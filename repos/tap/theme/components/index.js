@@ -1,5 +1,4 @@
 import { aceEditor } from './aceEditor'
-import { buttons } from './buttons'
 import { chip } from './chip'
 import { definitions } from './definitions'
 import { drawer } from './drawer'
@@ -8,8 +7,6 @@ import { header } from './header'
 import { list } from './list'
 import { runner } from './runner'
 import { scenarios } from './scenarios'
-import { section } from './section'
-import { sidebar } from './sidebar'
 import { step } from './step'
 import { surface } from './surface'
 import { tabbar } from './tabbar'
@@ -23,7 +20,6 @@ import { iframe } from './iframe'
 
 export const components = theme => ({
   aceEditor: aceEditor(theme),
-  buttons: buttons(theme),
   chip: chip(theme),
   cmdOutput: cmdOutput(theme),
   definitions: definitions(theme),
@@ -32,8 +28,6 @@ export const components = theme => ({
   list: list(theme),
   runner: runner(theme),
   scenarios: scenarios(theme),
-  section: section(theme),
-  sidebar: sidebar(theme),
   tabbar: tabbar(theme),
   table: table(theme),
   tags: tags(theme),

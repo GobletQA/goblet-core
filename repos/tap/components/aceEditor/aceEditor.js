@@ -119,13 +119,13 @@ export const AceEditor = props => {
 
   const {
     aceRef,
-    onChange,
-    editorId=`ace-editor`,
     style,
-    mode=`javascript`,
-    showGutter=defOptions.showGutter,
+    onChange,
     theme=`chrome`,
+    mode=`javascript`,
+    editorId=`ace-editor`,
     value=defOptions.value,
+    showGutter=defOptions.showGutter,
   } = props
 
   const editorRef = aceRef || useRef(null)
@@ -136,23 +136,23 @@ export const AceEditor = props => {
     <>
       {mode === 'gherkin' ? (
         <GherkinEditor
-          editorRef={editorRef}
-          editorId={editorId}
-          onChange={onChange}
-          showGutter={showGutter}
           style={style}
           theme={theme}
           value={value}
+          editorId={editorId}
+          onChange={onChange}
+          editorRef={editorRef}
+          showGutter={showGutter}
         />
       ): (
         <ReactAce
+          mode={mode}
+          value={value}
+          theme={theme}
           ref={editorRef}
           editorId={editorId}
           onChange={onChange}
           style={tapTheme.get(`aceEditor.main`, style)}
-          mode={mode}
-          theme={theme}
-          value={value}
         />
       )}
     </>

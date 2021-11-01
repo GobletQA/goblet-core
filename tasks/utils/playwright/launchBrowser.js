@@ -4,11 +4,10 @@
  * Starts the playwright chromium server on the HOST machine,
  * The `wsEndpoint` is then passed to the docker container as an ENV - BROWSER_WS_ENDPOINT
 */
-const { Logger }  = require('@keg-hub/ask-it/src/logger')
-const playwright = require('playwright')
+const path = require('path')
+const { Logger }  = require('@keg-hub/cli-utils')
+const { inDocker, metadata } = require('HerkinSC')
 const { noOpObj, exists, isEmpty, limbo } = require('@keg-hub/jsutils')
-const { inDocker } = require('HerkinTasks/utils/helpers')
-const metadata = require('./metadata')
 
 /**
 * Logs the websocket endpoint to the terminal
@@ -38,7 +37,7 @@ const getBrowserType = (browser, allowed) => {
   if(exists(browser) && !allowed.includes(browser))
     throw new Error(`The browser ${browser} is not allowed. Must be one of ${allowed.join(' | ')}`)
 
-  return browser || defConfig.browser
+  return browser
 }
 
 /**
@@ -52,7 +51,7 @@ const launchBrowserServer = async (browserType, launchOptions, log) => {
     endpoint='', 
     type: prevType, 
     launchOptions: prevOptions 
-  } = metadata.read(browserType) || {}
+  } = (await metadata.read(browserType) || {})
 
   const isInContainer = inDocker()
 
@@ -133,7 +132,7 @@ const launchBrowser = async (config=noOpObj) => {
   log && logWebsocket(wsEndpoint, browserType)
 
   // Save the playwright browser metadata to the browser-meta.json, to be used in the container.
-  metadata.save(
+  await metadata.save(
     browserType, 
     wsEndpoint,
     launchParams

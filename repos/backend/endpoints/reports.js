@@ -1,4 +1,4 @@
-const { AppRouter } = require('HerkinAppRouter')
+const { AppRouter } = require('HerkinSharedRouter')
 const { apiResponse, htmlResponse, htmlErr } = require('./handler')
 const { getTestReportHtml } = require('../utils/getTestReportHtml')
 

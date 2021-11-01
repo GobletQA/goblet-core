@@ -1,36 +1,45 @@
-import React, {useState} from 'react'
-import { useTheme } from '@keg-hub/re-theme'
+import React, {useState, useEffect} from 'react'
+import { useVisibleModal } from 'SVHooks/modal/useVisibleModal'
+import { Screen } from './screens/screen'
+import { FadeOut } from 'SVComponents/fadeOut'
+import { SidebarContent } from 'SVComponents/sidebar'
+import { useActiveFile } from 'SVHooks/activeFile/useActiveFile'
 import {
   View,
   Sidebar,
   withAppHeader,
 } from 'SVComponents'
-import { SidebarContent } from 'SVComponents/sidebar'
-import { Screen } from './screens/screen'
-import { useActiveFile, useVisibleModal } from 'SVHooks'
 
-const sideBarConfig = {
-  speed: 1,
-  bounciness: 1,
+const sidebarProps = {
+  to: 0,
+  initial: -250,
+  type: 'spring',
+  sidebarWidth: 250,
+  config: {
+    speed: 5,
+    bounciness: 1,
+  },
+  styles: {
+    container: {
+      minHeight: '100vh',
+      paddingTop: 50,
+    },
+  },
 }
 
 export const RootContainer = withAppHeader('KeGherkin Editor', props => {
-  const theme = useTheme()
-  const containerStyles =  theme.containers.root
-
   const activeFile = useActiveFile()
   // Auto open the sidebar to allow selecting a file, if no file is already active
   const [sidebarToggled, setSidebarToggled] = useState(
-    !useVisibleModal() && !Boolean(activeFile.location)
+    false
+    // !useVisibleModal() && !Boolean(activeFile.location)
   )
 
+  // TODO: Update this to use reStyle
   return (
-    <View className={`tap-main`} style={containerStyles.main}>
+    <View className={`tap-main`} style={{ fl: 1 }} >
       <Sidebar 
-        initial={-250}
-        to={0}
-        type={'spring'}
-        config={sideBarConfig}
+        {...sidebarProps}
         toggled={sidebarToggled}
         onToggled={setSidebarToggled}
       >

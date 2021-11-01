@@ -1,32 +1,15 @@
-import { useTheme } from '@keg-hub/re-theme'
-import { Tabbar } from 'SVComponents'
-import { Values } from 'SVConstants'
-import { isFunc } from '@keg-hub/jsutils'
-import { View, Button } from '@keg-hub/keg-components'
 import React, { useCallback, useEffect, useState } from 'react'
+import { Values } from 'SVConstants'
+import { Tabbar } from 'SVComponents'
+import { isFunc } from '@keg-hub/jsutils'
+import { useOnTabSelect } from 'SVHooks/tabs/useOnTabSelect'
 
 const { DEFINITION_TABS } = Values
 
-const TestActions = props => {
-  return (
-    <View style={{ flexDirection: 'row' }} >
-      <View style={{ marginRight: 15 }} >
-        <Button type='primary'>
-          Save
-        </Button>
-      </View>
-      <View >
-        <Button
-          type='secondary'
-          onClick={props.onRun}
-        >
-          Run
-        </Button>
-      </View>
-    </View>
-  )
-}
-
+/**
+ * Tabs that can be selected
+ * @type {Object}
+ */
 const tabs = [
   {
     id: DEFINITION_TABS.LIST,
@@ -38,15 +21,16 @@ const tabs = [
   },
 ]
 
-const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
-    return isFunc(onTabSelect)
-      ? onTabSelect(newTab, tab)
-      : (tab !== newTab && setTab(newTab)) || true
-}, [ tab, setTab, onTabSelect ])
-
+/**
+ * Tabs at the top of the Definitions List / Active Definition section to toggle between them
+ * @param {Object} prop
+ * @param {string} prop.activeTab - Initial Tab name to be active
+ * @param {function} prop.onTabSelect - Called when a tab is selected
+ *
+ */
 export const DefinitionTabs = props => {
 
-  const { activeTab, onTabSelect, onRun } = props
+  const { activeTab, onTabSelect } = props
   const [tab, setTab] = useState(activeTab)
   const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
   
@@ -58,10 +42,10 @@ export const DefinitionTabs = props => {
 
   return (
     <Tabbar
-      type='definitions'
       tabs={tabs}
-      activeTab={tab}
       location='top'
+      activeTab={tab}
+      type='definitions'
       onTabSelect={tabSelect}
     />
   )

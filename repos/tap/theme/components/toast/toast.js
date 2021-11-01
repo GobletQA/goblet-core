@@ -107,6 +107,8 @@ const danger = (theme, styles) => deepMerge(styles, {
 
 export const toast = theme => {
   const styles = defStyles(theme)
+  const dangerType = danger(theme, styles)
+
   return {
     topLeft: topLeft(theme, styles),
     bottomLeft: bottomLeft(theme, styles),
@@ -115,6 +117,7 @@ export const toast = theme => {
     success: success(theme, styles),
     info: info(theme, styles),
     warn: warn(theme, styles),
-    danger: danger(theme, styles),
+    danger: dangerType,
+    error: dangerType,
   }
 }

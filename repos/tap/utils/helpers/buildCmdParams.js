@@ -12,7 +12,7 @@ import { checkCall, noPropArr, noOpObj } from '@keg-hub/jsutils'
 const buildFeatureParams = (command, fileModel) => {
   return [
     `context=${fileModel.relative || fileModel.location}`,
-    `slowMo=5`,
+    `slowMo=5`
   ]
 }
 

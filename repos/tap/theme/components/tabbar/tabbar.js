@@ -20,18 +20,8 @@ const defTabbar = theme => ({
   },
   container: {
   },
-  tabview: {
-    flex: 1,
-  },
-  bar: {
-    main: {
-      cursor: 'pointer',
-      flexDirection: 'row',
-      zIndex: 6,
-    },
-    bottom: {},
-    top: {}
-  },
+  tabview: {},
+  bar: {},
   tab: {
     default: {
       main: {

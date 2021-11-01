@@ -1,5 +1,8 @@
 require('../configs/aliases.config').registerAliases()
 
+// Ensure the shared options are set
+require('./utils/task/sharedOptions')
+
 /**
  * Set the taps root path within the cli-utils
  * Ensure child processes run from the cli-utils use the tap folder as the root directory

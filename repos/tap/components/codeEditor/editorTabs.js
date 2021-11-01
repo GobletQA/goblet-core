@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react'
-import { Values } from 'SVConstants'
-import { View, Button } from '@keg-hub/keg-components'
-import { isFunc, noOpObj, deepMerge } from '@keg-hub/jsutils'
+import React, { useEffect, useState, useMemo } from 'react'
+import { View } from '@keg-hub/keg-components'
+import { isFunc, deepMerge } from '@keg-hub/jsutils'
+import { useOnTabSelect } from 'SVHooks/tabs/useOnTabSelect'
 import { RunTestsButton, SaveFileButton, Tabbar } from 'SVComponents'
 
-const { EDITOR_TABS } = Values
+const ignoreTabs = [`test-actions`]
 
 /**
  * TestActions Component - Displays editor screen actions for updating test files
@@ -54,16 +54,6 @@ const TestActions = props => {
 }
 
 /**
- * Group of tabs that can be displayed 
- * @type Object
- */
-const tabs = [
-  EDITOR_TABS.FEATURE,
-  EDITOR_TABS.DEFINITIONS,
-  EDITOR_TABS.BDD_SPLIT,
-]
-
-/**
  * Helper hook to memoizing the tabs to be displayed
  * @param {Object} tabs - Tabs for the Editor screen
  * @param {String} TestActions - React Component to render the test actions
@@ -89,7 +79,7 @@ const useActionsTab = (
   }]
 
   return showFeatureTabs
-    ? tabs.concat(extraActionTabs)
+    ? Object.values(tabs).concat(extraActionTabs)
     : extraActionTabs
 
 }, [
@@ -103,33 +93,18 @@ const useActionsTab = (
   showFeatureTabs,
 ])
 
-/**
- * Helper callback hook for memoizing switching between editor tabs
- * @param {Object} tab - Current tab that is active
- * @param {String} setTab - Method of update the current tab in the local state
- * @param {Object} onTabSelect - Callback passed in from props
- *
- * @returns {function} - Callback called when a tab is clicked
- */
-const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
-  if(newTab === `test-actions`) return
-  
-    return isFunc(onTabSelect)
-      ? onTabSelect(newTab, tab)
-      : (tab !== newTab && setTab(newTab)) || true
-}, [ tab, setTab, onTabSelect ])
 
 /**
  * EditorTabs Component - Displays the tabs for the editor screen
  * @param {Object} props
- * @param {Object} props.activeTab - Currently active tab
+ * @param {Object} props.activeTab - Active tab ID
  * @param {Object} props.onTabSelect - Callback for when the tab is changed
  */
 export const EditorTabs = props => {
-  const { activeTab, onTabSelect } = props
+  const { activeTab, onTabSelect, tabs } = props
 
   const [tab, setTab] = useState(activeTab)
-  const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
+  const tabSelect = useOnTabSelect(tab, setTab, onTabSelect, ignoreTabs)
 
   useEffect(() => {
     isFunc(onTabSelect) &&
@@ -141,11 +116,11 @@ export const EditorTabs = props => {
 
   return (
     <Tabbar
-      type='code'
       fixed
+      type='code'
       tabs={barTabs}
-      activeTab={tab}
       location='bottom'
+      activeTab={tab}
       onTabSelect={tabSelect}
     />
   )

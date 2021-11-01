@@ -3,18 +3,16 @@ import { tapColors } from '../tapColors'
 export const parent = theme => ({
   main: {
     $web: {
-      top: 110,
-      height: 'calc( 100vh - 65px )',
-      maxWidth: `100vw`,
-      transitionDuration: '1s',
-      transitionProperty: 'max-width left',
+      tp: 0,
+      mT: 100,
+      mW: `100vw`,
     },
     $all: {
-      position: 'relative',
-      zIndex: -1,
-      pH: theme?.padding?.size,
-      backgroundColor: tapColors.appBackground,
-      overflow: 'scroll',
+      zI: -1,
+      ovf: 'scroll',
+      pos: 'relative',
+      pH: theme?.padding?.size / 2,
+      bgC: tapColors.appBackground,
     }
   }
 })

@@ -19,6 +19,7 @@ const initialize = tasks => {
 
 module.exports = {
   ...initialize(require('./tap')),
+  ...initialize(require('./metadata')),
   ...initialize(require('./waypoint')),
   ...initialize(require('./unit')),
   ...initialize(require('./bdd')),

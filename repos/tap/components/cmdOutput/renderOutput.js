@@ -7,20 +7,20 @@ import { Text } from '@keg-hub/keg-components/text'
 import { wordCaps, noOpObj, mapObj } from '@keg-hub/jsutils'
 
 const useRunMessages = (messages) => useMemo(() => {
-  return Object.values(messages)
-}, [ messages ])
+  return messages && Object.values(messages)
+}, [messages])
 
 
 const bottomStyle = { maxHeight: 0, opacity: 0 }
-const AlwaysScrollToBottom = () => {
+const AlwaysScrollToBottom = React.memo(() => {
   const bottomRef = useRef()
   useEffect(() => {
     bottomRef.current.scrollIntoView({behavior: 'smooth', block: 'end'})
   })
   return (<View ref={bottomRef} style={bottomStyle} />)
-};
+})
 
-const Message = ({ styles=noOpObj, message, timestamp, type }) => {
+const Message = React.memo(({ styles=noOpObj, message, timestamp, type }) => {
   const defStyles = styles.default
   const msgStyles = styles[type]
 
@@ -31,21 +31,25 @@ const Message = ({ styles=noOpObj, message, timestamp, type }) => {
       </Text>
     </View>
   )
-}
+})
 
-export const RenderOutput = ({ testRunModel, testFile }) => {
+export const RenderOutput = ({ testRunModel=noOpObj, testFile }) => {
   const styles = useStyle(`cmdOutput.renderOutput`)
-  const messages = useRunMessages(testRunModel.messages)
+  const messages = useRunMessages(testRunModel?.messages)
 
-  return testRunModel && (
+  return (
     <View style={styles.main} >
-      {messages.length && messages.map(message => (
-        <Message
-          styles={styles}
-          key={message.timestamp}
-          {...message}
-        />
-      ))}
+      {
+        messages &&
+          messages.length &&
+          messages.map(message => (
+            <Message
+              styles={styles}
+              key={message.timestamp}
+              {...message}
+            />
+          ))
+      }
       <AlwaysScrollToBottom />
     </View>
   ) || null

@@ -1,9 +1,7 @@
 import { themeConfig } from './theme.config.js'
 import { deepMerge } from '@keg-hub/jsutils'
-import { app } from './app'
 import { appHeader } from './appHeader'
 import { domStyles } from './domStyles'
-import { containers } from './containers'
 import { transition } from './transition'
 import { tapColors } from './tapColors'
 import { kegComponentsTheme } from 'SVTheme/kegComponentsTheme'
@@ -13,13 +11,11 @@ import { screens } from './screens'
 
 const kegTheme = kegComponentsTheme(themeConfig)
 
-export const theme = setDefaultTheme(
+const theme = setDefaultTheme(
   deepMerge(
     kegTheme,
-    containers(kegTheme),
     components(kegTheme),
     {
-      app: app(kegTheme),
       appHeader: appHeader(kegTheme),
       domStyles: domStyles(kegTheme),
       screens: screens(kegTheme),
@@ -29,3 +25,7 @@ export const theme = setDefaultTheme(
   )
 )
 
+export {
+  theme,
+  tapColors
+}

@@ -1,5 +1,7 @@
+const { world } = require('./repos/testUtils/support/world')
 const { getHerkinConfig } = require('./configs/getHerkinConfig')
 const config = getHerkinConfig()
+const { process:proc, ...webSockConf } = config.server
 
 module.exports = {
   name: 'keg-herkin',
@@ -11,6 +13,14 @@ module.exports = {
       'process.env.HERKIN_USE_VNC': process.env.HERKIN_USE_VNC,
       'process.env.NO_VNC_PORT': process.env.NO_VNC_PORT || 26369,
       'process.env.HERKIN_PW_SOCKET': process.env.HERKIN_PW_SOCKET,
+      'process.env.VNC_VIEW_HEIGHT': process.env.VNC_VIEW_WIDTH || 14000,
+      'process.env.VNC_VIEW_HEIGHT': process.env.VNC_VIEW_HEIGHT || 900,
+      // TODO: Investigate loading this through API instead
+      // This will allow it to be updated overtime without restarting webpack
+      'process.env.PARKIN_WORLD': JSON.stringify(world),
+      'process.env.WS_SERVER_CONFIG': JSON.stringify(webSockConf),
+      'process.env.SCREENCAST_HOST': config.screencast.server.host,
+      'process.env.SCREENCAST_PORT': config.screencast.server.port,
     },
     cli: {
       link: {

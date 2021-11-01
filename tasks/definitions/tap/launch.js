@@ -1,4 +1,4 @@
-const { sharedOptions } = require('../../utils/task/sharedOptions')
+const { sharedOptions } = require('@keg-hub/cli-utils')
 const { launchBrowsers } = require('../../utils/playwright/launchBrowsers')
 
 /**

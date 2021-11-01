@@ -32,11 +32,11 @@
 * [Docker-Compose](https://github.com/docker/compose)
   * Tool for defining and running multi-container Docker applications
   * Uses a YAML file to configure your application’s services
-* [Keg-Hub](https://github.com/simpleviewinc/keg-hub)
+* [Keg-Hub](https://github.com/lancetipton/keg-hub)
   * A platform for developing cross-platform react apps.
   * Comes pre-configured to target both web and mobile devices
   * Contains a collection of utilities for simplifying development
-* [Keg-CLI](https://github.com/simpleviewinc/keg-cli)
+* [Keg-CLI](https://github.com/lancetipton/keg-cli)
   * CLI for running taps, and other keg-hub related tasks
   * Manages docker and docker-compose
   * Can be extended by Taps through custom tasks

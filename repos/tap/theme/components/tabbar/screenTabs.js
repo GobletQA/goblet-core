@@ -2,15 +2,15 @@ import { tapColors } from '../../tapColors'
 import { deepMerge } from '@keg-hub/jsutils'
 import { sharedShadow } from '../shared/shadow'
 
-
+/**
+ * Styles for the Screen Root component. NOT the Screencast Tabs
+*/
 export const screenTabs = (theme, defTabbar) => deepMerge(defTabbar, {
   bar: {
     main: {
       top: 50,
-      minHeight: 45,
       bgC: tapColors.headerBackground,
       left: (theme.padding.size * 2) * -1,
-      width: `calc( 100% + ${theme.padding.size * 4}px)`,
       ...sharedShadow,
       position: 'fixed',
     },

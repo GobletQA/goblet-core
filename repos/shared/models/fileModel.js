@@ -15,6 +15,7 @@ const { buildModel } = require('./buildModel')
  */
 const Model = {
   name: '',
+  ext: '',
   location: '',
   relative: '',
   content: '',

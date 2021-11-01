@@ -1,5 +1,6 @@
 module.exports = {
-  ...require('./ensureArray'),
-  ...require('./envToStr'),
-  ...require('./inDocker'),
+  ...require('./dockerCmd'),
+  ...require('./buildCmdOpts'),
+  ...require('./handleTestExit'),
+  ...require('./ensureBrowserType'),
 }

@@ -1,5 +1,5 @@
 const path = require('path')
-const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
+const { sharedOptions } = require('@keg-hub/cli-utils')
 
 /**
  * Run unit tests in container
@@ -17,14 +17,13 @@ module.exports = {
     action: runUnit,
     example: 'keg herkin unit run',
     description : 'Runs unit feature tests',
+    // TODO: Update to allow groupNames to be be array in cli-utils/tasks/sharedOptions
     options: sharedOptions('run', {
       jestConfig: {
         default: 'configs/configs/jest.config.js'
       },
-    }, null, [
-      'herkin',
-      'docker',
-      'jest',
+    }, [
+      'jestConfig',
     ])
   }
 }

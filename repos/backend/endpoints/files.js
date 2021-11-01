@@ -1,6 +1,6 @@
-const { AppRouter } = require('HerkinAppRouter')
+const { AppRouter } = require('HerkinSharedRouter')
 const { apiErr, apiResponse } = require('./handler')
-const { treeNodeModel } = require('HerkinModels')
+const { treeNodeModel } = require('HerkinSharedModels')
 const {
   isDirectory,
   createTestFile,

@@ -1,7 +1,17 @@
 import RFB from "@novnc/novnc/core/rfb"
-import { noOpObj } from '@keg-hub/jsutils'
 import KeyTable from "@novnc/novnc/core/input/keysym"
+import { noOpObj, noOp, isFunc, throttleLast } from '@keg-hub/jsutils'
+import { statusBrowser } from 'SVActions/screencast/api/statusBrowser'
 
+/**
+ * Check if the instance content has updated
+ * @param {Object} instance - Current instance of NoVncService
+ * @param {Object} element - Dom element the VNC canvas is attached to
+ * @param {string} url - The url used to connect to the websocket server
+ * @param {Object} creds - Credentials for connecting to the VNC websocket server
+ *
+ * @return {boolean} - True if the instance properties have changed
+ */
 const noUpdate = (instance, element, url, creds) => {
   return instance.element === element &&
     instance.url === url &&
@@ -9,28 +19,47 @@ const noUpdate = (instance, element, url, creds) => {
 }
 
 export class NoVncService {
-  element = null
   url = null
+  element = null
   creds = noOpObj
   isConnected = null
+  setConnected = noOp
 
-  onConnect(evt) {
-    this.isConnected = true
+  constructor(setConnected){
+    this.setConnected = setConnected
   }
+
+  updateConnected = status => {
+    this.isConnected = status
+    this.setConnected(status)
+  }
+
+  onConnect = evt => {
+    this.updateConnected(true)
+  }
+
+  onDisconnect = evt => {
+    if(!this.isConnected) return
   
-  onDisconnect() {
-    this.isConnected = false
-  }
+    this.updateConnected(false)
 
-  onCopy() {
+    // On Disconnect, try to restart the browser
+    setTimeout(async () => {
+      await statusBrowser()
+      this.connect()
+    }, 2000)
   
   }
 
-  onKeyDown(){
+  onCopy = () => {
   
   }
 
-  connect(){
+  onKeyDown = () => {
+  
+  }
+
+  connect = () => {
     if (!this.element || !this.url || this.connected) return
 
     const rfb = new RFB(this.element, this.url, {
@@ -39,12 +68,17 @@ export class NoVncService {
     })
 
     this._rfb = rfb
-    // rfb.scaleViewport = true
+    rfb.scaleViewport = true
+    rfb.background = `#FFFFFF`
+    // rfb.resizeSession = true
+    // rfb.focusOnClick = true
+    rfb.addEventListener("clipboard", this.onCopy)
     rfb.addEventListener("connect", this.onConnect)
     rfb.addEventListener("disconnect", this.onDisconnect)
-    rfb.addEventListener("clipboard", this.onCopy)
-    // rfb._canvas.addEventListener("keydown", this.onKeyDown, true)
 
+    // TODO: Investigate adding a listeners for errors
+    // If not available, try to use the onDisconnect
+    // rfb._canvas.addEventListener("keydown", this.onKeyDown, true)
   }
 
   init(element, url, creds){
@@ -55,6 +89,13 @@ export class NoVncService {
     creds && (this.creds = creds)
 
     return this.connect()
+  }
+
+  reload() {
+    if (!this._rfb) return
+
+    this._rfb.scaleViewport = false
+    this._rfb.scaleViewport = true
   }
 
   disconnect(){

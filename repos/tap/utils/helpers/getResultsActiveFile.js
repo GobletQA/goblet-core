@@ -14,6 +14,8 @@ const { CATEGORIES, SCREENS } = Values
 export const getResultsActiveFile = (items) => {
   const storeItems = items || getStore()?.getState()?.items
   const resultsScreen = storeItems[CATEGORIES.SCREENS][SCREENS.RESULTS]
+  return resultsScreen?.activeFile?.location
+    ? resultsScreen.activeFile
+    : getActiveFile(items)
 
-  return resultsScreen.activeFile || getActiveFile(items)
 }

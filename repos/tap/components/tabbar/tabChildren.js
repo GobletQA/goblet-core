@@ -4,6 +4,7 @@ import { mapColl } from '@keg-hub/jsutils'
 import { useStyle } from '@keg-hub/re-theme'
 import { TabbarPortal } from './tabbarPortal'
 import { View, isValidComponent, renderFromType } from '@keg-hub/keg-components'
+import { TabbarContainer, TabViewMain } from './tabbar.restyle'
 
 /**
  * Renders the TabBar Tabs from the passed in tabs array prop
@@ -60,6 +61,7 @@ const BarComponent = React.memo(props => {
     onSelectTab,
   } = props
 
+  // TODO: move to tabbar.restyle for tabbar container
   const containerStyles = useStyle(
     fixed && { ...barStyles?.fixed?.main, ...barStyles?.fixed[location] },
     barStyles?.bar?.main,
@@ -67,7 +69,7 @@ const BarComponent = React.memo(props => {
   )
 
   return (
-    <View
+    <TabbarContainer
       className='tabbar-bar'
       style={containerStyles}
     >
@@ -77,7 +79,7 @@ const BarComponent = React.memo(props => {
         styles={barStyles.tab}
         onTabSelect={onSelectTab}
       />
-    </View>
+    </TabbarContainer>
   )
 })
 
@@ -101,16 +103,16 @@ export const TabChildren = props => {
   const TabView = useMemo(() => (
     CurrentTab && (CurrentTab.View || CurrentTab.view)
       ? (
-          <View
-            className='tabview-main'
+          <TabViewMain
             key='tabview-main'
+            className='tabview-main'
             style={barStyles.tabview}
           >
             <ActiveTabView
               tab={CurrentTab}
               styles={barStyles}
             />
-          </View>
+          </TabViewMain>
         )
       : null
   ), [barStyles, CurrentTab])

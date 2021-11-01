@@ -1,6 +1,5 @@
-const { dockerCmd } = require('HerkinTasks/utils/process/dockerCmd')
+const { dockerExec, sharedOptions } = require('@keg-hub/cli-utils')
 const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers') 
-const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
 const { buildArguments } = require('HerkinTasks/utils/task/buildArguments')
 
 /**
@@ -41,7 +40,7 @@ const runTest = async (args) => {
   const cmdOptions = buildTestArguments(params)
 
   // TODO: Add command to run playwright recorded tests
-  // return dockerCmd(params.container, [`npx`, `playwright`, `test`, name, ...cmdOptions])
+  // return dockerExec(params.container, [`npx`, `playwright`, `test`, name, ...cmdOptions])
 }
 
 module.exports = {

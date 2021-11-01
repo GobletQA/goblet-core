@@ -1,42 +1,25 @@
-const metadata = require('HerkinTasks/utils/playwright/metadata')
-const { chromium, firefox, webkit } = require('playwright')
-const { isStr } = require('@keg-hub/jsutils')
+const {metadata, newBrowser} = require('HerkinSC')
 
 // HOST_BROWSER is set by the task `keg herkin bdd run`
-const BROWSER = process.env.HOST_BROWSER
-  || 'chromium'
-
-/**
- * Gets the browser type playwright object
- * @param {string} type - browser type (e.g. chromium)
- * @return {Object} browserType
- */
-const getBrowser = (type) => {
-  return ['firefox', 'ff'].includes(type)
-    ? firefox
-    : ['safari', 'webkit'].includes(type)
-      ? webkit
-      : chromium
-}
+const BROWSER = process.env.HOST_BROWSER || 'chromium'
 
 /**
  * Initializes tests by connecting to the browser loaded at the websocket
- * endpoint, creating a new browser context.
+ * Then creates a new context from the connected browser
+ * Adds both browser and context to the global scope
  * @param {Function} done - jest function called when all asynchronous ops are complete
+ *
  * @return {boolean} - true if init was successful
  */
 const initialize = async () => {
   try {
-    const { endpoint, type } = metadata.read(BROWSER)
-    if (!isStr(endpoint) || !isStr(type))
-      throw new Error(`Browser type "${BROWSER}" is not running (no entry in browser-meta.json)`)
+    const { type, launchOptions } = await metadata.read(BROWSER)
+    const { browser } = await newBrowser({...launchOptions, type})
+    if(!browser)
+      throw new Error(`Could not create browser. Please ensure the browser server is running.`)
     
-    const wsEndpoint = endpoint.replace('127.0.0.1', 'host.docker.internal')
-
-    global.browser = await getBrowser(type).connect({ wsEndpoint })
+    global.browser = browser
     global.context = await browser.newContext()
-    // TODO: Update to use playwright video record start
-    // TODO: investigate to see if we other changes for the context 
   }
   catch (err) {
     console.error(err.message)
@@ -53,6 +36,7 @@ const initialize = async () => {
  * Cleans up for testing tear down by releasing all resources, including
  * the browser window and any globals set in `initialize`.
  * @param {Function} done - jest function called when all asynchronous ops are complete
+ *
  * @return {boolean} - true if cleanup was successful
  */
 const cleanup = async () => {
@@ -62,24 +46,29 @@ const cleanup = async () => {
   delete global.browser
   delete global.context
   delete global.page
+
   return true
 }
 
 /**
  * Gets the browser page instance, or else creates a new one
+ * @param {number} num - The page number to get if multiple exist
+ *
+ * @return {Object} - Playwright browser page object
  */
-const getPage = async () => {
+const getPage = async (num=0) => {
   if (!global.context)
     throw new Error('No browser context initialized')
 
   const pages = context.pages() || []
 
-  return pages.length 
-    ? pages[0]
-    : await context.newPage()
+  return pages.length ? pages[num] : await context.newPage()
 }
 
 /**
+ * Helper method to return the getPage method
+ *
+ * @return {Object} - Contains the getPage method
  */
 const getBrowserContext = () => ({ getPage })
 
@@ -88,6 +77,10 @@ const getBrowserContext = () => ({ getPage })
  * functions for setup and teardown. Called in the waypoint templates template.
  */
 const setupTestEnvironment = () => {
+  // TODO: Add helpers to pull beforeAll && afterAll from a global getter
+  //   * Similar to how Parkin does it for describe and test methods
+  //   * All polyfills to ensure they exist when called
+  //   * Typically they defined globally by a test framework like Jest
   beforeAll(initialize)
   afterAll(cleanup)
 }

@@ -1,7 +1,6 @@
 const path = require('path')
 const { runSeq, isNum, get, exists } = require('@keg-hub/jsutils')
-const { dockerCmd } = require('HerkinTasks/utils/process/dockerCmd')
-const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
+const { dockerExec, sharedOptions } = require('@keg-hub/cli-utils')
 const { buildReportPath } = require('HerkinTasks/utils/reporter/buildReportPath')
 const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers') 
 const { buildReportTitle } = require('HerkinTasks/utils/reporter/buildReportTitle')
@@ -28,7 +27,7 @@ const buildCmdArgs = params => {
 
   const docTapPath = '/keg/tap'
   jestConfig && cmdArgs.push(`--config=${path.join(docTapPath, jestConfig)}`)
-  timeout && cmdArgs.push(`--testTimeout=${timeout}`)
+  cmdArgs.push(`--testTimeout=${(timeout || 90) * 1000}`) // Convert to milliseconds
   bail && cmdArgs.push('--bail')
   noTests && cmdArgs.push('--passWithNoTests')
 
@@ -56,7 +55,7 @@ const addEnv = (envs, key, value) => {
  * @param {Object} params - `run` task params
  * @param {Object} reportPath - Path where the test report should be saved
  *
- * @return {Object} dockerCmd options object, with envs
+ * @return {Object} dockerExec options object, with envs
  */
 const buildCmdOpts = (browser, params, reportPath) => {
   const envs = {
@@ -109,9 +108,8 @@ const exitProcess = (exitCodes=[], reportPath) => {
 const buildLaunchParams = params => ({
   ...params,
   herkinTestsRun: true,
-  slowMo: isNum(params.slowMo)
-    ? params.slowMo * 1000  // seconds to ms conversion
-    : undefined
+  // seconds to ms conversion
+  slowMo: isNum(params.slowMo) ? params.slowMo * 1000  : undefined
 })
 
 /**
@@ -128,7 +126,7 @@ const runTest = async args => {
   const reportPath = buildReportPath('feature', params.context)
 
   const commands = browsers.map(browser => 
-    () => dockerCmd(params.container, cmdArgs, buildCmdOpts(browser, params, reportPath))
+    () => dockerExec(params.container, cmdArgs, buildCmdOpts(browser, params, reportPath))
   )
 
   const codes = await runSeq(commands)

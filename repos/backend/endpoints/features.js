@@ -1,4 +1,4 @@
-const { AppRouter } = require('HerkinAppRouter')
+const { AppRouter } = require('HerkinSharedRouter')
 const { apiErr, apiResponse } = require('./handler')
 const { loadFeatures } = require('../libs/features')
 

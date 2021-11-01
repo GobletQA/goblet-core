@@ -13,7 +13,7 @@ export const startBrowser = async (options=noOpObj) => {
   if(!items)
     return console.warn(`No items set in the store`)
   
-  const storeOpts = items[CATEGORIES.BROWSER_OPTIONS]
+  const storeOpts = items[CATEGORIES.BROWSER_OPTS]
 
   addToast({
     type: 'info',
@@ -23,11 +23,15 @@ export const startBrowser = async (options=noOpObj) => {
   const resp = await apiRequest({
     url: '/screencast/browser/start',
     method: HttpMethods.GET,
-    params: {...storeOpts, ...options},
+    params: {...storeOpts, ...options },
   }, 'object')
   
+  // TODO: store browser running status in redux
+  // Then use that to tell update the canvas to reload as needed
   console.log(`---------- resp ----------`)
   console.log(resp)
+
+  return resp
   
   // error &&
   //   error.message &&

@@ -26,12 +26,12 @@ env:
   KEG_CONTEXT_PATH: "{{ cli.taps.herkin.path }}"
 
   # Image to use when building herkin
-  KEG_BASE_IMAGE: ghcr.io/simpleviewinc/tap:develop
+  KEG_BASE_IMAGE: ghcr.io/lancetipton/tap:develop
 
   # Image to use when running herkin
   # Even if the dockerfile does not use this in the FROM directive
   # It should still be defined as the image used to run the Tap
-  KEG_IMAGE_FROM: ghcr.io/simpleviewinc/keg-herkin:browser-inception
+  KEG_IMAGE_FROM: ghcr.io/lancetipton/keg-herkin:develop
 
   # This is a true base image from playwright - Alpine Linux are not supported
   # ref: https://playwright.dev/docs/docker/README/#using-on-ci
@@ -55,12 +55,25 @@ env:
   DOC_RESOLVER_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/tap-resolver
   DOC_JSUTILS_PATH: /keg/tap/node_modules/@keg-hub/jsutils
   DOC_PARKIN_PATH: /keg/tap/node_modules/@ltipton/parkin
+  DOC_SOCKR_PATH: /keg/tap/node_modules/@ltipton/sockr
+
+  EXPO_CLI_VERSION: 4.11.0
+  SHARP_CLI_VERSION: 1.15.0
+  KEG_NODE_VERSION: 14.17-alpine
 
   # Default port of the app to expose from the container
   KEG_PROXY_PORT: 19006
   API_PORT: 5005
+  SCREENCAST_API_PORT: 5006
   NO_VNC_PORT: 26369
   VNC_SERVER_PORT: 26370
+  VNC_VIEW_HEIGHT: 900
+  VNC_VIEW_WIDTH: 1440
+  # URL where the screencast is being displayed
+  # This is the URL of the server the proxy connects to
+  # Update this to call an externally available VNC websocket host
+  SCREENCAST_PROXY_HOST: 0.0.0.0
+  
   # Required for VNC to work properly
   # Needs a display of some type
   DISPLAY: ":0.0"
@@ -74,7 +87,7 @@ env:
   CONTAINER_NAME: keg-herkin
   
   # Git tap url in github
-  GIT_APP_URL: https://github.com/simpleviewinc/keg-herkin.git
+  GIT_APP_URL: https://github.com/lancetipton/keg-herkin.git
   GIT_APP_BRANCH: master
   
   # Browser Local vs VNC envs

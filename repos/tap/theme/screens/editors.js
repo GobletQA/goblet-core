@@ -13,40 +13,65 @@ export const editors = theme => {
       },
       content: {
         flWr: 'nowrap', 
-        backgroundColor: tapColors.backGround
+        bgColor: tapColors.backGround
       }
     },
     full: {
       w: `100%`,
-      h: `75vh`,
+      h: `calc( 100vh - 150px )`,
     },
     feature: {
-      w: `100%`,
-      h: `calc( 100vh - 210px )`,
+      main: {
+        w: `100%`,
+        h: `calc( 100vh - 150px )`,
+      }
     },
     definitions: {
       main: {
         w: `100%`,
-        h: `calc( 100vh - 170px )`,
-        overflowY: 'auto',
+        h: `100%`,
+        ovfY: 'auto',
       },
       editor: {
         w: `100%`,
         minH: `100px`,
       }
     },
-    bddSplit: {
+    // This gets dynamically generated from the Constants.EDITOR_TABS.split.editors array
+    // See components/codeEditor/codeEditor.js in the useEditorTabs hook
+    ['feature-definitions']: {
       feature: {
-        w: `calc( 50% - ${halfMargin}px )`,
-        h: `calc( 100vh - 210px )`,
-        mR: halfMargin,
+        main: {
+          h: `calc( 100vh - 150px )`,
+          mR: halfMargin,
+        },
       },
       definitions: {
         main: {
-          w: `calc( 50% - ${halfMargin}px )`,
-          h: `calc( 100vh - 170px )`,
           mL: halfMargin,
-          overflowY: 'auto',
+          h: `100%`,
+          ovfY: 'auto',
+        },
+        editor: {
+          w: `100%`,
+          minH: `100px`,
+        }
+      },
+    },
+    // This gets dynamically generated from the Constants.EDITOR_TABS.split.editors array
+    // See components/codeEditor/codeEditor.js in the useEditorTabs hook
+    ['definition-definitions']: {
+      definition: {
+        main: {
+          h: `calc( 100vh - 150px )`,
+          mR: halfMargin,
+        }
+      },
+      definitions: {
+        main: {
+          h: `100%`,
+          mL: halfMargin,
+          ovfY: 'auto',
         },
         editor: {
           w: `100%`,

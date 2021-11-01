@@ -2,9 +2,9 @@ import { tapColors } from '../tapColors'
 
 export const sharedScreen = {
   main: {
-    flexDirection: 'column',
-    width: `100%`,
-    height: '100%'
+    fl: 1, 
+    w: `100%`,
+    flD: 'column',
   },
   iFrame: {
     surface: {

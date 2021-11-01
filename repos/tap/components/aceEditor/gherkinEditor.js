@@ -2,7 +2,7 @@ import { useSelector } from 'SVHooks/useSelector'
 import React, { useCallback } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import { Values, ActionTypes } from 'SVConstants'
-import { useActiveFile } from 'SVHooks/useActiveFile'
+import { useActiveFile } from 'SVHooks/activeFile/useActiveFile'
 import { noPropArr, noOpObj, pickKeys } from '@keg-hub/jsutils'
 import ReactGherkinEditor from '@ltipton/react-gherkin-editor'
 
@@ -52,19 +52,19 @@ export const GherkinEditor = props => {
 
   const autoComplete = useAutoComplete(feature, definitionTypes)
 
-
   return (
     <ReactGherkinEditor
       ref={editorRef}
-      initialValue={value}
-      onChange={onChange}
-      autoCompleteFunction={autoComplete}
-      uniqueId={args.editorId}
       theme={'herkin'}
-      mode={'gherkin_i18n'}
-      language={ language || 'en'}
+      wrapEnabled={true}
       hideToolbar={true}
+      onChange={onChange}
+      initialValue={value}
+      mode={'gherkin_i18n'}
       showGutter={showGutter}
+      uniqueId={args.editorId}
+      language={ language || 'en'}
+      autoCompleteFunction={autoComplete}
       style={tapTheme.get(style, `aceEditor.gherkin`)}
     />
   )

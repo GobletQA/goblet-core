@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-const { getApp } = require('HerkinApp')
-const apiEndpoints = require('HerkinEndpoints')
+const { getApp } = require('HerkinSharedApp')
+const { initSockr } = require('./libs/sockr')
+const apiEndpoints = require('HerkinBackEndpoints')
 const { Logger } = require('@keg-hub/cli-utils')
-const { sockr } = require('@ltipton/sockr/src/server')
 const {
   setupCors,
   setupLogger,
   setupServer,
   setupStatic,
   setupVNCProxy,
-} = require('HerkinMiddleware')
+} = require('HerkinSharedMiddleware')
 
 /**
  * Starts a express API server, and connects the sockr Websocket
@@ -38,14 +38,13 @@ const initApi = async () => {
       const serverUrl = `http://${serverConf.host}:${serverConf.port}`
 
       Logger.empty()
-      Logger.pair(`Herkin API server listening on`, serverUrl)
+      Logger.pair(`Herkin Backend API listening on`, serverUrl)
       Logger.empty()
     }
   )
 
   server.on('upgrade', wsProxy.upgrade)
-
-  const socket = await sockr(server, sockrConf, 'tests')
+  const socket = await initSockr(app, server, sockrConf, 'tests')
 
   return { app, server, socket }
 }

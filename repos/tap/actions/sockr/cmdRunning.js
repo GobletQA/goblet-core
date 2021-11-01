@@ -49,7 +49,9 @@ export const cmdRunning = data => {
 
   toggleTestRunning(true)
 
+  // TODO: get setting from store
+  // Check if option is set to switch to a screen on test run
+  // If options is set, then switch to that screen
   // Switch to the results screen automatically
   // setScreenById(SCREENS.RESULTS)
-
 }

@@ -1,4 +1,4 @@
-const { dockerCmd } = require('HerkinTasks/utils/process/dockerCmd')
+const { dockerExec } = require('@keg-hub/cli-utils')
 const { launchBrowser } = require('HerkinTasks/utils/playwright/launchBrowser') 
 
 const createTest = async args => {
@@ -10,7 +10,7 @@ const createTest = async args => {
   
   // ensure a non-headless chromium instance is running
   await launchBrowser({ browser: 'chromium', headless: false, launch })
-  // return dockerCmd(container, ` create ${url} ${name}`)
+  // return dockerExec(container, ` create ${url} ${name}`)
 }
 
 module.exports = {

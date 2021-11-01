@@ -1,14 +1,9 @@
 import React, { useCallback } from 'react'
-import { Values } from 'SVConstants'
 import { Save } from 'SVAssets/icons'
-import { useStyle } from '@keg-hub/re-theme'
-import { noOpObj, get, noOp } from '@keg-hub/jsutils'
-import { View, Button, Text } from 'SVComponents'
-import { useIconProps } from 'SVHooks/useIconProps'
-import { useActiveFile } from 'SVHooks/useActiveFile'
+import { HerkinButton } from './button.restyle'
+import { noOpObj, noOp } from '@keg-hub/jsutils'
 import { saveFile } from 'SVActions/files/api/saveFile'
-
-const { SCREENS, CATEGORIES } = Values
+import { useActiveFile } from 'SVHooks/activeFile/useActiveFile'
 
 /**
  * Hook to save the activeFile by calling the saveFile action
@@ -34,6 +29,16 @@ const useSaveAction = props => {
   }, [onSave, testFile])
 }
 
+/**
+ * Classes for the Save-File Button
+ * @type {Object}
+ */
+const classes = {
+  main: `save-file-button.main`,
+  button: `save-file-button`,
+  icon: `save-file-button-icon`,
+  text: `save-file-button-text`
+}
 
 /**
  * SaveFileButton - Component saving a file
@@ -43,36 +48,21 @@ const useSaveAction = props => {
  *
  */
 export const SaveFileButton = props => {
-  const { children, disabled, text="Save File", styles, ...args } = props
+  const { children, text="Save File", ...args } = props
 
   const onSave = useSaveAction(args)
-  const builtStyles = useStyle(`buttons.saveFile`, styles)
-  const iconProps = useIconProps(props, builtStyles.icon)
 
   return (
-    <View
-      style={builtStyles.main}
-      className={`save-file-button.main`}
+    <HerkinButton
+      {...args}
+      Icon={Save}
+      type='primary'
+      onClick={onSave}
+      classes={classes}
+      className={`save-file-button`}
     >
-      <Button
-        type='primary'
-        disabled={disabled}
-        onClick={onSave}
-        styles={builtStyles.button}
-        className={`save-file-button`}
-      >
-        <Save
-          {...iconProps}
-          className={`save-file-button-icon`}
-        />
-        <Text
-          style={builtStyles.text}
-          className={`save-file-button-text`}
-        >
-          {children || text}
-        </Text>
-      </Button>
-    </View>
+      {children || text}
+    </HerkinButton>
   )
 
 }

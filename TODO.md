@@ -1,99 +1,122 @@
-# New feature flow
-1. Start a command which
- * starts the backend docker container
- * starts the local server running on the host machine
- * maybe accepts flags for syncing other projects for feature and step definition files
-2. User runs `yarn test:create` to create a new test file
-  * this drops them into the qa-wolf REPL
-  * they can then decide what to do -- record, or do something else
-3. User can manually edit the feature file with jest and cucumber as they want
-3. User can run `yarn test:run` to run the test
-​
 # TODO
-[] start task
-  [x] starts the local server running on the host machine
-    * the local server, starting the browser, gets the websocket-hash to the browser, passed to the `docker-compose.yml` file
-  [x] starts the backend docker container
-  [] accepts flags for syncing other projects for feature and step definition files
-    * `values.defaults.yml` we create with defaults 
-    * `values.yml` file can be configured with the environment variable overrides (or the user can pass these inline at the terminal). 
-​
-[] create test 
-  * this drops them into the qa-wolf REPL for creating
-  * they can then decide what to do using that REPL -- record, or do something else
-  * parameters
-    * context: name of test
-    * url: url that test will be run on (could use default env)
-    * template: cucumber vs qa-wolf
-      * ideally eventually we can abstract this out and won't need separate templates
-​
-[] edit test
-  * this drops them into the qa-wolf REPL for editing
-  * they can then decide what to do using that REPL -- record, or do something else
-  * parameters
-    * context?: name of test (if not provided, we could ask)
-​
-[] run test
-  * runs the cucumber test-runner
-    * need this for feature files
-  * could ALSO run the qa-wolf test-runner, but this can't run features
-  * runs the tests
-    * Environment variables / start-command args
-      1. Path to the external project
-      2. Browser(s) to test on
-      3. Headless mode
-      4. Dimensions of browser
-      5. Playwright device list
-      6. Path to the custom value yml file
-      7. test-runner (cucumber vs qa-wolf)
-    * also could let user define the custom docker-compose file that docker compose runs with
-  * when running tests, looks at the "env" argument (e.g. env=ci, env=mac-ci, env=win-ci), which it uses to determine which `values.<env>.yml` to use
-    * then each of these can define any environment variables they want
-  * parameters
-    * context?: name of single test file to test (if not provided, we run all the tests)
-    * browser?: uses env var by default, otherwise uses this browser, 
-      * this could also be defined in the `values.yml`, following this pattern:
-        * BROWSER_<env> 
-​
-[] create our qa-wolf template
-  * import/integrate with the "expect" package (ideally import jest's expect package directly, so that we have control over that dependency) 
-    * [some existing work done on this](tests/wolf/test.template.js)
-  * import/integrate with the cucumber exports (Given/When/Then)
-  * investigate/research: there is a lot of jest/qa-wolf initialization code that takes up a lot of the template. It would be nice to just wrap these into a function that we import, OR to pass our tests into that file to be run there.
-​
-[] setup the test results reporter
-  * ideally, just copy over the cucumber-html-reporter work from `keg-regulator`
-​
-[] we need configuration for setup for cucumber
-  * probably can copy from `keg-regulator`
-  * just ignore the selenium stuff
-​
-[] github actions for running this in a ci environment
-  - a reusable action that can be added to any repo
-  - when this action is added, it will use kegherkin to run the tests in that repo 
-  - makes this super simple to setup on any "test" repo or other repo
-​
-[] migrate repo from lancetipton to @simpleviewinc org
-​
-[] stop task
-​
-[] investigate using keg-cli as a node_module to reuse tasks like start/stop
-​
-# Done?
-[ x ] it needs a server that runs on the host machine, not in docker container, for launching the browser
+
+## Screencast
+* **Browser Server**
+  * When starting server on boot, tests fail to run
+    * Seems like there's an issue with the browser context being created when tests run
+  * If the server is restarted, then tests work again, without changes
+  * Must be an issue with how yarn screencast:daemon works
+    * Anytime the server is started with the daemon, 
+      * It tries to navigate to "https://playwright/index.html"
+      * Looks like `yarn sc` also is not working
+  * The only thing that seems to work is to run `yarn sc:restart`
+    * After running that, everything works
+* **TODO**
+  * Validate if just restarting the server fixes the issue, or if all servers must be restarted
+* **Possible Solution**
+  * Don't start server on container run
+    * Start when someone first visits the page
+    * Then any interaction with the server should be fresh
+* **Browser running but no metadata**
+  * Add handling around a browser currently running, but no metadata exists
+  * In this case, we should kill the running server, and restart it
+### Investigate
+* For all UI screencast, don't use Browser Server with websocket
+  * Only needs to be used when running browser server on the host machine
+  * This will make the Screencast UI work a lot faster
+  * Will fix the problem with the browser server not connecting
+    * Seems to only happen when used via websocket
+  * Need to add code to check the if running with host websocket when creating a new browser
 
 
 
-
-TODO:
-* Integrate parkin library from NPM
-* Fix Definitions editors
+## UI Updates
+* **Fix Definition/Definitions editors**
   * Have the definition editor show based on the selected step ( maybe? )
-* Add saving and deleting test files
-  * Needed for features / steps, unit, and waypoint
-* Add web-socket
-  * Add UI for running tests from backend server 
-* Add browser tab manager
-  * Open test site in new browser tab
-  * Run tests in browser tab for the opened site
-    * Investigate injecting messenger into the opened browser tab
+  * Allow selecting different steps to edit
+  * Allow showing side-by-side or separately
+* **Dialog Core step / integration**
+  * [See playwrite docs here](https://playwright.dev/docs/api/class-dialog/)
+  * Update herkin itself to set a `dialog` event listener
+    * Handles browser window pop-ups
+    * Must be called prior to tests being run
+    * When the event is triggered by a dialog opening, save the dialog value to the world object
+      * example: `page.on('dialog', dialog => (world.$dialog = dialog))`
+  * In the step definition that needs to verify something about or control the dialog, it just needs to access the `world.$dialog` value
+* **Page Layout**
+  * Clean-up / fix the page-layout
+  * Maybe a good idea to use a layout plugin / component-library
+  * The Sections / Surfaces are inconsistent
+    * In some cases scrollbars are shown, if others they are not
+  * Target min-width of the Window is 1024px
+    * All content should fit horizontally within this width
+    * All sections should allow scrolling vertically
+  * Issues
+    * Definitions List
+      * Content should wrap instead of show a horizontal scroll bar
+    * Screencast
+      * Should fit the height and width of the parent surface
+      * Should not scroll in any direction
+    * Terminal Test Output
+      * Migrate into an Aside component that can be toggled on Screencast and Test Results Screens
+    * Test Report
+      * Should not Hoiozontal scroll
+      * Should not have a max width larger than the parent surface
+    * Slide-out menu 
+      * Should allow vertical scrolling based on the content height
+      * As items are opened/closed, the scroll height should adjust based on it's height
+
+
+## Parkin
+* **Fix Parking Optional Text parsing**
+  * In some edge-cases the optional text is not parsed properly in Parkin
+  * Which means the step is either not matched, or it throws an error
+  * Example => 
+      ```js
+        Given('the {word} (titled) {string} is found', () => { /* ...do-something */ }, {
+          // The following given line errors due to the optional word next to the expression. The error says that selectorAlias isn't a function. There is a ticket for this.
+          // Given('the {word} (titled){string} is found', findElSetAsAncestor, {
+            description: 'Locates an element by selector AND text.\nEstablishes the element as an ancestor for use by subsequent steps that reference a descendent element.\nThe word "titled" is optional depending on context.  See examples below for usage.\n\nModule : findElAsAncestor',
+            expressions: []
+        })
+      ```
+* **World Variables**
+  * Update Parkin to check the step definition parameters for world variables (strings of form $world.*)
+    * If a world variable is found, find its value in the world object
+    * Take that value and pass it to the step definition function at the corresponding parameter index
+    * Ensure that this works with string interpolation
+    * Examples
+      * Example 1
+        * World => { app: { domain: 'www.test.com', query: `some-text` } }
+        * Step Text => Given I navigate to"$world.app.domain/browse/sessions/?qString=$world.app.query&qString=2"
+        * Definition Text => Given I navigate to {string}
+        * Output => {string} converted to `www.test.com/browse/sessions/?qString=some-text&qString=2`
+          * $world.app.domain && $world.app.query are replaced with values from the world object
+      * Example 2
+        * World => { appName: 'my-app' }
+        * Step Text => And I click the element "material-button.icon > button[aria-label='View $world.appName']"
+        * Definition Text => And I click the element {word}
+        * Output => {word} converted to `material-button.icon > button[aria-label='View my-app']`
+
+## Deployments
+* **CI/CD**
+  * Allows keg-herkin tests to be run in a CI/CD environment
+  * Is possiable when screencast is complete
+    * Allows running the browsers in the docker image and headless
+* **Deploy as a docker image**
+  * Stand up on a server somewhere
+  * Is possiable when screencast is complete
+    * Uses screencast to display browser
+      * Only works with chrome and firefox
+      * Might work with IE, but needs to be validated
+
+## Admin
+* **Integrate Herkin-Admin**
+  * ...
+
+
+## Idea
+  * Parse cmd output to know what test is currently running
+  * On the right side of the screencast, show list of tests
+    * Use the parsed cmd output to highlight which test is currently running
+    * Update it as it runs to be pass / fail / error etc...

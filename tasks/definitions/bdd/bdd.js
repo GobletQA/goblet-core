@@ -6,6 +6,7 @@ module.exports = {
     example: 'bdd <sub-task> <options>',
     tasks: {
       ...require('./run'),
+      ...require('./test'),
     }
   }
 }

@@ -44,6 +44,28 @@ actions:
       privileged: true
       cmds:
         - yarn install
+  sockr:
+    install:
+      location: /keg/tap/node_modules/@ltipton/sockr
+      privileged: true
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/@ltipton/sockr
+      privileged: true
+      cmds:
+        - yarn build:rollup
+    start:
+      location: /keg/tap/node_modules/@ltipton/sockr
+      privileged: true
+      detach: true
+      cmds:
+        - yarn dev
+    att:
+      location: /keg/tap/node_modules/@ltipton/sockr
+      privileged: true
+      cmds:
+        - bash
   parkin:
     install:
       location: /keg/tap/node_modules/@ltipton/parkin

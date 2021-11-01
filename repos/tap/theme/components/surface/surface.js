@@ -3,17 +3,12 @@ import { toggleState } from './toggleState'
 
 const titleSize = 16
 export const surface = theme => ({
-  main: {
-    borderTopLeftRadius: tapColors.borderRadius,
-    borderTopRightRadius: tapColors.borderRadius,
-    minHeight: 0,
-  },
   header: {
     // Overrides
     itemHeader: {
       main: {
         $web: {
-          height: 40,
+          height: 30,
           borderBottomColor: tapColors.border,
           borderBottomWidth: 1,
           borderTopLeftRadius: tapColors.borderRadius,
@@ -54,4 +49,7 @@ export const surface = theme => ({
       c: tapColors?.success
     }
   },
+  content: {
+    fl: 1,
+  }
 })

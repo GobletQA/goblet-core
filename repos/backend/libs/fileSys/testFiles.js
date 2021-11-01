@@ -38,12 +38,16 @@ const deleteTestFile = async (config, location) => {
   const { testsRoot } = config.paths
   await checkPath(location)
 
-  // TODO: double check that removeFile returns a value
-  const [__, deleted] = await removeFile(location)
+  const [err] = await removeFile(location)
+  if(err){
+    const error = new Error(`[API - Files] File could not be removed: ${location}`)
+    error.status = 404
+    throw error
+  }
 
   return {
     location,
-    success: Boolean(deleted),
+    success: true,
   }
 }
 

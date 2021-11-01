@@ -19,10 +19,7 @@ export const codeTabs = (theme, defTabbar) => deepMerge(defTabbar, {
       left: 'initial',
       bottom: 'initial',
       position: 'initial',
-
-      minHeight: 45,
       bgC: tapColors.headerBackground,
-      width: `100vw`,
       ...sharedShadow,
       zIndex: 20,
     },

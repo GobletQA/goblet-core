@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { singular } = require('@keg-hub/jsutils')
-const { treeNodeModel } = require('HerkinModels')
+const { treeNodeModel } = require('HerkinSharedModels')
 const { isDirectory, getFolderContent } = require('./fileSys')
 const { resolveTestFileType } = require('../../utils/resolveTestFileType')
 

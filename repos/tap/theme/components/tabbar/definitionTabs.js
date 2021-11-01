@@ -13,7 +13,6 @@ export const definitionTabs = (theme, defTabbar) => deepMerge(defTabbar, {
   },
   bar: {
     main: {
-      width: '100%',
       position: 'absolute',
       minHeight: theme.margin.size * 2,
       bgC: tapColors.headerBackground,

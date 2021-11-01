@@ -5,25 +5,40 @@ const path = require('path')
 
 // aliases shared by jest and module-alias
 const aliases = deepFreeze({
+  // ---- General Alias ---- //
   HerkinRoot: HERKIN_ROOT,
   HerkinTemp: path.join(HERKIN_ROOT, 'temp'),
   HerkinRepos: path.join(HERKIN_ROOT, 'repos'),
   HerkinConfigs: path.join(HERKIN_ROOT, 'configs'),
   HerkinTasks: path.join(HERKIN_ROOT, 'tasks'),
-  HerkinModels: path.join(HERKIN_ROOT, 'repos/shared/models'),
-  HerkinApp: path.join(HERKIN_ROOT, 'repos/backend/app/app.js'),
-  HerkinPaths: path.join(HERKIN_ROOT, 'repos/backend/utils/paths.js'),
-  HerkinBackConstants: path.join(HERKIN_ROOT, 'constants', 'backend'),
-  HerkinScreenCast: path.join(HERKIN_ROOT, 'repos/screencast/index.js'),
-  HerkinEndpoints: path.join(HERKIN_ROOT, 'repos/backend/endpoints'),
-  HerkinMiddleware: path.join(HERKIN_ROOT, 'repos/backend/middleware'),
-  HerkinAppRouter: path.join(HERKIN_ROOT, 'repos/backend/appRouter.js'),
   HerkinFrontConstants: path.join(HERKIN_ROOT, 'constants', 'frontend'),
+  
+  // ---- Shared Alias ---- //
+  HerkinSharedModels: path.join(HERKIN_ROOT, 'repos/shared/models'),
+  HerkinSharedMiddleware: path.join(HERKIN_ROOT, 'repos/shared/middleware'),
+  HerkinSharedApp: path.join(HERKIN_ROOT, 'repos/shared/express/app.js'),
+  HerkinSharedRouter: path.join(HERKIN_ROOT, 'repos/shared/express/appRouter.js'),
+  HerkinSharedPaths: path.join(HERKIN_ROOT, 'repos/shared/utils/paths.js'),
+  
+  // ---- Backend Alias ---- //
+  HerkinBackConstants: path.join(HERKIN_ROOT, 'constants', 'backend'),
+  HerkinBackEndpoints: path.join(HERKIN_ROOT, 'repos/backend/endpoints'),
+
+  // ---- TestUtils Alias ---- //
   HerkinParkin: path.join(TEST_UTILS_PATH, 'parkin'),
   HerkinSetup: path.join(TEST_UTILS_PATH, 'playwright', 'setupTestEnvironment'),
   HerkinPlaywright: path.join(TEST_UTILS_PATH, 'playwright'),
   HerkinSteps: path.join(TEST_UTILS_PATH, 'steps'),
   HerkinSupport: path.join(TEST_UTILS_PATH, 'support'),
+
+  // ---- Screencast Alias ---- //
+  HerkinSC: path.join(HERKIN_ROOT, 'repos/screencast'),
+  HerkinSCConstants: path.join(HERKIN_ROOT, 'repos/screencast/src/constants'),
+  HerkinSCEndpoints: path.join(HERKIN_ROOT, 'repos/screencast/src/endpoints'),
+  HerkinSCScreencast: path.join(HERKIN_ROOT, 'repos/screencast/src/screencast'),
+  HerkinSCLibs: path.join(HERKIN_ROOT, 'repos/screencast/src/libs'),
+  HerkinSCPlaywright: path.join(HERKIN_ROOT, 'repos/screencast/src/libs/playwright'),
+  HerkinSCVnc: path.join(HERKIN_ROOT, 'repos/screencast/src/libs/vnc'),
 })
 
 // Registers module-alias aliases (done programatically so we can reuse the aliases object for jest)

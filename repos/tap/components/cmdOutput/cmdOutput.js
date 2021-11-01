@@ -4,14 +4,14 @@ import { RenderOutput } from './renderOutput'
 import { Surface } from 'SVComponents/surface'
 import { Row } from '@keg-hub/keg-components/row'
 import { Grid } from '@keg-hub/keg-components/grid'
-import { useActiveTestRuns } from 'SVHooks/useActiveTestRuns'
+import { useActiveTestRuns } from 'SVHooks/activeFile/useActiveTestRuns'
 
 export const CmdOutput = props => {
   const { activeFile} = props
   const styles = useStyle(`cmdOutput`, props.styles)
   const testRunModel = useActiveTestRuns()
 
-  return testRunModel && (
+  return (
     <Surface
       className={`results-main`}
       prefix={`Test Output`}

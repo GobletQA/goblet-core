@@ -1,9 +1,12 @@
 import React from 'react'
+import { Code } from 'SVAssets/icons/code'
 import { EmptyScreen } from './emptyScreen'
 import { useStyle } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components'
 import { CodeEditor } from 'SVComponents/codeEditor'
-import { useActiveFile } from 'SVHooks/useActiveFile'
+import { useActiveFile } from 'SVHooks/activeFile/useActiveFile'
+import { Values } from 'SVConstants'
+const { SCREENS } = Values
 
 /**
  * EditorScreen - Renders code editors based on the type of file selected
@@ -28,3 +31,7 @@ export const EditorScreen = props => {
         </View>
       )
 }
+
+EditorScreen.tabIcon = Code
+EditorScreen.tabId = SCREENS.EDITOR
+EditorScreen.tabTitle = `Code Editor`

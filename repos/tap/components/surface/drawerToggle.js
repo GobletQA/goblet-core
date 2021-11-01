@@ -1,9 +1,9 @@
 import React from 'react'
 import { Icon } from '@keg-hub/keg-components/icon'
 import { Text } from '@keg-hub/keg-components/text'
-import { Touchable } from '@keg-hub/keg-components/touchable'
-import { useToggledStyles } from 'SVHooks/useToggledStyles'
 import { PlusCircle, MinusCircle } from 'SVAssets/icons'
+import { Touchable } from '@keg-hub/keg-components/touchable'
+import { useToggledStyles } from 'SVHooks/styles/useToggledStyles'
 
 export const DrawerToggle = ({ onPress, toggled, toggleDisabled, styles, icons }) => {
   const iconStyles = useToggledStyles(toggled, styles?.toggle)

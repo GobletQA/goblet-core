@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react'
-import { View, Button } from '@keg-hub/keg-components'
-import { isFunc, deepMerge, noPropArr, noOpObj } from '@keg-hub/jsutils'
+import React, { useEffect, useState, useMemo } from 'react'
+import { View } from '@keg-hub/keg-components'
 import { RunTestsButton, Tabbar } from 'SVComponents'
+import { isFunc, noPropArr, noOpObj } from '@keg-hub/jsutils'
+import { useOnTabSelect } from 'SVHooks/tabs/useOnTabSelect'
 
+const ignoreTabs = [`test-actions`]
 
 /**
  * TestActions Component - Displays results screen actions for updating test files
@@ -65,22 +67,6 @@ const useActionsTab = (
 ])
 
 /**
- * Helper callback hook for memoizing switching between results tabs
- * @param {Object} tab - Current tab that is active
- * @param {String} setTab - Method of update the current tab in the local state
- * @param {Object} onTabSelect - Callback passed in from props
- *
- * @returns {function} - Callback called when a tab is clicked
- */
-const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
-  if(newTab === `test-actions`) return
-  
-    return isFunc(onTabSelect)
-      ? onTabSelect(newTab, tab)
-      : (tab !== newTab && setTab(newTab)) || true
-}, [ tab, setTab, onTabSelect ])
-
-/**
  * EditorTabs Component - Displays the tabs for the results screen
  * @param {Object} props
  * @param {Object} props.activeTab - Currently active tab
@@ -90,7 +76,7 @@ export const ResultsTabs = props => {
   const { activeTab, onTabSelect, tabs=noPropArr } = props
 
   const [tab, setTab] = useState(activeTab)
-  const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
+  const tabSelect = useOnTabSelect(tab, setTab, onTabSelect, ignoreTabs)
 
   useEffect(() => {
     isFunc(onTabSelect) &&

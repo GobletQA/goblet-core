@@ -12,6 +12,7 @@ const icons = {
   success: Check,
   info: Info,
   danger: Times,
+  error: Times,
   warn: Exclamation,
 }
 

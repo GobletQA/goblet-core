@@ -1,53 +1,44 @@
+import React, { useMemo, useCallback } from 'react'
+import * as Screens from './index'
 import { Values } from 'SVConstants'
 import { View, Tabbar } from 'SVComponents'
-import { EmptyScreen } from './emptyScreen'
-import { useTheme } from '@keg-hub/re-theme'
-import { ScreencastScreen } from './screencastScreen'
-import { ResultsScreen } from './resultsScreen'
-import { EditorScreen } from './editorScreen'
-import { BuilderScreen } from './builderScreen'
-import React, { useMemo, useCallback } from 'react'
-import { ClipboardCheck, Code, Desktop } from 'SVAssets/icons'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { useScreenSelect } from 'SVHooks/useScreenSelect'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { deepMerge, isEmpty, exists } from '@keg-hub/jsutils'
 import { setScreenById } from 'SVActions/screens/setScreenById'
+import { deepMerge, isEmpty, exists, capitalize, noOpObj } from '@keg-hub/jsutils'
 
 const { CATEGORIES, SCREENS } = Values
 
 /**
- * Local tabs matching the screenModels in the store
+ * Restyle View component that wraps the Main Tabbar
+ */
+const ScreenParent = reStyle(View)(theme => ({
+  tp: 0,
+  fl: 1,
+  mT: 95,
+  mW: `100vw`,
+  zI: -1,
+  ovf: 'scroll',
+  pos: 'relative',
+  pH: theme?.padding?.size / 3,
+  bgC: theme?.tapColors?.appBackground,
+}))
+
+/**
+ * Screen Tabs built to match the screenModels in the store
+ * Looks each export screen component, and generates it's model
  * @type Array
  */
-const screenTabs = [
-  {
-    id: SCREENS.EMPTY,
-    View: EmptyScreen,
-  },
-  // {
-  //   id: SCREENS.BUILDER,
-  //   View: BuilderScreen,
-  //   title: `Feature Builder`,
-  // },
-  {
-    id: SCREENS.EDITOR,
-    View: EditorScreen,
-    Icon: Code,
-    title: `Code Editor`,
-  },
-  {
-    id: SCREENS.SCREENCAST,
-    View: ScreencastScreen,
-    Icon: Desktop,
-    title: `Screencast`,
-  },
-  {
-    id: SCREENS.RESULTS,
-    View: ResultsScreen,
-    Icon: ClipboardCheck,
-    title: `Tests Results`,
-  },
-]
+const screenTabs = Object.values(Screens)
+  .map(View => ({
+    View,
+    id: View.tabId,
+    Icon: View.tabIcon,
+    title: View.tabId !== SCREENS.EMPTY
+      ? View.tabTitle || capitalize(View.tabId)
+      : undefined
+  }))
 
 /**
  * Hook to merge the local tabs with the screenModels to make a screenTab
@@ -77,26 +68,21 @@ const useScreenTab = (id, screenModels) => {
  * @param {object} [props.activeScreen] - Currently active screen
  */
 export const Screen = props => {
-
-  const theme = useTheme()
   const screenModels = useStoreItems(CATEGORIES.SCREENS)
   const screenTab = useScreenTab(props?.activeScreen, screenModels)
   const onTabSelect = useScreenSelect(screenTab, screenModels)
 
   return screenTab && (
-    <View
-      className={`screen-parent-main`}
-      style={theme?.screens?.parent?.main}
-    >
+    <ScreenParent className={`screen-parent-main`}>
       <Tabbar
-        location={'top'}
-        tabs={screenTabs}
         fixed
         type={'screens'}
+        location={'top'}
+        tabs={screenTabs}
         activeTab={screenTab.id}
         onTabSelect={onTabSelect}
       />
-    </View>
+    </ScreenParent>
   ) || null
 
 }

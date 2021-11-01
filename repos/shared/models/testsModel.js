@@ -12,6 +12,7 @@ const Model = {
   features: [],
   definitions: [],
   jest: [],
+  unit: [],
   waypoint: []
 }
 

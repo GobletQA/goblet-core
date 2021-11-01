@@ -2,8 +2,8 @@ import React, { useMemo } from 'react'
 import { Icon } from 'SVComponents'
 import { isStr } from '@keg-hub/jsutils'
 import { Animated } from 'react-native'
-import { useToggleAnimate } from 'SVHooks'
 import { useTheme } from '@keg-hub/re-theme'
+import { useToggleAnimate } from 'SVHooks/styles/useToggleAnimate'
 
 /**
  * Memoizes props for the Icon component

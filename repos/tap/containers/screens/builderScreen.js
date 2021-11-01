@@ -1,7 +1,7 @@
 import React from 'react'
-import { Feature, H5, View, Section } from 'SVComponents'
-import { useActiveFile } from 'SVHooks/useActiveFile'
 import { EmptyScreen } from './emptyScreen'
+import { Feature, H5, View, Section } from 'SVComponents'
+import { useActiveFile } from 'SVHooks/activeFile/useActiveFile'
 
 /**
  * BuilderScreen - Renders Feature File NO-Code Editor

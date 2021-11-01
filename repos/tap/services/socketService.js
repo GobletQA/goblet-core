@@ -1,7 +1,8 @@
 import * as sockrActions from 'SVActions/sockr'
 import { isFunc, camelCase, snakeCase, checkCall } from '@keg-hub/jsutils'
-import { serverConfig } from '../../../configs/server.config'
 import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
+
+const serverConfig = JSON.parse(process.env.WS_SERVER_CONFIG)
 
 /**
  * Callback event functions bound to the SocketService
@@ -23,6 +24,11 @@ const events = {
     const actionName = camelCase((event.split(':')[1] || '').toLowerCase())
     checkCall(sockrActions[actionName], message)
   },
+  browserStatus: function(message, instance, event){
+    // TODO: Update to call browser status update local action
+    //
+  
+  }
 }
 
 /**

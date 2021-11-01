@@ -1,11 +1,11 @@
 import React,  { useState, useCallback, useMemo, useEffect } from 'react'
 import { useStyle } from '@keg-hub/re-theme'
 import {
+  exists,
+  noOpObj,
   checkCall,
   noPropArr,
   deepMerge,
-  noOpObj,
-  exists
 } from '@keg-hub/jsutils'
 import { ListItem } from './listItem'
 import { ListHeader } from './listHeader'
@@ -51,16 +51,26 @@ const useToggled = (meta, propsToggled, drawerToggled, onHeaderPress) => {
   }, [toggled, controlledToggle])
 
   return {
-    onTogglePress,
-    setToggled,
     toggled,
+    setToggled,
+    onTogglePress,
   }
   
 }
 
-const RenderListItems = ({ items, renderItem, group, onItemPress, styles }) => {
+const RenderListItems = props => {
+  const {
+    items,
+    group,
+    styles,
+    renderItem,
+    onItemPress,
+    filterValue,
+    filterKey='title',
+  } = props
+
   return Object.entries(items)
-    .map(([ key, item ]) => {
+    .reduce((acc, [ key, item ]) => {
       const itemProps = {
         group,
         styles,
@@ -69,36 +79,42 @@ const RenderListItems = ({ items, renderItem, group, onItemPress, styles }) => {
         key: `${group}-${key}`,
         ...item
       }
-
-      return isValidComponent(renderItem)
-        ? renderFromType(renderItem, itemProps)
-        : (<ListItem {...itemProps} />)
-    })
+      
+      ;(!exists(filterValue) || item[filterKey].toLowerCase().includes(filterValue)) &&
+        acc.push(
+        isValidComponent(renderItem)
+          ? renderFromType(renderItem, itemProps)
+          : (<ListItem {...itemProps} />)
+        )
+      return acc
+    }, [])
 }
 
 const RenderList = props => {
   const {
-    drawer=true,
-    first,
-    header=true,
-    groupKey,
-    HeaderIcon,
-    iconProps,
     last,
+    first,
+    styles,
+    groupKey,
+    iconProps,
+    filterKey,
+    HeaderIcon,
+    renderItem,
+    onItemPress,
+    filterValue,
+    drawer=true,
+    header=true,
     meta=noOpObj,
     onHeaderPress,
-    onItemPress,
-    renderItem,
-    styles,
-    drawerProps=noOpObj
+    drawerProps=noOpObj,
   } = props
 
   const group = meta.group || groupKey
 
   const {
     toggled,
-    onTogglePress,
     setToggled,
+    onTogglePress,
   } = useToggled(
     meta,
     props.toggled,
@@ -115,13 +131,15 @@ const RenderList = props => {
 
   const RenderedItems = (
     <RenderListItems
-      first={first}
       last={last}
-      items={meta.items || noPropArr}
+      first={first}
       group={group}
+      filterKey={filterKey}
+      styles={styles?.item}
       renderItem={renderItem}
       onItemPress={onItemPress}
-      styles={styles?.item}
+      filterValue={filterValue}
+      items={meta.items || noPropArr}
     />
   )
 
@@ -129,13 +147,13 @@ const RenderList = props => {
     <>
       {header && (
         <ListHeader
-          first={first}
           last={last}
-          Icon={HeaderIcon}
-          iconProps={iconProps}
-          toggled={toggled}
-          onPress={onTogglePress}
+          first={first}
           title={group}
+          Icon={HeaderIcon}
+          toggled={toggled}
+          iconProps={iconProps}
+          onPress={onTogglePress}
           styles={styles?.header}
         />
       )}
@@ -143,11 +161,11 @@ const RenderList = props => {
         ? (
             <Drawer
               {...drawerProps}
-              first={first}
               last={last}
-              className='sub-items-drawer'
-              styles={drawerStyles}
+              first={first}
               toggled={toggled}
+              styles={drawerStyles}
+              className='sub-items-drawer'
             >
               {RenderedItems}
             </Drawer>
@@ -156,13 +174,12 @@ const RenderList = props => {
       }
     </>
   )
-
 }
 
 // Need to move tasks specific data outside of this component
 // Should create a RenderTasks component, and use this inside it
 // Which will make this component reuseable
-export const SimpleList = (props) => {
+export const SimpleList = props => {
   const { items, styles } = props
   const listStyles = useStyle(`list`, styles)
   const itemsLength = items.length - 1
@@ -172,17 +189,17 @@ export const SimpleList = (props) => {
       return (
         <Grid
           className="simple-list"
-          key={`${meta.group}-${key}`}
           style={listStyles.main}
+          key={`${meta.group}-${key}`}
         >
           <RenderList
             { ...props }
-            first={index === 0}
-            last={itemsLength === index}
+            meta={meta}
             index={index}
             groupKey={key}
-            meta={meta}
+            first={index === 0}
             styles={listStyles}
+            last={itemsLength === index}
           />
         </Grid>
       )

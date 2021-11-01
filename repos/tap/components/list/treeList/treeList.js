@@ -9,9 +9,9 @@ import {
   Text,
 } from 'SVComponents'
 import { Values } from 'SVConstants'
-import TreeView from 'react-native-final-tree-view'
+import { TreeView } from './treeView'
 import { ChevronDown } from 'SVAssets/icons'
-import { useActiveFile } from 'SVHooks/useActiveFile'
+import { useActiveFile } from 'SVHooks/activeFile/useActiveFile'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { isEmptyFolderNode, findNode, constructFileTree } from 'SVUtils/fileTree'
 import { toggleRotationStyle } from 'SVUtils/theme'
@@ -99,6 +99,10 @@ const usePendingContent = (pendingFiles, location) => useMemo(() => {
   pendingFiles
 ])
 
+const buildArtifactUrl = ({ name }) => {
+  return `${window.location.origin}/artifacts/${name}`
+}
+
 /**
  * TreeList
  * @param {Object} props 
@@ -119,6 +123,8 @@ export const TreeList = props => {
         type: 'error',
         message: `Unknown node type selected: ${node.type}`
       })
+    if (node.testType === 'artifact')
+      return window.open(buildArtifactUrl(node), '_blank').focus()
 
     node.testType === 'report'
       ? await setReportFile(node.location)
@@ -148,7 +154,6 @@ export const TreeList = props => {
 
 /**
  * Component for list item based on the props
- * prop ref: https://github.com/zaguiini/react-native-final-tree-view#rendernode
  * @param {Object} props 
  * @param {Object} props.node - node object: { children, location, id, modified, name, type }
  * @param {Boolean} props.isExpanded - if the list item is expanded

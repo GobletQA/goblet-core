@@ -14,11 +14,16 @@ const { FILE_TYPES } = Values
 export const setActiveFileFromType = (fileModel, screenId) => {
   switch(fileModel.fileType){
     case FILE_TYPES.REPORT:
-    case FILE_TYPES.DEFINITION:
       return setAltActiveFile(fileModel, screenId)
     case FILE_TYPES.UNIT:
     case FILE_TYPES.WAYPOINT:
     case FILE_TYPES.FEATURE:
+    case FILE_TYPES.DEFINITION:
+    // Eventually we want to support other file type clasifications
+    // This includes general support, html and markdown class types
+    // case FILE_TYPES.SUPPORT:
+    // case FILE_TYPES.HTML:
+    // case FILE_TYPES.DOCS:
       return setActiveFile(fileModel, screenId)
     default:
       return addToast({

@@ -2,7 +2,7 @@ import { Surface } from 'SVComponents/surface'
 import { noOp, noOpObj } from '@keg-hub/jsutils'
 import { AceEditor } from 'SVComponents/aceEditor'
 import React, { useCallback, useState } from 'react'
-import { usePendingMark } from 'SVHooks/usePendingMark'
+import { usePendingMark } from 'SVHooks/activeFile/usePendingMark'
 
 
 /**
@@ -13,6 +13,7 @@ import { usePendingMark } from 'SVHooks/usePendingMark'
  */
 export const FeatureEditor = props => {
   const {
+    styles,
     activeFile=noOpObj,
     onChange=noOp
   } = props
@@ -27,20 +28,20 @@ export const FeatureEditor = props => {
   }, [activeFeat, setActiveFeat])
 
   const surfaceTitle = usePendingMark(activeFile)
-  
+
   return (
     <Surface
+      styles={styles}
       prefix={'Editor'}
       hasToggle={false}
       capitalize={false}
       title={surfaceTitle}
-      styles={{ main: props?.style }}
       className={`feature-surface-main`}
     >
       <AceEditor
         {...props}
-        fileId={activeFile.location}
         mode='gherkin'
+        fileId={activeFile.location}
         onChange={onChange || onFeatureEdit}
       />
     </Surface>

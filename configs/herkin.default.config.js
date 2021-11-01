@@ -11,6 +11,8 @@ const {
   HERKIN_SUPPORT_DIR,
   HERKIN_UNIT_DIR,
   HERKIN_WAYPOINT_DIR,
+  SCREENCAST_API_PORT,
+  SCREENCAST_PROXY_HOST,
   TEST_TYPES,
 } = require('../constants/backend')
 
@@ -22,15 +24,26 @@ module.exports = {
   screencast: {
     // Proxy settings, for connecting the backend API to the noVNC server
     proxy: {
-      host: serverConfig.host || '0.0.0.0',
+      host: SCREENCAST_PROXY_HOST || serverConfig.host || '0.0.0.0',
       port: process.env.NO_VNC_PORT || 26369,
       path: '/novnc',
     },
+    // Uses to start separate screencast API
+    server: {
+      host: SCREENCAST_PROXY_HOST || serverConfig.host || '0.0.0.0',
+      port: SCREENCAST_API_PORT,
+    },
+    // Default playwright browser context settings
+    // TODO: add defaults here for Screencast
+    context: {},
     // Default playwright browser launch settings
+    // TODO: add defaults here for Screencast
     browser: {},
     // Default tigervnc server settings
+    // TODO: add defaults here for Screencast
     vnc: {},
     // Default websockify server settings
+    // TODO: add defaults here for Screencast
     sockify: {},
   },
   server: serverConfig,

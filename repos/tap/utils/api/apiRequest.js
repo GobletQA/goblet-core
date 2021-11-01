@@ -37,8 +37,8 @@ export const apiRequest = async (request, responseType) => {
   if (success)  return isObj(data) && data.data || data
 
   devLog(`warn`, `ERROR: ${data?.error?.message}`)
+
   return responseType === 'object'
     ? data
     : false
-
 }

@@ -18,7 +18,16 @@ const buildToast = (toast=noOpObj) => {
 
 export const addToast = toast => {
   const { items } = getStore().getState()
-  const updated = Array.from([ ...(items[CATEGORIES.TOASTS] || noPropArr), buildToast(toast) ])
+  const current = items[CATEGORIES.TOASTS] || noPropArr
+
+  // Allow max 4 toasts on the screen at one time
+  // In this case log message to the output
+  if(current.length >=3)
+    return toast &&
+      toast.message &&
+      console.log(toast.type || 'info', toast.message)
+
+  const updated = Array.from([ ...current, buildToast(toast) ])
 
   dispatch({
     type: ActionTypes.SET_ITEMS,

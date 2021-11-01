@@ -4,7 +4,7 @@ import { checkCall, noOpObj } from '@keg-hub/jsutils'
 import { View, H5 } from '@keg-hub/keg-components'
 import { AceEditor } from 'SVComponents/aceEditor'
 import { NoActiveDefinition } from './noActiveDefinition'
-import { useAltActiveFile } from 'SVHooks/useAltActiveFile'
+import { useAltActiveFile } from 'SVHooks/activeFile/useAltActiveFile'
 import { Values } from 'SVConstants'
 const { SCREENS, FILE_TYPES } = Values
 

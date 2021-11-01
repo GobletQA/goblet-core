@@ -10,7 +10,7 @@ export const setBrowserOptions = (options=noOpObj) => {
   dispatch({
     type: ActionTypes.UPSERT_ITEMS,
     payload: {
-      category: CATEGORIES.BROWSER_OPTIONS,
+      category: CATEGORIES.BROWSER_OPTS,
       item: options,
     },
   })

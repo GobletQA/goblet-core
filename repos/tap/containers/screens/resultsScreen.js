@@ -10,9 +10,10 @@ import { Surface } from 'SVComponents/surface'
 import { CmdOutput } from 'SVComponents/cmdOutput'
 import { Results } from 'SVComponents/results'
 import { apiRequest } from 'SVUtils/api/apiRequest'
-import { useActiveFile } from 'SVHooks/useActiveFile'
-import { useAltActiveFile } from 'SVHooks/useAltActiveFile'
 import { View, TouchableIcon } from '@keg-hub/keg-components'
+import { ClipboardCheck } from 'SVAssets/icons/clipboardCheck'
+import { useActiveFile } from 'SVHooks/activeFile/useActiveFile'
+import { useAltActiveFile } from 'SVHooks/activeFile/useAltActiveFile'
 import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
 
 const { SCREENS, FILE_TYPES } = Values
@@ -82,3 +83,7 @@ export const ResultsScreen = props => {
       </View>
   )
 }
+
+ResultsScreen.tabId = SCREENS.RESULTS
+ResultsScreen.tabTitle = `Test Results`
+ResultsScreen.tabIcon = ClipboardCheck

@@ -1,3 +1,6 @@
+/**
+ * Default bable config for Keg-Herkin loaded from the root babel.config.js file
+ */
 module.exports = {
   presets: [
     [

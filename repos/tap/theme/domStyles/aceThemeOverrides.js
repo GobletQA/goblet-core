@@ -1,31 +1,23 @@
 import { tapColors } from '../tapColors'
 
-export const aceThemeOverrides = theme => ({
-  '.editors-screen > div:first-child': {
-    width: '100%',
-  },
-  '.ace-chrome': {
-    paddingBottom: theme.padding.size
-  },
-  '.ace-cucumber': {
-    color: theme.colors.opacity._100,
-    paddingBottom: theme.padding.size
-  },
-  '.ace-chrome .ace_gutter, .ace-cucumber .ace_gutter': {
-    background: tapColors.accentBackground,
-    width: '42px !important',
-  },
-  '.ace_gutter .ace_gutter-layer': {
-    width: '42px !important',
-  },
-  '.ace_gutter .ace_gutter-layer .ace_gutter-active-line': {
-      backgroundColor: '#e3e8f0',
-  },
-  '.gherkin-editor-wrapper': {
-    overflowY: 'auto',
-    marginRight: '0px !important',
-  },
-  '.gherkin-editor-wrapper #feature-editor': {
-    height: '100% !important',
+export const aceThemeOverrides = theme => {
+  const padDouble = theme.padding.size * 2
+  return {
+    '.ace-chrome': {
+      paddingBottom: padDouble
+    },
+    '.ace-herkin': {
+      color: theme.colors.opacity._100,
+      paddingBottom: padDouble
+    },
+    '.ace-chrome .ace_gutter, .ace-cucumber .ace_gutter': {
+      background: tapColors.accentBackground,
+    },
+    '.ace_gutter .ace_gutter-layer .ace_gutter-active-line': {
+        backgroundColor: '#e3e8f0',
+    },
+    '.gherkin-editor-wrapper': {
+      overflowY: 'auto',
+    },
   }
-})
+}

@@ -6,6 +6,7 @@ import { useStyle } from '@keg-hub/re-theme'
 import { checkCall, noPropArr } from '@keg-hub/jsutils'
 import React, { useMemo, useCallback, useState, useEffect } from 'react'
 import { View } from '@keg-hub/keg-components'
+import { TabbarMain } from './tabbar.restyle'
 
 const { CATEGORIES } = Values
 
@@ -83,7 +84,10 @@ export const Tabbar = props => {
   useCheckActiveTab(activeTab, activeId, setActiveId)
 
   return (
-    <View className='tabbar-main' style={ barStyles.main } >
+    <TabbarMain
+      className='tabbar-main'
+      style={barStyles.main}
+    >
       {tabs && (
         <TabChildren
           tabs={tabs}
@@ -95,7 +99,7 @@ export const Tabbar = props => {
           onSelectTab={onSelectTab}
         />
       )}
-    </View>
+    </TabbarMain>
   )
 
 }

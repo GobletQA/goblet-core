@@ -6,6 +6,11 @@ const constants = {
     safari: `--webkit`,
     webkit: `--webkit`,
   },
+  browserNames: [
+    'chromium',
+    'firefox',
+    'webkit'
+  ]
 }
 
 module.exports = constants

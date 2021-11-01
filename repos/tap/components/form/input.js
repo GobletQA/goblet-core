@@ -6,14 +6,9 @@ import {
 } from '@keg-hub/keg-components'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 
-const ReStyleView = reStyle(
-  View,
-  'style'
-)((__, props) => ({
-  ...props?.style,
-  padding: 8,
+const ReStyleView = reStyle(View)(theme => ({
+  padding: theme.padding.size / 2,
 }))
-
 
 /**
  * Input component
@@ -21,30 +16,42 @@ const ReStyleView = reStyle(
  * @param {Array<{label:string, value:string}>} props.options - options to display
  * @returns
  */
-export const Input = ({ onChange, styles, title='', value, inputRef, className }) => {
+export const Input = props => {
+  const {
+    value,
+    title,
+    onBlur,
+    styles,
+    onChange,
+    className,
+    placeholder
+  } = props
 
   const valueRef = useRef(value)
-  inputRef = inputRef || useRef(null)
+  const inputRef = props.inputRef || useRef(null)
 
   useEffect(() => {
     if(valueRef.current === value) return
 
     valueRef.current = value
     inputRef.current && inputRef.current.focus()
-
   }, [ value, inputRef.current, valueRef.current ])
 
   return (
     <ReStyleView style={styles?.main}>
-      <Label style={styles?.label} >
-        {title}
-      </Label>
+      {title && (
+        <Label style={styles?.label} >
+          {title}
+        </Label>
+      )}
       <KegInput
-        style={styles?.input}
-        ref={inputRef}
-        onChange={onChange}
         value={value}
+        ref={inputRef}
+        onBlur={onBlur}
+        onChange={onChange}
         className={className}
+        style={styles?.input}
+        placeholder={placeholder}
       />
     </ReStyleView>
   )
