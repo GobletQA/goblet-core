@@ -1,19 +1,27 @@
 const { parkin } = require('./instance')
-const { HERKIN_FEATURE_NAME, HERKIN_FEATURE_TAGS } = process.env
+
 /**
  * Global helper to allow re-using the same parking instance for each test
  */
 global.getParkinInstance = () => parkin
 
 /**
- * TODO: build dynamic options based on the current env
- * Most likely will need to use process.env to pass in options
- * Need a way to get the name, and tags options passed here
- * const { HERKIN_FEATURE_NAME, HERKIN_FEATURE_TAGS } = process.env
+ * Gets the options to be passed on to parkin
+ * Currently set using envs, but would be better to define a config object
+ * TODO: investigate loading in the herkin.config in this content
  */
 global.getParkinOptions = () => {
+  // Load the both herkin and parkin version
+  // Herkin version overrides parkin version
+  const {
+    PARKIN_FEATURE_NAME,
+    PARKIN_FEATURE_TAGS,
+    HERKIN_FEATURE_NAME = PARKIN_FEATURE_NAME,
+    HERKIN_FEATURE_TAGS = PARKIN_FEATURE_TAGS,
+  } = process.env
+
   return {
     ...(HERKIN_FEATURE_NAME && { name: HERKIN_FEATURE_NAME }),
-    ...(HERKIN_FEATURE_TAGS && { tags: HERKIN_FEATURE_TAGS })
+    ...(HERKIN_FEATURE_TAGS && { tags: HERKIN_FEATURE_TAGS }),
   }
 }

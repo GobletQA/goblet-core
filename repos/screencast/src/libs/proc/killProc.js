@@ -14,17 +14,19 @@ const { isObj, exists } = require('@keg-hub/jsutils')
  *
  * @returns {boolean|*} - False if no pid is passed, or the response from the exec method
  */
-const killProc = (proc, platform=process.platform) => {
+const killProc = (proc, platform = process.platform) => {
   const procPid = isObj(proc) ? proc.pid : proc
 
-  return exists(procPid) &&
+  return (
+    exists(procPid) &&
     exec(
       platform === 'win32'
         ? `taskKill /pid ${procPid} /t`
         : `kill -9 ${procPid}`
     )
+  )
 }
 
 module.exports = {
-  killProc
+  killProc,
 }

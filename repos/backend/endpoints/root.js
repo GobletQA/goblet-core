@@ -1,20 +1,19 @@
 const { AppRouter } = require('HerkinSharedRouter')
-const { apiErr, apiResponse } = require('./handler')
+const { asyncWrap, apiRes } = require('HerkinSharedExp')
 
-const apiRoot = (req, res) => {
+const apiRoot = asyncWrap(async (req, res) => {
+  const config = req.app.locals.config
 
-  try {
-    const config = req.app.locals.config
-    return apiResponse(req, res, {
+  return apiRes(
+    req,
+    res,
+    {
       host: config.server.host,
-      port: config.server.port
-    }, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-
-}
+      port: config.server.port,
+    },
+    200
+  )
+})
 
 module.exports = () => {
   AppRouter.get('/', apiRoot)

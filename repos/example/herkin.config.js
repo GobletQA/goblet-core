@@ -2,16 +2,18 @@ const path = require('path')
 
 module.exports = {
   paths: {
-    rootDir: __dirname,
+    repoRoot: path.join(__dirname),
+    workDir: 'herkin',
     reportsDir: 'reports',
-    testsRoot: path.join(__dirname, 'tests'),
     featuresDir: 'bdd/features',
     supportDir: 'bdd/support',
     stepsDir: 'bdd/steps',
     unitDir: 'unit',
-    waypointDir: 'waypoint'
+    waypointDir: 'waypoint',
   },
-  urls: {
-    app: 'http://www.google.com'
-  }
+  world: {
+    app: {
+      url: 'http://www.google.com',
+    },
+  },
 }

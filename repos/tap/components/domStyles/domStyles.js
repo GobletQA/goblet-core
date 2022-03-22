@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import { noOpObj } from '@keg-hub/jsutils'
-import { useDomStyles } from 'SVHooks/styles/useDomStyles'
+import { useDomStyles } from 'HKHooks/styles/useDomStyles'
 
 /**
  * Calls useDomStyles hook with global styles and always returns null
@@ -22,9 +22,9 @@ const ApplyDomStyles = React.memo(({ styles }) => {
  * @param {Object} props.styles - Styles that should be added to the dom globally
  *
  */
-export const DomStyles = React.memo(({ styles=noOpObj }) => {
+export const DomStyles = React.memo(({ styles = noOpObj }) => {
   const styleRef = useRef(false)
   useEffect(() => (styleRef.current = true))
 
-  return !styleRef.current && (<ApplyDomStyles styles={styles} />)
+  return !styleRef.current && <ApplyDomStyles styles={styles} />
 })

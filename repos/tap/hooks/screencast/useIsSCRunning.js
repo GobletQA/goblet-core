@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useMemo } from 'react'
 import { useSCStatus } from './useSCStatus'
 
 export const useIsSCRunning = () => {
@@ -6,9 +6,9 @@ export const useIsSCRunning = () => {
   const isRunning = useMemo(() => {
     return Boolean(
       status.lastCheck &&
-      status?.vnc?.running &&
-      status?.sockify?.running &&
-      status?.browser?.running
+        status?.vnc?.running &&
+        status?.sockify?.running &&
+        status?.browser?.running
     )
   }, [status])
 

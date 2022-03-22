@@ -1,4 +1,3 @@
-
 import { useMemo } from 'react'
 import { doIt, uuid, eitherArr } from '@keg-hub/jsutils'
 
@@ -9,9 +8,9 @@ import { doIt, uuid, eitherArr } from '@keg-hub/jsutils'
  *
  * @returns {Array} - Memoized set of Ids matching the length of the passed in array
  */
-export const useIds = (arr) => {
+export const useIds = arr => {
   const deps = eitherArr(arr, [arr])
   return useMemo(() => {
     return doIt(arr.length, null, () => uuid())
-  }, [ ...deps ])
+  }, [...deps])
 }

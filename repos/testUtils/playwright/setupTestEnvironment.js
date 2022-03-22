@@ -1,7 +1,4 @@
-const {metadata, newBrowser} = require('HerkinSC')
-
-// HOST_BROWSER is set by the task `keg herkin bdd run`
-const BROWSER = process.env.HOST_BROWSER || 'chromium'
+const { metadata, newBrowser } = require('HerkinSC')
 
 /**
  * Initializes tests by connecting to the browser loaded at the websocket
@@ -12,22 +9,38 @@ const BROWSER = process.env.HOST_BROWSER || 'chromium'
  * @return {boolean} - true if init was successful
  */
 const initialize = async () => {
+
+  /** HERKIN_BROWSER is set by the task `keg herkin bdd run` */
+  const { HERKIN_BROWSER='chromium' } = process.env
+  
   try {
-    const { type, launchOptions } = await metadata.read(BROWSER)
-    const { browser } = await newBrowser({...launchOptions, type})
-    if(!browser)
-      throw new Error(`Could not create browser. Please ensure the browser server is running.`)
-    
+    const { type, launchOptions } = await metadata.read(HERKIN_BROWSER)
+
+    // TODO: Should update to check if in docker container
+    // Then pass false based on that
+    // Pass false to bypass checking the browser status
+    const { browser } = await newBrowser(
+      {
+        ...launchOptions,
+        type,
+        ...global.herkinBrowserOpts,
+      },
+      false
+    )
+
+    if (!browser)
+      throw new Error(
+        `Could not create browser. Please ensure the browser server is running.`
+      )
+
     global.browser = browser
     global.context = await browser.newContext()
-  }
-  catch (err) {
+  } catch (err) {
     console.error(err.message)
-    // exit 2 seconds later to ensure error 
+    // exit 2 seconds later to ensure error
     // has time to be written to stdout
     setTimeout(() => process.exit(1), 2000)
-  }
-  finally {
+  } finally {
     return global.context && global.browser
   }
 }
@@ -56,9 +69,8 @@ const cleanup = async () => {
  *
  * @return {Object} - Playwright browser page object
  */
-const getPage = async (num=0) => {
-  if (!global.context)
-    throw new Error('No browser context initialized')
+const getPage = async (num = 0) => {
+  if (!global.context) throw new Error('No browser context initialized')
 
   const pages = context.pages() || []
 
@@ -89,5 +101,5 @@ module.exports = {
   setupTestEnvironment,
   getBrowserContext,
   initialize,
-  cleanup
+  cleanup,
 }

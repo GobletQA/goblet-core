@@ -1,4 +1,3 @@
-
 /**
  * Checks a tag's parent to determine it's type
  * @function
@@ -12,8 +11,8 @@ export const getTagType = parent => {
   return !parent
     ? null
     : parent.feature
-      ? 'feature'
-      : parent.scenario
-        ? 'scenario'
-        : null
+    ? 'feature'
+    : parent.scenario
+    ? 'scenario'
+    : null
 }

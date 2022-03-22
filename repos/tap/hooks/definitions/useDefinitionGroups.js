@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
-import { reduceObj, deepClone, exists } from '@keg-hub/jsutils'
-import { Copy, Edit } from 'SVAssets/icons'
+import { Edit } from 'HKAssets/icons/edit'
+import { Copy } from 'HKAssets/icons/copy'
+import { reduceObj, deepClone } from '@keg-hub/jsutils'
 
 /**
  * Default group object for splitting up step definitions
@@ -26,7 +27,7 @@ const alphaSort = items => {
   items.sort((a, b) => {
     const textA = a.title.toLowerCase()
     const textB = b.title.toLowerCase()
-    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
+    return textA < textB ? -1 : textA > textB ? 1 : 0
   })
 
   return items
@@ -38,10 +39,9 @@ const alphaSort = items => {
  * @private
  * @param {Object} grouped - Groups of step definitions separated by type
  *
- * @return {Object} - Sorted Groups of definitions alphabetically and by type 
+ * @return {Object} - Sorted Groups of definitions alphabetically and by type
  */
 const sortDefinitions = grouped => {
-
   grouped.all.items.sort((a, b) => {
     const textA = a.title.toLowerCase()
     const textB = b.title.toLowerCase()
@@ -50,10 +50,10 @@ const sortDefinitions = grouped => {
     const aThen = textA.startsWith('then')
     const bWhen = textB.startsWith('when')
 
-    if(aWhen && bThen) return -1
-    if(aThen && bWhen) return 1
+    if (aWhen && bThen) return -1
+    if (aThen && bWhen) return 1
 
-    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
+    return textA < textB ? -1 : textA > textB ? 1 : 0
   })
 
   grouped.given.items = alphaSort(grouped.given.items)
@@ -68,44 +68,46 @@ const sortDefinitions = grouped => {
  * Separates them by type, and creates a lookup map
  * @private
  * @param {Object} definitions - Groups of step definitions to search separated by type
- * @param {Object} props - Global items props applied to each built item
  *
  * @return {Object} - Mapped definitions into SimpleList formatted object
  */
-export const useDefinitionGroups = definitions => {
+export const useDefinitionGroups = (definitions) => {
   return useMemo(() => {
-    return reduceObj(definitions, (key, defs, grouped) => {
-
-      defs.map(def => {
-        const itemProps = {
-          title: `${def.type} ${def.name}`,
-          uuid: def.uuid,
-          meta: def.meta,
-          actions: [
-            {
-              name: 'Copy',
-              key: `action-copy`,
-              iconProps: {
-                size: 12,
-                Component: Copy,
+    return reduceObj(
+      definitions,
+      (key, defs, grouped) => {
+        defs.map(def => {
+          const itemProps = {
+            title: `${def.type} ${def.name}`,
+            uuid: def.uuid,
+            meta: def.meta,
+            actions: [
+              {
+                name: 'Copy',
+                key: `action-copy`,
+                iconProps: {
+                  size: 12,
+                  Component: Copy,
+                },
               },
-            },
-            {
-              name: 'Edit',
-              key: `action-edit`,
-              iconProps: {
-                size: 12,
-                Component: Edit,
+              {
+                name: 'Edit',
+                key: `action-edit`,
+                iconProps: {
+                  size: 12,
+                  Component: Edit,
+                },
               },
-            }
-          ]
-        }
-        grouped[key].items.push(itemProps)
-        grouped.all.items.push(itemProps)
-        grouped.lookup[def.uuid] = def
-      })
+            ],
+          }
+          grouped[key].items.push(itemProps)
+          grouped.all.items.push(itemProps)
+          grouped.lookup[def.uuid] = def
+        })
 
-      return sortDefinitions(grouped)
-    }, deepClone(defaultGroups))
+        return sortDefinitions(grouped)
+      },
+      deepClone(defaultGroups)
+    )
   }, [definitions])
 }

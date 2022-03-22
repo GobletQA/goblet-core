@@ -8,7 +8,6 @@ const {
   setupCors,
   setupLogger,
   setupServer,
-  setupStatic,
 } = require('HerkinSharedMiddleware')
 
 /**
@@ -18,31 +17,27 @@ const {
  * @returns {Object} - Express app, server and socket.io socket
  */
 const initApi = async () => {
-
   const app = getApp('screencast')
-  const { server:serverConf } = app.locals.config
+  const { server: serverConf } = app.locals.config
 
   setupLogger(app)
   setupCors(app)
   setupServer(app)
   apiEndpoints(app)
 
-  const server = app.listen(
-    serverConf.port,
-    serverConf.host,
-    () => {
-      const serverUrl = `http://${serverConf.host}:${serverConf.port}`
+  const server = app.listen(serverConf.port, serverConf.host, () => {
+    const serverUrl = `http://${serverConf.host}:${serverConf.port}`
 
-      Logger.empty()
-      Logger.pair(`Herkin Screencast API listening on`, serverUrl)
-      Logger.empty()
-    }
-  )
+    Logger.empty()
+    Logger.pair(`Herkin Screencast API listening on`, serverUrl)
+    Logger.empty()
+  })
 
   return { app, server }
-
 }
 
-!module.parent
+!module.parent && module.id !== '.'
   ? initApi()
-  : (module.exports = () => { initApi() })
+  : (module.exports = () => {
+      initApi()
+    })

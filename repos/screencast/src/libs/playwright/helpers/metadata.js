@@ -1,52 +1,45 @@
 const os = require('os')
-const fs = require('fs')
 const path = require('path')
-const { HERKIN_ROOT } = require('HerkinBackConstants')
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
+const { getHerkinConfig } = require('HerkinSharedConfig')
 const { checkVncEnv } = require('../../utils/vncActiveEnv')
-const {
-  isStr,
-  isObj,
-  exists,
-  noOpObj,
-  validate,
-} = require('@keg-hub/jsutils')
+const { isStr, isObj, exists, noOpObj, validate } = require('@keg-hub/jsutils')
 
-const {
-  mkDir,
-  readFile,
-  writeFile,
-  pathExists,
-  removeFile,
-  pathExistsSync,
-} = fileSys
-
-const { HERKIN_PW_METADATA_PATH } = process.env
+const { mkDir, readFile, writeFile, pathExists, removeFile, pathExistsSync } =
+  fileSys
 
 /**
- * Finds the path to metadata json folder
+ * Finds the path to metadata folder and browser-meta.json file
  * If using host browser, then use the keg-herkin root dir
  * Else if Vnc is running, then use the os temp directory
- * @type {string}
+ * @type {function}
+ *
+ * @return {Object} - Contains metadata directory and file path
  */
-const META_DIR = exists(HERKIN_PW_METADATA_PATH) && pathExistsSync(HERKIN_PW_METADATA_PATH)
-  ? HERKIN_PW_METADATA_PATH
-  : checkVncEnv().vncActive
-    ? path.resolve(os.tmpdir(), 'keg-herkin')
-    : HERKIN_ROOT
+const getMetaDataPaths = () => {
+  const config = getHerkinConfig()
+  const { herkinRoot, pwMetaDataDir } = config.internalPaths
+
+  const metadataDir =
+    exists(pwMetaDataDir) && pathExistsSync(pwMetaDataDir)
+      ? pwMetaDataDir
+      : checkVncEnv().vncActive
+      ? path.resolve(os.tmpdir(), 'keg-herkin')
+      : herkinRoot
+
+  const metadataPath = path.resolve(metadataDir, 'browser-meta.json')
+
+  return { metadataPath, metadataDir }
+}
 
 /**
- * Full path to metadata json file
- * @type {string}
- */
-const META_PATH = path.resolve(META_DIR, 'browser-meta.json')
-
-/**
- * Loads the metadata json file from the META_PATH value
+ * Loads the metadata json file from the metadataPath value
  * @return {string?} contents of the browser-meta.json file or null
  */
 const tryReadMeta = async () => {
-  const [err, content] = await readFile(META_PATH, 'utf8')
+  const { metadataPath } = getMetaDataPaths()
+
+  const [err, content] = await readFile(metadataPath, 'utf8')
   return err ? null : content
 }
 
@@ -56,16 +49,21 @@ const tryReadMeta = async () => {
  *
  * @return {Void}
  */
-const create = async (content=noOpObj) => {
-  const [existsErr, exists] = await pathExists(META_DIR)
-  !exists &&  await mkDir(META_DIR)
-  const [err, _] = await writeFile(META_PATH, JSON.stringify(content, null, 2))
+const create = async (content = noOpObj) => {
+  const { metadataPath, metadataDir } = getMetaDataPaths()
+  const [existsErr, exists] = await pathExists(metadataDir)
+
+  !exists && (await mkDir(metadataDir))
+  const [err, _] = await writeFile(
+    metadataPath,
+    JSON.stringify(content, null, 2)
+  )
   err && Logger.error(err)
 }
 
 /**
  * Reads browser metadata from file
- * @param {string?} [type] - specific browser to return. If omitted, returns all metadata.
+ * @param {string?} [type] - specific browser to return. If omitted, returns all metadata
  *
  * @return {Object} - json of the metadata
  */
@@ -73,12 +71,9 @@ const read = async type => {
   try {
     const data = await tryReadMeta()
     const parsed = data ? JSON.parse(data) : {}
-    const value = isObj(parsed) && type
-      ? parsed[type]
-      : parsed
+    const value = isObj(parsed) && type ? parsed[type] : parsed
     return value || {}
-  }
-  catch (err) {
+  } catch (err) {
     Logger.error(err)
     return {}
   }
@@ -93,7 +88,8 @@ const read = async type => {
  * @return {Void}
  */
 const save = async (type, endpoint, launchOptions) => {
-  const [ valid ] = validate({ type, endpoint }, { $default: isStr })
+  const { metadataPath } = getMetaDataPaths()
+  const [valid] = validate({ type, endpoint }, { $default: isStr })
   if (!valid) return
 
   const content = await read()
@@ -105,11 +101,11 @@ const save = async (type, endpoint, launchOptions) => {
       endpoint,
       launchOptions,
       launchTime: new Date().getTime(),
-    }
+    },
   }
 
   const [err, _] = await writeFile(
-    META_PATH,
+    metadataPath,
     JSON.stringify(nextMetadata, null, 2)
   )
 
@@ -124,7 +120,19 @@ const save = async (type, endpoint, launchOptions) => {
  * @return {Void}
  */
 const remove = async () => {
-  return await removeFile(META_PATH)
+  const { metadataPath } = getMetaDataPaths()
+  return await removeFile(metadataPath)
 }
 
-module.exports = { create, read, remove, save, location: META_PATH }
+/**
+ * Gets the location to where the browser metadata file is saved
+ *
+ * @return {Void}
+ */
+const location = () => {
+  const { metadataPath } = getMetaDataPaths()
+
+  return metadataPath
+}
+
+module.exports = { create, read, remove, save, location }

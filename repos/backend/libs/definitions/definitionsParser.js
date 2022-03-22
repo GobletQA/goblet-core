@@ -1,17 +1,22 @@
 const fs = require('fs')
 const { parkin } = require('HerkinParkin/instance')
-const { isArr, capitalize } = require('@keg-hub/jsutils')
-const { stripComments } = require('../../utils/stripComments')
 const { buildFileModel } = require('../../utils/buildFileModel')
 
 class DefinitionsParser {
-
   clear = () => {
     parkin.steps.clear()
   }
 
-  getDefinitions = async filePath => {
-    const { fileModel } = await this.parseDefinition(filePath)
+  /**
+   * Loads and parses a step definition and based on the passed in filePath
+   * Then creates a fileModel from it's content
+   * @param {string} filePath - Path to the step definition file
+   * @param {Object} repo - Repo Class instance for the currently active repo
+   *
+   * @returns {Array} - Loaded Definition file model
+   */
+  getDefinitions = async (filePath, repo) => {
+    const { fileModel } = await this.parseDefinition(filePath, repo)
 
     // The definitions get auto-loaded into the parkin instance
     // from the require call in the parseDefinition method below
@@ -26,21 +31,20 @@ class DefinitionsParser {
         fileModel.ast.definitions.push({
           ...def,
           // Add a reference back to the parent
-          location: filePath
+          location: filePath,
         })
     })
 
     return fileModel
   }
 
-  parseDefinition = (filePath) => {
+  parseDefinition = (filePath, repo) => {
     return new Promise((res, rej) => {
       // We still want to load the file content
       // Even if the require call fails
       // So wrap if in a try catch, and log the error if it happends
       let response
       try {
-
         // Always clear out the node require cache
         // This ensure we get a fresh file every time
         // Otherwise changed files would not get reloaded
@@ -49,8 +53,7 @@ class DefinitionsParser {
         // Require the file, to auto-load the definitions into parkin
         // Later we'll pull them from parkin
         response = require(filePath)
-      }
-      catch(err){
+      } catch (err) {
         console.log(`Could not load step definition file ${filePath}`)
         console.log('')
         console.error(err.message)
@@ -58,14 +61,17 @@ class DefinitionsParser {
 
       // Read the file to get it's content and build the fileModel
       fs.readFile(filePath, async (err, content) => {
-        if(err) return rej(err)
+        if (err) return rej(err)
 
-        const fileModel = await buildFileModel({
-          location: filePath,
-          content: content.toString(),
-          fileType: 'definition',
-          ast: { definitions: [] },
-        })
+        const fileModel = await buildFileModel(
+          {
+            location: filePath,
+            content: content.toString(),
+            fileType: 'definition',
+            ast: { definitions: [] },
+          },
+          repo
+        )
 
         return res({ fileModel })
       })
@@ -73,18 +79,17 @@ class DefinitionsParser {
   }
 
   validateMatch = (match, type) => {
-    if(!match)
+    if (!match)
       return console.warn(
         `Found a ${type} definition that contains an empty match in the definition definition files!`
       )
 
     return match
   }
-
 }
 
 const definitionsParser = new DefinitionsParser()
 
 module.exports = {
-  DefinitionsParser: definitionsParser
+  DefinitionsParser: definitionsParser,
 }

@@ -13,6 +13,6 @@ export const parent = theme => ({
       pos: 'relative',
       pH: theme?.padding?.size / 2,
       bgC: tapColors.appBackground,
-    }
-  }
+    },
+  },
 })

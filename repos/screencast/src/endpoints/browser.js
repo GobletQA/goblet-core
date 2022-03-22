@@ -1,7 +1,8 @@
 const { AppRouter } = require('HerkinSharedRouter')
 const { get, noOpObj } = require('@keg-hub/jsutils')
-const { apiErr, apiResponse } = require('./handler')
+const { asyncWrap, apiRes } = require('HerkinSharedExp')
 const {
+  actionBrowser,
   stopBrowser,
   startBrowser,
   statusBrowser,
@@ -9,7 +10,7 @@ const {
 } = require('HerkinSCPlaywright')
 
 /**
- * Starts a Playwright Browser using the passed in params as launch options
+ * Builds a browser config merging the passed in params and global config.browser settings
  * @param {Object} options - Options for interfacing with Playwright Browser object
  * @param {Object} app - Express Server Application
  *
@@ -19,7 +20,7 @@ const joinConf = (options, app) => {
   return {
     ...get(app, 'locals.config.browser', noOpObj),
     ...get(app, 'locals.config.screencast.browser', noOpObj),
-    ...options
+    ...options,
   }
 }
 
@@ -29,74 +30,68 @@ const joinConf = (options, app) => {
  * @param {string} params.type - The browser type to start [chromium|firefox]
  *
  */
-const browserStart = async (req, res) => {
-  try {
-    const { query, app } = req
-    const browserConf = joinConf(query, app)
-    const { browser, context, page } = await startBrowser(browserConf)
-    const status = await statusBrowser(browserConf, browser, context, page) 
+const browserStart = asyncWrap(async (req, res) => {
+  const { query, app } = req
+  const browserConf = joinConf(query, app)
+  const { browser, context, page } = await startBrowser(browserConf)
+  const status = await statusBrowser(browserConf, browser, context, page)
 
-    return apiResponse(req, res, status, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
+  return apiRes(req, res, status, 200)
+})
 
 /**
  * Gets the current status of the browser
  *
  */
-const browserStatus = async (req, res) => {
-  try {
-    const { query, app } = req
-    const status = await statusBrowser(joinConf(query, app))
+const browserStatus = asyncWrap(async (req, res) => {
+  const { query, app } = req
+  const status = await statusBrowser(joinConf(query, app))
 
-    return apiResponse(req, res, status, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
+  return apiRes(req, res, status, 200)
+})
 
 /**
  * Restarts a Browser by killing it, and starting it
  *
  */
-const browserRestart = async (req, res) => {
-  try {
-    const { params, app } = req
-    const browserConf = joinConf(params, app)
-    const { browser, context, page } = await restartBrowser(browserConf)
-    const status = await statusBrowser(browserConf, browser, context, page) 
+const browserRestart = asyncWrap(async (req, res) => {
+  const { params, app } = req
+  const browserConf = joinConf(params, app)
+  const { browser, context, page } = await restartBrowser(browserConf)
+  const status = await statusBrowser(browserConf, browser, context, page)
 
-    return apiResponse(req, res, status, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
+  return apiRes(req, res, status, 200)
+})
 
 /**
  * Stops a Browser if its running
  *
  */
-const browserStop = async (req, res) => {
-  try {
-    const { params, app } = req
-    const browserConf = joinConf(params, app)
-    const status = await stopBrowser(browserConf)
+const browserStop = asyncWrap(async (req, res) => {
+  const { params, app } = req
+  const browserConf = joinConf(params, app)
+  const status = await stopBrowser(browserConf)
 
-    return apiResponse(req, res, status, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
+  return apiRes(req, res, status, 200)
+})
+
+/**
+ * Execute an action on a playwright component ( browser, context, page )
+ *
+ */
+const browserAction = asyncWrap(async (req, res) => {
+  const { body, app } = req
+  const { ref, actions, ...browser } = body
+  const browserConf = joinConf(browser, app)
+  await actionBrowser({ ref, actions }, browserConf)
+
+  return apiRes(req, res, noOpObj, 200)
+})
 
 module.exports = () => {
   AppRouter.get('/screencast/browser/start', browserStart)
   AppRouter.get('/screencast/browser/status', browserStatus)
   AppRouter.post('/screencast/browser/stop', browserStop)
+  AppRouter.post('/screencast/browser/action', browserAction)
   AppRouter.post('/screencast/browser/restart', browserRestart)
 }

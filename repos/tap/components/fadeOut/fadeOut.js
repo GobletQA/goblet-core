@@ -1,10 +1,9 @@
-import React, {useState, useEffect, useMemo} from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { exists } from '@keg-hub/jsutils'
-import { Row, Loading } from 'SVComponents'
-import { reStyle } from '@keg-hub/re-theme/reStyle'
-import { useSetTimeout } from 'SVHooks/useSetTimeout'
+import { useSetTimeout } from 'HKHooks/useSetTimeout'
+import { Row, Loading } from '@keg-hub/keg-components'
 import { useSelector, shallowEqual } from 'react-redux'
-import { Fade, FadeView, FadeText, FadeSection } from './fadeOut.restyle.js'
+import { Fade, FadeView, FadeSection } from './fadeOut.restyle.js'
 
 /**
  * Hook to get the boolean tigger that starts the fade out
@@ -13,8 +12,14 @@ import { Fade, FadeView, FadeText, FadeSection } from './fadeOut.restyle.js'
  * @param {Boolean} - Trigger that starts the fade out
  */
 const useFadeStart = start => {
-  const initialized = useSelector(store => store?.app?.initialized, shallowEqual)
-  return useMemo(() => exists(start) ? start : initialized, [start, initialized])
+  const initialized = useSelector(
+    store => store?.app?.initialized,
+    shallowEqual
+  )
+  return useMemo(
+    () => (exists(start) ? start : initialized),
+    [start, initialized]
+  )
 }
 
 /**
@@ -37,9 +42,9 @@ const useFadeEffect = (start, speed, styles) => {
   }, [start, style])
 
   useSetTimeout(
-    () => setStyle({ ...style, display: 'none'}),
+    () => setStyle({ ...style, display: 'none' }),
     speed,
-    (start && style.display !== 'none')
+    start && style.display !== 'none'
   )
 
   return [style, setStyle]
@@ -53,7 +58,7 @@ const useFadeEffect = (start, speed, styles) => {
  * @param {Object} [props.styles] - Custom styles for the component
  * @param {number} [props.speed] - How fast the component should fade out
  */
-export const FadeOut = ({ children, color, start, styles, speed=1000 }) => {
+export const FadeOut = ({ children, color, start, styles, speed = 1000 }) => {
   const fadeStart = useFadeStart(start)
   const [fadeStyle] = useFadeEffect(fadeStart, speed, styles)
 
@@ -64,11 +69,9 @@ export const FadeOut = ({ children, color, start, styles, speed=1000 }) => {
       style={fadeStyle}
       className='fade-out-main'
     >
-      <FadeSection style={styles?.section} >
-        <Row style={styles?.row} >
-          <FadeView>
-            {children || (<Loading />)}
-          </FadeView>
+      <FadeSection style={styles?.section}>
+        <Row style={styles?.row}>
+          <FadeView>{children || <Loading />}</FadeView>
         </Row>
       </FadeSection>
     </Fade>

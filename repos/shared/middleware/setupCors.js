@@ -1,4 +1,19 @@
 const { eitherArr } = require('@keg-hub/jsutils')
+const { isDeployedEnv } = require('../utils/isDeployedEnv')
+
+/**
+ * Resolves the origin from the passed in headers
+ * @param {Object} req - Express request object
+ */
+const getOrigin = req => {
+  return (
+    req.headers.origin ||
+    (req.headers.referer && new URL(req.headers.referer).origin) ||
+    (req.headers.host &&
+      req.protocol &&
+      `${req.protocol}://${req.headers.host.split(':').shift()}`)
+  )
+}
 
 /**
  * Configures cors for the backend API and websocket
@@ -8,29 +23,40 @@ const { eitherArr } = require('@keg-hub/jsutils')
  * @returns {void}
  */
 const setupCors = app => {
-  if(!app) return
+  if (!app) return
 
-  const config = app.locals.config
+  const config = app.locals.config.server
   const allowedOrigins = !config.origins
     ? ['*']
     : eitherArr(config.origins, [config.origins])
 
   app.use((req, res, next) => {
-    const origin = req.headers.origin
-    const foundOrigin = (allowedOrigins.includes(origin)) ? origin : allowedOrigins[0]
+    const origin = getOrigin(req)
 
-    res.header('Access-Control-Allow-Origin', foundOrigin)
-    res.header('Access-Control-Allow-Credentials','true');
-    res.header('Access-Control-Allow-Headers','Content-Type');
-    res.header('Access-Control-Allow-Methods','GET','POST','PUT','DELETE','OPTIONS');
-    res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,Authorization,AuthToken')
+    // If in a deployed env, then validate the origin
+    // Otherwise allow the origin in development envs
+    const foundOrigin = isDeployedEnv
+      ? allowedOrigins.includes(origin)
+        ? origin
+        : allowedOrigins[0]
+      : origin
 
-    return req.method === 'OPTIONS'
-      ? res.status(200).send('OK')
-      : next()
+    res.setHeader('Access-Control-Allow-Origin', foundOrigin)
+    res.setHeader('Vary', 'Origin,Access-Control-Request-Headers')
+    res.setHeader('Access-Control-Allow-Credentials', 'true')
+    res.setHeader(
+      'Access-Control-Allow-Methods',
+      'GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS'
+    )
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'X-PINGOTHER,Origin,X-Requested-With,Content-Type,Accept,Authorization,AuthToken'
+    )
+
+    return req.method === 'OPTIONS' ? res.status(200).send('OK') : next()
   })
 }
 
 module.exports = {
-  setupCors
+  setupCors,
 }

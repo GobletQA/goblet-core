@@ -3,8 +3,8 @@ import { Tab } from './tab'
 import { mapColl } from '@keg-hub/jsutils'
 import { useStyle } from '@keg-hub/re-theme'
 import { TabbarPortal } from './tabbarPortal'
-import { View, isValidComponent, renderFromType } from '@keg-hub/keg-components'
 import { TabbarContainer, TabViewMain } from './tabbar.restyle'
+import { isValidComponent, renderFromType } from '@keg-hub/keg-components'
 
 /**
  * Renders the TabBar Tabs from the passed in tabs array prop
@@ -12,26 +12,32 @@ import { TabbarContainer, TabViewMain } from './tabbar.restyle'
  */
 const Tabs = React.memo(({ activeId, tabs, styles, onTabSelect }) => {
   return mapColl(tabs, (index, tab) => {
-    const { Tab:Component, tab:component, id, key, title, disableTab, ...tabProps } = tab
+    const {
+      Tab: Component,
+      tab: component,
+      id,
+      key,
+      title,
+      disableTab,
+      ...tabProps
+    } = tab
 
     const keyId = key || id || index
-    return !Component && !component && !title
-      ? null
-      : (
-          <Tab
-            disabled={disableTab}
-            className='tabbar-tab'
-            key={ keyId }
-            id={ id }
-            { ...tabProps }
-            title={title}
-            styles={ styles }
-            onTabSelect={ onTabSelect }
-            active={ activeId === id }
-          >
-            { renderFromType(Component || component) }
-          </Tab>
-        )
+    return !Component && !component && !title ? null : (
+      <Tab
+        id={id}
+        key={keyId}
+        disabled={disableTab}
+        className='tabbar-tab'
+        {...tabProps}
+        title={title}
+        styles={styles}
+        onTabSelect={onTabSelect}
+        active={activeId === id}
+      >
+        {renderFromType(Component || component)}
+      </Tab>
+    )
   })
 })
 
@@ -41,9 +47,9 @@ const Tabs = React.memo(({ activeId, tabs, styles, onTabSelect }) => {
  */
 const ActiveTabView = React.memo(({ tab, styles }) => {
   const ViewComponent = tab && (tab.View || tab.view)
-  return isValidComponent(ViewComponent)
-    ? (<ViewComponent { ...tab } styles={styles} />)
-    : null
+  return isValidComponent(ViewComponent) ? (
+    <ViewComponent {...tab} styles={styles} />
+  ) : null
 })
 
 /**
@@ -51,32 +57,21 @@ const ActiveTabView = React.memo(({ tab, styles }) => {
  * @param {Object} props
  */
 const BarComponent = React.memo(props => {
-
-  const {
-    fixed,
-    tabs,
-    location,
-    activeId,
-    barStyles,
-    onSelectTab,
-  } = props
+  const { fixed, tabs, location, activeId, styles, onSelectTab } = props
 
   // TODO: move to tabbar.restyle for tabbar container
   const containerStyles = useStyle(
-    fixed && { ...barStyles?.fixed?.main, ...barStyles?.fixed[location] },
-    barStyles?.bar?.main,
-    barStyles?.bar[location],
+    fixed && { ...styles?.fixed?.main, ...styles?.fixed[location] },
+    styles?.bar?.main,
+    styles?.bar[location]
   )
 
   return (
-    <TabbarContainer
-      className='tabbar-bar'
-      style={containerStyles}
-    >
+    <TabbarContainer className='tabbar-bar' style={containerStyles}>
       <Tabs
         tabs={tabs}
         activeId={activeId}
-        styles={barStyles.tab}
+        styles={styles.tab}
         onTabSelect={onSelectTab}
       />
     </TabbarContainer>
@@ -93,48 +88,45 @@ export const TabChildren = props => {
   const {
     tabs,
     fixed,
+    styles,
     activeId,
     location,
-    barStyles,
     CurrentTab,
     onSelectTab,
   } = props
 
-  const TabView = useMemo(() => (
-    CurrentTab && (CurrentTab.View || CurrentTab.view)
-      ? (
-          <TabViewMain
-            key='tabview-main'
-            className='tabview-main'
-            style={barStyles.tabview}
-          >
-            <ActiveTabView
-              tab={CurrentTab}
-              styles={barStyles}
-            />
-          </TabViewMain>
-        )
-      : null
-  ), [barStyles, CurrentTab])
+  const TabView = useMemo(
+    () =>
+      CurrentTab && (CurrentTab.View || CurrentTab.view) ? (
+        <TabViewMain
+          className='tabview-main'
+          style={styles.tabview}
+          key='tabbar-tabview-component'
+        >
+          <ActiveTabView tab={CurrentTab} styles={styles} />
+        </TabViewMain>
+      ) : null,
+    [styles, CurrentTab]
+  )
 
   const Bar = (
     <BarComponent
-      key={'tabbar'}
       tabs={tabs}
       fixed={fixed}
       activeId={activeId}
       location={location}
-      barStyles={barStyles}
+      styles={styles}
       onSelectTab={onSelectTab}
+      key={'tabbar-bar-component'}
     />
   )
 
-  return location === 'bottom'
-    ? (
-        <TabbarPortal>
-          {TabView}
-          {Bar}
-        </TabbarPortal>
-      )
-    : [Bar, TabView]
+  return location === 'bottom' ? (
+    <TabbarPortal>
+      {TabView}
+      {Bar}
+    </TabbarPortal>
+  ) : (
+    [Bar, TabView]
+  )
 }

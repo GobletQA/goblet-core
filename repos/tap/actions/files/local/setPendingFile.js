@@ -1,5 +1,5 @@
-import { dispatch } from 'SVStore'
-import { Values, ActionTypes } from 'SVConstants'
+import { dispatch } from 'HKStore'
+import { Values, ActionTypes } from 'HKConstants'
 
 const { CATEGORIES } = Values
 
@@ -11,7 +11,7 @@ const { CATEGORIES } = Values
  * @returns {void}
  */
 export const setPendingFile = (pendingContent, activeFile) => {
-  activeFile && 
+  activeFile &&
     activeFile?.content !== pendingContent &&
     dispatch({
       type: ActionTypes.SET_ITEM,

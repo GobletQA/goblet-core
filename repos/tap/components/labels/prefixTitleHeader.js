@@ -1,6 +1,6 @@
 import React from 'react'
-import { H3, Text } from 'SVComponents'
 import { wordCaps } from '@keg-hub/jsutils'
+import { H3, Text } from '@keg-hub/keg-components'
 
 /**
  * PrefixTitleHeader - {prefix} - {title}
@@ -11,30 +11,20 @@ import { wordCaps } from '@keg-hub/jsutils'
  * @param {string} props.title - value to go after the dash
  * @param {Object} props.titleStyle
  * @param {Boolean} props.capitalize
- * 
+ *
  * @returns {Component}
  */
-export const PrefixTitleHeader = (props) => {
-  const {
-    styles,
-    prefix,
-    title,
-    titleStyle,
-    capitalize
-  } = props
+export const PrefixTitleHeader = props => {
+  const { styles, prefix, title, titleStyle, capitalize } = props
 
   return (
-    <H3 style={styles?.heading} >
-      { prefix && (
-        <Text style={styles?.prefix}>
-          {prefix}
-        </Text>
-      )}
-      { title && (
+    <H3 style={styles?.heading}>
+      {prefix && <Text style={styles?.prefix}>{prefix}</Text>}
+      {title && (
         <>
-          {prefix && (<Text style={styles?.prefix}> - </Text>)}
+          {prefix && <Text style={styles?.prefix}> - </Text>}
           <Text style={[styles?.title, titleStyle]}>
-            { capitalize ? wordCaps(`${title}`) : title }
+            {capitalize ? wordCaps(`${title}`) : title}
           </Text>
         </>
       )}

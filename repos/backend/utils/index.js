@@ -1,5 +1,6 @@
 module.exports = {
-  ...require('./stripComments')
-  ...require('./getTestReportHtml')
-  ...require('./resolveTestFileType')
+  ...require('./stripComments'),
+  ...require('./resolveFileType'),
+  ...require('./loadRepoContent'),
+  ...require('./getTestReportHtml'),
 }

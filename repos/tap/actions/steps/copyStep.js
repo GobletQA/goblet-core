@@ -1,8 +1,6 @@
-import { dispatch } from 'SVStore'
-import { Values, ActionTypes } from 'SVConstants'
-import { devLog } from 'SVUtils/devLog'
+import { dispatch } from 'HKStore'
+import { Values, ActionTypes } from 'HKConstants'
 const { CATEGORIES } = Values
-
 
 export const copyStep = step => {
   step
@@ -14,5 +12,5 @@ export const copyStep = step => {
           item: { ...step },
         },
       })
-    : devLog.warn(`Can not copy empty step!`)
+    : console.warn(`Can not copy empty step!`)
 }

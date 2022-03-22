@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
 import { noOpObj } from '@keg-hub/jsutils'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { useStoreItems } from 'HKHooks/store/useStoreItems'
 
 const { CATEGORIES } = Values
 
@@ -13,7 +13,7 @@ const { CATEGORIES } = Values
  * @returns {boolean} - If the activeFile has pending content
  */
 export const usePendingCheck = (checkPending, location) => {
-  const { pendingFiles=noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
+  const { pendingFiles = noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
   const pendingContent = pendingFiles[location]
 
   return useMemo(

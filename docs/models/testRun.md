@@ -1,6 +1,6 @@
 
 ```js
-import { setActiveTestFile } from 'SVActions/runner/setActiveTestFile'
+import { setActiveTestFile } from 'HKActions/runner/setActiveTestFile'
 // TODO: remove once output is finished
 const addTestFileOutput = (activeTestFile) => {
 
@@ -13,7 +13,7 @@ const addTestFileOutput = (activeTestFile) => {
       key: activeTestFile.location,
       item: {
         file: activeTestFile.location,
-        testType: activeTestFile.fileType,
+        fileType: activeTestFile.fileType,
         lastRun: "1615252072389",
         output: [
           "Running feature tests for dayNavigation.feature",

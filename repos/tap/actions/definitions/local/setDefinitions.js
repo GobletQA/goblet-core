@@ -1,18 +1,21 @@
-import { setItems } from 'SVActions'
+import { setItems } from 'HKActions'
+import { Values } from 'HKConstants'
 import { noOpObj } from '@keg-hub/jsutils'
-import { Values } from 'SVConstants'
-import { definitionsByType } from 'SVUtils/shared'
+import { definitionsByType } from 'HKUtils/shared'
 
 const { CATEGORIES } = Values
 
 /**
  * Dispatches the passed in step definitions to the Store
  * @type function
- * @param {Array} definitions - Parsed definitions matching the filesModel
+ * @param {Object} definitions - Parsed definitions matching the filesModel, keyed by their filesystem path
  *
  * @returns {void}
  */
-export const setDefinitions = (definitions=noOpObj, definitionTypes) => {
+export const setDefinitions = (definitions = noOpObj, definitionTypes) => {
   setItems(CATEGORIES.DEFINITIONS, definitions)
-  setItems(CATEGORIES.DEFINITION_TYPES, definitionTypes || definitionsByType(definitions))
+  setItems(
+    CATEGORIES.DEFINITION_TYPES,
+    definitionTypes || definitionsByType(definitions)
+  )
 }

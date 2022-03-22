@@ -11,7 +11,7 @@
 
 # Starts the screen cast servers when not using a websocket from the hostmachine
 keg_start_screen_cast(){
-  cd $DOC_APP_PATH  
+  cd $DOC_APP_PATH
   yarn sc:daemon
 }
 
@@ -26,14 +26,27 @@ keg_herkin_serve(){
 # Check if the vnc screen-cast servers should be started
 [[ "$HERKIN_USE_VNC" == "true" ]] && keg_start_screen_cast
 
+# Check if we should be running only the backend API
+if [[ "$HERKIN_API_TYPE" == "backend" ]]; then
+  echo $"[ KEG-CLI ] Running backend API server!" >&2
+  node ./repos/backend/index.js
+
+# Check if we should be running only the screencast API
+elif [[ "$HERKIN_API_TYPE" == "screencast" ]]; then
+  echo $"[ KEG-CLI ] Running screencast API server!" >&2
+  node ./repos/screencast/index.js
+
 # Check the NODE_ENV, and use that to know which environment to start
 # For non-development environments, we want to serve the bundle if it exists
-if [[ ! " development develop local test " =~ " $NODE_ENV " ]]; then
+elif [[ ! " development develop local test " =~ " $NODE_ENV " ]]; then
   [[ -d "$DOC_BUILD_PATH" ]] && keg_herkin_serve
   echo $"[ KEG-CLI ] Serve path $DOC_BUILD_PATH does not exist!" >&2
+
+# If none of the above exist, then we run the develop / local yarn command
+# And Serve the app bundle in development environemnts
+else
+  echo $"[ KEG-CLI ] Running development server!" >&2
+  cd $DOC_APP_PATH
+  [[ -z "$KEG_EXEC_CMD" ]] && yarn web || yarn $KEG_EXEC_CMD
 fi
 
-# Serve the app bundle in development environemnts
-echo $"[ KEG-CLI ] Running development server!" >&2
-cd $DOC_APP_PATH
-[[ -z "$KEG_EXEC_CMD" ]] && yarn web || yarn $KEG_EXEC_CMD

@@ -1,23 +1,15 @@
-const path = require('path')
 const { Logger } = require('@keg-hub/cli-utils')
+const { getHerkinConfig } = require('HerkinSharedConfig')
 const { findProc, killProc } = require('HerkinSCLibs/proc')
-const { flatUnion } = require('HerkinSCLibs/utils/flatUnion')
-const { create:childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
+const { create: childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
 const {
+  checkCall,
+  deepMerge,
+  flatUnion,
+  limbo,
   noOpObj,
   noPropArr,
-  limbo,
-  checkCall,
-  deepMerge
 } = require('@keg-hub/jsutils')
-
-const rootDir = path.join(__dirname, '../../../../')
-const {
-  DISPLAY=':0.0',
-  VNC_VIEW_HEIGHT='900',
-  VNC_VIEW_WIDTH='1440',
-  VNC_SERVER_PORT=26370,
-} = process.env
 
 /**
  * Cache holder for the tigervnc process
@@ -33,41 +25,68 @@ let VNC_PROC
  * @param {Array} args.env - Extra environment variables to pass
  *
  * @example
- * Xtigervnc -SecurityTypes None -geometry 1440x900x24 -rfbport 26370 -alwaysshared :0
+ * // With auth
  * Xtigervnc -SecurityTypes None -geometry 1440x900x24 -rfbauth /root/.vnc/passwd -rfbport 26370 -alwaysshared :0
+ * @example
+ * // With arm64 hack
+ * LD_PRELOAD=/lib/aarch64-linux-gnu/libgcc_s.so.1 /usr/bin/Xtigervnc -SecurityTypes None -geometry 1440x900x24 -rfbport 26370 -alwaysshared :0
  *
  * @returns {Object} - Child process running tigervnc
  */
-const startVNC = async ({ args=noPropArr, cwd, options=noOpObj, env=noOpObj }) => {
-
+const startVNC = async ({
+  args = noPropArr,
+  cwd,
+  options = noOpObj,
+  env = noOpObj,
+}) => {
   const status = await statusVNC()
 
-  if(status.pid){
+  if (status.pid) {
     Logger.pair(`- Tigervnc already running with pid:`, status.pid)
     return (VNC_PROC = status)
   }
 
   Logger.log(`- Starting tigervnc server...`)
+  const config = getHerkinConfig()
+  const { vnc } = config.screencast
 
   VNC_PROC = await childProc({
-    cmd: 'Xtigervnc',
-    args: flatUnion([
-      '-SecurityTypes',
-      'None',
-      '-geometry',
-      `${VNC_VIEW_WIDTH}x${VNC_VIEW_HEIGHT}x24`,
-      '-rfbport',
-      VNC_SERVER_PORT,
-      '-alwaysshared',
-      DISPLAY,
-    ], args),
-    options: deepMerge({
-      detached: true,
-      stdio: 'ignore',
-      cwd: cwd || rootDir,
-      env: { ...process.env }
-    }, options, { env }),
     log: true,
+    cmd: 'Xtigervnc',
+    args: flatUnion(
+      [
+        `-verbose`,
+        `-SecurityTypes`,
+        `None`,
+        '-geometry',
+        `${vnc.width}x${vnc.height}x24`,
+        `-rfbport`,
+        vnc.port,
+        `-alwaysshared`,
+        vnc.display,
+      ],
+      args
+    ),
+    options: deepMerge(
+      {
+        detached: true,
+        stdio: 'ignore',
+        cwd: cwd || config.internalPaths.herkinRoot,
+        env: {
+          ...process.env,
+          DISPLAY: vnc.display,
+          // Hack for arm64 machines to tigerVNC doesn't crash on client disconnect
+          // This only happens on new Mac M1 machines using arm64
+          // Ubuntu 20.10 should have a fix included, but playwright uses version 20.04
+          // If the playwright docker image ever updates to +Ubuntu 20.10, this should be removed
+          ...(process.arch === 'arm64' && {
+            LD_PRELOAD: `/lib/aarch64-linux-gnu/libgcc_s.so.1`,
+          }),
+        },
+      },
+      options,
+      { env }
+    ),
   })
 
   return VNC_PROC
@@ -84,9 +103,7 @@ const stopVNC = async () => {
     ? killProc(VNC_PROC)
     : await checkCall(async () => {
         const status = await statusVNC()
-        status &&
-          status.pid &&
-          killProc(status)
+        status && status.pid && killProc(status)
       })
 
   VNC_PROC = undefined

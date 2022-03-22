@@ -3,7 +3,7 @@ import { toggleState } from './toggleState'
 
 const subheaderText = {
   ftSz: 14,
-  ftWt: 'bold'
+  ftWt: 'bold',
 }
 
 export const subsurface = theme => ({
@@ -23,20 +23,19 @@ export const subsurface = theme => ({
     },
     prefix: {
       ...subheaderText,
-      c: tapColors.default
+      c: tapColors.default,
     },
     title: {
       ...subheaderText,
       c: tapColors.success,
-    }
+    },
   },
   drawer: {
     default: {
-      main: {}
+      main: {},
     },
   },
   toggle: toggleState(theme),
-  containerRow: {
-  },
+  containerRow: {},
   container: {},
 })

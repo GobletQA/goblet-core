@@ -1,5 +1,5 @@
 const { When } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinSetup')
+const { getBrowserContext } = require('HerkinTestEnv')
 const { getPage } = getBrowserContext()
 
 /**
@@ -17,7 +17,7 @@ When('I wait for the page to load', waitForPageLoad, {
 Preceding step should be something that causes a page load such as a refresh, submitting a form, clicking a link, etc.
 If the page load event has already fired before reaching this step the step resolves immediately.
 
-Module : waitForPageLoad`
+Module : waitForPageLoad`,
 })
 
 module.exports = { waitForPageLoad }

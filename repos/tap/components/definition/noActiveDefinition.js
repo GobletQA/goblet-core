@@ -1,25 +1,19 @@
 import React from 'react'
-import { View, H5 } from '@keg-hub/keg-components'
+import { NoActiveMain, NoActiveText } from './definition.restyle'
 
 /**
- * NoActiveDefinition - Displays when not definition is active as an activeAltFile 
+ * NoActiveDefinition - Displays when no definition is active
  * @param {Object} props
  * @param {Object} props.styles - Custom styles for displaying the component
  *
  * @returns {Component}
  */
-export const NoActiveDefinition = ({ styles=noOpObj }) => {
+export const NoActiveDefinition = props => {
   return (
-    <View
-      className={'empty-definitions-main'}
-      style={styles.main}
-    >
-      <H5
-        className={'empty-definitions-text'}
-        style={styles.text}
-      >
+    <NoActiveMain className={'empty-definitions-main'}>
+      <NoActiveText className={'empty-definitions-text'}>
         No Active Definition
-      </H5>
-    </View>
+      </NoActiveText>
+    </NoActiveMain>
   )
 }

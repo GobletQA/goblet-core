@@ -1,5 +1,6 @@
 module.exports = {
+  ...require('./repo'),
   ...require('./definitions'),
   ...require('./features'),
-  testFiles: require('./fileSys/testFiles'),
+  herkinFiles: require('./fileSys/herkinFiles'),
 }

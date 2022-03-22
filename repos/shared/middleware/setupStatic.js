@@ -33,19 +33,25 @@ const setupStatic = app => {
   isStr(config.static)
     ? app.use(express.static(config.static))
     : isArr(config.static)
-      ? config.static.map(loc => addStaticPath(app, loc))
-      : isObj(config.static)
-        ? Object.entries(config.static).map(([name, loc]) => addStaticPath(app, name, loc))
-        : exists(config.static)
-          ? app.use(express.static(HerkinRoot))
-          : false
+    ? config.static.map(loc => addStaticPath(app, loc))
+    : isObj(config.static)
+    ? Object.entries(config.static).map(([name, loc]) =>
+        addStaticPath(app, name, loc)
+      )
+    : exists(config.static)
+    ? app.use(express.static(HerkinRoot))
+    : false
 
-  // If nodeModules is true, then the node_modules folder is served as a static path
-  ;(!exists(config.nodeModules) || config.nodeModules !== false) &&
-    app.use('/node_modules', express.static(path.join(HerkinRoot + './node_modules')))
-
+  // If nodeModules is explicitly set to true,
+  // then the node_modules folder is served as a static path
+  exists(config.nodeModules) &&
+    config.nodeModules === true &&
+    app.use(
+      '/node_modules',
+      express.static(path.join(HerkinRoot + './node_modules'))
+    )
 }
 
 module.exports = {
-  setupStatic
+  setupStatic,
 }

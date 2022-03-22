@@ -1,21 +1,20 @@
-import { get } from '@keg-hub/jsutils'
-import { dispatch, getStore } from 'SVStore'
+import { dispatch, getStore } from 'HKStore'
 import { addToast } from '../../toasts/addToast'
-import { Values, ActionTypes } from 'SVConstants'
-import { updateUrlQuery } from 'SVUtils/url/updateUrlQuery'
-import { getActiveScreen } from 'SVUtils/helpers/getActiveScreen'
+import { Values, ActionTypes } from 'HKConstants'
+import { updateUrlQuery } from 'HKUtils/url/updateUrlQuery'
+import { getActiveScreen } from 'HKUtils/helpers/getActiveScreen'
 
 const { CATEGORIES, SUB_CATEGORIES } = Values
 
 /**
  * setActiveFile
- * @param {Object} fileModel - file to set as the activeFile 
+ * @param {Object} fileModel - file to set as the activeFile
  */
-export const setActiveFile = (fileModel, screenId) => {
+export const setActiveFile = (fileModel, screenId, mergeQuery) => {
   const { items } = getStore().getState()
   const screenModel = getActiveScreen(items, screenId)
 
-  if(!screenModel)
+  if (!screenModel)
     return addToast({
       type: `error`,
       timeout: 6000,
@@ -25,8 +24,7 @@ export const setActiveFile = (fileModel, screenId) => {
   const updatedFile = { ...fileModel }
 
   // If the current screen is active, then also update the browser url
-  screenModel.active &&
-    updateUrlQuery({ file: fileModel.name }, true)
+  screenModel.active && updateUrlQuery({ file: fileModel.name }, Boolean(mergeQuery))
 
   dispatch({
     type: ActionTypes.SET_ITEM,
@@ -42,5 +40,3 @@ export const setActiveFile = (fileModel, screenId) => {
 
   return updatedFile
 }
-
-

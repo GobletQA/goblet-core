@@ -1,5 +1,5 @@
 const { When } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinSetup')
+const { getBrowserContext } = require('HerkinTestEnv')
 const { getPage } = getBrowserContext()
 
 /**
@@ -7,12 +7,12 @@ const { getPage } = getBrowserContext()
  * @param {string} selector - valid playwright selector
  * @param {string} data - selector's option label or value
  */
-const setSelectOption = async (selector, data, key='label') => {
+const setSelectOption = async (selector, data, key = 'label') => {
   const page = await getPage()
 
   //defaults to use label if no 'by' key exists
-  const options = data.split(",").map(value => ({ [key]: value }))
-  const content = await page.selectOption(selector,options)
+  const options = data.split(',').map(value => ({ [key]: value }))
+  const content = await page.selectOption(selector, options)
 }
 
 When('I set the select {string} to {string} by {string}', setSelectOption, {
@@ -23,7 +23,7 @@ Module : setSelectOption`,
     {
       type: 'string',
       description: `The selector for the select element.  Selector must be specific enough to locate a single element.`,
-      example: 'select[name=\'unique_name\']',
+      example: "select[name='unique_name']",
     },
     {
       type: 'string',
@@ -34,9 +34,8 @@ Module : setSelectOption`,
       type: 'string',
       description: `Valid options are \'label\' or \'value\' only.`,
       example: 'value',
-    }
-  ]
+    },
+  ],
 })
 
 module.exports = { setSelectOption }
-

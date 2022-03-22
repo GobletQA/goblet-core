@@ -10,9 +10,12 @@ import { useCallback, useState } from 'react'
 export const useActiveTab = initialTab => {
   const [activeTab, setActiveTab] = useState(initialTab)
 
-  const setTab = useCallback(tab => {
-    activeTab !== tab && setActiveTab(tab)
-  }, [activeTab, setActiveTab])
-  
-  return [ activeTab, setTab ]
+  const setTab = useCallback(
+    tab => {
+      activeTab !== tab && setActiveTab(tab)
+    },
+    [activeTab, setActiveTab]
+  )
+
+  return [activeTab, setTab]
 }

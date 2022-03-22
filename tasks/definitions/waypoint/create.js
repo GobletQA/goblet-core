@@ -1,16 +1,16 @@
-const { dockerExec } = require('@keg-hub/cli-utils')
-const { launchBrowser } = require('HerkinTasks/utils/playwright/launchBrowser') 
+const { dockerCmd } = require('@keg-hub/cli-utils')
+const { launchBrowser } = require('HerkinTasks/utils/playwright/launchBrowser')
 
 const createTest = async args => {
   const { params } = args
   const { url, name, container, launch } = params
 
   // TODO: Update to create a new test file using playwright record functionality
-  // Which allows recording actions in the browser as they happend 
-  
+  // Which allows recording actions in the browser as they happend
+
   // ensure a non-headless chromium instance is running
-  await launchBrowser({ browser: 'chromium', headless: false, launch })
-  // return dockerExec(container, ` create ${url} ${name}`)
+  // await launchBrowser({ browser: 'chromium', headless: false, launch })
+  // return dockerCmd(container, ` create ${url} ${name}`)
 }
 
 module.exports = {
@@ -18,10 +18,11 @@ module.exports = {
     name: 'create',
     action: createTest,
     example: 'yarn test:create',
-    description : 'Creates a new QAWolf test based on the passed in context and url',
+    description:
+      'Creates a new QAWolf test based on the passed in context and url',
     options: {
       name: {
-        alias: [ 'context' ],
+        alias: ['context'],
         description: 'Name of the test to be created',
         required: true,
       },
@@ -37,14 +38,16 @@ module.exports = {
         default: 'keg-herkin',
       },
       device: {
-        description: 'Device to run the test on. See device list here => https://github.com/microsoft/playwright/blob/master/src/server/deviceDescriptors.ts',
-        example: '--device \"iPad Mini\"',
+        description:
+          'Device to run the test on. See device list here => https://github.com/microsoft/playwright/blob/master/src/server/deviceDescriptors.ts',
+        example: '--device "iPad Mini"',
       },
       launch: {
-        description: 'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
+        description:
+          'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
         example: 'start --launch',
         default: false,
       },
-    }
-  }
+    },
+  },
 }

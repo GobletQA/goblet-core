@@ -1,37 +1,44 @@
-import { dispatch, getStore } from 'SVStore'
-import { devLog } from 'SVUtils'
-import { Values } from 'SVConstants'
-import { noOpObj, objToQuery } from '@keg-hub/jsutils'
-import { apiRequest } from 'SVUtils/api/apiRequest'
-import { setSCStatus } from 'SVActions/screencast/local/setSCStatus'
+import { getStore } from 'HKStore'
+import { Values } from 'HKConstants'
+import { noOpObj } from '@keg-hub/jsutils'
+import { apiRequest } from 'HKUtils/api/apiRequest'
+import { setSCStatus } from 'HKActions/screencast/local/setSCStatus'
 
 const { HttpMethods, CATEGORIES } = Values
 
 /**
  * Calls the backend API to get the status of the screencast processes
  * Updates the store with the response
- * 
+ *
  * @returns {Object} - Response from the backend API
  */
-export const getSCStatus = async (options=noOpObj) => {
+export const getSCStatus = async (options = noOpObj) => {
   const { items } = getStore()?.getState()
-  if(!items)
-    return console.warn(`No items set in the store`)
-  
+  if (!items) return console.warn(`No items set in the store`)
+
   const browserOpts = items[CATEGORIES.BROWSER_OPTS]
 
-  const resp = await apiRequest({
+  const {
+    data,
+    error,
+    success
+  } = await apiRequest({
     url: '/screencast/status',
     method: HttpMethods.GET,
     params: {
       browser: {
         ...browserOpts,
-        ...options.browser
+        ...options.browser,
       },
     },
-  }, 'object')
+  })
 
-  resp && setSCStatus(resp)
+  !success || error
+    ? addToast({
+        type: 'error',
+        message: error || `Failed to get screencast status`
+      })
+    : data && setSCStatus(data)
 
-  return resp
+  return data
 }

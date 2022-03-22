@@ -1,33 +1,30 @@
-import { exists } from '@keg-hub/jsutils'
+import { exists, noOpObj } from '@keg-hub/jsutils'
+import { ReIframe } from './iframe.restyle'
 import { useStyle } from '@keg-hub/re-theme'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 
 /**
-  * Ideally the following script is added to the page loaded in the iframe
-  * Then we listen for the message here, and use it to set the height
-```js
-  <script>
-    window.parent !== window &&
-      window.parent.postMessage({ herkinIframeHeight: document.body.scrollHeight }, '*')
-  </script>
-```
-  * TODO: update the backend API to inject the below script onto all html files 
-  * This script has no effect if the page is not loaded into an iframe
-  * So it's safe to add to all
+ * Helper to emit click events that are sent from the iframe
+ * This lets us know the IFrame was clicked on
+ * Useful for cases like closing the open sidebar when the iframe is clicked
  */
+const emitIframeClick = () => {
+  window.dispatchEvent(
+    new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    })
+  )
+}
 
 /**
- * Helper for getting the height for the iframe
- * Only used when the iframe does not send it height to us via post message
- * Double the page height for parent window and child iframe
- * Then add a buffer of 200 px
- * May not covert everything, but se rely on post message to set the real height
- * @function
- *
- * @return {string} - Initial height to use from the iframe
+ * Helper to update the IFrame height to match the height of the iframe document
+ * @param {string} sentHeight - Height of the iframe document
+ * @param {function} setFrameStyle - Method to update the iframe height stored in state
  */
-const getWindowHeight = () => {
-  return `${(document.body.scrollHeight * 2) + 200}px`
+const updateHeight = (sentHeight, setFrameStyle) => {
+  exists(sentHeight) && setFrameStyle({ height: `${sentHeight}px` })
 }
 
 /**
@@ -37,44 +34,25 @@ const getWindowHeight = () => {
  * @param {object} props.styles - Styles for the iframe element
  */
 export const Iframe = React.forwardRef((props, ref) => {
-  const {
-    src,
-    styles,
-  } = props
+  const { style, styles, ...args } = props
 
-  const iframeHeight = useRef()
-  const [frameStyle, setFrameStyle] = useState({ main: { height: getWindowHeight() }})
+  const [frameStyle, setFrameStyle] = useState(noOpObj)
 
   useEffect(() => {
     // Event listener handler for post message events from the child iframe
     const onMessage = event => {
-      iframeHeight.current = true
-      const sentHeight = event.data.herkinIframeHeight
-      exists(sentHeight) &&
-        sentHeight !== frameStyle.main.height &&
-        setFrameStyle({ main: { height: `${sentHeight}px` }})
+      event?.data?.herkinIframeClick
+        ? emitIframeClick()
+        : updateHeight(event?.data?.herkinIframeHeight, setFrameStyle)
     }
 
     // Add listener to the window
     window.addEventListener('message', onMessage)
-    // If the ref is set, then just return
-    if(iframeHeight.current) return
-
-    // Get the current window height and save it to state
-    const currentHeight = getWindowHeight()
-    frameStyle.main.height !== currentHeight &&
-      setFrameStyle({ main: { height: currentHeight }})
 
     // Remove the listener on unmount
     return () => window.removeEventListener('message', onMessage)
   }, [])
 
-  const mainStyles = useStyle(`iframe`, styles, frameStyle)
-  return (
-    <iframe 
-      {...props}
-      ref={ref}
-      style={mainStyles?.main} 
-    />
-  )
+  const mainStyles = useStyle(style, frameStyle)
+  return <ReIframe {...args} ref={ref} style={mainStyles} />
 })

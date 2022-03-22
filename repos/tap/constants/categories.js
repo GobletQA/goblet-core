@@ -1,6 +1,9 @@
+import { storage } from './storage'
+import { deepFreeze } from '@keg-hub/jsutils'
 
-export const categories = {
+export const categories = deepFreeze({
   CATEGORIES: {
+    ...storage.STORAGE,
     STEPS: 'steps',
     FEATURES: 'features',
     DEFINITIONS: 'definitions',
@@ -22,12 +25,12 @@ export const categories = {
     TOASTS: 'toasts',
     BROWSER_OPTS: 'browserOpts',
     SCREENCAST_STATUS: 'screencastStatus',
-    PARKIN_WORLD: 'parkinWorld',
+    PROVIDER_REPOS: 'providerRepos',
+    SPEC_RESULTS: `specResults`,
   },
   SUB_CATEGORIES: {
     NODES: 'nodes',
     ACTIVE_FILE: 'activeFile',
     MODIFIED_CONTENT: 'modified',
-    ALT_ACTIVE_FILE: 'altActiveFile',
   },
-}
+})

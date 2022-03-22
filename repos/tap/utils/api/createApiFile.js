@@ -1,6 +1,6 @@
-import { apiRequest } from './apiRequest'
-import { logData, isFunc, noOpObj } from '@keg-hub/jsutils'
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
+import { apiRepoRequest } from './apiRepoRequest'
+import { addToast } from 'HKActions/toasts/addToast'
 
 const { HttpMethods } = Values
 /**
@@ -8,20 +8,33 @@ const { HttpMethods } = Values
  * @function
  * @export
  * @public
- * @param {string} fileName - Name of the file to be saved
- * @param {string} fileType - Test Type of of the file
- * @param {function} [callback=undefined] - Callback function called after the request is made 
+ * @param {string} name - Name of the file to be saved
+ * @param {string} type - Test Type of of the file
  *
  * @returns {*} - Response from the Backend API or callback function when it exists
  */
-export const createApiFile = async (fileName, fileType, callback) => {
-  const response = fileName
-    ? await apiRequest({
-        method: HttpMethods.POST,
-        url: `/files/create`,
-        params: { name: fileName, type: fileType }
-      }, 'object')
-    : logData(`Create File action requires a file name!`) || noOpObj
+export const createApiFile = async ({ name, type }) => {
+  if(!name || !type)
+    return addToast({
+      type: 'error',
+      message: [
+        `Failed to create file. The file name and type are required`,
+        `Name: ${name}`,
+        `Type: ${type}`
+      ].join(`\n`)
+    })
 
-  return isFunc(callback) ? callback(response) : response
+  const resp = await apiRepoRequest({
+    method: HttpMethods.POST,
+    url: `/files/create`,
+    params: { name, type },
+  })
+
+  if(!resp?.success || resp?.error)
+    addToast({
+      type: 'error',
+      message: resp?.error || `Error creating file, please try again later.`,
+    })
+
+  return resp
 }

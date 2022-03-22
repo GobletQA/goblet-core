@@ -40,6 +40,6 @@
 * **Websockify**
   * Command => `websockify -v --web /usr/share/novnc 0.0.0.0:26369 0.0.0.0:26370`
   * Example URL => http://herkin-develop.local.keghub.io:26369/vnc_lite.html
-  * Example URL => http://herkin--develop.local.keghub.io:26369/novnc
+  * Example URL => http://herkin-develop.local.keghub.io:26369/novnc
 * **TigerVNC**
   * Command => `Xtigervnc -SecurityTypes None -geometry 1440x900x24 -rfbauth /root/.vnc/passwd -rfbport 26370 -alwaysshared :0`

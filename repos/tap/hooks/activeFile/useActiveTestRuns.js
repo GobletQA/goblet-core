@@ -1,7 +1,7 @@
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
 import { noOpObj } from '@keg-hub/jsutils'
 import { useActiveFile } from './useActiveFile'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { useStoreItems } from 'HKHooks/store/useStoreItems'
 
 const { CATEGORIES } = Values
 
@@ -14,6 +14,7 @@ export const useActiveTestRuns = () => {
   const activeFile = useActiveFile()
   const allTestRuns = useStoreItems(CATEGORIES.TEST_RUNS) || noOpObj
 
-  return activeFile.location &&
+  return activeFile &&
+    activeFile.location &&
     allTestRuns[activeFile.location]
 }

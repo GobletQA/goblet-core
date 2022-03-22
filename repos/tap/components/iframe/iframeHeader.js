@@ -1,7 +1,7 @@
 import React from 'react'
-import { ExternalLink } from 'SVAssets/icons'
-import { Touchable, View, Icon } from '@keg-hub/keg-components'
-import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
+import { ExternalLink } from 'HKAssets/icons/externalLink'
+import { PrefixTitleHeader } from 'HKComponents/labels/prefixTitleHeader'
+import { ReIframeHeaderMain, ReIframeHeaderIcon } from './iframe.restyle'
 
 /**
  * IframeHeader
@@ -11,40 +11,35 @@ import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
  * @param {string} props.title - title passed in to Surface
  * @param {Object} props.titleStyle - titleStyle passed in to Surface
  * @param {Boolean} props.capitalize - capitalize value passed in to Surface
- * 
+ *
  * @returns {Component}
  */
-export const IframeHeader = (props) => {
+export const IframeHeader = props => {
   const {
     mainTextStyles,
     prefix,
     title,
     titleStyle,
     capitalize,
-    mainStyles,
-    onExternalOpen
+    onExternalOpen,
   } = props
 
   return (
-    <Touchable
+    <ReIframeHeaderMain
       className={'iframe-header-main'}
       onPress={onExternalOpen}
-      style={mainStyles?.main}
     >
       <PrefixTitleHeader
-        styles={mainTextStyles}
-        titleStyle={titleStyle}
         title={title}
         prefix={prefix}
+        styles={mainTextStyles}
+        titleStyle={titleStyle}
         capitalize={capitalize}
       />
-      <Icon
+      <ReIframeHeaderIcon
+        Icon={ExternalLink}
         className={'iframe-header-icon'}
-        styles={mainStyles?.icon}
-        color={mainStyles?.icon?.color}
-        size={mainStyles?.icon?.size}
-        Component={ ExternalLink }
       />
-    </Touchable>
+    </ReIframeHeaderMain>
   )
 }

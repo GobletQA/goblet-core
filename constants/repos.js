@@ -12,7 +12,7 @@ const reposPath = path.join(rootDir, 'repos')
  * @return {Object} - Found repo paths converted into snakeCase
  */
 const getRepoPaths = () => {
-  if(__REPO_PATHS) return __REPO_PATHS
+  if (__REPO_PATHS) return __REPO_PATHS
 
   // list of the herkin repo names located at `<root>/repos`
   const repos = execSync('ls', { cwd: reposPath })
@@ -33,7 +33,6 @@ const getRepoPaths = () => {
   return __REPO_PATHS
 }
 
-
 module.exports = {
-  getRepoPaths
+  getRepoPaths,
 }

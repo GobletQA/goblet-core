@@ -1,4 +1,4 @@
-import { noOpObj }  from '@keg-hub/jsutils'
+import { noOpObj } from '@keg-hub/jsutils'
 import { useState, useRef, useEffect } from 'react'
 
 const defSize = {
@@ -8,9 +8,7 @@ const defSize = {
 
 defSize.ratio = defSize.width / defSize.height
 
-
 export const sizeFromRatio = ({ height, width }) => {
-
   const size = { ...defSize }
 
   if (height < size.height) {
@@ -28,45 +26,46 @@ export const sizeFromRatio = ({ height, width }) => {
   }
 }
 
-export const useScreenResize = (element, screenSize=noOpObj) => {
-
+export const useScreenResize = (element, screenSize = noOpObj) => {
   const [screenRect, setScreenRect] = useState(screenSize)
   const screenRef = useRef()
 
   useEffect(() => {
-    if(element && !screenRef.current) screenRef.current = element
+    if (element && !screenRef.current) screenRef.current = element
     if (!screenRef.current) return
 
     const canvasParentEl = screenRef.current.parentNode
     const rect = canvasParentEl.getBoundingClientRect()
 
-    setScreenRect(sizeFromRatio({
-      width: rect.width,
-      height: rect.height,
-    }))
+    setScreenRect(
+      sizeFromRatio({
+        width: rect.width,
+        height: rect.height,
+      })
+    )
 
-    const observer = new ResizeObserver((entries) => {
+    const observer = new ResizeObserver(entries => {
       const contentRect = entries[0]?.contentRect
       if (!contentRect) return
 
       const boundingRect = canvasParentEl.getBoundingClientRect()
-      setScreenRect(sizeFromRatio({
-        width: boundingRect.width,
-        height: boundingRect.height,
-      }))
+      setScreenRect(
+        sizeFromRatio({
+          width: boundingRect.width,
+          height: boundingRect.height,
+        })
+      )
 
-      window.requestAnimationFrame(() => window.dispatchEvent(new UIEvent("resize")))
+      window.requestAnimationFrame(() =>
+        window.dispatchEvent(new UIEvent('resize'))
+      )
     })
 
     observer.observe(canvasParentEl)
 
     return () => observer.unobserve(canvasParentEl)
-  }, [
-    element,
-    screenRef,
-    setScreenRect
-  ])
-  
+  }, [element, screenRef, setScreenRect])
+
   return {
     screenRef,
     screenRect,

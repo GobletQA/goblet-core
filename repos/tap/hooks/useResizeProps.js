@@ -1,8 +1,8 @@
-import { useMemo } from "react"
+import { useMemo } from 'react'
 import { useDimensions } from '@keg-hub/re-theme'
 import { noOpObj, isNum } from '@keg-hub/jsutils'
 
-export const useResizeProps = (props=noOpObj) => {
+export const useResizeProps = (props = noOpObj) => {
   const {
     height,
     width,
@@ -10,24 +10,23 @@ export const useResizeProps = (props=noOpObj) => {
     minHeight,
     maxWidth,
     maxHeight,
-    diffHeight=0,
-    diffWidth=0,
+    diffHeight = 0,
+    diffWidth = 0,
     resizeRatio,
-    bounds='parent',
+    bounds = 'parent',
     lockAspectRatio,
   } = props
 
   const dims = useDimensions()
-  
+
   return useMemo(() => {
     // Default width to 100%
-    const initialWidth = (width === 'dimension' || width === 'dim')
-      ? dims.width
-      : (width || '100%')
+    const initialWidth =
+      width === 'dimension' || width === 'dim' ? dims.width : width || '100%'
 
     // Height doesn't work like width, so we default to full dimension height
     const initialHeight = height || dims.height
-    
+
     return {
       bounds,
       minWidth,
@@ -37,11 +36,12 @@ export const useResizeProps = (props=noOpObj) => {
       resizeRatio,
       lockAspectRatio,
       defaultSize: {
-        height: isNum(initialHeight) ? (initialHeight - diffHeight) : initialHeight,
-        width: isNum(initialWidth) ? (initialWidth - diffWidth) : initialWidth,
-      }
+        height: isNum(initialHeight)
+          ? initialHeight - diffHeight
+          : initialHeight,
+        width: isNum(initialWidth) ? initialWidth - diffWidth : initialWidth,
+      },
     }
-  
   }, [
     dims.height,
     dims.width,

@@ -1,14 +1,11 @@
-import React, {useState, useEffect} from 'react'
-import { useVisibleModal } from 'SVHooks/modal/useVisibleModal'
+import React, { useState } from 'react'
 import { Screen } from './screens/screen'
-import { FadeOut } from 'SVComponents/fadeOut'
-import { SidebarContent } from 'SVComponents/sidebar'
-import { useActiveFile } from 'SVHooks/activeFile/useActiveFile'
-import {
-  View,
-  Sidebar,
-  withAppHeader,
-} from 'SVComponents'
+import { Sidebar, View } from '@keg-hub/keg-components'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { withAppHeader } from 'HKComponents/hocs/withAppHeader'
+import { useVisibleModal } from 'HKHooks/modal/useVisibleModal'
+import { useActiveFile } from 'HKHooks/activeFile/useActiveFile'
+import { SidebarContent } from 'HKComponents/sidebar/sidebarContent'
 
 const sidebarProps = {
   to: 0,
@@ -27,6 +24,10 @@ const sidebarProps = {
   },
 }
 
+const ReMain = reStyle(View)({
+  fl: 1,
+})
+
 export const RootContainer = withAppHeader('KeGherkin Editor', props => {
   const activeFile = useActiveFile()
   // Auto open the sidebar to allow selecting a file, if no file is already active
@@ -35,20 +36,19 @@ export const RootContainer = withAppHeader('KeGherkin Editor', props => {
     // !useVisibleModal() && !Boolean(activeFile.location)
   )
 
-  // TODO: Update this to use reStyle
   return (
-    <View className={`tap-main`} style={{ fl: 1 }} >
-      <Sidebar 
+    <ReMain>
+      <Sidebar
         {...sidebarProps}
         toggled={sidebarToggled}
         onToggled={setSidebarToggled}
       >
         <SidebarContent
-          sidebarToggled={sidebarToggled} 
+          sidebarToggled={sidebarToggled}
           onSidebarToggled={setSidebarToggled}
         />
       </Sidebar>
       <Screen />
-    </View>
+    </ReMain>
   )
 })

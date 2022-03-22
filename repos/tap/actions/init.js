@@ -1,15 +1,16 @@
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
+import { loadUser } from 'HKActions/admin'
 import { isEmptyColl } from '@keg-hub/jsutils'
-import { setActiveModal } from 'SVActions/modals'
-import { setActiveSidebar } from 'SVActions/sidebar'
-import { loadTestFile } from './files/api/loadTestFile'
-import { loadBddTests } from './files/api/loadBddTests'
-import { getQueryData } from 'SVUtils/url/getQueryData'
-import { setScreenById } from 'SVActions/screens/setScreenById'
-import { getRemoteFileTree } from './files/api/getRemoteFileTree'
+import { loadFile } from './files/api/loadFile'
+import { setActiveModal } from 'HKActions/modals'
+import { isAuthActive } from 'HKUtils/isAuthActive'
+import { setActiveSidebar } from 'HKActions/sidebar'
+import { statusRepo } from 'HKActions/repo/api/status'
+import { getQueryData } from 'HKUtils/url/getQueryData'
+import { setScreenById } from 'HKActions/screens/setScreenById'
 
 const { MODAL_TYPES, SIDEBAR_TYPES, SCREENS } = Values
-
+const authActive = isAuthActive()
 
 /**
  * Checks if an initial test file should be loaded, and makes call to load it
@@ -19,26 +20,19 @@ const { MODAL_TYPES, SIDEBAR_TYPES, SCREENS } = Values
  * @return {void}
  */
 const loadInitTestFiles = async (queryObj, screenId) => {
-  // Load the file tree from root tests folder
-  await getRemoteFileTree()
-
-  // Load all features and definitions
-  await loadBddTests()
-
-  // Load the initial test file 
-  queryObj?.file && await loadTestFile(queryObj?.file, screenId)
+  // Load the initial file from query params if it exists
+  queryObj?.file && (await loadFile(queryObj?.file, screenId))
 }
 
 /**
- * Checks if the initial settings modal should be shown, and makes call to update the store 
+ * Checks if the initial settings modal should be shown, and makes call to update the store
  * @function
  * @param {Object} queryObj - Current url query params as an object
  *
  * @return {void}
  */
-const loadInitModal = async queryObj => {
-  // display options modal if no valid querystring passed in
-  ;(!queryObj || isEmptyColl(queryObj)) &&
+const loadInitModal = queryObj => {
+  ;(!queryObj || isEmptyColl(queryObj) || !queryObj?.file) &&
     setActiveModal(MODAL_TYPES.TEST_SELECTOR)
 }
 
@@ -48,6 +42,17 @@ const loadInitModal = async queryObj => {
  * @function
  */
 export const init = async () => {
+  // Load the local storage user if they exist
+  const activeUser = await loadUser()
+
+  !activeUser && authActive && setActiveModal(MODAL_TYPES.SIGN_IN)
+
+  // First check the status of the mounted repo
+  // TODO: If no locally mounted volume
+  // Then setup a fake mounted repo at the default location
+  // Will allow using keg-herkin without persisting changes
+  const status = await statusRepo()
+  if (!status || !status.mounted) return
 
   // Get the query params from the url
   const queryObj = getQueryData()
@@ -65,5 +70,3 @@ export const init = async () => {
   // Load the init modal
   loadInitModal(queryObj)
 }
-
-

@@ -1,40 +1,37 @@
 const path = require('path')
 const { appRoot } = require('../../paths')
-const { get } = require('@keg-hub/jsutils')
-
+const { addFlag } = require('@keg-hub/cli-utils')
+const { uniqArr, noPropArr } = require('@keg-hub/jsutils')
 /**
  * Builds the arguments that are passed to jest when the test is run
  * @param {Object} params - Parsed task definition options
  *                          See options section of the task definition below
- * @param {Object} herkin - Keg-Herkin global config object
+ * @param {string} jestConfig - Path the a jest config file to load
  */
-const buildJestArgs = (params, herkin) => {
-  const { jestConfig, timeout, bail, context, filter, noTests } = params
+const buildJestArgs = (params, jestConfig, extraArgs=noPropArr) => {
+  const { timeout, bail, context, noTests } = params
 
   const cmdArgs = [
-    'npx',
-    'jest',
+    // 'npx',
+    // 'jest',
+    path.join(appRoot, 'node_modules/.bin/jest'),
+    ...extraArgs,
     '--detectOpenHandles',
     '--no-cache',
-    '--runInBand',
-    // TODO: fix this timeout
     // Convert to milliseconds
-    // `--testTimeout=${(timeout || 90) * 1000}`
-    `--testTimeout=10000`
+    `--testTimeout=${(timeout || 90) * 1000}`,
   ]
 
-  bail && cmdArgs.push('--bail')
-  noTests && cmdArgs.push('--passWithNoTests')
-
-  const rootDir = get(herkin, `paths.rootDir`, appRoot)
-  jestConfig && cmdArgs.push(`--config=${path.join(rootDir, jestConfig)}`)
+  cmdArgs.push(addFlag('bail', bail))
+  cmdArgs.push(addFlag('passWithNoTests', noTests))
+  cmdArgs.push(addFlag(`config=${jestConfig}`, jestConfig))
 
   // If context is set use that as the only file to run
   context && cmdArgs.push(context)
 
-  return cmdArgs
+  return uniqArr(cmdArgs.filter(arg => arg))
 }
 
 module.exports = {
-  buildJestArgs
+  buildJestArgs,
 }

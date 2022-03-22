@@ -1,4 +1,3 @@
-
 export const empty = theme => ({
   main: {
     ...theme?.flex?.center,
@@ -7,5 +6,5 @@ export const empty = theme => ({
   message: {
     textAlign: 'center',
     w: `100%`,
-  }
+  },
 })

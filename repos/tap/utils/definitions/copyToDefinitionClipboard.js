@@ -11,8 +11,11 @@ import { capitalize } from '@keg-hub/jsutils'
  * @return {void}
  */
 export const copyToDefinitionClipboard = definition => {
-  if(!definition || !definition.name)
-    return console.warn(`Can not copy to clipboard, a definition is require!`, definition)
+  if (!definition || !definition.name)
+    return console.warn(
+      `Can not copy to clipboard, a definition is require!`,
+      definition
+    )
 
   const copyText = `${capitalize(definition.type)} ${definition.name}`.trim()
   Clipboard.setString(copyText)

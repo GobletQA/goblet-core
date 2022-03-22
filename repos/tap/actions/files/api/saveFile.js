@@ -1,6 +1,5 @@
-import { devLog } from 'SVUtils'
-import { saveApiFile } from 'SVUtils/api'
-import { addToast } from 'SVActions/toasts'
+import { saveApiFile } from 'HKUtils/api'
+import { addToast } from 'HKActions/toasts'
 import { noOpObj } from '@keg-hub/jsutils'
 import { removePendingFile } from '../local/removePendingFile'
 
@@ -10,27 +9,25 @@ import { removePendingFile } from '../local/removePendingFile'
  *
  * @returns {Object} - {success, fileModel}
  */
-export const saveFile = async (fileToSave=noOpObj) => {
-  const { location, content } = fileToSave
+export const saveFile = async (fileToSave = noOpObj) => {
+  const { location, content, fileType } = fileToSave
 
   if (!content || !location)
-    return devLog(`warn`, 'File content and location are required')
+    return console.warn('File content and location are required')
 
   addToast({
     type: 'info',
-    message: `Saving file ${fileToSave.name}!`
+    message: `Saving file ${fileToSave.name}!`,
   })
 
-  const result = await saveApiFile(location, content)
+  const resp = await saveApiFile(location, content, fileType)
+  if(!resp?.success) return noOpObj
 
-  if(result?.success){
-    removePendingFile(fileToSave)
-    addToast({
-      type: 'success',
-      message: `File ${fileToSave.name} was saved!`
-    })
-  }
-  else addToast({ type: 'danger', message: `Failed to save file ${fileToSave.name}!` })
-  
-  return result
+  removePendingFile(fileToSave)
+  addToast({
+    type: 'success',
+    message: `File ${fileToSave.name} was saved!`,
+  })
+
+  return resp?.data
 }

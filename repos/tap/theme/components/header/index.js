@@ -3,5 +3,5 @@ import { subheader } from './subheader'
 
 export const header = theme => ({
   header: { itemHeader: itemHeader(theme) },
-  subheader: subheader(theme)
+  subheader: subheader(theme),
 })

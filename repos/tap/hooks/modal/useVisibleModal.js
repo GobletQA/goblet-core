@@ -1,5 +1,5 @@
-import { Values } from 'SVConstants'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { Values } from 'HKConstants'
+import { useStoreItems } from 'HKHooks/store/useStoreItems'
 import { noOpObj } from '@keg-hub/jsutils'
 
 const { CATEGORIES } = Values
@@ -9,8 +9,6 @@ const { CATEGORIES } = Values
  * @returns {string|null}
  */
 export const useVisibleModal = () => {
-  const { modals=noOpObj } = useStoreItems([CATEGORIES.MODALS])
-  return modals?.visible
-    ? modals?.activeModal
-    : null
+  const { modals = noOpObj } = useStoreItems([CATEGORIES.MODALS])
+  return modals?.visible ? modals?.activeModal : null
 }

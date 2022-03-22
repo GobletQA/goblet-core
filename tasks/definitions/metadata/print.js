@@ -2,7 +2,6 @@ const { metadata } = require('HerkinSC')
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
 const { pathExistsSync, readFile } = fileSys
 
-
 /**
  * Print the browser metadata if it exists
  * @param {Object} args - arguments passed from the runTask method
@@ -13,14 +12,17 @@ const { pathExistsSync, readFile } = fileSys
  *
  * @returns {void}
  */
-const printMeta = async (args) => {
-  const { params } = args
-
+const printMeta = async args => {
   Logger.empty()
-  if(!pathExistsSync(metadata.location))
-    return Logger.pair(`Browser metadata file does not exist at:`, `${metadata.location}\n`)
 
-  const [err, content] = await readFile(metadata.location)
+  const metaLoc = metadata.location()
+  if (!pathExistsSync(metaLoc))
+    return Logger.pair(
+      `Browser metadata file does not exist at:`,
+      `${metaLoc}\n`
+    )
+
+  const [err, content] = await readFile(metaLoc)
   err ? Logger.error(err) : Logger.log(content)
   Logger.empty()
 }
@@ -28,9 +30,9 @@ const printMeta = async (args) => {
 module.exports = {
   print: {
     name: 'print',
-    alias: [ 'prt', `pr` ],
+    alias: ['prt', `pr`],
     action: printMeta,
     example: 'keg herkin metadata print',
-    description : 'Print the browser metadata if it exists',
-  }
+    description: 'Print the browser metadata if it exists',
+  },
 }

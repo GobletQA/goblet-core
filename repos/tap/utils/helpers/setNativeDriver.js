@@ -8,7 +8,7 @@ import { exists } from '@keg-hub/jsutils'
  *
  * @returns {Object} - config object with useNativeDriver property set
  */
-export const setNativeDriver = (config={}) => {
+export const setNativeDriver = (config = {}) => {
   !exists(config.useNativeDriver) &&
     (config.useNativeDriver = Platform.OS !== 'web')
 

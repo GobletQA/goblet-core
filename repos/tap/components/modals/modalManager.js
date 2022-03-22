@@ -1,8 +1,12 @@
 import React from 'react'
-import { Values } from 'SVConstants'
-import { CreateFileModal } from './createFileModal'
-import { TestSelectorModal } from './testSelectorModal'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { Values } from 'HKConstants'
+import { useStoreItems } from 'HKHooks/store/useStoreItems'
+import { SignInModal } from './content/signIn'
+import { ConnectRepoModal } from './content/connectRepo'
+import { FileSelectorModal } from './content/fileSelector'
+import { NoLocalMountModal } from './content/noLocalMount'
+import { ConfirmRemoveFile } from './content/confirmRemoveFile'
+
 
 const { CATEGORIES, MODAL_TYPES } = Values
 
@@ -11,15 +15,20 @@ const { CATEGORIES, MODAL_TYPES } = Values
  * @returns {null|Component}
  */
 export const ModalManager = () => {
-  const { activeModal, visible } = useStoreItems(CATEGORIES.MODALS) || {}
+  const { activeModal, visible, props } = useStoreItems(CATEGORIES.MODALS) || {}
 
   switch (activeModal) {
     case MODAL_TYPES.TEST_SELECTOR:
-      return <TestSelectorModal visible={visible} />
-    case MODAL_TYPES.CREATE_FILE:
-      return <CreateFileModal visible={visible} />
+      return <FileSelectorModal visible={visible} />
+    case MODAL_TYPES.CONNECT_REPO:
+      return <ConnectRepoModal visible={visible} />
+    case MODAL_TYPES.NO_LOCAL_MOUNT:
+      return <NoLocalMountModal visible={visible} />
+    case MODAL_TYPES.SIGN_IN:
+      return <SignInModal visible={visible} />
+    case MODAL_TYPES.CONFIRM_REMOVE_FILE:
+      return <ConfirmRemoveFile visible={visible} {...props} />
     default:
       return null
   }
-  
 }

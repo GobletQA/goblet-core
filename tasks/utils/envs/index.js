@@ -1,4 +1,4 @@
 module.exports = {
   ...require('./replaceTemplateVars'),
-  ...require('./setMountEnvs')
+  ...require('./setMountEnvs'),
 }

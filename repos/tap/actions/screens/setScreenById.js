@@ -1,10 +1,8 @@
-import { getStore } from 'SVStore'
-import { Values } from 'SVConstants'
+import { getStore } from 'HKStore'
+import { Values } from 'HKConstants'
 import { setScreen } from './setScreen'
-import { setResultsScreen } from './setResultsScreen'
 
-const { CATEGORIES, SCREENS } = Values
-const defFileProps = { activeFile: {}, altActiveFile: false }
+const { CATEGORIES } = Values
 
 /**
  * Sets the currently active screen based on the passed in ID

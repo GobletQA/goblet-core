@@ -1,18 +1,11 @@
-actions:
-  tap:
-    build:
-      cmds:
-        - yarn web:build
-        - rm -rf {{ envs.DOC_BUILD_PATH }}
-        - cp -R {{ envs.DOC_CORE_PATH }}/web-build {{ envs.DOC_BUILD_PATH }}
-    serve:
-      detached: true
-      cmds:
-        - npx serve {{ envs.DOC_BUILD_PATH }} --cors -n -l {{ envs.KEG_PROXY_PORT }}
-        - node {{ envs.DOC_APP_PATH }}/repos/backend/index.js
 env:
-
   # --- KEG-CLI ENV CONTEXT --- #
+
+  CORE_PATH: "{{ cli.taps.core.path }}"
+  COMPONENTS_PATH: "{{ cli.taps.components.path }}"
+  RETHEME_PATH: "{{ cli.taps.retheme.path }}"
+  JSUTILS_PATH: "{{ cli.taps.utils.path }}"
+  PARKIN_PATH: "{{ cli.taps.parkin.path }}"
 
   # Set the paths to the linked external app
   # The app should be linked to the keg-cli with `kee`
@@ -20,27 +13,28 @@ env:
   KEG_DOCKER_FILE: "{{ cli.taps.herkin.path }}/container/Dockerfile"
   KEG_VALUES_FILE: "{{ cli.taps.herkin.path }}/container/values.yml"
   KEG_COMPOSE_DEFAULT: "{{ cli.taps.herkin.path }}/container/docker-compose.yml"
-  KEG_COMPOSE_LOCAL: "{{ cli.taps.herkin.path }}/container/docker-compose-local.yml"
+
+  # --- IMPORTANT - Don't set this ENV --- #
+  # Get's defined within the tasks
+  # It will be overwritten, from within the tasks/*
+  # KEG_COMPOSE_HERKIN: "DO NOT UNCOMMENT ME"
+  # --- IMPORTANT - Don't set this ENV --- #
 
   # The KEG_CONTEXT_PATH env should be the location of the external app being run
   KEG_CONTEXT_PATH: "{{ cli.taps.herkin.path }}"
-
-  # Image to use when building herkin
-  KEG_BASE_IMAGE: ghcr.io/lancetipton/tap:develop
-
-  # Image to use when running herkin
-  # Even if the dockerfile does not use this in the FROM directive
-  # It should still be defined as the image used to run the Tap
-  KEG_IMAGE_FROM: ghcr.io/lancetipton/keg-herkin:develop
 
   # This is a true base image from playwright - Alpine Linux are not supported
   # ref: https://playwright.dev/docs/docker/README/#using-on-ci
   # includes node v 14.15.3
   # When building the keg-herkin image, this acts as the parent image
-  PLAYWRIGHT_IMAGE_FROM: mcr.microsoft.com/playwright:bionic
-  # Since the browsers are downloaded manually
-  # Tell yarn install to skip browser download
-  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+  # Image to use when building herkin
+  # KEG_BASE_IMAGE: mcr.microsoft.com/playwright:bionic
+  KEG_BASE_IMAGE: mcr.microsoft.com/playwright:focal
+
+  # Image to use when running herkin
+  # Even if the dockerfile does not use this in the FROM directive
+  # It should still be defined as the image used to run the Tap
+  KEG_IMAGE_FROM: ghcr.io/keg-hub/keg-herkin:develop
 
   # --- DOCKER ENV CONTEXT --- #
 
@@ -57,8 +51,7 @@ env:
   DOC_PARKIN_PATH: /keg/tap/node_modules/@ltipton/parkin
   DOC_SOCKR_PATH: /keg/tap/node_modules/@ltipton/sockr
 
-  EXPO_CLI_VERSION: 4.11.0
-  SHARP_CLI_VERSION: 1.15.0
+  EXPO_CLI_VERSION: 5.0.3
   KEG_NODE_VERSION: 14.17-alpine
 
   # Default port of the app to expose from the container
@@ -69,10 +62,15 @@ env:
   VNC_SERVER_PORT: 26370
   VNC_VIEW_HEIGHT: 900
   VNC_VIEW_WIDTH: 1440
+
   # URL where the screencast is being displayed
   # This is the URL of the server the proxy connects to
   # Update this to call an externally available VNC websocket host
   SCREENCAST_PROXY_HOST: 0.0.0.0
+
+  # Host of the novnc proxy to tigerVNC
+  # This is internal, and generally should not change
+  VNC_PROXY_HOST: 0.0.0.0
   
   # Required for VNC to work properly
   # Needs a display of some type
@@ -85,12 +83,149 @@ env:
   # IMAGE and CONTAINER_NAME should be the same
   IMAGE: keg-herkin
   CONTAINER_NAME: keg-herkin
-  
+
   # Git tap url in github
-  GIT_APP_URL: https://github.com/lancetipton/keg-herkin.git
+  GIT_APP_URL: https://github.com/KegHub/keg-herkin.git
   GIT_APP_BRANCH: master
-  
-  # Browser Local vs VNC envs
-  # Defaults to using VNC to display the browser
-  HERKIN_USE_VNC: true
-  HERKIN_PW_SOCKET: false
+
+  HERKIN_MOUNT_ROOT: /keg/repos
+  HERKIN_LOCAL_MOUNT: herkin-local/current
+
+  # Define the type of API server to run => all | backend | screencast
+  HERKIN_API_TYPE: 'all'
+
+actions:
+  tap:
+    build:
+      location: /keg/tap
+      cmds:
+        - yarn build
+    install:
+      location: /keg/tap
+      cmds:
+        - yarn setup
+    start:
+      location: /keg/tap
+      cmds:
+        - yarn dev
+    bundle:
+      cmds:
+        - node ./tasks/runTask.js deploy build {{ envs.KEG_ACTION_PARAMS }}
+    web:
+      cmds:
+        - yarn web:build
+        - rm -rf {{ envs.DOC_BUILD_PATH }}
+        - cp -R {{ envs.DOC_CORE_PATH }}/web-build {{ envs.DOC_BUILD_PATH }}
+    copy:
+      cmds:
+        - rm -rf {{ envs.DOC_BUILD_PATH }}
+        - cp -R {{ envs.DOC_CORE_PATH }}/web-build {{ envs.DOC_BUILD_PATH }}
+    serve:
+      cmds:
+        - npx serve {{ envs.DOC_BUILD_PATH }} --cors -n -l {{ envs.KEG_PROXY_PORT }}
+        - node {{ envs.DOC_APP_PATH }}/repos/backend/index.js
+  core:
+    install:
+      location: /keg/tap/node_modules/keg-core
+      cmds:
+        - yarn install
+  sockr:
+    install:
+      location: /keg/tap/node_modules/@ltipton/sockr
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/@ltipton/sockr
+      cmds:
+        - yarn build:rollup
+    start:
+      location: /keg/tap/node_modules/@ltipton/sockr
+      detach: true
+      cmds:
+        - yarn dev
+    att:
+      location: /keg/tap/node_modules/@ltipton/sockr
+      cmds:
+        - bash
+  parkin:
+    install:
+      location: /keg/tap/node_modules/@ltipton/parkin
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/@ltipton/parkin
+      cmds:
+        - yarn build:rollup
+    start:
+      location: /keg/tap/node_modules/@ltipton/parkin
+      detach: true
+      cmds:
+        - yarn dev
+    att:
+      location: /keg/tap/node_modules/@ltipton/parkin
+      cmds:
+        - bash
+  jsutils:
+    install:
+      location: /keg/tap/node_modules/@keg-hub/jsutils
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/@keg-hub/jsutils
+      cmds:
+        - yarn build
+    start:
+      location: /keg/tap/node_modules/@keg-hub/jsutils
+      detach: true
+      cmds:
+        - yarn dev
+    copyRoot:
+      location: /keg/tap/node_modules/@keg-hub/jsutils
+      cmds:
+        - rm -rf /keg/tap/node_modules/@keg-hub/jsutils/build
+        - cp -R /keg/tap/node_modules/@keg-hub/jsutils/build /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils/build
+  retheme:
+    att:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
+      cmds:
+        - bash
+    install:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
+      cmds:
+        - yarn build
+    start:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
+      detach: true
+      cmds:
+        - yarn dev
+    setup:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
+      cmds:
+        - yarn install
+        - yarn build
+  components:
+    att:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
+      cmds:
+        - bash
+    install:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
+      cmds:
+        - yarn build
+    start:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
+      cmds:
+        - yarn dev
+    setup:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
+      cmds:
+        - yarn install
+        - yarn build

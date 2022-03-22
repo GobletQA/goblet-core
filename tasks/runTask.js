@@ -1,3 +1,2 @@
-const { runTask } = require('@keg-hub/cli-utils')
+require('@keg-hub/cli-utils').runTask()
 
-;(async () => await runTask())()

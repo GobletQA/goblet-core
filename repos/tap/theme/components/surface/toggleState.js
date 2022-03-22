@@ -1,6 +1,5 @@
 import { tapColors } from '../../tapColors'
 
-
 export const toggleState = theme => ({
   default: {
     main: {
@@ -15,7 +14,7 @@ export const toggleState = theme => ({
       ftSz: 12,
       ftWt: 'bold',
       c: tapColors.success,
-    }
+    },
   },
   open: {
     icon: {
@@ -23,14 +22,10 @@ export const toggleState = theme => ({
     },
     text: {
       color: tapColors.danger,
-    }
+    },
   },
   closed: {
-    icon: {
-      
-    },
-    text: {
-      
-    }
+    icon: {},
+    text: {},
   },
 })

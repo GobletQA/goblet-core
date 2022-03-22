@@ -7,8 +7,15 @@ ios/platform.sqlite
 /temp_assets
 src/assets/fonts
 /builds/*
-/bundle
 jsconfig.json
+
+container/values-local.yml
+
+/bundle/backend/*
+/bundle/screencast/*
+/bundle/frontend/*
+/bundle/tap/*
+.firebase
 
 # code coverage
 coverage/
@@ -70,13 +77,13 @@ android/app/.settings/
 node_modules/
 npm-debug.log
 yarn-error.log
-main.jsbundle
+
 ios/reactapp/main.ios.js
 ios/reactapp/main.ios.js.meta
-ios/reactapp/main.ios.jsbundle.meta
+
 android/app/src/main/assets/main.android.js
 android/app/src/main/assets/main.android.js.meta
-android/app/src/main/assets/main.android.jsbundle.meta
+
 
 # BUCK
 buck-out/
@@ -95,8 +102,6 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 
-# Bundle artifact
-*.jsbundle
 
 # RNFirebase specific
 #
@@ -193,4 +198,10 @@ tests/util/*
 tests/waypoint/*
 tests/reports/*
 tests/artifacts/*
+**/**/.token
+**/**/*.token
+**/**.swp
 
+configs/*firebase*.json
+
+!**/**/.gitkeep

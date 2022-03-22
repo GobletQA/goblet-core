@@ -15,25 +15,23 @@ const shared = theme => {
         pH: theme.padding.size,
       },
       title: {
-        ...theme.transition([ 'color' ], 0.5),
+        ...theme.transition(['color'], 0.5),
         fontWeight: 'bold',
         letterSpacing: 1,
-      }
+      },
     },
     active: {
-      main: {
-      },
+      main: {},
       title: {
         color: tapColors.primary,
       },
     },
     hover: {
-      main: {
-      },
+      main: {},
       title: {
         color: tapColors.primary,
       },
-    }
+    },
   }
 }
 
@@ -51,20 +49,20 @@ const header = (theme, shared) => {
       toggle: {
         main: {
           color: tapColors.inactive,
-        }
+        },
       },
       first: {
         main: {
           borderTopWidth: 0,
-        }
-      }
+        },
+      },
     },
     active: {
       main: {
         borderBottomColor: tapColors.border,
         borderBottomWidth: 1,
-      }
-    }
+      },
+    },
   })
 }
 
@@ -95,9 +93,9 @@ const item = (theme, shared) => {
           main: {
             mL: theme.margin.size,
           },
-        }
-      }
-    }
+        },
+      },
+    },
   }
 }
 
@@ -115,6 +113,6 @@ export const list = theme => {
       },
     },
     header: header(theme, sharedStyle),
-    item: item(theme, sharedStyle)
+    item: item(theme, sharedStyle),
   }
 }

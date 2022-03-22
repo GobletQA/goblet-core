@@ -1,6 +1,5 @@
-import { devLog } from '../devLog'
-import { getStore } from 'SVStore'
-import { noOpObj } from '../helpers/noop'
+import { getStore } from 'HKStore'
+import { noOpObj } from '@keg-hub/jsutils'
 
 /**
  * Logs warning message, and returns noop object
@@ -13,7 +12,7 @@ import { noOpObj } from '../helpers/noop'
  * @return {Object} - Empty noop object
  */
 const emptyResponse = (message, ...extra) => {
-  devLog(`warn`, message, ...extra)
+  console.warn(message, ...extra)
   return noOpObj
 }
 
@@ -29,17 +28,23 @@ const emptyResponse = (message, ...extra) => {
  * @return {Object} - Object containing the store features, items, and validated feature
  */
 export const validateFeatureAction = (feature, type) => {
-
-  if(!feature || !feature?.ast[type])
-    return emptyResponse(`The ${type} does not exist on the feature.`, feature, type)
+  if (!feature || !feature?.ast[type])
+    return emptyResponse(
+      `The ${type} does not exist on the feature.`,
+      feature,
+      type
+    )
 
   const { items } = getStore()?.getState()
-  if(!items || !items.features)
+  if (!items || !items.features)
     return emptyResponse(`No features exist in the store!`, items)
 
   const { features } = items
-  const index = features.findIndex(feat => feat?.ast?.feature === feature?.ast?.feature)
-  if(index === -1) return emptyResponse(`Parent does not exist in the items store!`, items)
+  const index = features.findIndex(
+    feat => feat?.ast?.feature === feature?.ast?.feature
+  )
+  if (index === -1)
+    return emptyResponse(`Parent does not exist in the items store!`, items)
 
   return {
     items,
@@ -47,5 +52,4 @@ export const validateFeatureAction = (feature, type) => {
     feature,
     features,
   }
-
 }

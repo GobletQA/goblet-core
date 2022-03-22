@@ -1,4 +1,4 @@
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
 const { TABBAR_PORTAL_ID } = Values
 
 // Add $ at the end because it's not a valid selector for an element
@@ -8,6 +8,6 @@ const { TABBAR_PORTAL_ID } = Values
 export const tabbarPortal = theme => ({
   [`body > #${TABBAR_PORTAL_ID}`]: {
     position: 'sticky',
-    bottom: 0
-  }
+    bottom: 0,
+  },
 })

@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
 import { useStyle } from '@keg-hub/re-theme'
-import { noOpObj } from '@keg-hub/jsutils'
-import { createDomNode } from 'SVUtils/helpers/createDomNode'
+import { noOpObj, isStr, checkCall } from '@keg-hub/jsutils'
+import { createDomNode } from 'HKUtils/helpers/createDomNode'
 import { convertToCss } from '@keg-hub/re-theme/styleInjector'
 
 let DomStyleSheet
@@ -17,35 +17,36 @@ const isProduction = process.env.NODE_ENV === 'production'
  *
  * @returns {void}
  */
-export const useDomStyles = (styles=noOpObj) => {
+export const useDomStyles = (styles = noOpObj) => {
   const globalStyles = useStyle('global', `domStyles`, styles)
 
   return useMemo(() => {
-    if(stylesAdded) return stylesAdded
+    if (stylesAdded) return stylesAdded
     stylesAdded = true
 
-    DomStyleSheet = DomStyleSheet || document.head.querySelector(`#${KEG_DOM_STYLES_ID}`)
+    DomStyleSheet =
+      DomStyleSheet || document.head.querySelector(`#${KEG_DOM_STYLES_ID}`)
 
     DomStyleSheet &&
-      Object.entries(globalStyles)
-        .map(([ className, rules ]) => {
-          const { blocks } = convertToCss(rules, noOpObj)
-          // Blocks should always be an array with max length of 1
-          // So we can treat it as a string here
-          const validCssStr = blocks.length && `${className}${blocks}`
+      Object.entries(globalStyles).map(([selector, rules]) => {
+        const validCssStr = selector[0] === '$' && isStr(rules)
+          ? rules
+          : checkCall(() => {
+              const { blocks } = convertToCss(rules, noOpObj)
+              // Blocks should always be an array with max length of 1
+              // So we can treat it as a string here
+              return blocks.length && `${selector}${blocks}`
+            })
 
-          validCssStr && (
-            isProduction
-              ? DomStyleSheet.sheet.insertRule(`@media all {${validCssStr}}`)
-              : (DomStyleSheet.textContent = `${DomStyleSheet.textContent}\n${validCssStr}`)
-          )
-        })
+        validCssStr &&
+          (isProduction
+            ? DomStyleSheet.sheet.insertRule(`@media all {${validCssStr}}`)
+            : (DomStyleSheet.textContent = `${DomStyleSheet.textContent}\n${validCssStr}`))
+      })
   }, [])
-
 }
-
 
 /**
  * Helper to auto-add the ace editor style overrides
  */
-;(()=> createDomNode(KEG_DOM_STYLES_ID, 'style', 'head'))()
+;(() => createDomNode(KEG_DOM_STYLES_ID, 'style', 'head'))()

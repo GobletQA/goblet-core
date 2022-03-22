@@ -1,6 +1,6 @@
-import { dispatch } from 'SVStore'
-import { validateFeatureAction } from 'SVUtils'
-import { Values, ActionTypes } from 'SVConstants'
+import { dispatch } from 'HKStore'
+import { Values, ActionTypes } from 'HKConstants'
+import { validateFeatureAction } from 'HKUtils/features/validateFeatureAction'
 
 const { CATEGORIES } = Values
 
@@ -15,8 +15,8 @@ const { CATEGORIES } = Values
 export const addFeatureTag = (parent, tag) => {
   const { feature, index } = validateFeatureAction(parent, 'tags')
   tag = tag[0] === '@' ? tag : `@${tag}`
-  
-  const tags = feature.ast.tags ? [ ...feature.ast.tags, tag ]  : [ tag ]
+
+  const tags = feature.ast.tags ? [...feature.ast.tags, tag] : [tag]
 
   index > -1 &&
     feature &&
@@ -25,8 +25,7 @@ export const addFeatureTag = (parent, tag) => {
       payload: {
         key: index,
         category: CATEGORIES.FEATURES,
-        item: { ...feature, ast: { ...feature.ast, tags: tags }},
+        item: { ...feature, ast: { ...feature.ast, tags: tags } },
       },
     })
-
 }

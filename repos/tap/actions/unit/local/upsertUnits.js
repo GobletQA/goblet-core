@@ -1,6 +1,6 @@
-import { dispatch } from 'SVStore'
+import { dispatch } from 'HKStore'
 import { noPropArr } from '@keg-hub/jsutils'
-import { Values, ActionTypes } from 'SVConstants'
+import { Values, ActionTypes } from 'HKConstants'
 
 const { CATEGORIES } = Values
 
@@ -11,6 +11,6 @@ const { CATEGORIES } = Values
  *
  * @returns {void}
  */
-export const upsertUnits = (units=noPropArr) => {
+export const upsertUnits = (units = noPropArr) => {
   // TODO
 }

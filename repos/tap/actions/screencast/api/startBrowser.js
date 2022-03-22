@@ -1,43 +1,42 @@
-import { dispatch, getStore } from 'SVStore'
-import { devLog } from 'SVUtils'
-import { Values } from 'SVConstants'
-import { addToast } from 'SVActions/toasts'
-import { noOpObj, get } from '@keg-hub/jsutils'
-import { apiRequest } from 'SVUtils/api/apiRequest'
+import { getStore } from 'HKStore'
+import { Values } from 'HKConstants'
+import { noOpObj } from '@keg-hub/jsutils'
+import { addToast } from 'HKActions/toasts'
+import { apiRequest } from 'HKUtils/api/apiRequest'
 
 const { HttpMethods, CATEGORIES } = Values
 
-export const startBrowser = async (options=noOpObj) => {
-
+export const startBrowser = async (options = noOpObj) => {
   const { items } = getStore()?.getState()
-  if(!items)
-    return console.warn(`No items set in the store`)
-  
+  if (!items) return console.warn(`No items set in the store`)
+
   const storeOpts = items[CATEGORIES.BROWSER_OPTS]
 
   addToast({
     type: 'info',
-    message: `Starting Browser...`
+    message: `Starting Browser...`,
   })
 
-  const resp = await apiRequest({
+  const {
+    data,
+    error,
+    success
+  } = await apiRequest({
     url: '/screencast/browser/start',
     method: HttpMethods.GET,
-    params: {...storeOpts, ...options },
-  }, 'object')
+    params: { ...storeOpts, ...options },
+  })
+
+  if(!success || error)
+    addToast({
+      type: 'error',
+      message: error || `Failed to start the browser, please try again later.`,
+    })
   
   // TODO: store browser running status in redux
   // Then use that to tell update the canvas to reload as needed
-  console.log(`---------- resp ----------`)
-  console.log(resp)
+  console.log(`---------- data ----------`)
+  console.log(data)
 
-  return resp
-  
-  // error &&
-  //   error.message &&
-  //   addToast({
-  //     type: 'danger',
-  //     message: error.message
-  //   })
-
+  return data
 }

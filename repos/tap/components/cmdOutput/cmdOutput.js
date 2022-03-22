@@ -1,32 +1,24 @@
-import React from "react"
-import { useStyle } from '@keg-hub/re-theme'
+import React from 'react'
 import { RenderOutput } from './renderOutput'
-import { Surface } from 'SVComponents/surface'
-import { Row } from '@keg-hub/keg-components/row'
-import { Grid } from '@keg-hub/keg-components/grid'
-import { useActiveTestRuns } from 'SVHooks/activeFile/useActiveTestRuns'
+import { useActiveTestRuns } from 'HKHooks/activeFile/useActiveTestRuns'
+import { ReCmdRow, ReCmdMain, ReCmdSurface } from './cmd.restyle'
 
 export const CmdOutput = props => {
-  const { activeFile} = props
-  const styles = useStyle(`cmdOutput`, props.styles)
+  const { activeFile } = props
   const testRunModel = useActiveTestRuns()
 
   return (
-    <Surface
-      className={`results-main`}
+    <ReCmdSurface
+      className={`cmd-main`}
       prefix={`Test Output`}
       title={activeFile.name}
       capitalize={false}
-      styles={styles.surface}
     >
-      <Grid className={`results-grid`} style={styles?.main} >
-        <Row className='results-results-row' style={styles?.row} >
-          <RenderOutput
-            testRunModel={testRunModel}
-            testFile={activeFile}
-          />
-        </Row>
-      </Grid>
-    </Surface>
-  ) || null
+      <ReCmdMain className={`cmd-grid`}>
+        <ReCmdRow className='cmd-cmd-row'>
+          <RenderOutput testRunModel={testRunModel} testFile={activeFile} />
+        </ReCmdRow>
+      </ReCmdMain>
+    </ReCmdSurface>
+  )
 }

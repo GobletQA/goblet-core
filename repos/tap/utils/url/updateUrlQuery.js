@@ -9,7 +9,7 @@ import { inPopStateUpdate } from './listenToPopState'
  * @return {Object} - Contains the location and history global objects
  */
 const getWindowProps = () => {
-  return typeof window === "undefined"
+  return typeof window === 'undefined'
     ? noOpObj
     : (() => ({ location: window.location, history: window.history }))()
 }
@@ -25,8 +25,24 @@ const getWindowProps = () => {
  * @return {string} - Stringified version of the query params
  */
 const buildQuery = (current, update, merge) => {
-  const query = merge ? { ...current, ...update }: update
+  const query = merge ? { ...current, ...update } : update
   return objToQuery(query)
+}
+
+/**
+ * Removes an array of items for the url query params
+ * @function
+ * @public
+ * @export
+ * @param {Array} toRemove - Array of items to remove form the query prams
+ *
+ * @return {void}
+ */
+export const removeFromQuery = (toRemove=noPropArr) => {
+  const current = queryToObj(location.search)
+  toRemove.map(item => (delete current[item]))
+
+  history.pushState(noOpObj, '', objToQuery(current))
 }
 
 /**
@@ -39,8 +55,8 @@ const buildQuery = (current, update, merge) => {
  *
  * @return {void}
  */
-export const updateUrlQuery = (update=noOpObj, merge) => {
-  if(inPopStateUpdate()) return
+export const updateUrlQuery = (update = noOpObj, merge) => {
+  if (inPopStateUpdate()) return
 
   const { location, history } = getWindowProps()
   const current = queryToObj(location.search)

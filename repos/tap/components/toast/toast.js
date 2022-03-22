@@ -1,12 +1,16 @@
 import React, { useMemo, useEffect, useCallback } from 'react'
-import { Values } from 'SVConstants'
-import { removeToast } from 'SVActions/toasts'
-import { useIconProps } from 'SVHooks/useIconProps'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { Check, Times, Exclamation, Info } from 'SVAssets/icons'
+import { Values } from 'HKConstants'
+import { Info } from 'HKAssets/icons/info'
+import { Check } from 'HKAssets/icons/check'
+import { Times } from 'HKAssets/icons/times'
+import { removeToast } from 'HKActions/toasts'
+import { useIconProps } from 'HKHooks/useIconProps'
+import { Exclamation } from 'HKAssets/icons/exclamation'
+import { useStoreItems } from 'HKHooks/store/useStoreItems'
 import { noOpObj, noPropArr, noOp, isStr } from '@keg-hub/jsutils'
+import { View, Text, isValidComponent } from '@keg-hub/keg-components'
 import { useStyle, useThemeHover, useThemeActive } from '@keg-hub/re-theme'
-import { View, Button, Text, isValidComponent } from '@keg-hub/keg-components'
+
 
 const icons = {
   success: Check,
@@ -18,34 +22,25 @@ const icons = {
 
 const { CATEGORIES } = Values
 
-const useIcon = (type, icon) => useMemo(() => {
-  const Icon = isStr(type) && icons[type] || icon
-  return isValidComponent(Icon) && Icon
-}, [type, icon])
+const useIcon = (type, icon) =>
+  useMemo(() => {
+    const Icon = (isStr(type) && icons[type]) || icon
+    return isValidComponent(Icon) && Icon
+  }, [type, icon])
 
 const RenderToast = props => {
   const {
-    toast=noOpObj,
-    onDelete=noOp,
-    autoClose=toast.timeout || 4000,
-    styles=noOpObj,
-    toastsStyle=noOpObj,
-    position='topRight',
+    toast = noOpObj,
+    onDelete = noOp,
+    autoClose = toast.timeout || 4000,
+    styles = noOpObj,
+    toastsStyle = noOpObj,
+    position = 'topRight',
   } = props
 
-  const {
-    id,
-    icon,
-    title,
-    message,
-    type='info',
-  } = toast
-    
-  const toastStyle = useStyle(
-    toastsStyle,
-    `toast.${type}`,
-    styles
-  )
+  const { id, icon, title, message, type = 'info' } = toast
+
+  const toastStyle = useStyle(toastsStyle, `toast.${type}`, styles)
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -54,18 +49,19 @@ const RenderToast = props => {
     }, autoClose)
 
     return () => timeout && clearInterval(timeout)
-
   }, [autoClose, onDelete, toast])
 
   const deleteToast = useCallback(() => {
     onDelete(toast)
     removeToast(toast)
-  }, [ removeToast, onDelete, toast ])
+  }, [removeToast, onDelete, toast])
 
   const Icon = useIcon(type, icon)
 
-  const [ hoverRef, hoverStyles ] = useThemeHover(toastStyle, toastsStyle.hover)
-  const [ ref, themeStyles ] = useThemeActive(hoverStyles, toastsStyle.active, { ref: hoverRef })
+  const [hoverRef, hoverStyles] = useThemeHover(toastStyle, toastsStyle.hover)
+  const [ref, themeStyles] = useThemeActive(hoverStyles, toastsStyle.active, {
+    ref: hoverRef,
+  })
   const iconProps = useIconProps(noOpObj, themeStyles.icon)
 
   return (
@@ -76,33 +72,18 @@ const RenderToast = props => {
       style={themeStyles.content}
     >
       {Icon && (
-        <View
-          className="toast-left"
-          style={themeStyles.left}
-        >
-          <Icon
-            className="toast-icon"
-            {...iconProps}
-          />
+        <View className='toast-left' style={themeStyles.left}>
+          <Icon className='toast-icon' {...iconProps} />
         </View>
       )}
-      <View
-        className="toast-right"
-        style={themeStyles.right}
-      >
+      <View className='toast-right' style={themeStyles.right}>
         {title && (
-          <Text
-            className="toast-title"
-            style={themeStyles.title}
-          >
-            { title }
+          <Text className='toast-title' style={themeStyles.title}>
+            {title}
           </Text>
         )}
         {message && (
-          <Text
-            className="toast-message"
-            style={themeStyles.message}
-          >
+          <Text className='toast-message' style={themeStyles.message}>
             {message}
           </Text>
         )}
@@ -112,21 +93,14 @@ const RenderToast = props => {
 }
 
 export const Toast = props => {
-  const { styles=noOpObj, position='topRight', onDelete=noOp } = props
-  
-  const { toasts=noPropArr } = useStoreItems([CATEGORIES.TOASTS])
+  const { styles = noOpObj, position = 'topRight', onDelete = noOp } = props
 
-  const toastsStyle = useStyle(
-    'toast.default',
-    `toast.${position}`,
-    styles,
-  )
+  const { toasts = noPropArr } = useStoreItems([CATEGORIES.TOASTS])
+
+  const toastsStyle = useStyle('toast.default', `toast.${position}`, styles)
 
   return (
-    <View
-      className={'toasts-main'}
-      style={toastsStyle.main} 
-    >
+    <View className={'toasts-main'} style={toastsStyle.main}>
       {toasts.map(item => (
         <RenderToast
           key={item.key || item.id || `${item.title}-${item.message}`}
@@ -138,5 +112,4 @@ export const Toast = props => {
       ))}
     </View>
   )
-
 }

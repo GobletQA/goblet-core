@@ -1,6 +1,6 @@
 const { newPage } = require('./newPage')
 const { getPage, getContext, getBrowser } = require('./browser')
-
+const { noOpObj } = require('@keg-hub/jsutils')
 /**
  * Starts browser using playwright
  * See {@link https://playwright.dev/docs/api/class-browsertype#browser-type-launch|Playwright Docs} for more info
@@ -14,7 +14,7 @@ const { getPage, getContext, getBrowser } = require('./browser')
  *
  * @returns {Object} - Contains the page, context, and browser created from playwright
  */
-const startBrowser = async (browserConf=noOpObj) => {
+const startBrowser = async (browserConf = noOpObj) => {
   await newPage(browserConf)
 
   return {
@@ -24,7 +24,6 @@ const startBrowser = async (browserConf=noOpObj) => {
   }
 }
 
-
 module.exports = {
-  startBrowser
+  startBrowser,
 }

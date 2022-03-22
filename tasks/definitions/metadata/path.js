@@ -1,7 +1,6 @@
 const { metadata } = require('HerkinSC')
 const { Logger } = require('@keg-hub/cli-utils')
 
-
 /**
  * Print the browser metadata path on the HDD
  * @param {Object} args - arguments passed from the runTask method
@@ -12,9 +11,11 @@ const { Logger } = require('@keg-hub/cli-utils')
  *
  * @returns {void}
  */
-const metaLocation = async (args) => {
-  console.log(metadata.location)
-  return metadata.location
+const metaLocation = async args => {
+  const metaLoc = metadata.location()
+  Logger.log(metaLoc)
+
+  return metaLoc
 }
 
 module.exports = {
@@ -23,6 +24,6 @@ module.exports = {
     alias: ['location', 'loc'],
     action: metaLocation,
     example: 'keg herkin metadata path',
-    description : 'Print the path to the browser metadata',
-  }
+    description: 'Print the path to the browser metadata',
+  },
 }

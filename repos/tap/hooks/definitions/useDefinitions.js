@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useMemo } from 'react'
 import { noOpObj, uuid } from '@keg-hub/jsutils'
 
 /**
@@ -9,22 +9,28 @@ import { noOpObj, uuid } from '@keg-hub/jsutils'
  *
  * @returns {Array} - Definitions that exist in the feature files ast
  */
-export const useDefinitions = (feature=noOpObj, definitionTypes=noOpObj) => {
+export const useDefinitions = (
+  feature = noOpObj,
+  definitionTypes = noOpObj
+) => {
   return useMemo(() => {
     let mappedDefs = []
-    if(!feature?.ast || !feature?.ast?.scenarios) return mappedDefs
+    if (!feature?.ast || !feature?.ast?.scenarios) return mappedDefs
 
     feature?.ast?.scenarios.map(scenario => {
-      scenario.steps && scenario.steps.map(step => {
-        const type = step.type
-        if(!definitionTypes || !definitionTypes[type]) return
+      scenario.steps &&
+        scenario.steps.map(step => {
+          const type = step.type
+          if (!definitionTypes || !definitionTypes[type]) return
 
-        const foundDef = definitionTypes[type].find(def => def.uuid === step.definition)
-        // Add the keyId incase two steps use the same definition
-        // We need a different Id for them
-        // Which can be used as the keg in a react component loop
-        foundDef && mappedDefs.push({ ...foundDef, keyId: uuid() })
-      })
+          const foundDef = definitionTypes[type].find(
+            def => def.uuid === step.definition
+          )
+          // Add the keyId incase two steps use the same definition
+          // We need a different Id for them
+          // Which can be used as the keg in a react component loop
+          foundDef && mappedDefs.push({ ...foundDef, keyId: uuid() })
+        })
     })
 
     return mappedDefs

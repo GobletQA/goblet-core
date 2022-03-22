@@ -1,7 +1,6 @@
 const { parkin } = require('./instance')
 
-const getStepHandler = (parkin, name) =>
-  parkin[name].bind(parkin)
+const getStepHandler = (parkin, name) => parkin[name].bind(parkin)
 
 /**
  * Cucumber-like step functions

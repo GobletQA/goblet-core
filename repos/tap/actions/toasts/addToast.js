@@ -1,19 +1,28 @@
-import { dispatch, getStore } from 'SVStore'
-import { Values, ActionTypes } from 'SVConstants'
-import { noPropArr, noOpObj, deepMerge, uuid, capitalize } from '@keg-hub/jsutils'
+import { dispatch, getStore } from 'HKStore'
+import { Values, ActionTypes } from 'HKConstants'
+import {
+  noPropArr,
+  noOpObj,
+  deepMerge,
+  uuid,
+  capitalize,
+} from '@keg-hub/jsutils'
 const { CATEGORIES } = Values
 
-const buildToast = (toast=noOpObj) => {
+const buildToast = (toast = noOpObj) => {
   const type = toast.type || 'info'
 
-  return deepMerge({
-    type,
-    id: uuid(),
-    icon: type,
-    title: capitalize(type),
-    timeout: type === 'danger' ? 6000 : 4000,
-    message: `This is a ${type} toast component`,
-  }, toast)
+  return deepMerge(
+    {
+      type,
+      id: uuid(),
+      icon: type,
+      title: capitalize(type),
+      timeout: type === 'danger' ? 6000 : 4000,
+      message: `This is a ${type} toast component`,
+    },
+    toast
+  )
 }
 
 export const addToast = toast => {
@@ -22,12 +31,12 @@ export const addToast = toast => {
 
   // Allow max 4 toasts on the screen at one time
   // In this case log message to the output
-  if(current.length >=3)
-    return toast &&
-      toast.message &&
-      console.log(toast.type || 'info', toast.message)
+  if (current.length >= 3)
+    return (
+      toast && toast.message && console.log(toast.type || 'info', toast.message)
+    )
 
-  const updated = Array.from([ ...current, buildToast(toast) ])
+  const updated = Array.from([...current, buildToast(toast)])
 
   dispatch({
     type: ActionTypes.SET_ITEMS,

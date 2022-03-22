@@ -5,31 +5,30 @@ const { get, isArr } = require('@keg-hub/jsutils')
  * Then organizes them by the step type ( given | then | when )
  * @param {Array} defFileModels - All loaded definition fileModels
  *
- * @return {Object} - Organized definitions code by type 
+ * @return {Object} - Organized definitions code by type
  */
 const definitionsByType = defFileModels => {
   return isArr(defFileModels)
-  ? defFileModels.reduce((organized, fileModel, idx) => {
-      get(fileModel, 'ast.definitions', [])
-        .map(definition => {
-          if(!definition || !definition.type) return
-          
+    ? defFileModels.reduce((organized, fileModel, idx) => {
+        get(fileModel, 'ast.definitions', []).map(definition => {
+          if (!definition || !definition.type) return
+
           const type = definition.type.toLowerCase()
           // Store a reference to the parent fileModel to allow finding it later
           definition.parent = {
             uuid: fileModel.uuid,
-            location: fileModel.location
+            location: fileModel.location,
           }
 
           organized[type] = organized[type] || []
           organized[type].push(definition)
         })
 
-      return organized
-    }, {})
-  : {}
+        return organized
+      }, {})
+    : {}
 }
 
 module.exports = {
-  definitionsByType
+  definitionsByType,
 }

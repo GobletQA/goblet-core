@@ -1,6 +1,8 @@
 const { limbo } = require('@keg-hub/jsutils')
 const { statusServer, startServer } = require('HerkinSC')
-const { ensureBrowserType } = require('HerkinTasks/utils/helpers/ensureBrowserType')
+const {
+  ensureBrowserType,
+} = require('HerkinTasks/utils/helpers/ensureBrowserType')
 
 /**
  * Starts the browser servers is they are not already running
@@ -15,11 +17,11 @@ const startServers = async (browsers, browserOpts) => {
   return Promise.all(
     browsers.map(async browser => {
       const type = ensureBrowserType(browser)
-      const launchOpts = {...browserOpts, type}
+      const launchOpts = { ...browserOpts, type }
 
       const [err, server] = await limbo(startServer(launchOpts))
-      if(!err) return server
-      
+      if (!err) return server
+
       Logger.warn(`Could not start ${browser} browser server`)
       Logger.log(err.message)
     })
@@ -27,5 +29,5 @@ const startServers = async (browsers, browserOpts) => {
 }
 
 module.exports = {
-  startServers
+  startServers,
 }

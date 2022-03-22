@@ -11,22 +11,23 @@ const { noOpObj } = require('@keg-hub/jsutils')
  *
  * @returns {Promise<Array<Object>>} - Parsed feature file ast joined with the featureMeta Object
  */
-const featuresParser = (featureMeta=noOpObj) => {
-    const { location } = featureMeta
+const featuresParser = (featureMeta = noOpObj) => {
+  const { location } = featureMeta
 
-    return new Promise((res, rej) => {
-      fs.readFile(location, (err, data) => {
-        if(err) return rej(err)
-
-        const parsed = parkin.parse
-              .feature(data.toString())
-              .map(feature => ({ ...featureMeta, ...feature }))
-
-        return res(parsed)
+  return new Promise((res, rej) => {
+    fs.readFile(location, (err, data) => {
+      if (err) return rej(err)
+      const content = data.toString()
+      const ast = parkin.parse.feature(content)
+      return res({
+        ...featureMeta,
+        content,
+        ast
       })
     })
+  })
 }
 
 module.exports = {
-  featuresParser
+  featuresParser,
 }

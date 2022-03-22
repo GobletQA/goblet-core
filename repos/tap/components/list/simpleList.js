@@ -1,16 +1,9 @@
-import React,  { useState, useCallback, useMemo, useEffect } from 'react'
-import { useStyle } from '@keg-hub/re-theme'
-import {
-  exists,
-  noOpObj,
-  checkCall,
-  noPropArr,
-  deepMerge,
-} from '@keg-hub/jsutils'
+import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import { ListItem } from './listItem'
 import { ListHeader } from './listHeader'
-import { Grid, Drawer } from 'SVComponents'
-import { renderFromType, isValidComponent } from '@keg-hub/keg-components'
+import { useStyle } from '@keg-hub/re-theme'
+import { exists, noOpObj, checkCall, noPropArr } from '@keg-hub/jsutils'
+import { renderFromType, isValidComponent, Grid, Drawer } from '@keg-hub/keg-components'
 
 /**
  * Helper to build the toggled values and callbacks based on passed in props
@@ -19,27 +12,31 @@ import { renderFromType, isValidComponent } from '@keg-hub/keg-components'
  * @returns {Object} - Built toggle values and callbacks
  */
 const useToggled = (meta, propsToggled, drawerToggled, onHeaderPress) => {
-
   // Get the toggle state if its controlled externally
   const controlledToggle = useMemo(() => {
     return exists(meta.toggled)
       ? meta.toggled
       : exists(drawerToggled)
-        ? drawerToggled
-        : exists(propsToggled)
-          ? propsToggled
-          : undefined
+      ? drawerToggled
+      : exists(propsToggled)
+      ? propsToggled
+      : undefined
   }, [meta.toggled, drawerToggled, propsToggled])
 
   // Store the initial toggle state
-  const [ toggled, setToggled ] = useState(exists(controlledToggle) ? controlledToggle : false)
+  const [toggled, setToggled] = useState(
+    exists(controlledToggle) ? controlledToggle : false
+  )
 
   // Add a callback for toggling the state when header is pressed
-  const onTogglePress = useCallback(event => {
+  const onTogglePress = useCallback(
+    event => {
       checkCall(onHeaderPress, event, meta)
-      // If no controlledToggle exists, flip the toggled state 
+      // If no controlledToggle exists, flip the toggled state
       !exists(controlledToggle) && setToggled(!toggled)
-  }, [ onHeaderPress, meta, toggled, controlledToggle ])
+    },
+    [onHeaderPress, meta, toggled, controlledToggle]
+  )
 
   // If the toggle state is controlled externally
   // Then validate if it's correct, and update the state if it's not
@@ -55,7 +52,6 @@ const useToggled = (meta, propsToggled, drawerToggled, onHeaderPress) => {
     setToggled,
     onTogglePress,
   }
-  
 }
 
 const RenderListItems = props => {
@@ -66,28 +62,30 @@ const RenderListItems = props => {
     renderItem,
     onItemPress,
     filterValue,
-    filterKey='title',
+    filterKey = 'title',
   } = props
 
-  return Object.entries(items)
-    .reduce((acc, [ key, item ]) => {
-      const itemProps = {
-        group,
-        styles,
-        title: key,
-        onItemPress,
-        key: `${group}-${key}`,
-        ...item
-      }
-      
-      ;(!exists(filterValue) || item[filterKey].toLowerCase().includes(filterValue)) &&
-        acc.push(
-        isValidComponent(renderItem)
-          ? renderFromType(renderItem, itemProps)
-          : (<ListItem {...itemProps} />)
+  return Object.entries(items).reduce((acc, [key, item]) => {
+    const itemProps = {
+      group,
+      styles,
+      title: key,
+      onItemPress,
+      key: `${group}-${key}`,
+      ...item,
+    }
+
+    ;(!exists(filterValue) ||
+      item[filterKey].toLowerCase().includes(filterValue)) &&
+      acc.push(
+        isValidComponent(renderItem) ? (
+          renderFromType(renderItem, itemProps)
+        ) : (
+          <ListItem {...itemProps} />
         )
-      return acc
-    }, [])
+      )
+    return acc
+  }, [])
 }
 
 const RenderList = props => {
@@ -102,20 +100,16 @@ const RenderList = props => {
     renderItem,
     onItemPress,
     filterValue,
-    drawer=true,
-    header=true,
-    meta=noOpObj,
+    drawer = true,
+    header = true,
+    meta = noOpObj,
     onHeaderPress,
-    drawerProps=noOpObj,
+    drawerProps = noOpObj,
   } = props
 
   const group = meta.group || groupKey
 
-  const {
-    toggled,
-    setToggled,
-    onTogglePress,
-  } = useToggled(
+  const { toggled, setToggled, onTogglePress } = useToggled(
     meta,
     props.toggled,
     drawerProps[groupKey]?.toggled,
@@ -126,7 +120,7 @@ const RenderList = props => {
     styles?.drawer,
     drawerProps?.styles,
     toggled && styles?.drawer?.toggled,
-    toggled && drawerProps?.styles?.toggled,
+    toggled && drawerProps?.styles?.toggled
   )
 
   const RenderedItems = (
@@ -157,51 +151,44 @@ const RenderList = props => {
           styles={styles?.header}
         />
       )}
-      {header && drawer
-        ? (
-            <Drawer
-              {...drawerProps}
-              last={last}
-              first={first}
-              toggled={toggled}
-              styles={drawerStyles}
-              className='sub-items-drawer'
-            >
-              {RenderedItems}
-            </Drawer>
-          )
-        : RenderedItems
-      }
+      {header && drawer ? (
+        <Drawer
+          {...drawerProps}
+          toggled={toggled}
+          styles={drawerStyles}
+          className='sub-items-drawer'
+        >
+          {RenderedItems}
+        </Drawer>
+      ) : (
+        RenderedItems
+      )}
     </>
   )
 }
 
-// Need to move tasks specific data outside of this component
-// Should create a RenderTasks component, and use this inside it
-// Which will make this component reuseable
-export const SimpleList = props => {
+export const SimpleList = React.memo(props => {
   const { items, styles } = props
   const listStyles = useStyle(`list`, styles)
   const itemsLength = items.length - 1
 
-  return Object.entries(items)
-    .map(([ key, meta ], index) => {
-      return (
-        <Grid
-          className="simple-list"
-          style={listStyles.main}
-          key={`${meta.group}-${key}`}
-        >
-          <RenderList
-            { ...props }
-            meta={meta}
-            index={index}
-            groupKey={key}
-            first={index === 0}
-            styles={listStyles}
-            last={itemsLength === index}
-          />
-        </Grid>
-      )
-    })
-}
+  return Object.entries(items).map(([key, meta], index) => {
+    return (
+      <Grid
+        className='simple-list'
+        style={listStyles.main}
+        key={`${meta.group}-${key}`}
+      >
+        <RenderList
+          {...props}
+          meta={meta}
+          index={index}
+          groupKey={key}
+          first={index === 0}
+          styles={listStyles}
+          last={itemsLength === index}
+        />
+      </Grid>
+    )
+  })
+})

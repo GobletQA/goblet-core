@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { Values } from 'SVConstants'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { getSCStatus } from 'SVActions/screencast/api/getSCStatus'
+import { Values } from 'HKConstants'
+import { useStoreItems } from 'HKHooks/store/useStoreItems'
+import { getSCStatus } from 'HKActions/screencast/api/getSCStatus'
 
 const { CATEGORIES } = Values
 
@@ -16,15 +16,12 @@ export const useSCStatus = () => {
   const lastCheckRef = useRef()
 
   useEffect(() => {
-    (async () => {
-      if(lastCheckRef.current === scOpts?.lastCheck) return
+    ;(async () => {
+      if (lastCheckRef.current === scOpts?.lastCheck) return
 
       const resp = await getSCStatus()
-      resp?.lastCheck && 
-        (lastCheckRef.current = resp?.lastCheck)
-
+      resp?.lastCheck && (lastCheckRef.current = resp?.lastCheck)
     })()
-
   }, [scOpts, lastCheckRef.current])
 
   return scOpts

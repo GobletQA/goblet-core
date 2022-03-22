@@ -1,22 +1,25 @@
 import React from 'react'
-import { View } from 'SVComponents'
-import { Input } from 'SVComponents/form/input'
+import { Search } from 'HKAssets/icons/search'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { ControlledInput } from 'HKComponents/form/controlledInput'
 
-const FilterInput = reStyle(Input, 'styles')(theme => ({
+const FilterInput = reStyle(
+  ControlledInput,
+  'styles'
+)(theme => ({
   main: {
     bW: 0,
     borderBottomWidth: 1,
     p: theme.padding.size,
     bC: theme.tapColors.border,
-    pV: theme.padding.size * (2/3),
+    pV: theme.padding.size * (2 / 3),
   },
   input: {
     otl: 'none',
     borderRadius: 0,
     c: theme.tapColors.defaultDark,
-    bgC: theme.tapColors.accentBackground
-  }
+    bgC: theme.tapColors.accentBackground,
+  },
 }))
 
 /**
@@ -26,14 +29,15 @@ const FilterInput = reStyle(Input, 'styles')(theme => ({
  * @param {function} props.onBlur - Called when the the input is blurred
  *
  */
-export const DefinitionListFilter = props => {
+export const DefinitionListFilter = React.memo(props => {
   const { onChange, onBlur } = props
 
   return (
     <FilterInput
+      Aside={Search}
       onBlur={onBlur}
       onChange={onChange}
-      placeholder={`Filter Definitions...`}
+      placeholder={`Search Definitions...`}
     />
   )
-}
+})

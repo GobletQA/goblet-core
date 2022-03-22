@@ -1,43 +1,95 @@
 #!/usr/bin/env node
+
 /**
  * Script should be run on the HOST machine, NOT with in the docker container
  * Starts the playwright chromium server on the HOST machine,
  * The `wsEndpoint` is then passed to the docker container as an ENV - BROWSER_WS_ENDPOINT
-*/
-const path = require('path')
-const { Logger }  = require('@keg-hub/cli-utils')
-const { inDocker, metadata } = require('HerkinSC')
+ */
+const { Logger, inDocker } = require('@keg-hub/cli-utils')
 const { noOpObj, exists, isEmpty, limbo } = require('@keg-hub/jsutils')
+const {
+  metadata,
+  newServer,
+  newBrowserWS,
+  getBrowserType,
+} = require('HerkinSC')
 
 /**
-* Logs the websocket endpoint to the terminal
-* @function
-* @private
-* @param {Object} wsEndpoint - Websocket endpoint of the started browser server
-*
-* @returns {void}
-*/
-const logWebsocket = (wsEndpoint, browserType) => {
-  Logger.empty()
-  Logger.pair(`Using browser: `, browserType)
-  Logger.pair(`Using websocket-endpoint: `, wsEndpoint)
-  Logger.empty()
+ * Logs a highlighted message
+ * @param {string} start - Start of message
+ * @param {string} middle - Part of message highlighted
+ * @param {string} end - End of message
+ * @param {boolean} [log] - Should the message be logged
+ *
+ */
+const logHighlight = (start, middle, end, log = true) => {
+  log && Logger.highlight(`\n==== ${start}`, middle, `${end} ====`)
 }
 
 /**
-* Gets the browser type to be started
-* @function
-* @private
-* @param {string} browser - Name of the browser to be started
-* @param {Array} allowed - List of allowed browsers
-*
-* @returns {void}
-*/
-const getBrowserType = (browser, allowed) => {
-  if(exists(browser) && !allowed.includes(browser))
-    throw new Error(`The browser ${browser} is not allowed. Must be one of ${allowed.join(' | ')}`)
+ * Gets the browser name for logs
+ * Adds headless to the browser type if it's true
+ * @param {boolean} headless - Is headless mode enabled
+ * @param {String} type - one of 'chromium', 'firefox', or 'webkit'
+ */
+const getBrowserName = (headless, type) =>
+  `${headless ? 'headless ' : ''}${type}`
 
-  return browser
+/**
+ * Checks if inside a docker container, and it so, throws an error
+ * @throws
+ * @param {Object} endpoint - Saved metadata websocket endpoint from a previous launch
+ */
+const inDockerErr = endpoint => {
+  if (!inDocker()) return
+
+  endpoint = endpoint.replace('127.0.0.1', 'host.docker.internal')
+  throw new Error(`Could not connect to the browser at ${endpoint}. Exiting...`)
+}
+
+/**
+ * Check to see if the previous launch parameters match the current ones
+ * @param {Object} browserMeta - Saved metadata from a previous launch
+ * @param {Object} launchOptions - see: https://playwright.dev/docs/api/class-browsertype?_highlight=launch#browsertypelaunchserveroptions
+ * @param {String} browserType - one of 'chromium', 'firefox', or 'webkit'
+ *
+ * @return {boolean} True if the launchParams are the same
+ */
+const checkLaunchParams = (browserMeta, launchOptions, browserType) => {
+  return (
+    !isEmpty(browserMeta.endpoint) &&
+    browserType === browserMeta.type &&
+    launchOptions.headless === browserMeta.launchOptions.headless &&
+    launchOptions.slowMo === browserMeta.launchOptions.slowMo
+  )
+}
+
+/**
+ * If launch params match, then just try connecting to that launched
+ * browser. If you can connect, close the connection and do nothing else.
+ * @param {Object} launchOptions - see: https://playwright.dev/docs/api/class-browsertype?_highlight=launch#browsertypelaunchserveroptions
+ * @param {String} browserType - one of 'chromium', 'firefox', or 'webkit'
+ * @param {boolean} paramsMatch - True if the passed params match the metadata params
+ * @param {boolean} log - if true, logs out stages of launch
+ *
+ * @return {boolean} True if we can connect to the browser
+ */
+const testBrowserConnection = async (
+  launchOptions,
+  browserType,
+  paramsMatch,
+  log
+) => {
+  if (!paramsMatch) return
+
+  const [err, browser] = await limbo(
+    newBrowserWS({ type: browserType, ...launchOptions }, false)
+  )
+
+  if (!err && browser.isConnected()) {
+    browser.close()
+    return true
+  }
 }
 
 /**
@@ -45,103 +97,81 @@ const getBrowserType = (browser, allowed) => {
  * @param {String} browserType - one of 'chromium', 'firefox', or 'webkit'
  * @param {Object} launchOptions - see: https://playwright.dev/docs/api/class-browsertype?_highlight=launch#browsertypelaunchserveroptions
  * @param {boolean} log - if true, logs out stages of launch
+ *
+ * @returns {Object} - Browser server instance
  */
 const launchBrowserServer = async (browserType, launchOptions, log) => {
-  const { 
-    endpoint='', 
-    type: prevType, 
-    launchOptions: prevOptions 
-  } = (await metadata.read(browserType) || {})
+  const browserMeta = await metadata.read(browserType)
+  const paramsMatch = checkLaunchParams(browserMeta, launchOptions, browserType)
+  const canConnect = await testBrowserConnection(
+    launchOptions,
+    browserType,
+    paramsMatch,
+    log
+  )
+  const name = getBrowserName(launchOptions.headless, browserType)
 
-  const isInContainer = inDocker()
-
-  log && Logger.empty()
-
-  const browserEndpoint = isInContainer
-    ? endpoint.replace('127.0.0.1', 'host.docker.internal')
-    : endpoint
-
-  // check to see if the previous launch parameters match the current ones
-  const launchParamsMatch = 
-    !isEmpty(browserEndpoint)
-    && browserType === prevType
-    && launchOptions.headless === prevOptions.headless
-    && launchOptions.slowMo === prevOptions.slowMo
-
-  const browserName = `${launchOptions.headless ? 'headless ' : ''}${browserType}`
-
-  // If launch params match, then just try connecting to that launched
-  // browser. If you can connect, close the connection and do nothing else.
-  if (launchParamsMatch) {
-    const [ err, browser ] = await limbo(
-      playwright[browserType].connect({ wsEndpoint: browserEndpoint })
+  if (canConnect)
+    return logHighlight(
+      `Using previously-launched`,
+      name,
+      `on host machine...`,
+      log
     )
 
-    if (!err && browser.isConnected()) {
-      log && Logger.log(`==== Using previously-launched ${browserName} on host machine... ====`)
-      browser.close()
-      return null
-    }
-  }
+  // If we can't connect, and we're inside docker, throw an error
+  inDockerErr(browserMeta.endpoint)
 
-  if (isInContainer)
-    throw new Error(`Could not connect to the browser at ${browserEndpoint}. Exiting...`)
+  // Otherwise, try to launch the browser.
+  logHighlight(`Starting`, name, `on host machine..`, log)
 
-  // Otherwise, launch the browser.
-  log && Logger.log(`==== Starting ${browserName} on host machine... ====`)
-  return playwright[browserType].launchServer(launchOptions)
+  return newServer(browserType, launchOptions)
 }
 
 /**
-* Starts a Playwright Browser Server.
-* <br/> Then gets the websocket endpoint for the server,
-* <br/> adds it as an ENV `KEG_PLAYWRIGHT_WS`, and returns it
-* <br/> For a list of all options, [Go here](https://playwright.dev/docs/api/class-browsertype/#browsertypelaunchoptions)
-* @function
-* @export
-* @param {Object} config - Config for the browser server
-* @param {boolean} [config.log=true] - Log the websocket endpoint
-* @param {string} [config.browser='chromium'] - Browser type to start
-* @param {Array} [config.browsers=[All browsers]] - Allowed browser to use
-* @param {Object} [config.headless=false] - Run the browser in headless mode
-*
-* @returns {string} - Websocket endpoint of the started browser server
-*/
-const launchBrowser = async (config=noOpObj) => {
+ * Starts a Playwright Browser Server.
+ * <br/> Then gets the websocket endpoint for the server,
+ * <br/> For a list of all options, [Go here](https://playwright.dev/docs/api/class-browsertype/#browsertypelaunchoptions)
+ * @function
+ * @export
+ * @param {Object} config - Config for the browser server
+ * @param {boolean} [config.log=true] - Log the websocket endpoint
+ * @param {string} [config.browser='chromium'] - Browser type to start
+ * @param {Array} [config.browsers=[All browsers]] - Allowed browser to use
+ * @param {Object} [config.headless=false] - Run the browser in headless mode
+ *
+ * @returns {string} - Websocket endpoint of the started browser server
+ */
+const launchBrowser = async (config = noOpObj) => {
   const {
-    log=true,
-    browser='chromium',
-    allowed=[ 'chromium', 'firefox', 'webkit' ],
+    log = true,
+    browser = 'chromium',
+    allowed = ['chromium', 'firefox', 'webkit'],
     ...params
   } = config
 
   const launchParams = {
     headless: exists(config.headless) ? config.headless : true,
-    ...params
+    ...params,
   }
 
-  const browserType = getBrowserType(browser, allowed)
-
-  const browserServer = await launchBrowserServer(browserType, launchParams, log)
+  const browserType = getBrowserType(browser)
+  const browserServer = await launchBrowserServer(
+    browserType,
+    launchParams,
+    log
+  )
   if (!browserServer) return
 
   const wsEndpoint = browserServer.wsEndpoint()
-  if(!wsEndpoint)
-    throw new Error(`Could not get the websocket endpoint from the browser server!`)
-
-  log && logWebsocket(wsEndpoint, browserType)
-
-  // Save the playwright browser metadata to the browser-meta.json, to be used in the container.
-  await metadata.save(
-    browserType, 
-    wsEndpoint,
-    launchParams
-  )
+  if (!wsEndpoint)
+    throw new Error(
+      `Could not get the websocket endpoint from the browser server!`
+    )
 
   return wsEndpoint
 }
 
-
 module.exports = {
-  launchBrowser
+  launchBrowser,
 }

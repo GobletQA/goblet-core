@@ -1,10 +1,11 @@
-import { getStore } from 'SVStore'
-import { Values } from 'SVConstants'
+import { getStore } from 'HKStore'
+import { Values } from 'HKConstants'
 import { addToast } from '../toasts/addToast'
 import { get, noOpObj } from '@keg-hub/jsutils'
 import { setTestRun } from '../runner/setTestRun'
+import { getFileTree } from 'HKActions/files/api/getFileTree'
 import { toggleTestRunning } from '../runner/toggleTestRunning'
-import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
+import { getReportsActiveFile } from 'HKUtils/helpers/getReportsActiveFile'
 
 const { CATEGORIES, SOCKR_MSG_TYPES } = Values
 
@@ -17,8 +18,9 @@ const { CATEGORIES, SOCKR_MSG_TYPES } = Values
  */
 export const cmdEnd = (data, testRunModel) => {
   const { items } = getStore().getState()
-  const activeFile = getResultsActiveFile() || noOpObj
-  testRunModel = testRunModel || get(items, [CATEGORIES.TEST_RUNS, activeFile.location])
+  const activeFile = getReportsActiveFile() || noOpObj
+  testRunModel =
+    testRunModel || get(items, [CATEGORIES.TEST_RUNS, activeFile.location])
 
   const exitCode = get(data, 'data.exitCode', 0)
 
@@ -40,10 +42,13 @@ export const cmdEnd = (data, testRunModel) => {
     : addToast({
         type: `error`,
         timeout: 6000,
-        message: `Can not set testRun model running. A testRun model is required!`
+        message: `Can not set testRun model running. A testRun model is required!`,
       })
 
-
+  // Turn of running tests
   toggleTestRunning(false)
-
+  // Make call to reload the file tree
+  // This lets us load in a new test report file if it was generated
+  // TODO: Figure out a way to automatically load the new test report if it exists
+  getFileTree()
 }

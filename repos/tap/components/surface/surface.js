@@ -1,50 +1,54 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useStyle } from '@keg-hub/re-theme'
-import { DrawerToggle } from './drawerToggle'
 import { SurfaceHeader } from './surfaceHeader'
+import { SurfaceMain } from './surface.restyle'
 import { checkCall, exists } from '@keg-hub/jsutils'
 import { Drawer, Row } from '@keg-hub/keg-components'
 
-import { SurfaceContent, SurfaceMain } from './surface.restyle'
+const SCContent = React.memo(props => {
+  return (
+    <Row
+      style={props.style}
+      className={`surface-row ${props.className || ''}`.trim()}
+      children={props.children} 
+    />
+  )
+})
 
 export const Surface = props => {
   const {
-    capitalize,
+    title,
     prefix,
     styles,
-    title,
     titleStyle,
-    hasToggle,
+    capitalize,
+    surfaceRef,
     toggleHandel,
     initialToggle,
-    toggleDisabled,
     RightComponent,
     TitleComponent,
-    className='surface',
+    hasToggle = true,
+    className = 'surface',
   } = props
 
   const surfaceStyles = useStyle('surface', styles)
-  const [ toggled, setToggled ] = useState(initialToggle || true)
+  const [toggled, setToggled] = useState(initialToggle || true)
 
-  const onTogglePress = useCallback((event, setValue) => {
-    const value = exists(setValue) ? setValue : !toggled
-
-    setToggled(value)
-  }, [ toggled, setToggled ])
+  const onTogglePress = useCallback(
+    (event, setValue) => {
+      const value = exists(setValue) ? setValue : !toggled
+      setToggled(value)
+    },
+    [toggled, setToggled]
+  )
 
   useEffect(() => {
     checkCall(toggleHandel, setToggled)
   }, [toggleHandel, setToggled])
 
-  const SCContent = (
-    <Row
-      children={props.children}
-      style={surfaceStyles?.content}
-    />
-  )
-
   return (
     <SurfaceMain
+      ref={surfaceRef}
       accessibilityRole='region'
       style={surfaceStyles?.main}
       className={`${className ? className : ''} surface-main`}
@@ -59,19 +63,27 @@ export const Surface = props => {
           capitalize={capitalize}
           onTogglePress={onTogglePress}
           styles={surfaceStyles?.header}
-          RightComponent={RightComponent}
           TitleComponent={TitleComponent}
+          RightComponent={RightComponent}
         />
       )}
-      {hasToggle && (
+      {(hasToggle && (
         <Drawer
           className='surface-drawer'
-          styles={ surfaceStyles.drawer }
-          toggled={ toggled }
+          styles={surfaceStyles.drawer}
+          toggled={toggled}
         >
-          {SCContent}
+          <SCContent
+            children={props.children} 
+            style={surfaceStyles?.content}
+          />
         </Drawer>
-      ) || SCContent}
+      )) || (
+        <SCContent
+          children={props.children} 
+          style={surfaceStyles?.content}
+        />
+      )}
     </SurfaceMain>
   )
 }

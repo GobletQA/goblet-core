@@ -1,13 +1,12 @@
-import { dispatch, getStore } from 'SVStore'
-import { devLog } from 'SVUtils'
-import { Values, ActionTypes } from 'SVConstants'
+import { dispatch, getStore } from 'HKStore'
+import { Values, ActionTypes } from 'HKConstants'
 import { noOpObj, isObj } from '@keg-hub/jsutils'
 
 const { CATEGORIES } = Values
 
 /**
  * Updates the store with the passed in status
- * 
+ *
  * @returns {Object} - Resposne from the backend API
  */
 export const setSCStatus = status => {

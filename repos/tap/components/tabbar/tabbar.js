@@ -1,14 +1,8 @@
-import { Tab } from './tab'
-import { Values } from 'SVConstants'
-import { TabChildren } from './tabChildren'
-import { TabbarPortal } from './tabbarPortal'
-import { useStyle } from '@keg-hub/re-theme'
-import { checkCall, noPropArr } from '@keg-hub/jsutils'
 import React, { useMemo, useCallback, useState, useEffect } from 'react'
-import { View } from '@keg-hub/keg-components'
+import { TabChildren } from './tabChildren'
+import { useStyle } from '@keg-hub/re-theme'
 import { TabbarMain } from './tabbar.restyle'
-
-const { CATEGORIES } = Values
+import { isFunc, noOpObj } from '@keg-hub/jsutils'
 
 /**
  * Hooks to Set the active tab id when a tab is selected
@@ -20,15 +14,19 @@ const { CATEGORIES } = Values
  *
  * @returns {function} - Callback function for when a tab is clicked
  */
-const useTabSelect = (tabs, onTabSelect, setActiveId) => useCallback(id => {
-  if(!tabs) return
+const useTabSelect = (tabs, onTabSelect, setActiveId) =>
+  useCallback(
+    async id => {
+      if (!tabs) return
 
-  // Call the event hook, and if it returns true, then skip the state update
-  const skip = checkCall(onTabSelect, id, tabs)
-  // If nothing is returned, then update the tab id
-  skip !== true && setActiveId(id)
+      // Call the event hook, and if it returns true, then skip the state update
+      const skip = isFunc(onTabSelect) ? await onTabSelect(id, tabs) : false
 
-}, [tabs, onTabSelect])
+      // If nothing is returned, then update the tab id
+      skip !== true && setActiveId(id)
+    },
+    [tabs, onTabSelect]
+  )
 
 /**
  * Finds the active tab object from the passed in activeTab id
@@ -37,10 +35,8 @@ const useTabSelect = (tabs, onTabSelect, setActiveId) => useCallback(id => {
  *
  * @returns {Object} - Found activeTab Object
  */
-const useCurrentTab = (tabs, activeId) => useMemo(() =>
-  tabs.find(tab => tab.id === activeId),
-  [tabs, activeId]
-)
+const useCurrentTab = (tabs, activeId) =>
+  useMemo(() => tabs.find(tab => tab.id === activeId), [tabs, activeId])
 
 /**
  * Finds the active tab object from the passed in activeTab id
@@ -50,13 +46,13 @@ const useCurrentTab = (tabs, activeId) => useMemo(() =>
  *
  * @returns {Void}
  */
-const useCheckActiveTab = (activeTab, activeId, setActiveId) => useEffect(() => 
-  { activeTab !== activeId && setActiveId(activeTab) },
-  [activeTab, activeId, setActiveId]
-)
+const useCheckActiveTab = (activeTab, activeId, setActiveId) =>
+  useEffect(() => {
+    activeTab !== activeId && setActiveId(activeTab)
+  }, [activeTab, activeId, setActiveId])
 
 /**
- * 
+ *
  * @param {Object} props
  * @param {string} props.activeTab - active tab id
  * @param {Object} props.location - default 'bottom'
@@ -67,41 +63,35 @@ const useCheckActiveTab = (activeTab, activeId, setActiveId) => useEffect(() =>
  */
 export const Tabbar = props => {
   const {
-    activeTab,
-    location='bottom',
-    fixed,
-    onTabSelect,
-    styles,
     tabs,
-    type,
+    fixed,
+    activeTab,
+    onTabSelect,
+    type=`default`,
+    location = 'bottom',
   } = props
 
-  const barStyles = useStyle(`tabbar.default`, `tabbar.${type}`)
+  const barStyles = useStyle(`tabbar.${type}`)
   const [activeId, setActiveId] = useState(activeTab)
   const CurrentTab = useCurrentTab(tabs, activeId)
+
   const onSelectTab = useTabSelect(tabs, onTabSelect, setActiveId)
 
   useCheckActiveTab(activeTab, activeId, setActiveId)
 
   return (
-    <TabbarMain
-      className='tabbar-main'
-      style={barStyles.main}
-    >
+    <TabbarMain className='tabbar-main' style={barStyles.main}>
       {tabs && (
         <TabChildren
           tabs={tabs}
           fixed={fixed}
+          styles={barStyles}
           activeId={activeId}
           location={location}
-          barStyles={barStyles}
           CurrentTab={CurrentTab}
           onSelectTab={onSelectTab}
         />
       )}
     </TabbarMain>
   )
-
 }
-
-

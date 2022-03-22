@@ -1,7 +1,6 @@
 const fs = require('fs')
-const path = require('path')
 const { fileSys } = require('@keg-hub/cli-utils')
-const { limbo, isFunc, exists, noOpObj } = require('@keg-hub/jsutils')
+const { limbo, exists } = require('@keg-hub/jsutils')
 
 /**
  * Wraps a method with a callback into a promise
@@ -13,9 +12,11 @@ const { limbo, isFunc, exists, noOpObj } = require('@keg-hub/jsutils')
  */
 const limboify = (cb, ...args) => {
   return limbo(
-    new Promise((res, rej) => cb(...args, (err, success) => 
-      err? rej(err) : res(exists(success) ? success : true) 
-    ))
+    new Promise((res, rej) =>
+      cb(...args, (err, success) =>
+        err ? rej(err) : res(exists(success) ? success : true)
+      )
+    )
   )
 }
 
@@ -26,7 +27,7 @@ const limboify = (cb, ...args) => {
  *
  * @returns {Promise<Array>} - All files found in the directory
  */
-const readDir = (dirPath) => {
+const readDir = dirPath => {
   return limboify(fs.readdir, dirPath)
 }
 
@@ -56,7 +57,6 @@ const isDirectory = async fullPath => {
   const [_, stat] = await limboify(fs.stat, fullPath)
   return stat.isDirectory()
 }
-
 
 module.exports = {
   ...fileSys,

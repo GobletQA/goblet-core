@@ -1,3 +1,6 @@
 module.exports = {
-  ...require('./browserStatus')
+  ...require('./authToken'),
+  ...require('./browserStatus'),
+  ...require('./connection'),
+  ...require('./repoStatus'),
 }

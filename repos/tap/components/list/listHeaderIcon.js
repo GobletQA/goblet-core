@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react'
-import { Icon } from 'SVComponents'
 import { isStr } from '@keg-hub/jsutils'
 import { Animated } from 'react-native'
 import { useTheme } from '@keg-hub/re-theme'
-import { useToggleAnimate } from 'SVHooks/styles/useToggleAnimate'
+import { useToggleAnimate } from 'HKHooks/styles/useToggleAnimate'
 
 /**
  * Memoizes props for the Icon component
@@ -13,12 +12,16 @@ import { useToggleAnimate } from 'SVHooks/styles/useToggleAnimate'
  *
  * @returns {Object} - Props to pass to the Icon component
  */
-const useIconProps = (icon, theme) => useMemo(() => ({
-  name: 'chevron-down',
-  color: theme?.colors?.palette?.gray01,
-  size: 20,
-  ...(icon ? isStr(icon) ? { name: icon } : icon : null)
-}), [icon, theme])
+const useIconProps = (icon, theme) =>
+  useMemo(
+    () => ({
+      name: 'chevron-down',
+      color: theme?.colors?.palette?.gray01,
+      size: 20,
+      ...(icon ? (isStr(icon) ? { name: icon } : icon) : null),
+    }),
+    [icon, theme]
+  )
 
 /**
  * Memoizes the styles for the icon transform animation
@@ -27,14 +30,20 @@ const useIconProps = (icon, theme) => useMemo(() => ({
  *
  * @returns {Object} - Styles to pass to the Animated View component
  */
-const useTransformStyle = animation => useMemo(() => ({
-  transform: [{
-    rotate: animation.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '180deg']
-    })
-  }]
-}), [animation])
+const useTransformStyle = animation =>
+  useMemo(
+    () => ({
+      transform: [
+        {
+          rotate: animation.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['0deg', '180deg'],
+          }),
+        },
+      ],
+    }),
+    [animation]
+  )
 
 /**
  * Default configuration for the icon toggle animation
@@ -42,7 +51,7 @@ const useTransformStyle = animation => useMemo(() => ({
  */
 const toggleConfig = {
   values: { from: 0, to: 1 },
-  config: { duration: 400 }
+  config: { duration: 400 },
 }
 
 /**
@@ -62,17 +71,8 @@ export const ListHeaderIcon = ({ Icon, iconProps, styles, toggled }) => {
   const transformStyle = useTransformStyle(animation)
 
   return (
-    <Animated.View 
-      style={[
-        styles?.icon?.animate,
-        transformStyle
-      ]}
-    >
-      <Icon
-        className='list-header-icon'
-        { ...builtProps }
-        styles={ styles }
-      />
+    <Animated.View style={[styles?.icon?.animate, transformStyle]}>
+      <Icon className='list-header-icon' {...builtProps} styles={styles} />
     </Animated.View>
   )
 }

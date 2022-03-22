@@ -1,6 +1,6 @@
-import { dispatch, getStore } from 'SVStore'
-import { Values, ActionTypes } from 'SVConstants'
-import { getActiveScreen } from 'SVUtils/helpers/getActiveScreen'
+import { dispatch, getStore } from 'HKStore'
+import { Values, ActionTypes } from 'HKConstants'
+import { getActiveScreen } from 'HKUtils/helpers/getActiveScreen'
 
 const { CATEGORIES } = Values
 

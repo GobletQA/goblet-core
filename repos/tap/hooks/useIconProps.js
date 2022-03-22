@@ -5,24 +5,18 @@ import { useMemo } from 'react'
  * @param {Object=} props - Properties passed to the component
  * @param {Object=} style - Style object used to apply custom styles to the component
  *
- * @returns {Object} - Contains the height, width, and color properties and values 
+ * @returns {Object} - Contains the height, width, and color properties and values
  */
 export const useIconProps = (props, style) => {
   return useMemo(() => {
-    const {
-      height,
-      width,
-      color,
-      fill,
-      size,
-      stroke,
-    } = props
+    const { height, width, color, fill, size, stroke } = props
 
     const styleSize = props?.style?.fontSize || style?.fontSize
-    const styleColor = props?.style?.color ||
-        style?.color ||
-        props?.style?.backgroundColor ||
-        style?.backgroundColor
+    const styleColor =
+      props?.style?.color ||
+      style?.color ||
+      props?.style?.backgroundColor ||
+      style?.backgroundColor
 
     return {
       style,

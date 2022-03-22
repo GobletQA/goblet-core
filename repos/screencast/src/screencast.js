@@ -1,11 +1,9 @@
 require('../../../configs/aliases.config').registerAliases()
 
-const { killProc } = require('HerkinSCLibs/proc')
 const { Logger } = require('@keg-hub/cli-utils')
+const { noOpObj, exists, wait } = require('@keg-hub/jsutils')
 const { checkArgs } = require('HerkinSCLibs/utils/checkArgs')
 const { daemonize } = require('HerkinSCLibs/utils/daemonize')
-const { noOpObj, exists, isObj } = require('@keg-hub/jsutils')
-const { killAll } = require('@keg-hub/spawn-cmd/src/childProcess')
 const {
   stopServer,
   statusServer,
@@ -52,7 +50,9 @@ const killAndExit = exitStatus => {
       Logger.error(err.stack)
       return 1
     })
-    .finally((status=0) => process.exit(exists(exitStatus) ? exitStatus : status))
+    .finally((status = 0) =>
+      process.exit(exists(exitStatus) ? exitStatus : status)
+    )
 }
 
 /**
@@ -72,9 +72,9 @@ const handleOnExit = exitStatus => {
     'SIGUSR1',
     'SIGUSR2',
     'uncaughtException',
-    'SIGTERM'
+    'SIGTERM',
   ])
-  .map(type => process.on(type, exitCode => stopScreencast(exitCode || exitStatus || 0)))
+  // .map(type => process.on(type, exitCode => stopScreencast(exitCode || exitStatus || 0)))
 }
 
 /**
@@ -98,15 +98,14 @@ const checkStatus = async () => {
  *
  * @return {Object} - Contains status for screencast processes
  */
-const statusScreencast = async (params=noOpObj) => {
+const statusScreencast = async (params = noOpObj) => {
   const status = {}
   status.vnc = await statusVNC()
   status.sockify = await statusSockify()
   status.server = await statusServer()
 
-  if(params.browser)
-    status.browser = await statusBrowser(params.browser)
-  
+  if (params.browser) status.browser = await statusBrowser(params.browser)
+
   return status
 }
 
@@ -125,7 +124,8 @@ const statusScreencast = async (params=noOpObj) => {
 const restartScreencast = async params => {
   Logger.info(`\n[ ScreenCast ] Restarting servers...`)
   await stopScreencast()
-  await startScreencast({...params, __internal: true})
+  await wait(2000)
+  await startScreencast({ ...params, __internal: true })
   process.exit(0)
 }
 
@@ -140,42 +140,42 @@ const restartScreencast = async params => {
  * @param {Object} params.playwright - Config used when starting the browser via playwright
  * @param {boolean} exitListener - Should the process be killed on SIGINT
  *
- * @returns {Object} - Contains the browser, context, page, and child process of the servers 
+ * @returns {Object} - Contains the browser, context, page, and child process of the servers
  */
 const startScreencast = async params => {
   const {
     args,
     __internal,
     exitListener,
-    vnc=noOpObj,
-    sockify=noOpObj,
-    playwright=noOpObj,
+    vnc = noOpObj,
+    sockify = noOpObj,
   } = params
 
   // Ensure this call comes before the potential daemon call
   // That way all process will exit when the daemon exists
   // Setup listener to kill process on exit
-  ;exitListener && handleOnExit()
+  exitListener && handleOnExit()
 
   // Parses the passed in args
   // Checks if a a method should be called based on the arg
   !__internal &&
-    await checkArgs(args, {
+    (await checkArgs(args, {
       kill: killAndExit,
       daemon: daemonize,
       status: checkStatus,
-      restart: () => restartScreencast(params)
-    })
+      restart: () => restartScreencast(params),
+    }))
 
   Logger.info(`\n[ ScreenCast ] Starting servers...`)
-  // Start the VNC, websockify, playwright servers
-  const vncProc = await startVNC(vnc)
-  const sockProc = await startSockify(sockify)
+  // Start the VNC, websockify servers
+  await startVNC(vnc)
+  await startSockify(sockify)
   Logger.info(`[ ScreenCast ] Servers started successfully\n`)
 
+  // Return the current status of the servers
   return {
-    sockProc,
-    vncProc,
+    vnc: await statusVNC(),
+    sockify: await statusSockify(),
   }
 }
 

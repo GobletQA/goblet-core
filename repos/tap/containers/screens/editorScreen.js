@@ -1,12 +1,10 @@
 import React from 'react'
-import { Code } from 'SVAssets/icons/code'
-import { EmptyScreen } from './emptyScreen'
-import { useStyle } from '@keg-hub/re-theme'
-import { View } from '@keg-hub/keg-components'
-import { CodeEditor } from 'SVComponents/codeEditor'
-import { useActiveFile } from 'SVHooks/activeFile/useActiveFile'
-import { Values } from 'SVConstants'
-const { SCREENS } = Values
+import { EmptyScreen } from './index'
+import { ReEditorMain } from './screens.restyle'
+import { CodeEditor } from 'HKComponents/codeEditor'
+import { Resize } from 'HKComponents/resize/resize'
+import { useActiveFile } from 'HKHooks/activeFile/useActiveFile'
+import { AsideCmdOutput } from 'HKComponents/cmdOutput/asideCmdOutput'
 
 /**
  * EditorScreen - Renders code editors based on the type of file selected
@@ -16,22 +14,17 @@ const { SCREENS } = Values
  * @param {Object} props.title - Display name for the screen
  *
  */
-export const EditorScreen = props => {
-  const styles = useStyle(`screens.editors.main`)
+const EditorScreen = props => {
   const activeFile = useActiveFile(props.id)
 
-  return !activeFile?.fileType
-    ? (<EmptyScreen message={'No file selected!'} />)
-    : (
-        <View
-          className={`editors-screen`}
-          style={styles}
-        >
-          <CodeEditor activeFile={activeFile} />
-        </View>
-      )
+  return !activeFile?.fileType ? (
+    <EmptyScreen message={'No file selected!'} />
+  ) : (
+    <ReEditorMain className='herkin-editor-screen-main' >
+      <CodeEditor activeFile={activeFile} screenId={props.id} />
+      <AsideCmdOutput activeFile={activeFile} screenId={props.id} />
+    </ReEditorMain>
+  )
 }
 
-EditorScreen.tabIcon = Code
-EditorScreen.tabId = SCREENS.EDITOR
-EditorScreen.tabTitle = `Code Editor`
+export default EditorScreen

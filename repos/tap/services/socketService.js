@@ -1,5 +1,5 @@
-import * as sockrActions from 'SVActions/sockr'
-import { isFunc, camelCase, snakeCase, checkCall } from '@keg-hub/jsutils'
+import * as sockrActions from 'HKActions/sockr'
+import { camelCase, snakeCase, checkCall } from '@keg-hub/jsutils'
 import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
 
 const serverConfig = JSON.parse(process.env.WS_SERVER_CONFIG)
@@ -16,19 +16,18 @@ const serverConfig = JSON.parse(process.env.WS_SERVER_CONFIG)
  * @property {function} cmdRunning - Called when a command is running on the backend
  */
 const events = {
-  all: function(message, instance, event){
-    if(!event) return
+  all: function (message, instance, event) {
+    if (!event) return
 
     // Get the name of the action from sockr's Event Types
     // And convert into an action name for the taps sockr actions
     const actionName = camelCase((event.split(':')[1] || '').toLowerCase())
     checkCall(sockrActions[actionName], message)
   },
-  browserStatus: function(message, instance, event){
+  browserStatus: function (message, instance, event) {
     // TODO: Update to call browser status update local action
     //
-  
-  }
+  },
 }
 
 /**
@@ -43,12 +42,11 @@ const events = {
  * @returns {Object} - Instance of SocketService
  */
 class SocketService {
-  constructor(config){
-    this.events = Object.entries(events)
-      .reduce((bound, [name, func]) => {
-        bound[name] = func.bind(this)
-        return bound
-      }, {})
+  constructor(config) {
+    this.events = Object.entries(events).reduce((bound, [name, func]) => {
+      bound[name] = func.bind(this)
+      return bound
+    }, {})
 
     Object.assign(this, config)
   }
@@ -72,9 +70,8 @@ class SocketService {
     SockrService.emit(eventType, data)
   }
 
-
   /**
-   * Calls the SockrService runCommand method 
+   * Calls the SockrService runCommand method
    * Helper to make running command esier
    * @memberof SocketService
    * @type function
@@ -97,7 +94,6 @@ class SocketService {
    * @returns {void}
    */
   disconnect = () => SockrService.disconnect()
-
 }
 
 export const WSService = new SocketService(serverConfig)

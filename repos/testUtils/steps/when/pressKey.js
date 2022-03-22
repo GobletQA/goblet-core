@@ -1,6 +1,7 @@
 const { When } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinSetup')
+const { getBrowserContext } = require('HerkinTestEnv')
 const { getPage } = getBrowserContext()
+const keyboardMap = require('./keyboardMap')
 
 /**
  * Simulates a key press
@@ -9,7 +10,8 @@ const { getPage } = getBrowserContext()
  */
 const pressKey = async key => {
   const page = await getPage()
-  await page.keyboard.press(key)
+  const pressedKey = keyboardMap.capitalize[key] || key
+  await page.keyboard.press(pressedKey)
 }
 
 When('I press the key {string}', pressKey, {
@@ -28,8 +30,7 @@ Examples :
   Shortcut combination : I press the key "Control+a"`,
       example: 'PageDown',
     },
-  ]
+  ],
 })
 
 module.exports = { pressKey }
-

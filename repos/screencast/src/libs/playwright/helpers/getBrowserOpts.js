@@ -1,12 +1,16 @@
 const path = require('path')
-const { flatUnion } = require('../../utils/flatUnion')
+const { getHerkinConfig } = require('HerkinSharedConfig')
+const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
+const { taskEnvToBrowserOpts } = require('HerkinSharedUtils/taskEnvToBrowserOpts')
 const { checkVncEnv } = require('../../utils/vncActiveEnv')
-const { getHerkinConfig } = require('HerkinConfigs/getHerkinConfig')
-const { get, noPropArr, noOpObj, exists, deepMerge } = require('@keg-hub/jsutils')
-const herkin = getHerkinConfig()
-const testsRoot = get(herkin, 'paths.testsRoot')
-const tracesDir = path.join(testsRoot, get(herkin, 'paths.reportsDir', 'reports'))
-const downloadsPath = path.join(testsRoot, get(herkin, 'paths.artifactsDir', 'artifacts'))
+const {
+  exists,
+  noOpObj,
+  omitKeys,
+  flatUnion,
+  noPropArr,
+  deepMerge,
+} = require('@keg-hub/jsutils')
 
 /**
 options
@@ -40,64 +44,92 @@ options
  * @type {Object}
  */
 const options = {
-  default: {
-    ...herkin?.screencast?.browser,
-    tracesDir,
-    downloadsPath,
-  },
-  host: {
-  },
+  host: {},
   vnc: {
-    slowMo: 50,
+    slowMo: 100,
     headless: false,
     args: [
       `--disable-gpu`,
       `--disable-dev-shm-usage`,
       `--no-sandbox`,
       `--window-position=0,0`,
-    ]
+    ],
   },
 }
 
+const getHerkinConfigOpts = herkin => {
+  const { reportsDir = 'reports', artifactsDir = 'artifacts' } = herkin.paths
+
+  const baseDir = getRepoHerkinDir(herkin)
+  return {
+    ...herkin?.screencast?.browser,
+    tracesDir: path.join(baseDir, reportsDir),
+    downloadsPath: path.join(baseDir, artifactsDir),
+  }
+}
 
 /**
  * Builds the config for the browser merging the defaults with the passed in config
  * @function
  * @public
  * @param {Object} browserConf - Options to define how the browser starts
+ * @param {Object} herkin - Global herkin config object
  *
  * @return {Object} - Config object to pass to playwright when starting a browser
  */
-const getBrowserOpts = (browserConf=noOpObj) => {
+const getBrowserOpts = (browserConf=noOpObj, herkin) => {
   const {
-    url,
     channel,
     restart,
     headless,
     // Config for creating a browser context
     // Should not be included in the browser options
     context,
-    args=noPropArr,
-    type='chromium',
-    ...config
+    args = noPropArr,
+    // type / url is not used, just pulled out of the config object
+    type,
+    url,
+    ...argumentOpts
   } = browserConf
 
-  const { args:envArgs, ...envOpts } = checkVncEnv().vncActive
+  herkin = herkin || getHerkinConfig()
+  const { args: herkinModeArgs, ...herkinModeOpts } = checkVncEnv().vncActive
     ? options.vnc
     : options.host
 
   return deepMerge(
-    options.default,
-    envOpts,
+    /**
+     * Gets the default config options from the global herkin.config.js
+     */
+    getHerkinConfigOpts(herkin),
+    /**
+     * Default options set based on the herkin mode i.e. local || vnc
+     */
+    herkinModeOpts,
+    /**
+     * Generated options passed on passed in arguments
+     * Allows only setting properties if they actually exist
+     */
     {
-      args: flatUnion(envArgs, args),
+      args: flatUnion(herkinModeArgs, args),
       ...(exists(headless) && { headless }),
       ...(exists(channel) && { channel }),
     },
-    config
+    /**
+     * Options passed to this function as the first argument
+     * Should override all except for options set by a task via ENVs
+     */
+    argumentOpts,
+    /**
+     * Task env opts overrides all others
+     * These come from the options passed to a task that started the process
+     * This ensures those options gets set
+     * Also, excludes the devices list from the returned Object
+     */
+     omitKeys(taskEnvToBrowserOpts(herkin), ['devices']),
   )
 }
 
 module.exports = {
-  getBrowserOpts
+  getBrowserOpts,
 }

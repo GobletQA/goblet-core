@@ -1,12 +1,12 @@
 const { Given } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinSetup')
+const { getBrowserContext } = require('HerkinTestEnv')
 const { getPage } = getBrowserContext()
 const { get, isStr } = require('@keg-hub/jsutils')
 
 /**
  * Parses the url, replacing any dynamic variables
- * @param {string} url 
- * @param {Object} world 
+ * @param {string} url
+ * @param {Object} world
  * @return {string} - updated url
  */
 
@@ -14,28 +14,33 @@ const parseUrl = (url, world) => {
   if (!url.startsWith(`$world`)) return url
 
   //isolate query string
-  const [baseUrl,urlParams] = url.split('?')
+  const [baseUrl, urlParams] = url.split('?')
   //console.log('baseUrl : ' + baseUrl + ' , urlParams : ' + urlParams)
-  
+
   //isolate path
-  const urlPath = (baseUrl.includes('/') ? baseUrl.substring(baseUrl.indexOf('/'), baseUrl.length) : '')
+  const urlPath = baseUrl.includes('/')
+    ? baseUrl.substring(baseUrl.indexOf('/'), baseUrl.length)
+    : ''
   //console.log('urlPath : ' + urlPath)
 
   //isolate domain
-  const urlDomain = (baseUrl.includes('/') ? baseUrl.substring(0,baseUrl.indexOf('/')) : baseUrl)
+  const urlDomain = baseUrl.includes('/')
+    ? baseUrl.substring(0, baseUrl.indexOf('/'))
+    : baseUrl
   //console.log('urlDomain : ' + urlDomain)
 
-  const [ _, ...worldPath ] = urlDomain.split('.')
-  //console.log('worldPath : ' + worldPath) 
+  const [_, ...worldPath] = urlDomain.split('.')
+  //console.log('worldPath : ' + worldPath)
 
   const parsed = get(world, worldPath)
   //console.log('parsed : ' + parsed)
 
-  const domainAndPath = (urlPath ? parsed.concat(urlPath) : parsed)
-  const urlConstruct = (urlParams ? domainAndPath + '?' + urlParams : domainAndPath)
+  const domainAndPath = urlPath ? parsed.concat(urlPath) : parsed
+  const urlConstruct = urlParams
+    ? domainAndPath + '?' + urlParams
+    : domainAndPath
 
-  if (!parsed) 
-    throw new Error(`No url found at world path ${url}.`)
+  if (!parsed) throw new Error(`No url found at world path ${url}.`)
 
   return urlConstruct
 }
@@ -43,12 +48,11 @@ const parseUrl = (url, world) => {
 /**
  * Opens the url in a playwright browser
  * @param {string} url - url to load in the browser
- * @param {object} world 
+ * @param {object} world
  */
 const openUrl = async (url, world) => {
   const site = parseUrl(url, world)
-  if (!isStr(site))
-    throw new Error(`Site must be a valid URL. Found: ${site}`)
+  if (!isStr(site)) throw new Error(`Site must be a valid URL. Found: ${site}`)
 
   const page = await getPage()
   await page.goto(site)
@@ -71,8 +75,8 @@ Examples:
   Domain ($world.myURL) defined in world.js and query string added to feature: I navigate to "$world.myURL?testUrlParam=1"
   Domain ($world.myURL) defined in world.js and path and query string added to feature : I navigate to "$world.myURL/search?q=cms"`,
       example: 'https://my.website.com',
-    }
-  ]
+    },
+  ],
 })
 
 module.exports = { openUrl }

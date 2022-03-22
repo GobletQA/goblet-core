@@ -1,5 +1,4 @@
-import { setScreenById } from 'SVActions/screens/setScreenById'
-import { saveApiFile } from 'SVUtils/api/saveApiFile'
+import { setScreenById } from 'HKActions/screens/setScreenById'
 
 /**
  * Creates a new waypoint test file using the filesModel
@@ -11,5 +10,4 @@ import { saveApiFile } from 'SVUtils/api/saveApiFile'
  */
 export const createWaypointFile = async (screenId, name) => {
   setScreenById(screenId)
-
 }

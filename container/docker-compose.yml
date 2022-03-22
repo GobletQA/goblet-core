@@ -4,32 +4,28 @@ services:
     ipc: host
     privileged: true
     environment:
-      - HERKIN_APP_URL
-      - HERKIN_ROOT_DIR
-      - HERKIN_TESTS_ROOT
-      - HERKIN_REPORTS_DIR
-      - HERKIN_STEPS_DIR
-      - HERKIN_FEATURES_DIR
-      - HERKIN_ARTIFACTS_DIR
-      - HERKIN_UNIT_DIR
-      - HERKIN_SUPPORT_DIR
-      - HERKIN_WAYPOINT_DIR
-      - HERKIN_PW_SOCKET
-      - HERKIN_USE_VNC
+      - API_PORT
       - DOC_APP_PATH
       - DOC_BUILD_PATH
-      - DISPLAY
       - ENV
+      - FIRE_BASE_APP_ID
+      - FIRE_BASE_AUTH_DOMAIN
+      - FIRE_BASE_KEY
+      - FIRE_BASE_MEASURMENT_ID
+      - FIRE_BASE_MESSAGING_SENDER_ID
+      - FIRE_BASE_PERSISTENCE
+      - FIRE_BASE_PROJECT_ID
+      - FIRE_BASE_STORAGE_BUCKET
+      - FIRE_BASE_TOKEN
+      - HERKIN_APP_URL
+      - HERKIN_COOKIE_KEY
+      - HERKIN_COOKIE_NAME
+      - HERKIN_MOUNT_ROOT
       - KEG_EXEC_CMD
       - KEG_DOCKER_EXEC
       - KEG_PROXY_PORT
       - NODE_ENV
-      - API_PORT
-      - SCREENCAST_API_PORT
-      - NO_VNC_PORT
-      - VNC_SERVER_PORT
-      - VNC_VIEW_HEIGHT
-      - VNC_VIEW_WIDTH
-      - SCREENCAST_PROXY_HOST
-      - PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD
+      - HERKIN_API_TYPE
+    ports:
+      - ${API_PORT}:${API_PORT}
 

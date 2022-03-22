@@ -15,5 +15,5 @@ const restartBrowser = async browserConf => {
 }
 
 module.exports = {
-  restartBrowser
+  restartBrowser,
 }

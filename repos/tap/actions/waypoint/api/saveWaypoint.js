@@ -1,5 +1,3 @@
-
-
 /**
  * Saves a unit tests fileModel to the local file system by calling the backend API
  * @type function
@@ -7,6 +5,6 @@
  *
  * @returns {void}
  */
-export const saveWaypoint = (waypoint) => {
+export const saveWaypoint = waypoint => {
   // TODO
 }

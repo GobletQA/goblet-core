@@ -1,5 +1,4 @@
-import { screenModel } from 'SVModels'
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
 const { CATEGORIES, SCREENCAST_DEFAULTS, BROWSER_DEFAULTS } = Values
 
 /**

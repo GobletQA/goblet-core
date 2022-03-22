@@ -1,19 +1,19 @@
-
-import React from 'react'
-import { View } from 'SVComponents'
-import { Values } from 'SVConstants'
+import React, {useMemo} from 'react'
+import { Values } from 'HKConstants'
 import { noOpObj } from '@keg-hub/jsutils'
-import { reStyle } from '@keg-hub/re-theme/reStyle'
-import { FeatureEditor } from 'SVComponents/feature/featureEditor'
-import { GeneralEditor } from 'SVComponents/aceEditor/generalEditor'
-import { usePendingCallback } from 'SVHooks/activeFile/usePendingCallback'
-import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
+import { capitalize } from '@keg-hub/jsutils'
+import { DefaultEditor } from './defaultEditor'
+import { ReResizeContainer } from './codeEditor.restyle'
+import { Screencast } from 'HKComponents/screencast/screencast'
+import { FeatureEditor } from 'HKComponents/feature/featureEditor'
+import { usePendingCallback } from 'HKHooks/activeFile/usePendingCallback'
+import { DefinitionsEditor } from 'HKComponents/definition/definitionsEditor'
 
-const { EDITOR_TYPES, SCREENS } = Values
-
-const Container = reStyle(View)((theme, { width }) => ({
-  width: `${width}%`,
-}))
+const {
+  SCREENS,
+  EDITOR_TYPES,
+  EDITOR_MODE_TYPES
+} = Values
 
 /**
  * EditorFromType Component - Renders the correct editor based on passed in props
@@ -21,71 +21,86 @@ const Container = reStyle(View)((theme, { width }) => ({
  */
 export const EditorFromType = props => {
   const {
-    aceRef,
+    editorRef,
     styles,
+    width,
     editorType,
-    editorWidth,
-    editorCount,
-    activeFile=noOpObj,
+    activeFile = noOpObj,
     ...otherProps
   } = props
-  const onChange = usePendingCallback(SCREENS.EDITOR)
 
-  switch(editorType){
+  const onChange = usePendingCallback(SCREENS.EDITOR)
+  const editorMode = EDITOR_MODE_TYPES[editorType] || EDITOR_MODE_TYPES.default
+
+  switch (editorType) {
     case EDITOR_TYPES.FEATURE: {
       return (
-        <Container
-          width={editorWidth}
-          editorCount={editorCount}
+        <ReResizeContainer
+          width={width}
           className={`feature-editor-container`}
         >
           <FeatureEditor
             {...otherProps}
-            aceRef={aceRef}
+            mode={editorMode}
             onChange={onChange}
+            editorRef={editorRef}
             activeFile={activeFile}
             styles={styles?.feature}
           />
-        </Container>
+        </ReResizeContainer>
       )
     }
     case EDITOR_TYPES.DEFINITIONS: {
       return (
-        <Container
-          width={editorWidth}
-          editorCount={editorCount}
+        <ReResizeContainer
+          width={width}
           className={`definitions-editor-container`}
         >
           <DefinitionsEditor
             {...otherProps}
+            mode={editorMode}
             activeFile={activeFile}
-            featureEditorRef={aceRef}
+            featureEditorRef={editorRef}
             styles={styles?.definitions}
           />
-        </Container>
+        </ReResizeContainer>
+      )
+    }
+    case EDITOR_TYPES.SCREENCAST: {
+      return (
+        <ReResizeContainer
+          width={width}
+          className={`default-editor-container`}
+        >
+          <Screencast
+            {...otherProps}
+            hideTracker
+            styles={styles}
+            isRunning={false}
+            activeFile={activeFile}
+            title={capitalize(activeFile?.fileType || '')}
+            tests={activeFile?.modified || activeFile?.content || ''}
+          />
+        </ReResizeContainer>
       )
     }
     default: {
-      // TODO: Create an extention map to ace editor mode
-      // Would allow setting the mode based on extention instead of hardcodeing it
       return (
-        <Container
-          width={editorWidth}
-          editorCount={editorCount}
-          className={`ace-editor-container`}
+        <ReResizeContainer
+          width={width}
+          className={`default-editor-container`}
         >
-          <GeneralEditor
+          <DefaultEditor
             {...otherProps}
-            aceRef={aceRef}
+            styles={styles}
             onChange={onChange}
-            mode={'javascript'}
-            styles={styles?.editor}
+            mode={editorMode}
+            editorRef={editorRef}
             activeFile={activeFile}
             fileId={activeFile?.location}
           />
-        </Container>
+        </ReResizeContainer>
       )
-    } 
+    }
   }
-
 }

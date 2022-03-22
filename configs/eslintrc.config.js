@@ -21,8 +21,8 @@ module.exports = {
     'jest/globals': true,
     'react-native/react-native': true,
   },
-  plugins: [ 'jest', 'react', 'react-native' ],
-  extends: [ 'plugin:jest/recommended', 'plugin:react/recommended' ],
+  plugins: ['jest', 'react', 'react-native'],
+  extends: ['plugin:jest/recommended', 'plugin:react/recommended'],
   settings: {
     react: {
       version: '16.9',
@@ -30,9 +30,9 @@ module.exports = {
   },
   rules: {
     /* General */
-    'no-console': [ 'warn', { allow: [ 'warn', 'error' ] }],
-    'brace-style': [ 'error', 'stroustrup' ],
-    indent: [ 'error', 2, { offsetTernaryExpressions: true }],
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'brace-style': ['error', 'stroustrup'],
+    indent: ['error', 2, { offsetTernaryExpressions: true }],
     quotes: [
       'error',
       'single',
@@ -45,10 +45,10 @@ module.exports = {
       'error',
       {
         min: 2,
-        exceptions: [ 'y', 'x', 'i', 'e', '_', 'k', 'p', 'P', 'I' ],
+        exceptions: ['y', 'x', 'i', 'e', '_', 'k', 'p', 'P', 'I'],
       },
     ],
-    'one-var': [ 'error', 'never' ],
+    'one-var': ['error', 'never'],
     'keyword-spacing': [
       'error',
       {
@@ -66,9 +66,9 @@ module.exports = {
         objectsInArrays: false,
       },
     ],
-    'space-in-parens': [ 'error', 'never' ],
-    'object-curly-spacing': [ 'error', 'always' ],
-    'func-call-spacing': [ 'error', 'never' ],
+    'space-in-parens': ['error', 'never'],
+    'object-curly-spacing': ['error', 'always'],
+    'func-call-spacing': ['error', 'never'],
     'arrow-spacing': [
       'error',
       {
@@ -81,7 +81,7 @@ module.exports = {
       {
         args: 'none',
         ignoreRestSiblings: true,
-        varsIgnorePattern: '_'
+        varsIgnorePattern: '_',
       },
     ],
     /* Jest */
@@ -109,7 +109,7 @@ module.exports = {
     'react/prop-types': 0,
     'react/display-name': 0,
     'react/no-children-prop': 0,
-    'react/jsx-first-prop-new-line': [ 'error', 'multiline' ],
+    'react/jsx-first-prop-new-line': ['error', 'multiline'],
     'react/jsx-max-props-per-line': [
       'error',
       {
@@ -117,6 +117,6 @@ module.exports = {
         when: 'always',
       },
     ],
-    'react/jsx-closing-bracket-location': [ 'error', 'line-aligned' ],
+    'react/jsx-closing-bracket-location': ['error', 'line-aligned'],
   },
 }

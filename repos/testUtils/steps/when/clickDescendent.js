@@ -9,9 +9,13 @@ const { checkForAncestor } = require('HerkinSupport/validate')
  */
 const clickDescendent = async (selector, world) => {
   checkForAncestor(world)
-  const descendent = await getElement(`${world.meta.ancestorSelector} ${selector}`)
+  const descendent = await getElement(
+    `${world.meta.ancestorSelector} ${selector}`
+  )
   if (!descendent)
-    throw new Error(`Found no descendent of "${world.meta.ancestorSelector}", with selector: "${selector}"`)
+    throw new Error(
+      `Found no descendent of "${world.meta.ancestorSelector}", with selector: "${selector}"`
+    )
 
   return descendent.click()
 }
@@ -25,9 +29,9 @@ Module : clickDescendent`,
     {
       type: 'string',
       description: `The selector for the element.  Selector must be specific enough to locate a single element.`,
-      example: 'button[name=\'unique_name\']',
-    }
-  ]
+      example: "button[name='unique_name']",
+    },
+  ],
 })
 
 module.exports = { clickDescendent }

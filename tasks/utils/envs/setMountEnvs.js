@@ -4,7 +4,7 @@ const { replaceTemplateVars } = require('./replaceTemplateVars')
 const getEnvName = env => `HERKIN_` + snakeCase(env).toUpperCase()
 
 /**
- * Sets the env variables needed for 
+ * Sets the env variables needed for
  *  - mounting the test directories into the container.
  *  - client urls
  * @see `container/docker-compose.yml`, `volumes` group. It must be updated to work with these envs
@@ -13,8 +13,8 @@ const getEnvName = env => `HERKIN_` + snakeCase(env).toUpperCase()
  * @param {string} options.env - current keg environment
  * @param {string} options.path - path to client project
  */
-const setMountEnvs = (config, options={}) => {
-  const [ valid ] = validate({ config, options }, { $default: isObj })
+const setMountEnvs = (config, options = {}) => {
+  const [valid] = validate({ config, options }, { $default: isObj })
   if (!valid) return
 
   // paths envs
@@ -24,7 +24,8 @@ const setMountEnvs = (config, options={}) => {
   })
 
   // app envs
-  const appUrl = get(config, 'app.url') || 'http://${ alias }-${ branch }.${ env }.keghub.io'
+  const appUrl =
+    get(config, 'app.url') || 'http://${ alias }-${ branch }.${ env }.keghub.io'
   const appUrlEnv = getEnvName('appUrl')
   process.env[appUrlEnv] = replaceTemplateVars(appUrl, config, options)
 }

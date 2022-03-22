@@ -1,82 +1,45 @@
+const { parseJSON } = require('@keg-hub/jsutils')
 const { AppRouter } = require('HerkinSharedRouter')
-const { parseJSON, get } = require('@keg-hub/jsutils')
-const { apiErr, apiResponse } = require('./handler')
+const { asyncWrap, apiRes } = require('HerkinSharedExp')
 const {
   stopScreencast,
   statusScreencast,
   startScreencast,
 } = require('HerkinSCScreencast')
 
-/**
- * Parses the browser config from passed on query and app config
- * parseJSON is needed because query.browser comes in as a json string
- */
-const getBrowserConf = (app, query) => {
-  return {
-    browser: {
-      ...get(app, 'locals.config.browser', noOpObj),
-      ...get(app, 'locals.config.screencast.browser', noOpObj),
-      ...parseJSON(query.browser),
-    }
-  }
-}
+const scStatus = asyncWrap(async (req, res) => {
+  const { query } = req
+  const status = await statusScreencast({
+    ...query,
+    ...(query.browser && { browser: parseJSON(query.browser) }),
+  })
+  status.lastCheck = new Date().getTime()
 
-const scStatus = async (req, res) => {
-  try {
-    const { query, data, app } = req
-    // TODO: Load the parkin world
-    // Check if it has an app.url field
-    // If it does, update the started browser to navigate to the URL
-    const status = await statusScreencast({
-      ...query,
-      ...(query.browser && { browser: parseJSON(query.browser)})
-    })
-    status.lastCheck = new Date().getTime()
+  return apiRes(req, res, status, 200)
+})
 
-    return apiResponse(req, res, status, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
+const scRestart = asyncWrap(async (req, res) => {
+  const { params } = req
 
-const scRestart = async (req, res) => {
-  try {
-    const { params } = req
-  
-    const killResp = await stopScreencast(params)
-    const resp = await startScreencast(params)
+  await stopScreencast(params)
+  const status = await startScreencast(params)
 
-    return apiResponse(req, res, resp, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
+  return apiRes(req, res, status, 200)
+})
 
-const scStart = async (req, res) => {
-  try {
-    const { params } = req
-    const resp = await startScreencast(params)
+const scStart = asyncWrap(async (req, res) => {
+  const { params } = req
+  const status = await startScreencast(params)
 
-    return apiResponse(req, res, resp, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
+  return apiRes(req, res, status, 200)
+})
 
-const scStop = async (req, res) => {
-  try {
-    const { params } = req
-    const resp = await stopScreencast(params)
+const scStop = asyncWrap(async (req, res) => {
+  const { params } = req
+  const status = await stopScreencast(params)
 
-    return apiResponse(req, res, resp, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
+  return apiRes(req, res, status, 200)
+})
 
 module.exports = (...args) => {
   AppRouter.get('/screencast/status', scStatus)

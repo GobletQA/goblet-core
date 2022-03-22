@@ -12,9 +12,12 @@ const { exec } = require('child_process')
  */
 const parseOutput = (procName, output) => {
   const running = output.toLowerCase().includes(procName.toLowerCase())
-  if(!running) return { running, name: procName }
+  if (!running) return { running, name: procName }
 
-  const [pid, tty, time, name] = output.trim().split(' ').filter(part => part)
+  const [pid, tty, time, name] = output
+    .trim()
+    .split(' ')
+    .filter(part => part)
   return {
     tty,
     time,
@@ -37,9 +40,12 @@ const getPlatformCmd = (procName, platform) => {
   const proc = `"[${procName[0]}]${procName.substring(1)}"`
   switch (platform) {
     case 'linux':
-    case 'darwin': return `ps -A | grep ${proc}`
-    case 'win32': return `tasklist`
-    default: return false
+    case 'darwin':
+      return `ps -A | grep ${proc}`
+    case 'win32':
+      return `tasklist`
+    default:
+      return false
   }
 }
 
@@ -56,17 +62,21 @@ const findProc = procName => {
     const platform = process.platform
     // Use the platform to know the correct search command
     const cmd = getPlatformCmd(procName, platform)
-    if(!cmd) return rej(`Error: ${platform} platform not supported.`)
+    if (!cmd) return rej(`Error: ${platform} platform not supported.`)
 
     // Run the search command, and compare the output
     exec(cmd, (err, stdout, stderr) => {
-      if(err || stderr) return res({ running: false, name: procName })
+      if (err || stderr) return res({ running: false, name: procName })
 
       // Finding the pid on windows machine not currently supported
       // I would need a windows OS to see the tasklist cmd output, to know how to parse it
-      const status = platform === 'win32'
-        ? { running: stdout.toLowerCase().includes(procName.toLowerCase()), name: procName }
-        : parseOutput(procName, stdout)
+      const status =
+        platform === 'win32'
+          ? {
+              running: stdout.toLowerCase().includes(procName.toLowerCase()),
+              name: procName,
+            }
+          : parseOutput(procName, stdout)
 
       res(status)
     })
@@ -74,5 +84,5 @@ const findProc = procName => {
 }
 
 module.exports = {
-  findProc
+  findProc,
 }

@@ -1,85 +1,85 @@
-const { dockerExec, sharedOptions } = require('@keg-hub/cli-utils')
-const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers') 
-const { buildArguments } = require('HerkinTasks/utils/task/buildArguments')
+const { getBrowsers } = require('HerkinSC')
+const { testTypes } = require('../../constants')
+const { dockerCmd, sharedOptions } = require('@keg-hub/cli-utils')
+const { runCommands } = require('HerkinTasks/utils/helpers/runCommands')
+const { buildJestArgs } = require('HerkinTasks/utils/jest/buildJestArgs')
+const { getJestConfig } = require('HerkinTasks/utils/jest/getJestConfig')
+const { buildReportPath } = require('HerkinTest/reports/buildReportPath')
+const { filterTaskEnvs } = require('HerkinTasks/utils/envs/filterTaskEnvs')
+const { handleTestExit } = require('HerkinTasks/utils/helpers/handleTestExit')
+const { buildWaypointEnvs } = require('HerkinTasks/utils/envs/buildWaypointEnvs')
 
 /**
- * Builds the Playwright test command
- * @param {Object} params 
- * @returns {Array<string>} - array of cli args
+ * Run task for waypoint scripts
+ * node ./tasks/runTask.js waypoint run context=/keg/repos/lancetipton/current/herkin/waypoint/first.waypoint.js
  */
-const buildTestArguments = (params) => {
-  const { 
-    headless, 
-    sync,
-    firefox,
-    chromium,
-    webkit,
-    allBrowsers,
-  } = params
+const runWp = async args => {
+  filterTaskEnvs()
+  const { params, herkin } = args
+  const browsers = getBrowsers(params)
+  const jestConfig = await getJestConfig(params, testTypes.waypoint)
+  const reportPath = buildReportPath(testTypes.waypoint, params.context, herkin)
 
-  const args = {
-    headless,
-    chromium,
-    webkit,
-    firefox
-  }
+  const cmdArgs = buildJestArgs(params, jestConfig)
 
-  if (allBrowsers || (firefox && chromium && webkit)) {
-    args['all-browsers'] = allBrowsers
-  } 
-  if (sync) args['runInBand'] = sync
+  const commands = browsers.map(
+    browser => () => (
+      dockerCmd(
+        params.container,
+        cmdArgs,
+        buildWaypointEnvs(browser, params, reportPath, testTypes.waypoint),
+      )
+    )
+  )
 
-  return buildArguments(args)
-}
+  // Run the commands for each browser
+  const codes = await runCommands(commands, params)
 
-const runTest = async (args) => {
-  const { params } = args
-  const { context: name } = params
-
-  await launchBrowsers(params)
-  const cmdOptions = buildTestArguments(params)
-
-  // TODO: Add command to run playwright recorded tests
-  // return dockerExec(params.container, [`npx`, `playwright`, `test`, name, ...cmdOptions])
+  // Calculate the exit codes so we know if all runs were successful
+  return handleTestExit(codes)
 }
 
 module.exports = {
   run: {
     name: 'run',
-    action: runTest,
+    action: runWp,
     example: 'yarn test:run',
-    description : 'Runs all or defined QAWolf tests',
+    description: 'Runs all or defined QAWolf tests',
     alias: ['test'],
-    options: sharedOptions('run', {
-      context: {
-        alias: [ 'name' ],
-        description: 'Name of the test to be run. If not passed, all tests are run',
-        default: '.test.js',
-      },
-      sync: {
-        description: 'Run all tests sequentially',
-        alias: [ 'runInBand' ],
-        example: `--sync`,
-        default: false,
-      },
-      container: {
-        description: 'Name of container within which to run create command',
-        example: '--container keg-herkin',
-        required: true,
-        default: 'keg-herkin',
-      },
-      launch: {
-        description: 'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
-        example: 'start --launch',
-        default: false,
-      },
-    }, [
-      'allBrowsers',
-      'chromium',
-      'firefox',
-      'webkit',
-      'headless',
-      'log',
-    ])
-  }
+    options: sharedOptions(
+      'run',
+      {},
+      [
+        'context',
+        'browsers',
+        'allBrowsers',
+        'chromium',
+        'firefox',
+        'webkit',
+        'headless',
+        'slowMo',
+        'browserTimeout',
+        'debug',
+        'devtools',
+        'log',
+        'mode',
+        'base',
+        'repo',
+        'sync',
+        'container',
+        'device',
+        'width',
+        'height',
+        'appUrl',
+        'downloads',
+        'geolocation',
+        'hasTouch',
+        'isMobile',
+        'permissions',
+        'record',
+        'storageState',
+        'timezone',
+      ]
+    ),
+  },
 }

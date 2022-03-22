@@ -1,7 +1,6 @@
 const { parkin } = require('./instance')
 
-const getHook = (parkin, hookName) =>
-  parkin.hooks[hookName].bind(parkin.hooks)
+const getHook = (parkin, hookName) => parkin.hooks[hookName].bind(parkin.hooks)
 
 /**
  * Cucumber-like hooks
@@ -12,7 +11,7 @@ const getHook = (parkin, hookName) =>
  */
 module.exports = {
   BeforeAll: getHook(parkin, 'beforeAll'),
-  AfterAll:  getHook(parkin, 'afterAll'),
+  AfterAll: getHook(parkin, 'afterAll'),
   Before: getHook(parkin, 'beforeEach'),
   After: getHook(parkin, 'afterEach'),
 }

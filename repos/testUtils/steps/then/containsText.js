@@ -1,5 +1,5 @@
 const { Then } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinSetup')
+const { getBrowserContext } = require('HerkinTestEnv')
 const { getPage } = getBrowserContext()
 
 /**
@@ -9,15 +9,18 @@ const { getPage } = getBrowserContext()
  */
 const containsText = async (selector, data) => {
   const page = await getPage()
-  
-  //get element tagName
-  const elTagName = await page.$eval(selector, el => el.tagName)
+
+  const locator = await page.locator(selector)
+  const { tagName, textContent, value } = await locator.evaluate(el => ({
+    value: el.value,
+    tagName: el.tagName,
+    textContent: el.textContent,
+  }))
 
   //if tagName is (input or textarea) use value else use textContent
-  const content = (elTagName === 'INPUT' || elTagName === 'TEXTAREA') 
-    ? await page.$eval(selector, el => el.value) 
-    : await page.$eval(selector, el => el.textContent)
-  
+  const content =
+    tagName === 'INPUT' || tagName === 'TEXTAREA' ? value : textContent
+
   //assert element text contains expected text
   expect(content).toEqual(expect.stringContaining(data))
 }
@@ -36,8 +39,8 @@ Module : containsText`,
       type: 'string',
       description: `The text of the element to verify.`,
       example: '85°',
-    }
-  ]
+    },
+  ],
 })
 
 module.exports = { containsText }

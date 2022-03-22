@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Values } from 'SVConstants'
-import { Tabbar } from 'SVComponents'
+import { Values } from 'HKConstants'
 import { isFunc } from '@keg-hub/jsutils'
-import { useOnTabSelect } from 'SVHooks/tabs/useOnTabSelect'
+import { Tabbar } from 'HKComponents/tabbar'
+import { useOnTabSelect } from 'HKHooks/tabs/useOnTabSelect'
 
 const { DEFINITION_TABS } = Values
 
@@ -28,16 +28,13 @@ const tabs = [
  * @param {function} prop.onTabSelect - Called when a tab is selected
  *
  */
-export const DefinitionTabs = props => {
-
+export const DefinitionTabs = React.memo(props => {
   const { activeTab, onTabSelect } = props
   const [tab, setTab] = useState(activeTab)
   const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
-  
+
   useEffect(() => {
-    isFunc(onTabSelect) &&
-      activeTab !== tab &&
-      setTab(activeTab)
+    isFunc(onTabSelect) && activeTab !== tab && setTab(activeTab)
   }, [activeTab, onTabSelect, tab, setTab])
 
   return (
@@ -49,5 +46,4 @@ export const DefinitionTabs = props => {
       onTabSelect={tabSelect}
     />
   )
-  
-}
+})

@@ -1,9 +1,8 @@
 import { tapColors } from '../../tapColors'
-import { deepMerge } from '@keg-hub/jsutils'
 import { codeTabs } from './codeTabs'
 import { screenTabs } from './screenTabs'
 import { definitionTabs } from './definitionTabs'
-import { resultsTabs } from './resultsTabs'
+import { reportsTabs } from './reportsTabs'
 
 const defTabbar = theme => ({
   main: {},
@@ -15,11 +14,10 @@ const defTabbar = theme => ({
       top: 0,
     },
     bottom: {
-      bottom: 0
-    }
+      bottom: 0,
+    },
   },
-  container: {
-  },
+  container: {},
   tabview: {},
   bar: {},
   tab: {
@@ -34,12 +32,12 @@ const defTabbar = theme => ({
         borderBottomWidth: 2,
         borderBottomColor: tapColors.disabledColor,
         bgC: tapColors.accentBackground,
-        ...theme.transition([ 'borderBottomColor', 'backgroundColor' ], 0.8),
+        ...theme.transition(['borderBottomColor', 'backgroundColor'], 0.8),
       },
       container: {
         opacity: 0.8,
         flD: 'row',
-        ...theme.transition([ 'opacity' ], 0.8),
+        ...theme.transition(['opacity'], 0.8),
       },
       text: {
         marginBottom: 0,
@@ -59,7 +57,7 @@ const defTabbar = theme => ({
           fontSize: 16,
           mL: 8,
         },
-      }
+      },
     },
     hover: {
       main: {
@@ -79,7 +77,7 @@ const defTabbar = theme => ({
         after: {
           color: tapColors.link,
         },
-      }
+      },
     },
     active: {
       main: {
@@ -99,9 +97,9 @@ const defTabbar = theme => ({
         after: {
           color: tapColors.primary,
         },
-      }
+      },
     },
-  }
+  },
 })
 
 export const tabbar = theme => {
@@ -110,7 +108,7 @@ export const tabbar = theme => {
     default: builtTabbar,
     code: codeTabs(theme, builtTabbar),
     screens: screenTabs(theme, builtTabbar),
-    results: resultsTabs(theme, builtTabbar),
+    reports: reportsTabs(theme, builtTabbar),
     definitions: definitionTabs(theme, builtTabbar),
   }
 }

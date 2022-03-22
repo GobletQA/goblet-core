@@ -1,13 +1,25 @@
-import { networkRequest } from 'SVServices/networkRequest'
-import { isObj } from '@keg-hub/jsutils'
-import { devLog } from 'SVUtils'
+import { addToast } from 'HKActions/toasts'
+import { isObj, get } from '@keg-hub/jsutils'
 import { getBaseApiUrl } from './getBaseApiUrl'
+import { gitAuthSignOut } from 'HKActions/admin'
+import { networkRequest } from 'HKServices/networkRequest'
+
 /**
- * Default arguments for an API request
- * @object
+ * Check the response from the API for an expired session
+ * If expired, sign out and open the sign in modal by calling gitAuthSignOut
+ * @param {boolean} success - True if the request was successful
+ * @param {number} statusCode - Response code returned from the Backend API
+ * @param {string} message - Response message returned from the Backend API
  */
-const defRequest = {
-  url: getBaseApiUrl()
+const isValidSession = async (success, statusCode, message) =>{
+  if(success || statusCode !== 401) return true
+
+  addToast({
+    type: 'warn',
+    message: message || `User session is expired, please sign in`,
+  })
+
+  await gitAuthSignOut()
 }
 
 /**
@@ -16,29 +28,36 @@ const defRequest = {
  * @export
  * @public
  * @param {Object} request - Arguments that define the request type to make
- * @param {string|boolean} responseType - Type of response returned on error. default is false
  *
- * @returns {Object|Boolean} - Data returned from the Backend API
+ * @returns {Object|Boolean} - Data returned from the Backend API or false
  */
-export const apiRequest = async (request, responseType) => {
-  const builtRequest = isObj(request)
-    ? request
-    : { url: request }
+export const apiRequest = async request => {
+  const builtRequest = isObj(request) ? { ...request } : { url: request }
 
-  builtRequest.url = builtRequest.url.indexOf('/') !== 0
-    ? builtRequest.url
-    : `${defRequest.url}${builtRequest.url}`
+  builtRequest.url =
+    builtRequest.url.indexOf('/') !== 0
+      ? builtRequest.url
+      : `${getBaseApiUrl()}${builtRequest.url}`
 
-  const { data, success } = await networkRequest({
-    ...defRequest,
-    ...builtRequest,
-  })
+  // Add to ensure cookies get sent with the requests
+  builtRequest.withCredentials = true
 
-  if (success)  return isObj(data) && data.data || data
+  const { data, success, statusCode, errorMessage } = await networkRequest(
+    builtRequest
+  )
 
-  devLog(`warn`, `ERROR: ${data?.error?.message}`)
+  await isValidSession(success, statusCode, get(data, 'message', errorMessage))
 
-  return responseType === 'object'
-    ? data
-    : false
+  return success
+    ? { 
+        data,
+        success,
+        statusCode,
+      }
+    : {
+        data,
+        success,
+        statusCode,
+        error: data.message || errorMessage,
+      }
 }

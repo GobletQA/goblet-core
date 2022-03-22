@@ -1,4 +1,4 @@
-const { capitalize} = require('@keg-hub/jsutils')
+const { capitalize } = require('@keg-hub/jsutils')
 const { getBrowserType } = require('./getBrowserType')
 const { browserStatus } = require('HerkinSCConstants')
 
@@ -20,5 +20,5 @@ const buildStatus = (type, status, message) => {
 }
 
 module.exports = {
-  buildStatus
+  buildStatus,
 }

@@ -1,3 +1,3 @@
 module.exports = {
-  ...require('./validateConfig')
+  ...require('./validateConfig'),
 }

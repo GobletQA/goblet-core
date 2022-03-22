@@ -25,8 +25,4 @@
       * Step n
       * Verify <some_expectations>
   ```
-* Example Search Testing:
-  * login to zsales.zerista.com as admin
-  * Click on the 'Speakers' tab
-  * Search for 'billy bob'
-  * Verify that the speaker user shows up
+

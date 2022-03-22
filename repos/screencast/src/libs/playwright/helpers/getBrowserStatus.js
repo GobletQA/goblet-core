@@ -2,7 +2,7 @@ const { buildStatus } = require('./buildStatus')
 const { browserStatus } = require('HerkinSCConstants')
 const { getBrowserType } = require('./getBrowserType')
 const { restartBrowser } = require('../browser/restartBrowser')
-const { checkCall, noOpObj} = require('@keg-hub/jsutils')
+const { checkCall, noOpObj } = require('@keg-hub/jsutils')
 const { getPage, getContext, getBrowser } = require('../browser/browser')
 
 /**
@@ -19,7 +19,12 @@ const { getPage, getContext, getBrowser } = require('../browser/browser')
  *
  * @return {Object} - Status of the browser, with status and message properties
  */
-const getBrowserStatus = async (browserConf=noOpObj, browser, context, page) => {
+const getBrowserStatus = async (
+  browserConf = noOpObj,
+  browser,
+  context,
+  page
+) => {
   // Ensure we have a type to look for
   const type = getBrowserType(browserConf.type)
 
@@ -31,26 +36,26 @@ const getBrowserStatus = async (browserConf=noOpObj, browser, context, page) => 
   // Check if we have all needed items for the browser to be considered running
   return Boolean(browser && context && page)
     ? buildStatus(type, browserStatus.running)
-    // If not running, should we try to restart it
+    : // If not running, should we try to restart it
     // If not return the stopped status
-    : !browserConf.restart
-      ? buildStatus(type, browserStatus.stopped)
-      // If restart is true, then try to restart the browser
-      : await checkCall(async () => {
-          const res = await restartBrowser(browserConf)
+    !browserConf.restart
+    ? buildStatus(type, browserStatus.stopped)
+    : // If restart is true, then try to restart the browser
+      await checkCall(async () => {
+        const res = await restartBrowser(browserConf)
 
-          // After the restart, ensure it was successful
-          return Boolean(res.browser && res.context && res.page)
-            ? buildStatus(type, browserStatus.running)
-            : buildStatus(
-                type,
-                browserStatus.stopped,
-                `${getBrowserType(browserConf.type)} Browser could not be started`
-              )
-        })
+        // After the restart, ensure it was successful
+        return Boolean(res.browser && res.context && res.page)
+          ? buildStatus(type, browserStatus.running)
+          : buildStatus(
+              type,
+              browserStatus.stopped,
+              `${getBrowserType(browserConf.type)} Browser could not be started`
+            )
+      })
 }
 
 module.exports = {
   buildStatus,
-  getBrowserStatus
+  getBrowserStatus,
 }

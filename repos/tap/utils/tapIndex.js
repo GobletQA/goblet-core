@@ -1,7 +1,6 @@
 export * from './api'
 export * from './components'
 export * from './definitions'
-export * from './devLog'
 export * from './features'
 export * from './helpers'
 export * from './steps'

@@ -1,5 +1,6 @@
-import { apiRequest } from 'SVUtils/api/apiRequest'
+import { addToast } from 'HKActions/toasts/addToast'
 import { upsertFeatures } from '../local/upsertFeatures'
+import { apiRepoRequest } from 'HKUtils/api/apiRepoRequest'
 
 /**
  * Calls the API backend to load the parsed feature definitions
@@ -9,6 +10,19 @@ import { upsertFeatures } from '../local/upsertFeatures'
  * @returns {void}
  */
 export const getRemoteFeatures = async () => {
-  const features = await apiRequest(`/features`)
-  upsertFeatures(features)
+  const {
+    data,
+    error,
+    success
+  } = await apiRepoRequest(`/features`)
+
+  if (!success || error)
+    return addToast({
+      type: 'error',
+      message: error || `Error loading Features, please try again later.`,
+    })
+
+  if(data.features) upsertFeatures(data.features)
+
+  return data.features
 }

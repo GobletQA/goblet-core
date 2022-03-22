@@ -16,7 +16,7 @@ let prevStatus
 const getStatusUpdate = async (browserConf, Mgr) => {
   const status = await statusBrowser(browserConf)
   // If no status chance, don't update the backend
-  if(prevStatus === status.status) return
+  if (prevStatus === status.status) return
 
   prevStatus = status.status
   Mgr.emitAll(`browserStatus`, { data: status })
@@ -35,13 +35,15 @@ const getStatusUpdate = async (browserConf, Mgr) => {
 const startWatching = (app, options, Manager) => {
   const browserConf = get(app, 'locals.config.screencast.browser', noOpObj)
 
-  return setInterval(async (bConf, Mgr) => {
-    return await getStatusUpdate(bConf, Mgr)
-      .catch(err => Logger.error(err.message))
-  },
+  return setInterval(
+    async (bConf, Mgr) => {
+      return await getStatusUpdate(bConf, Mgr).catch(err =>
+        Logger.error(err.message)
+      )
+    },
     options.interval || 5000,
-    {...browserConf, ...options},
-    Manager,
+    { ...browserConf, ...options },
+    Manager
   )
 }
 
@@ -55,8 +57,8 @@ const startWatching = (app, options, Manager) => {
  * @returns {function} - Custom Event Method passed to Sockr to be called from the frontend
  */
 const browserStatus = app => {
-  return ({ message=noOpObj, socket, config, Manager, io }) => {
-    if(message.stopWatching){
+  return ({ message = noOpObj, socket, config, Manager, io }) => {
+    if (message.stopWatching) {
       watchInterval && clearInterval(watchInterval)
       return (watchInterval = false)
     }

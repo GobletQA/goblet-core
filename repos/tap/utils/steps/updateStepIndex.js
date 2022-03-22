@@ -1,6 +1,5 @@
-import { devLog } from '../devLog'
-import { addQuotes } from '../helpers/addQuotes'
 import { exists } from '@keg-hub/jsutils'
+import { addQuotes } from '../helpers/addQuotes'
 
 /**
  * Checks the param type and adds quotes the the value if needed
@@ -13,7 +12,9 @@ import { exists } from '@keg-hub/jsutils'
  * @return {string} Updated value with quotes when needed
  */
 const checkInputValue = (value, current, param) => {
-  return param?.type !== 'string' || current.indexOf('"') !== 0 ? value : addQuotes(value)
+  return param?.type !== 'string' || current.indexOf('"') !== 0
+    ? value
+    : addQuotes(value)
 }
 
 /**
@@ -27,14 +28,15 @@ const checkInputValue = (value, current, param) => {
  * @param {Object} row - Current row of a step being evaluated
  * @param {Object} param - The step param that can be dynamically set
  *
- * @return {Object} - Updated step with the matching text updated 
+ * @return {Object} - Updated step with the matching text updated
  */
 export const updateStepIndex = (step, value, row, param) => {
+  if (!step || !exists(step.step))
+    return (
+      console.warn(`Step string missing, can't update step index!`, step) || step
+    )
 
-  if(!step || !exists(step.step)) 
-    return devLog.warn(`Step string missing, can't update step index!`, step) || step
-  
-  const { index, value:current } = row
+  const { index, value: current } = row
   const quoted = checkInputValue(value, current, param)
   const replaced = step.step.replace(current, quoted)
 
@@ -43,7 +45,7 @@ export const updateStepIndex = (step, value, row, param) => {
     step: replaced,
     dynamicMap: {
       ...step?.dynamicMap,
-      ...(step.step !== replaced && { [index]: quoted })
-    }
+      ...(step.step !== replaced && { [index]: quoted }),
+    },
   }
 }

@@ -1,55 +1,55 @@
 import React, { useCallback } from 'react'
-import { Cog } from 'SVAssets/icons'
-import { setActiveModal } from 'SVActions/modals'
-import { useThemeHover, useStyle } from '@keg-hub/re-theme'
-import { AppHeader, View, Text, H5, Button, TouchableIcon } from 'SVComponents'
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
+import { Cog } from 'HKAssets/icons/cog'
+import { useStyle } from '@keg-hub/re-theme'
+import { SignOut } from 'HKAssets/icons/signOut'
+import { gitAuthSignOut } from 'HKActions/admin'
+import { setActiveModal } from 'HKActions/modals'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { isAuthActive } from 'HKUtils/isAuthActive'
+import { AppHeader, View, H5 } from '@keg-hub/keg-components'
+import { useDisconnectRepo } from 'HKHooks/repo/useDisconnectRepo'
+import { CondensedButton } from 'HKComponents/buttons/condensedButton'
+
+
 const { MODAL_TYPES } = Values
 
-const IconComponent = ({ styles, size, stroke, fill }) => {
-  return (
-    <View style={styles.container} >
-      <Cog
-        size={size}
-        stroke={stroke}
-        fill={fill}
-        style={styles.icon}
-      />
-      <Text style={styles.text} className='keg-settings'>
-        SETTINGS
-      </Text>
-    </View>
-  )
-}
+const authActive = isAuthActive()
+const ReRightMain = reStyle(View)(theme => ({
+  d: 'flex',
+  fl: 1,
+  flD: 'row',
+  jtC: 'end',
+}))
 
-const ToggleSettings = ({ styles }) => {
-
-  const [ref, toggleStyles] = useThemeHover(styles?.right?.default, styles?.right?.hover)
-  const iconSize = toggleStyles.icon?.ftSz || toggleStyles.icon?.fontSize || 20
-  const iconStroke = toggleStyles.icon?.c || toggleStyles.icon?.color
-
-  const onPress = useCallback(() => {
+const HeaderRight = props => {
+  const onClickSettings = useCallback(async () => {
     setActiveModal(MODAL_TYPES.TEST_SELECTOR)
   }, [])
 
+  const onClickSignOut = useDisconnectRepo(gitAuthSignOut)
+
   return (
-    <View ref={ref} style={toggleStyles.main} >
-      <TouchableIcon
-        Component={(
-          <IconComponent 
-            size={iconSize}
-            stroke={iconStroke}
-            fill={iconStroke}
-            styles={toggleStyles}
-          />
-        )}
-        onPress={onPress}
-        touchStyle={toggleStyles.touch}
+    <ReRightMain>
+      <CondensedButton
+        Icon={Cog}
+        text={'Settings'}
+        classPrefix={'settings'}
+        onClick={onClickSettings}
+        styles={props.styles?.right}
       />
-    </View>
+      {authActive && (
+        <CondensedButton
+          Icon={SignOut}
+          text={'SignOut'}
+          classPrefix={'sign-out'}
+          onClick={onClickSignOut}
+          styles={props.styles?.right}
+        />
+      )}
+    </ReRightMain>
   )
 }
-
 
 /**
  * Wraps the component with AppHeader
@@ -65,21 +65,18 @@ export const withAppHeader = (title, Component) => {
     return (
       <>
         <AppHeader
-          styles={ styles.main }
-          LeftComponent={(
-            <View
-              className='header-left-component'
-              style={ styles.left.main }
-            >
+          styles={styles.main}
+          LeftComponent={
+            <View className='header-left-component' style={styles.left.main}>
               <H5
                 className='header-left-title'
-                style={ styles.left.content.title }
+                style={styles.left.content.title}
               >
-                { title }
+                {title}
               </H5>
             </View>
-          )}
-          RightComponent={(<ToggleSettings styles={styles} />)}
+          }
+          RightComponent={<HeaderRight styles={styles} />}
         />
         <Component {...props} />
       </>

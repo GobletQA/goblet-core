@@ -1,10 +1,14 @@
 import { useMemo } from 'react'
-import { deepMerge } from '@keg-hub/jsutils'
-import { noOpObj } from 'SVUtils/helpers/noop'
+import { deepMerge, noOpObj } from '@keg-hub/jsutils'
 
-export const useToggledStyles = (toggled, styles=noOpObj, openKey='open', closedKey='closed') => {
+export const useToggledStyles = (
+  toggled,
+  styles = noOpObj,
+  openKey = 'open',
+  closedKey = 'closed'
+) => {
   return useMemo(() => {
     const toggleStyles = toggled ? styles[openKey] : styles[closedKey]
     return deepMerge(styles.default || styles, toggleStyles)
-  }, [ toggled, styles ])
+  }, [toggled, styles])
 }

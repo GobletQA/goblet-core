@@ -1,20 +1,14 @@
-const path = require('path')
-const { flatUnion } = require('../../utils/flatUnion')
+const { noOpObj, deepMerge } = require('@keg-hub/jsutils')
 const { checkVncEnv } = require('../../utils/vncActiveEnv')
-const { getHerkinConfig } = require('HerkinConfigs/getHerkinConfig')
-const { get, noPropArr, noOpObj, exists, deepMerge } = require('@keg-hub/jsutils')
-const herkin = getHerkinConfig()
+const { getHerkinConfig } = require('HerkinSharedConfig')
 
 /**
  * Default options for a browser context
  * @type {Object}
  */
 const options = {
-  default: herkin?.screencast?.page,
-  vnc: {
-  },
-  host: {
-  }
+  vnc: {},
+  host: {},
 }
 
 /**
@@ -23,19 +17,16 @@ const options = {
  *
  * @returns {Object} - Built page config
  */
-const getPageOpts = (pageConf=noOpObj) => {
-
-  const envOpts = checkVncEnv().vncActive
-    ? options.vnc
-    : options.host
+const getPageOpts = (pageConf = noOpObj) => {
+  const herkin = getHerkinConfig()
 
   return deepMerge(
-    options.default,
-    envOpts,
+    herkin?.screencast?.page,
+    checkVncEnv().vncActive ? options.vnc : options.host,
     pageConf
   )
 }
 
 module.exports = {
-  getPageOpts
+  getPageOpts,
 }

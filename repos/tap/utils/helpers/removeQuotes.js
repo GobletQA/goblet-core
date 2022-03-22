@@ -14,6 +14,6 @@ export const removeQuotes = str => {
     ? str
     : str.substring(
         str[0] === '"' ? 1 : 0,
-        str[str.length -1 ] === '"' ? str.length - 1 : str.length 
+        str[str.length - 1] === '"' ? str.length - 1 : str.length
       )
 }

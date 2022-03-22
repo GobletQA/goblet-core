@@ -10,39 +10,42 @@ export const Subheader = props => {
     title,
     prefix,
     children,
-    type='h6',
+    type = 'h6',
     Component,
-    styles=noOpObj,
-    classNames=noOpObj,
+    styles = noOpObj,
+    classNames = noOpObj,
   } = props
 
   const typeStyles = useStyle(`typography.${type}`)
-  const headerStyles = useStyle( `subheader`, styles)
+  const headerStyles = useStyle(`subheader`, styles)
   const Header = Component || headers[type]
 
-  return Header && children && (
-    <Header
-      className={useClassList(classNames.main,`subheader-main`)}
-      style={headerStyles.main}
-    >
-      <Text
-        className={useClassList(classNames.container, `subheader-container`)}
-        style={[typeStyles, headerStyles.container]}
+  return (
+    (Header && children && (
+      <Header
+        className={useClassList(classNames.main, `subheader-main`)}
+        style={headerStyles.main}
       >
         <Text
-          className={useClassList(classNames.prefix, `subheader-prefix`)}
-          style={[typeStyles, headerStyles.prefix]}
+          className={useClassList(classNames.container, `subheader-container`)}
+          style={[typeStyles, headerStyles.container]}
         >
-          {prefix}
+          <Text
+            className={useClassList(classNames.prefix, `subheader-prefix`)}
+            style={[typeStyles, headerStyles.prefix]}
+          >
+            {prefix}
+          </Text>
+          <Text
+            className={useClassList(classNames.title, `subheader-title`)}
+            style={[typeStyles, headerStyles.title]}
+          >
+            {title}
+          </Text>
         </Text>
-        <Text
-          className={useClassList(classNames.title, `subheader-title`)}
-          style={[typeStyles, headerStyles.title]}
-        >
-          {title}
-        </Text>
-      </Text>
-      { children }
-    </Header>
-  ) || null
+        {children}
+      </Header>
+    )) ||
+    null
+  )
 }

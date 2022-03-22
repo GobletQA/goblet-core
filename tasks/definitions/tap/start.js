@@ -3,15 +3,17 @@ const { get } = require('@keg-hub/jsutils')
 const { sharedOptions } = require('@keg-hub/cli-utils')
 const { validateConfig } = require('HerkinTasks/utils/validation')
 const { setMountEnvs } = require('HerkinTasks/utils/envs/setMountEnvs')
-const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers')
+const { setHerkinMode } = require('HerkinTasks/utils/helpers/setHerkinMode')
+const {
+  launchBrowsers,
+} = require('HerkinTasks/utils/playwright/launchBrowsers')
 
 /**
  * @param {String} configPath - path to herkin config file
  * @returns {String} path without config file
  */
-const getRootPath = config => nodePath.resolve(
-  get(config, ['paths', 'rootDir'])
-)
+const getRootPath = config =>
+  nodePath.resolve(get(config, ['internalPaths', 'herkinRoot']))
 
 /**
  * Starts all the Keg-Herkin services needed to run tests
@@ -26,19 +28,30 @@ const getRootPath = config => nodePath.resolve(
  *
  * @returns {void}
  */
-const startHerkin = async (args) => {
-  const { params, herkin } = args
-
+const startHerkin = async args => {
+  const { herkin } = args
   validateConfig(herkin)
 
-  params.launch && await launchBrowsers(params)
+  const {
+    mode,
+    local,
+    vnc,
+    launch,
+    config,
+    // All params not related to the keg-herkin start cmd
+    ...params
+  } = args.params
 
-  setMountEnvs(herkin, { 
-    path: getRootPath(herkin) || process.cwd(), 
-    env: params.env 
-  })
+  const herkinMode = setHerkinMode(args.params)
+  herkinMode === 'local' && (await launchBrowsers(args.params, herkinMode))
 
-  args.task.cliTask(args)
+  herkinMode !== 'vnc' &&
+    setMountEnvs(herkin, {
+      path: getRootPath(herkin) || process.cwd(),
+      env: params.env,
+    })
+
+  return args.task.cliTask(args)
 }
 
 module.exports = {
@@ -49,30 +62,57 @@ module.exports = {
     example: 'test:start',
     // Merge the default task options with these custom task options
     mergeOptions: true,
-    description : 'Starts all services. (Local Webserver and Docker Container)',
-    options: sharedOptions('start', {
+    description: 'Starts all services. (Local Webserver and Docker Container)',
+    options: sharedOptions(
+      'start',
+      {
         config: {
-          description: 'Path to the user herkin.config.js. If omitted, keg-herkin will look in your current working directory for a herkin config.',
+          description:
+            'Path to the user herkin.config.js. If omitted, keg-herkin will look in your current working directory for a herkin config.',
           example: 'keg herkin start --config my-repo/herkin.config.js',
         },
         warn: {
           alias: ['warn'],
-          description: 'See additional warnings (like for a missing herkin config)',
-          example: 'keg herkin start --config my-repo/herkin.config.js --no-warn',
+          description:
+            'See additional warnings (like for a missing herkin config)',
+          example:
+            'keg herkin start --config my-repo/herkin.config.js --no-warn',
           default: true,
         },
         launch: {
-          description: 'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
+          description:
+            'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
           example: 'start --launch',
-          default: false,
         },
-    }, [
-      'headless',
-      'log',
-      'allBrowsers',
-      'chromium',
-      'firefox',
-      'webkit'
-    ])
-  }
+        mode: {
+          allowed: ['vnc', 'local'],
+          example: 'start --mode local',
+          description:
+            'Mode to run keg-herkin in. In not set, uses launch option',
+        },
+        local: {
+          allowed: ['lc'],
+          example: 'start --local',
+          description: `Run keg-herkin in local mode. Same as '--mode local' option`,
+        },
+        vnc: {
+          example: 'start --vnc',
+          description: `Run keg-herkin in vnc mode. Same as '--mode vnc' option`,
+        },
+      },
+      [
+        'headless',
+        'log',
+        'mode',
+        'local',
+        'vnc',
+        'base',
+        'browsers',
+        'allBrowsers',
+        'chromium',
+        'firefox',
+        'webkit',
+      ]
+    ),
+  },
 }

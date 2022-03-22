@@ -6,7 +6,7 @@ const { checkForAncestor } = require('HerkinSupport/validate')
  * For the element matching `selector`, descendent of the registered ancestor, expects its text content to equal `data`
  * @param {string} selector - valid playwright selector
  * @param {string} data - text to compare to selector value/textContent
- * @param {Object} world 
+ * @param {Object} world
  */
 const descendentExactText = async (selector, data, world) => {
   checkForAncestor(world)
@@ -28,11 +28,10 @@ Module : descendentExactText`,
       type: 'string',
       description: `The text of the element to verify.`,
       example: 'Main Hall',
-    }
-  ]
+    },
+  ],
 })
 
 module.exports = {
-  descendentExactText
+  descendentExactText,
 }
-

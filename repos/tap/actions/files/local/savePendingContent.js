@@ -1,4 +1,4 @@
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
 import { saveFile } from '../api/saveFile'
 import { setActiveFileFromType } from './setActiveFileFromType'
 const { SCREENS } = Values
@@ -12,10 +12,11 @@ const { SCREENS } = Values
  */
 export const savePendingContent = async (content, activeFile) => {
   // save the file and update active file
-  const saveResult = content && await saveFile({ ...activeFile, content })
-  if(!saveResult || !saveResult.success) return false
-  
-  await setActiveFileFromType(saveResult?.file, SCREENS.EDITOR)
+  const saveResult = content && (await saveFile({ ...activeFile, content }))
+  if (!saveResult) return false
+
+  saveResult?.file &&
+    await setActiveFileFromType(saveResult?.file, SCREENS.EDITOR)
 
   return true
 }

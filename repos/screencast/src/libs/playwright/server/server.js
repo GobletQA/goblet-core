@@ -10,7 +10,7 @@ let PW_SERVER
  * Returns the cached playwrite server
  * @function
  */
-const getServer = () => (PW_SERVER)
+const getServer = () => PW_SERVER
 
 /**
  * Sets the cached playwrite server
@@ -37,5 +37,5 @@ const getMetadata = async type => {
 module.exports = {
   getMetadata,
   getServer,
-  setServer
+  setServer,
 }

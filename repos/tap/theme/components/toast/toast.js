@@ -12,8 +12,9 @@ const defStyles = theme => ({
   },
   content: {
     opacity: 1,
-    ...theme.transition([ 'opacity' ], 0.8),
-    p: theme.padding.size - (theme.padding.size / 3),
+    width: 'fit-content',
+    ...theme.transition(['opacity'], 0.8),
+    p: theme.padding.size - theme.padding.size / 3,
     pR: theme.padding.size,
     bRad: tapColors.borderRadius,
     mB: theme.margin.size,
@@ -42,68 +43,80 @@ const defStyles = theme => ({
   hover: {
     content: {
       opacity: 0.6,
-    }
+    },
   },
   active: {
     content: {
       opacity: 0.2,
-    }
+    },
   },
 })
 
-const topRight = (theme, styles) => deepMerge(styles, {
-  main: {
-    top: 15,
-    right: 15,
-  }
-})
+const topRight = (theme, styles) =>
+  deepMerge(styles, {
+    main: {
+      top: 50,
+      right: 5,
+      alignItems: 'flex-end',
+    },
+  })
 
-const bottomRight = (theme, styles) => deepMerge(styles, {
-  main: {
-    right: 15,
-    bottom: 15,
-  }
-})
+const bottomRight = (theme, styles) =>
+  deepMerge(styles, {
+    main: {
+      right: 15,
+      bottom: 15,
+      alignItems: 'flex-end',
+    },
+  })
 
-const topLeft = (theme, styles) => deepMerge(styles, {
-  main: {
-    top: 15,
-    left: 15,
-    transition: 'transform .6s ease-in'
-  }
-})
+const topLeft = (theme, styles) =>
+  deepMerge(styles, {
+    main: {
+      top: 15,
+      left: 15,
+      alignItems: 'flex-start',
+      transition: 'transform .6s ease-in',
+    },
+  })
 
-const bottomLeft = (theme, styles) => deepMerge(styles, {
-  main: {
-    left: 15,
-    bottom: 15,
-    transition: 'transform .6s ease-in'
-  }
-})
+const bottomLeft = (theme, styles) =>
+  deepMerge(styles, {
+    main: {
+      left: 15,
+      bottom: 15,
+      alignItems: 'flex-start',
+      transition: 'transform .6s ease-in',
+    },
+  })
 
-const success = (theme, styles) => deepMerge(styles, {
-  content: {
-    bgC: tapColors.successDark,
-  },
-})
+const success = (theme, styles) =>
+  deepMerge(styles, {
+    content: {
+      bgC: tapColors.successDark,
+    },
+  })
 
-const info = (theme, styles) => deepMerge(styles, {
-  content: {
-    bgC: tapColors.primaryDark,
-  },
-})
+const info = (theme, styles) =>
+  deepMerge(styles, {
+    content: {
+      bgC: tapColors.infoDark,
+    },
+  })
 
-const warn = (theme, styles) => deepMerge(styles, {
-  content: {
-    bgC: tapColors.warnDark,
-  },
-})
+const warn = (theme, styles) =>
+  deepMerge(styles, {
+    content: {
+      bgC: tapColors.warnDark,
+    },
+  })
 
-const danger = (theme, styles) => deepMerge(styles, {
-  content: {
-    bgC: tapColors.dangerDark,
-  },
-})
+const danger = (theme, styles) =>
+  deepMerge(styles, {
+    content: {
+      bgC: tapColors.dangerDark,
+    },
+  })
 
 export const toast = theme => {
   const styles = defStyles(theme)

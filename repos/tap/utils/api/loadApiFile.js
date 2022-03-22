@@ -1,5 +1,5 @@
-import { apiRequest } from './apiRequest'
-import { logData, isFunc } from '@keg-hub/jsutils'
+import { apiRepoRequest } from './apiRepoRequest'
+import { addToast } from 'HKActions/toasts/addToast'
 
 /**
  * Helper to make file load requests to the Backend API
@@ -7,14 +7,26 @@ import { logData, isFunc } from '@keg-hub/jsutils'
  * @export
  * @public
  * @param {string} path - Path to the file to be loaded on the backend
- * @param {function} [callback=undefined] - Callback function called after the request is made
  *
- * @returns {*} - Response from the Backend API or callback function when it exists
+ * @returns {Object} - Response from the Backend API or callback function when it exists
  */
-export const loadApiFile = async (path, callback) => {
-  const response = path
-    ? await apiRequest(`/files/load?path=${path}`)
-    : logData(`Load File action requires a file path!`)
+export const loadApiFile = async filePath => {
+  if(!filePath)
+    return addToast({
+      type: 'error',
+      message: [
+        `Failed to load file. A file path is required`,
+        `FilePath: ${filePath}`
+      ].join(`\n`)
+    })
+  
+  const resp = await apiRepoRequest(`/files/load?path=${filePath}`)
 
-  return isFunc(callback) ? callback(response) : response
+  if(!resp?.success || resp?.error)
+    addToast({
+      type: 'error',
+      message: resp?.error || `Error loading file, please try again later.`,
+    })
+
+  return resp
 }

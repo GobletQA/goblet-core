@@ -1,56 +1,34 @@
 const { AppRouter } = require('HerkinSharedRouter')
-const { apiErr, apiResponse } = require('./handler')
+const { asyncWrap, apiRes } = require('HerkinSharedExp')
 const {
+  statusSockify,
   startSockify,
   stopSockify,
+  statusVNC,
   startVNC,
   stopVNC,
-} = require('HerkinSCVnc')
+} = require('HerkinSCLibs/vnc')
 
-const vncStatus = () => {
-  try {
-    const { params } = req
-  
-    return apiResponse(req, res, {}, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
+const vncStatus = asyncWrap(async (req, res) => {
+  const status = await statusVNC()
+  return apiRes(req, res, { status }, 200)
+})
 
-const vncStart = () => {
-  try {
-    const { params } = req
-  
-    return apiResponse(req, res, {}, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
+const vncStart = asyncWrap(async (req, res) => {
+  const status = await startVNC()
+  return apiRes(req, res, { status }, 200)
+})
 
-const vncStop = () => {
-  try {
-    const { params } = req
-  
-    return apiResponse(req, res, {}, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
+const vncStop = asyncWrap(async (req, res) => {
+  const status = await stopVNC()
+  return apiRes(req, res, { status }, 200)
+})
 
-const vncRestart = () => {
-  try {
-    const { params } = req
-  
-    return apiResponse(req, res, {}, 200)
-  }
-  catch(err){
-    return apiErr(req, res, err, 400)
-  }
-}
-
+const vncRestart = asyncWrap(async (req, res) => {
+  await stopVNC()
+  const status = await startVNC()
+  return apiRes(req, res, { status }, 200)
+})
 
 module.exports = (...args) => {
   AppRouter.get('/screencast/vnc/status', vncStatus)

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export HERKIN_RUN_FROM_UI="true"
+export HERKIN_RUN_FROM_UI=1
 
 # Prints a message to the terminal through stderr
 printMessage(){
@@ -43,4 +43,12 @@ if [[ -z "$DOC_APP_PATH" ]]; then
 fi
 
 ## run the task (ex: bash scripts/sockr.cmd.sh bdd test)
+# 
+# Example feature file exec
+# bash scripts/sockr.cmd.sh bdd test context=repos/example/herkin/bdd/features/example.feature slowMo=5
+# bash scripts/sockr.cmd.sh bdd test context=/keg/repos/lancetipton/current/herkin/bdd/features/workflow-test.feature base=/keg/repos/lancetipton/current slowMo=5000
+# 
+# Example Waypoint exec
+# bash scripts/sockr.cmd.sh waypoint run context=/keg/repos/lancetipton/current/herkin/waypoint/first.waypoint.js
+
 yarn task "$@"

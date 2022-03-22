@@ -1,5 +1,5 @@
 const { When } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinSetup')
+const { getBrowserContext } = require('HerkinTestEnv')
 const { getPage } = getBrowserContext()
 const { getElement } = require('HerkinPlaywright')
 
@@ -20,11 +20,11 @@ Module : clickElement`,
     {
       type: 'string',
       description: `The element selector.  Selector must be specific enough to locate a single element.`,
-      example: 'button[name=\'unique_name\']',
+      example: "button[name='unique_name']",
     },
-  ]
+  ],
 })
 
 module.exports = {
-  clickElement
+  clickElement,
 }

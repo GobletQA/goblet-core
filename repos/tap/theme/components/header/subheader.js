@@ -9,10 +9,6 @@ export const subheader = theme => ({
     c: tapColors.default,
     pB: theme.padding.size / 3,
   },
-  prefix: {
-    
-  },
-  title: {
-    
-  }
+  prefix: {},
+  title: {},
 })

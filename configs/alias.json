@@ -1,0 +1,42 @@
+{
+  "HerkinRepos": "repos",
+  "HerkinTasks": "tasks",
+  "HerkinConfigs": "configs",
+
+  "HerkinSharedUtils": "repos/shared/utils",
+  "HerkinSharedModels": "repos/shared/models",
+  
+  "HerkinSharedExp": "repos/shared/express",
+  "HerkinSharedApp": "repos/shared/express/app.js",
+  "HerkinSharedPaths": "repos/shared/utils/paths.js",
+  "HerkinSharedMiddleware": "repos/shared/middleware",
+  "HerkinSharedRouter": "repos/shared/express/appRouter.js",
+  "HerkinSharedConfig": "repos/shared/utils/getHerkinConfig.js",
+  "HerkinSharedAsyncWrap": "repos/shared/express/asyncWrap.js",
+  "HerkinShared": "repos/shared",
+
+  "HerkinBackConstants": "constants/backend",
+  "HerkinBackLibs": "repos/backend/libs",
+  "HerkinBackUtils": "repos/backend/utils",
+  "HerkinBackEndpoints": "repos/backend/endpoints",
+  "HerkinBackTemplates": "repos/backend/templates",
+  "HerkinBackMiddleware": "repos/backend/middleware",
+  "HerkinBack": "repos/backend",
+
+  "HerkinParkin": "repos/testUtils/parkin",
+  "HerkinTestEnv": "repos/testUtils/playwright/setupTestEnvironment",
+  "HerkinPlaywright": "repos/testUtils/playwright",
+  "HerkinSteps": "repos/testUtils/steps",
+  "HerkinSupport": "repos/testUtils/support",
+  "HerkinTest": "repos/testUtils",
+
+  "HerkinSCConstants": "repos/screencast/src/constants",
+  "HerkinSCEndpoints": "repos/screencast/src/endpoints",
+  "HerkinSCScreencast": "repos/screencast/src/screencast",
+  "HerkinSCLibs": "repos/screencast/src/libs",
+  "HerkinSCPlaywright": "repos/screencast/src/libs/playwright",
+  "HerkinSCVnc": "repos/screencast/src/libs/vnc",
+  "HerkinSC": "repos/screencast",
+
+  "HerkinWF": "repos/workflows"
+}

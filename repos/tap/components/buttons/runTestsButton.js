@@ -1,18 +1,7 @@
 import React from 'react'
-import { Rabbit } from 'SVAssets/icons'
+import { Rabbit } from 'HKAssets/icons/rabbit'
 import { HerkinButton } from './button.restyle'
-import { useRunAction } from 'SVHooks/tests/useRunAction'
-
-/**
- * Classes for the Run-Tests Button
- * @type {Object}
- */
-const classes = {
-  main: `run-tests-button.main`,
-  button: `run-tests-button`,
-  icon: `run-tests-button-icon`,
-  text: `run-tests-button-text`
-}
+import { useRunAction } from 'HKHooks/tests/useRunAction'
 
 /**
  * RunTestsButton - Component for start a test run using sockr
@@ -25,7 +14,7 @@ const classes = {
  *
  */
 export const RunTestsButton = props => {
-  const { children, text='Run Tests', styles, ...args } = props
+  const { children, text = 'Run Tests', styles, ...args } = props
   const onRun = useRunAction(args)
 
   return (
@@ -34,10 +23,9 @@ export const RunTestsButton = props => {
       Icon={Rabbit}
       onClick={onRun}
       type='secondary'
-      classes={classes}
+      classPrefix='run-tests'
     >
       {children || text}
     </HerkinButton>
   )
-
 }

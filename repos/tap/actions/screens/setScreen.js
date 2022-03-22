@@ -1,8 +1,8 @@
 import { addToast } from '../toasts/addToast'
-import { dispatch, getStore } from 'SVStore'
-import { Values, ActionTypes } from 'SVConstants'
+import { dispatch, getStore } from 'HKStore'
+import { Values, ActionTypes } from 'HKConstants'
 import { setScreenInactive } from './setScreenInactive'
-import { updateUrlQuery } from 'SVUtils/url/updateUrlQuery'
+import { updateUrlQuery } from 'HKUtils/url/updateUrlQuery'
 
 const { CATEGORIES, SCREENS } = Values
 
@@ -29,8 +29,11 @@ export const setScreen = (screenId, screenModel) => {
   const { items } = getStore().getState()
   screenModel = screenModel || items[CATEGORIES.SCREENS][screenId]
 
-  if(!screenModel)
-    return addToast({ type: `warn`, message: `Screen ${screenId} does not exist!` })
+  if (!screenModel)
+    return addToast({
+      type: `warn`,
+      message: `Screen ${screenId} does not exist!`,
+    })
 
   setScreenInactive()
   updateUrl(screenModel)

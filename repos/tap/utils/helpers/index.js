@@ -1,6 +1,5 @@
-export * from './addQuotes'
-export * from './noop'
 export * from './styles'
+export * from './addQuotes'
 export * from './removeQuotes'
 export * from './createDomNode'
 export * from './formatFileName'

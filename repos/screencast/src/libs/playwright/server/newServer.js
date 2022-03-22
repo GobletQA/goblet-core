@@ -14,7 +14,7 @@ const { getBrowserOpts } = require('../helpers/getBrowserOpts')
  *
  * @returns {Object} - Browser server reference
  */
-const newServer = async (browser, browserConf=noOpObj) => {
+const newServer = async (browser, browserConf = noOpObj) => {
   Logger.log(`- Starting playwright server ${browser}...`)
   // Launch the playwright server
   const launchOpts = getBrowserOpts(browserConf)
@@ -34,5 +34,5 @@ const newServer = async (browser, browserConf=noOpObj) => {
 }
 
 module.exports = {
-  newServer
+  newServer,
 }

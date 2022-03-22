@@ -11,9 +11,9 @@ const { getPageOpts } = require('../helpers/getPageOpts')
  *
  * @returns {Object} - The playwright browser context object, and isNew state
  */
-const ensureContext = async (browserConf) => {
+const ensureContext = async browserConf => {
   const pwContext = getContext(browserConf.type)
-  if(pwContext) return pwContext
+  if (pwContext) return pwContext
 
   // If no context exists, try to create it
   const { context } = await newContext(browserConf)
@@ -32,8 +32,8 @@ const ensureContext = async (browserConf) => {
  */
 const ensurePage = async (context, browserConf) => {
   const pwPage = getPage(browserConf.type)
-  if(pwPage) return pwPage
-  
+  if (pwPage) return pwPage
+
   const page = await context.newPage(getPageOpts(browserConf.page))
   setPage(page, browserConf.type)
 
@@ -49,14 +49,13 @@ const ensurePage = async (context, browserConf) => {
  *
  * @returns {Object} - Contains the page, and context created from playwright
  */
-const newPage = async (browserConf=noOpObj) => {
-
+const newPage = async (browserConf = noOpObj) => {
   const context = await ensureContext(browserConf)
   const page = await ensurePage(context, browserConf)
 
-  return {context, page}
+  return { context, page }
 }
 
 module.exports = {
-  newPage
+  newPage,
 }

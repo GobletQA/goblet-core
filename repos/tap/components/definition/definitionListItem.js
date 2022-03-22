@@ -1,38 +1,42 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { isStr, checkCall, noOpObj, isEmptyColl, capitalize } from '@keg-hub/jsutils'
-import { Icon, View, Row, Text, Touchable } from 'SVComponents'
-import { renderCustomOrDefault } from 'SVUtils'
-import { useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { ListItem } from '../list/listItem'
-import { ChevronDown } from 'SVAssets/icons'
+import { useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { MetaToggle, DefinitionMeta } from './definitionMeta'
+import { View, Row, Touchable } from '@keg-hub/keg-components'
+import {
+  checkCall,
+  noOpObj,
+  isEmptyColl,
+  capitalize,
+} from '@keg-hub/jsutils'
+
 const { Actions, Title } = ListItem
 
-const useFormattedTitle = (title='') => useMemo(() => {
-  const [ type, ...rest ] = title.split(' ')
-  return `${capitalize(type)} ${rest.join(' ')}`
-}, [ title ])
+const useFormattedTitle = (title = '') =>
+  useMemo(() => {
+    const [type, ...rest] = title.split(' ')
+    return `${capitalize(type)} ${rest.join(' ')}`
+  }, [title])
 
 export const DefinitionListItem = React.memo(props => {
   const {
     active,
     actions,
-    children,
-    components=noOpObj,
     group,
     meta,
-    onItemPress,
-    renderItem,
-    styles=noOpObj,
     title,
     uuid,
+    onItemPress,
   } = props
 
   const hasMetaData = !isEmptyColl(meta)
   const mergeStyles = useStyle('list.item', 'definitions.list.list.item')
 
   const activeStyle = active ? mergeStyles.active : noOpObj
-  const [ rowRef, itemStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
+  const [rowRef, itemStyles] = useThemeHover(
+    mergeStyles.default,
+    mergeStyles.hover
+  )
   const rowStyles = useStyle(itemStyles.row, activeStyle?.row)
 
   const onPress = useCallback(
@@ -44,9 +48,8 @@ export const DefinitionListItem = React.memo(props => {
   const metaStyles = !hasMetaData
     ? mergeStyles.noMeta
     : metaToggled
-      ? mergeStyles.activeMeta
-      : noOpObj
-
+    ? mergeStyles.activeMeta
+    : noOpObj
 
   const toggleMeta = useCallback(
     () => setMetaToggled(!metaToggled),
@@ -56,19 +59,11 @@ export const DefinitionListItem = React.memo(props => {
   const formattedTitle = useFormattedTitle(title)
 
   return (
-    <Row
-      key={`${group}-${title}`}
-      className='list-item-row'
-      style={rowStyles}
-    >
+    <Row key={`${group}-${title}`} className='list-item-row' style={rowStyles}>
       <View
         className={`def-list-item-main`}
         ref={rowRef}
-        style={[
-          itemStyles.main,
-          activeStyle?.main,
-          metaStyles.main,
-        ]}
+        style={[itemStyles.main, activeStyle?.main, metaStyles.main]}
       >
         <Touchable
           style={itemStyles.touchable}
@@ -86,11 +81,7 @@ export const DefinitionListItem = React.memo(props => {
           )}
           <Title
             title={formattedTitle}
-            style={[
-              itemStyles.title,
-              activeStyle?.title,
-              metaStyles.title,
-            ]}
+            style={[itemStyles.title, activeStyle?.title, metaStyles.title]}
           />
         </Touchable>
         <Actions

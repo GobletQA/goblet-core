@@ -1,9 +1,9 @@
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
 import { getQueryData } from './getQueryData'
-import { setActiveModal } from 'SVActions/modals'
+import { setActiveModal } from 'HKActions/modals'
 import { isEmptyColl, noOpObj } from '@keg-hub/jsutils'
-import { loadTestFile } from 'SVActions/files/api/loadTestFile'
-import { setScreenById } from 'SVActions/screens/setScreenById'
+import { loadFile } from 'HKActions/files/api/loadFile'
+import { setScreenById } from 'HKActions/screens/setScreenById'
 
 const { MODAL_TYPES, SCREENS } = Values
 
@@ -26,17 +26,16 @@ let IN_POP_STATE = false
 const listenToPopState = async event => {
   IN_POP_STATE = true
   // Get the query params from the url
-  const queryObj = (getQueryData() || noOpObj)
+  const queryObj = getQueryData() || noOpObj
 
   const { screen, file } = queryObj
 
   screen && setScreenById(screen)
-  file && await loadTestFile(file, screen)
+  file && (await loadFile(file, screen))
 
   // Load the init modal
   // display options modal if no valid querystring passed in
-  isEmptyColl(queryObj) &&
-    setActiveModal(MODAL_TYPES.TEST_SELECTOR)
+  isEmptyColl(queryObj) && setActiveModal(MODAL_TYPES.TEST_SELECTOR)
 
   IN_POP_STATE = false
 }

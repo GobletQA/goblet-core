@@ -1,4 +1,4 @@
 module.exports = {
   ...require('./sharedOptions'),
-  ...require('./buildArguments')
+  ...require('./buildArguments'),
 }

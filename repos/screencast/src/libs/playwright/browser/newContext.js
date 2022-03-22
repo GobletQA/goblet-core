@@ -12,9 +12,9 @@ const { getContextOpts } = require('../helpers/getContextOpts')
  *
  * @returns {Object} - The playwright browser context object, and isNew state
  */
-const ensureBrowser = async (browserConf=noOpObj) => {
+const ensureBrowser = async (browserConf = noOpObj) => {
   const pwBrowser = getBrowser(browserConf.type)
-  if(pwBrowser) return pwBrowser
+  if (pwBrowser) return pwBrowser
 
   const { browser } = await newBrowser(browserConf)
   return browser
@@ -32,11 +32,9 @@ const ensureBrowser = async (browserConf=noOpObj) => {
  */
 const ensureContext = async (browser, browserConf) => {
   const pwContext = getContext(browserConf.type)
-  if(pwContext) return pwContext
+  if (pwContext) return pwContext
 
-  const context = await browser.newContext(
-    getContextOpts(browserConf.context)
-  )
+  const context = await browser.newContext(getContextOpts(browserConf.context))
   setContext(context, browserConf.type)
 
   return context
@@ -50,14 +48,13 @@ const ensureContext = async (browser, browserConf) => {
  *
  * @returns {Object} - Contains the context, and browser created from playwright
  */
-const newContext = async (browserConf=noOpObj) => {
+const newContext = async (browserConf = noOpObj) => {
   const browser = await ensureBrowser(browserConf)
   const context = await ensureContext(browser, browserConf)
 
-  return {browser, context}
+  return { browser, context }
 }
 
-
 module.exports = {
-  newContext
+  newContext,
 }

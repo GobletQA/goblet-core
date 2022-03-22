@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
-import { Values, ActionTypes } from 'SVConstants'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { Values } from 'HKConstants'
+import { noOpObj } from '@keg-hub/jsutils'
+import { useStoreItems } from 'HKHooks/store/useStoreItems'
 const { CATEGORIES, SUB_CATEGORIES } = Values
 
 /**
@@ -16,9 +17,6 @@ export const useActiveFile = screenId => {
   return useMemo(() => {
     return screenId
       ? screenModels[screenId][SUB_CATEGORIES.ACTIVE_FILE]
-      : Object.values(screenModels)
-          .reduce((found, model) => (
-            found || model.active && model[SUB_CATEGORIES.ACTIVE_FILE]
-          ), false)
+      : (Object.values(screenModels).find(model => model.active) || noOpObj)[SUB_CATEGORIES.ACTIVE_FILE]
   }, [screenModels, screenId])
-} 
+}

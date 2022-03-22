@@ -8,6 +8,6 @@ export const selectDefinition = theme => {
     main: shared?.main,
     label: {
       color: tapColors.inactive,
-    }
+    },
   }
 }

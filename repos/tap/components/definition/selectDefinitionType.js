@@ -1,5 +1,5 @@
 import React from 'react'
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
 import { capitalize } from '@keg-hub/jsutils'
 import { Option, Select } from '@keg-hub/keg-components'
 import { useStyle } from '@keg-hub/re-theme'
@@ -16,13 +16,7 @@ export const SelectDefinitionType = ({ styles, step, typeAction }) => {
       onValueChange={typeAction}
     >
       {STEP_TYPES.map(name => {
-        return (
-          <Option
-            key={name}
-            value={name}
-            label={capitalize(name)}
-          />
-        )
+        return <Option key={name} value={name} label={capitalize(name)} />
       })}
     </Select>
   )

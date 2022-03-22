@@ -8,7 +8,7 @@ export const surface = theme => ({
     itemHeader: {
       main: {
         $web: {
-          height: 30,
+          height: 35,
           borderBottomColor: tapColors.border,
           borderBottomWidth: 1,
           borderTopLeftRadius: tapColors.borderRadius,
@@ -19,21 +19,21 @@ export const surface = theme => ({
         left: {
           main: {
             d: 'none',
-          }
+          },
         },
         center: {
           main: {
             width: '70%',
             alI: 'start',
             pL: theme.padding.size,
-          }
+          },
         },
         right: {
           main: {
             pR: theme.padding.size,
-          }
-        }
-      }
+          },
+        },
+      },
     },
     toggle: toggleState(theme),
     heading: {
@@ -46,10 +46,10 @@ export const surface = theme => ({
     },
     title: {
       ftSz: titleSize,
-      c: tapColors?.success
-    }
+      c: tapColors?.success,
+    },
   },
   content: {
     fl: 1,
-  }
+  },
 })

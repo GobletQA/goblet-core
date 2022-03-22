@@ -14,8 +14,14 @@ const { sharedOptions } = require('@keg-hub/cli-utils')
  *
  * @returns {void}
  */
-const buildHerkin = async (args) => {
-  return await args.task.cliTask(args)
+const buildHerkin = async args => {
+  return await args.task.cliTask({
+    ...args,
+    params: {
+      local: true,
+      ...args.params,
+    },
+  })
 }
 
 module.exports = {
@@ -26,7 +32,8 @@ module.exports = {
     example: 'keg herkin build',
     // Merge the default task options with these custom task options
     mergeOptions: true,
-    description : 'Build the Keg-Herkin docker image from the host machines repo',
-    options: {}
-  }
+    description:
+      'Build the Keg-Herkin docker image from the host machines repo',
+    options: {},
+  },
 }

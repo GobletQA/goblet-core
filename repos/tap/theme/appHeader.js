@@ -1,7 +1,6 @@
 import { tapColors } from './tapColors'
 import { sharedShadow } from './components/shared/shadow'
 
-
 export const appHeader = theme => {
   return {
     main: {
@@ -22,8 +21,8 @@ export const appHeader = theme => {
         title: {
           c: tapColors.defaultDark,
           ftWt: 'bold',
-        }
-      }
+        },
+      },
     },
     right: {
       default: {
@@ -32,7 +31,7 @@ export const appHeader = theme => {
         },
         touch: {
           opacity: 0.4,
-          ...theme.transition([ 'opacity' ], 0.8),
+          ...theme.transition(['opacity'], 0.8),
         },
         container: {
           alI: 'center',
@@ -45,14 +44,13 @@ export const appHeader = theme => {
         text: {
           ftSz: 10,
           c: tapColors.borderColor,
-        }
+        },
       },
       hover: {
         touch: {
           opacity: 1,
         },
-      }
-      
-    }
+      },
+    },
   }
 }

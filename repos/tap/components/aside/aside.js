@@ -1,9 +1,8 @@
-import React, {useState, useMemo} from 'react'
-import { View, Text } from 'SVComponents'
-import { noOpObj, isStr, exists } from '@keg-hub/jsutils'
+import React, { useState, useMemo, useRef } from 'react'
+import { exists } from '@keg-hub/jsutils'
+import { View, Sidebar } from '@keg-hub/keg-components'
+import { convertCSSUnits } from 'HKUtils/helpers/styles'
 import { useDimensions, useStyle } from '@keg-hub/re-theme'
-import { Sidebar, SidebarContent } from 'SVComponents/sidebar'
-import { isCssUnits, convertCSSUnits } from 'SVUtils/helpers/styles'
 
 /**
  * Default props for the sidebar component
@@ -22,60 +21,64 @@ const defConfig = {
 }
 const defStyles = {
   container: {
-    minHeight: '90vh',
+    minHeight: '100vh',
+    marginTop: 90,
   },
 }
-
 
 const usePositionProps = (props, dims) => {
   const {
     initial,
-    to=defProps.to,
-    side=defProps.location,
-    sidebarWidth=defProps.sidebarWidth,
+    side = defProps.location,
+    sidebarWidth = defProps.sidebarWidth,
   } = props
 
   return useMemo(() => {
-    const init = convertCSSUnits(initial || sidebarWidth, dims)
-  
+    const sidebarW = convertCSSUnits(sidebarWidth, dims)
+    const init = initial ? convertCSSUnits(initial, dims) : sidebarW
     return {
-      sidebarWidth,
-      location: side,
-      to: convertCSSUnits(to, dims),
-      initial: (side !== 'right' || (exists(initial) && !initial.startsWith('-')))
-        ? init
-        : init * -1
+      sidebarWidth: sidebarW,
+      initial:
+        side !== 'right' || (exists(initial) && !initial.startsWith('-'))
+          ? init
+          : init * -1,
     }
-  }, [side, initial, sidebarWidth, to, dims])
+  }, [sidebarWidth, side, initial, dims.width])
 }
 
 export const Aside = props => {
   const {
     styles,
-    type='sprint',
+    type = 'sprint',
     initialToggle,
-    config=defConfig,
-  } = props
-  
+    config = defConfig,
+    to = defProps.to,
+    side = defProps.location,
+} = props
+
   const dims = useDimensions()
   const asideProps = usePositionProps(props, dims)
   const sidebarStyles = useStyle(defStyles, styles)
   const [toggled, setToggled] = useState(initialToggle || false)
 
+  // Hack to get the right-sidebar to stay in place
+  const asideRefProps = useRef(asideProps)
+  
   return (
     <Sidebar
       {...defProps}
-      {...asideProps}
+      {...asideRefProps.current}
       type={type}
+      to={to}
+      side={side}
       config={config}
       toggled={toggled}
       styles={sidebarStyles}
       onToggled={setToggled}
     >
-      <View className='aside-content' style={sidebarStyles.content} >
+      <View className='aside-content' style={sidebarStyles.content}>
         {props.children}
       </View>
     </Sidebar>
   )
-  
 }

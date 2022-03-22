@@ -1,14 +1,14 @@
 const { When } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinSetup')
+const { getBrowserContext } = require('HerkinTestEnv')
 const { getPage } = getBrowserContext()
 
 /**
  * Simply waits `num` seconds before continuing to next step
  * @param {number} num - number of seconds
  */
-const wait = async (num) => {
+const wait = async num => {
   const page = await getPage()
-  return await page.waitForTimeout(num * 1000);
+  return await page.waitForTimeout(num * 1000)
 }
 
 When('I wait {int} second(s)', wait, {
@@ -22,8 +22,8 @@ Module : wait`,
       description: `Amount of time to wait in seconds.
 
 Example : When I wait 5 seconds`,
-    }
-  ]
+    },
+  ],
 })
 
 module.exports = { wait }

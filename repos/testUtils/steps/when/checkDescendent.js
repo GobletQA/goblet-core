@@ -6,7 +6,7 @@ const { checkForAncestor } = require('HerkinSupport/validate')
  * Checks/unchecks the element matching the selector, that is also a descendent of the registered ancestor.
  * @param {String} action - check action
  * @param {string} selector - valid playwright selector
- * @param {Object} world 
+ * @param {Object} world
  */
 const checkDescendent = async (action, selector, world) => {
   checkForAncestor(world)
@@ -29,11 +29,11 @@ Module : checkDescendent`,
       description: `The element selector.  Selector must be specific enough to locate a single element.  Valid for checkbox and radio inputs.
 
 Example : I "uncheck" the element "input[name=\'unique_name\']"`,
-      example: 'input[name=\'unique_name\']',
+      example: "input[name='unique_name']",
     },
-  ]
+  ],
 })
 
 module.exports = {
-  checkDescendent
+  checkDescendent,
 }

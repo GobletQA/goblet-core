@@ -8,7 +8,7 @@ const { getElement } = require('HerkinPlaywright')
  */
 const checkElement = async (action, selector) => {
   const box = await getElement(selector)
-  const boxAction = (action === 'check') ? await box.check() : await box.uncheck()
+  const boxAction = action === 'check' ? await box.check() : await box.uncheck()
 }
 
 When(`I {string} the element {string}`, checkElement, {
@@ -26,11 +26,11 @@ Module : checkElement`,
       description: `The element selector.  Selector must be specific enough to locate a single element.  Valid for checkbox and radio inputs.
       
 Example : I "check" the element "input[name=\'unique_name\']"`,
-      example: 'input[name=\'unique_name\']',
+      example: "input[name='unique_name']",
     },
-  ]
+  ],
 })
 
 module.exports = {
-  checkElement
+  checkElement,
 }

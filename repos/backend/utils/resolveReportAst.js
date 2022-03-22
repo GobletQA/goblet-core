@@ -1,25 +1,31 @@
 const path = require('path')
-
+const { noOpObj } = require('@keg-hub/jsutils')
+const { getMountRootDir } = require('HerkinSharedUtils/getMountRootDir')
 /**
  * Checks if a path is in the reports folder
- * If it is, then build an ast object with the testType
+ * If it is, then build an ast object with the fileType
  * @param {string} fullPath - Full path to the file to check
- * @param {string} testsRoot - Root location of test files
+ * @param {string} baseDir - Root location of test files
  * @param {string} reportsDir - Directory where reports are stored
  *
  * @returns {Object} - Reports ast || empty object
  */
-const resolveReportAst = (fullPath, testsRoot, reportsDir) => {
-  return fullPath.startsWith(path.join(testsRoot, reportsDir))
-    ? { 
+const resolveReportAst = (repo, fullPath, baseDir) => {
+  const { reportsDir } = repo.paths
+  return fullPath.startsWith(path.join(baseDir, reportsDir))
+    ? {
         ast: {
-          testType: fullPath.split(`${reportsDir}/`).pop().split('/').shift(),
-          reportUrl: fullPath.replace(testsRoot, '')
-        }
+          fileType: fullPath.split(`${reportsDir}/`).pop().split('/').shift(),
+          // Generate the full url for resolving the report file, not including the domain
+          reportUrl: `/repo/${repo.name}/reports${fullPath.replace(
+            getMountRootDir(),
+            ''
+          )}`,
+        },
       }
-    : {}
+    : noOpObj
 }
 
 module.exports = {
-  resolveReportAst
+  resolveReportAst,
 }

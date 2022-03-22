@@ -1,5 +1,5 @@
-import { apiRequest } from './apiRequest'
-import { logData, isFunc } from '@keg-hub/jsutils'
+import { apiRepoRequest } from './apiRepoRequest'
+import { addToast } from 'HKActions/toasts/addToast'
 
 /**
  * Helper to make file delete requests to the Backend API
@@ -7,18 +7,30 @@ import { logData, isFunc } from '@keg-hub/jsutils'
  * @export
  * @public
  * @param {string} file - Path to the file to be deleted on the backend
- * @param {function} [callback=undefined] - Callback function called after the request is made 
  *
- * @returns {*} - Response from the Backend API or callback function when it exists
+ * @returns {Object} - Response from the Backend API or callback function when it exists
  */
-export const deleteApiFile = async (file, callback) => {
-  const response = file
-    ? await apiRequest({
-        method: 'delete',
-        url: `/files/delete`,
-        params: { file },
-      })
-    : logData(`Delete File action requires a file path!`)
+export const deleteApiFile = async ({ location }) => {
+  if(!location)
+    return addToast({
+      type: 'error',
+      message: [
+        `Failed to delete file. A file path is required`,
+        `FilePath: ${location}`
+      ].join(`\n`)
+    })
+  
+  const resp = await apiRepoRequest({
+    method: 'delete',
+    url: `/files/delete`,
+    params: { file: location },
+  })
 
-  return isFunc(callback) ? callback(response) : response
+  if(!resp?.success || resp?.error)
+    addToast({
+      type: 'error',
+      message: resp?.error || `Error deleting file, please try again later.`,
+    })
+
+  return resp
 }

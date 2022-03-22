@@ -11,7 +11,7 @@ export const itemHeader = theme => ({
       content: {
         title: {
           color: tapColors?.default,
-          ftWt: 'bold'
+          ftWt: 'bold',
         },
       },
     },

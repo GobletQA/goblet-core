@@ -4,4 +4,5 @@ module.exports = {
   ...require('./startBrowser'),
   ...require('./stopBrowser'),
   ...require('./statusBrowser'),
+  ...require('./actionBrowser'),
 }

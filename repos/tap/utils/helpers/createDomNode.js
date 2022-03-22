@@ -1,5 +1,3 @@
-
-
 /**
  * Adds a dom node to the dom.
  * First checks if it exists, and it it does not, then it adds it to the Dom
@@ -11,7 +9,7 @@
  */
 export const createDomNode = (selectorId, type, location) => {
   let domNode = document[location].querySelector(`#${selectorId}`)
-  if(domNode) return domNode
+  if (domNode) return domNode
 
   domNode = document.createElement(type)
   domNode.id = selectorId

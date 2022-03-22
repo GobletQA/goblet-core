@@ -13,7 +13,7 @@ const Model = {
   id: '',
   name: '',
   type: '',
-  testType: '',
+  fileType: '',
   children: [],
   location: '',
 }
@@ -21,5 +21,5 @@ const Model = {
 const treeNodeModel = overrides => buildModel(overrides, Model)
 
 module.exports = {
-  treeNodeModel
+  treeNodeModel,
 }

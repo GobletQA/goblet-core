@@ -1,23 +1,16 @@
-import { dispatch } from 'SVStore'
+import { upsertItems } from 'HKActions'
 import { noOpObj } from '@keg-hub/jsutils'
-import { Values, ActionTypes } from 'SVConstants'
+import { Values, ActionTypes } from 'HKConstants'
 
 const { CATEGORIES } = Values
 
 /**
  * Dispatches the passed in features to the Store
- * @type function
- * @param {Array} features - Parsed features matching the filesModel
+ * @type {function}
+ * @param {Object} features - Parsed features matching the filesModel, keyed by their filesystem path
  *
  * @returns {void}
  */
-export const upsertFeatures = (features=noOpObj) => {
-
-  dispatch({
-    type: ActionTypes.UPSERT_ITEMS,
-    payload: {
-      category: CATEGORIES.FEATURES,
-      items: features,
-    },
-  })
+export const upsertFeatures = (features = noOpObj) => {
+  upsertItems(CATEGORIES.FEATURES, features)
 }

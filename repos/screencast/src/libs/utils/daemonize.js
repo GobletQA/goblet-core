@@ -5,21 +5,18 @@ const { noOpObj } = require('@keg-hub/jsutils')
  * Helper to get the passed in args of the current script
  */
 const getArgs = () => {
-  const args = [].concat(process.argv)
-    .reduce((acc, arg) => {
-      arg !== '-d' &&
-        arg !== '--daemon' &&
-        acc.push(arg)
+  const args = [].concat(process.argv).reduce((acc, arg) => {
+    arg !== '-d' && arg !== '--daemon' && acc.push(arg)
 
-      return acc
-    }, [])
+    return acc
+  }, [])
 
   // Remove `node` executable from args
   args.shift()
   // get the name of the script that started the original process
   const script = args.shift()
 
-  return {args, script}
+  return { args, script }
 }
 
 /**
@@ -32,30 +29,26 @@ const getArgs = () => {
  *
  * @returns {Object} - Child process object
  */
-const spawnDaemon = (script, args, opt=noOpObj) => {
+const spawnDaemon = (script, args, opt = noOpObj) => {
   const defstd = 'inherit'
 
   const {
-    env=noOpObj,
-    stdout=defstd,
-    stderr=defstd,
-    cwd=process.cwd()
+    env = noOpObj,
+    stdout = defstd,
+    stderr = defstd,
+    cwd = process.cwd(),
   } = opt
 
   const spawnOpts = {
     cwd,
     // Detaches the spawed process from the parent
     detached: true,
-    env: {...env, ...process.env},
+    env: { ...env, ...process.env },
     stdio: [defstd, stdout, stderr],
   }
 
   // spawn the child using the same node process as ours
-  const child = spawn(
-    process.execPath,
-    [script].concat(args),
-    spawnOpts
-  )
+  const child = spawn(process.execPath, [script].concat(args), spawnOpts)
 
   // Remove reference to the child so the parent process can exit
   child.unref()
@@ -65,13 +58,13 @@ const spawnDaemon = (script, args, opt=noOpObj) => {
 
 /**
  * Turns the process into a daemon by recalling it's self, then disconnecting
- * **IMPORTANT** - exists the current process after spawning it's self as a child
+ * **IMPORTANT** - exits the current process after spawning it's self as a child
  * @function
  * @public
  * @exist
  * @param {Object} opts - Options to pass to the child spawned process
  */
-const daemonize = (opt=noOpObj) => {
+const daemonize = (opt = noOpObj) => {
   // we are a daemon, don't daemonize again
   if (process.env.__ALREADY_DAEMONIZED) return process.pid
 
@@ -93,5 +86,5 @@ const daemonize = (opt=noOpObj) => {
 
 module.exports = {
   spawnDaemon,
-  daemonize
+  daemonize,
 }

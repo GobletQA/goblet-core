@@ -1,14 +1,11 @@
 import React, { useCallback } from 'react'
-import { pickKeys, exists, noOp } from '@keg-hub/jsutils'
+import { Values } from 'HKConstants'
 import { useTheme } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'
-import { setActiveFile } from 'SVActions/files/local/setActiveFile'
-import {
-  View,
-  SimpleList,
-  Loading,
-} from 'SVComponents'
-import { Values } from 'SVConstants'
+import { View, Loading } from '@keg-hub/keg-components'
+import { SimpleList } from 'HKComponents/list/simpleList'
+import { pickKeys, exists, noOp } from '@keg-hub/jsutils'
+import { setActiveFile } from 'HKActions/files/local/setActiveFile'
 
 const { CATEGORIES } = Values
 const onHeaderPress = noOp
@@ -21,15 +18,15 @@ const drawerProps = { variant: 'sidebar' }
  *
  * @returns {Object} - Formatted list that works with Simple List component
  */
-const builtFeatureList = (features, activeFeature={}) => {
+const builtFeatureList = (features, activeFeature = {}) => {
   return {
     features: {
       group: 'Features',
       items: features.map(feature => ({
         title: feature?.ast?.feature,
-        active: feature?.ast?.feature === activeFeature?.ast?.feature
-      }))
-    }
+        active: feature?.ast?.feature === activeFeature?.ast?.feature,
+      })),
+    },
   }
 }
 
@@ -40,34 +37,36 @@ const builtFeatureList = (features, activeFeature={}) => {
  * @returns {Component}
  */
 export const FeatureList = props => {
-
   const theme = useTheme()
 
-  const { features, activeFeature } = useSelector(({ items }) => pickKeys(
-    items,
-    [ CATEGORIES.FEATURES, CATEGORIES.ACTIVE_FEATURE ]
-  ), shallowEqual)
+  const { features, activeFeature } = useSelector(
+    ({ items }) =>
+      pickKeys(items, [CATEGORIES.FEATURES, CATEGORIES.ACTIVE_FEATURE]),
+    shallowEqual
+  )
 
-  const onItemPress = useCallback((event, item) => {
-    const match = features.find(feature => feature?.ast?.feature === item.title)
-    match && setActiveFile(match)
-    
-  }, [ features ])
-
+  const onItemPress = useCallback(
+    (event, item) => {
+      const match = features.find(
+        feature => feature?.ast?.feature === item.title
+      )
+      match && setActiveFile(match)
+    },
+    [features]
+  )
 
   const feature = exists(activeFeature?.index) && features[activeFeature?.index]
 
-  return !features
-    ? (<Loading />)
-    : (
-        <View style={theme?.features?.list?.main}>
-          <SimpleList
-            items={ builtFeatureList(features, feature) }
-            onHeaderPress={ onHeaderPress }
-            onItemPress={ onItemPress }
-            drawerProps={ drawerProps }
-          />
-        </View>
-      )
-
+  return !features ? (
+    <Loading />
+  ) : (
+    <View style={theme?.features?.list?.main}>
+      <SimpleList
+        items={builtFeatureList(features, feature)}
+        onHeaderPress={onHeaderPress}
+        onItemPress={onItemPress}
+        drawerProps={drawerProps}
+      />
+    </View>
+  )
 }

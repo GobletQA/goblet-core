@@ -1,12 +1,25 @@
-import React, { useRef, useMemo, useEffect, useState, useCallback, useLayoutEffect } from 'react'
-import { Values } from 'SVConstants'
+import React, {
+  useRef,
+  useMemo,
+  useState,
+  useCallback,
+  useLayoutEffect,
+} from 'react'
+import { Values } from 'HKConstants'
 import { EditorTabs } from './editorTabs'
-import { useStyle } from '@keg-hub/re-theme'
 import { EditorFromType } from './editorFromType'
-import { useActiveTab } from 'SVHooks/useActiveTab'
 import { useEditorActions } from './useEditorActions'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { noOpObj, exists, plural, isArr, isStr, noPropArr } from '@keg-hub/jsutils'
+import { useStoreItems } from 'HKHooks/store/useStoreItems'
+import { useStyle, useDimensions } from '@keg-hub/re-theme'
+import { ResizeHandle } from 'HKComponents/resize/resizeHandle'
+import { useResizeHooks } from 'HKComponents/resize/useResizeHooks'
+import {
+  noOpObj,
+  exists,
+  isArr,
+  isStr,
+  noPropArr,
+} from '@keg-hub/jsutils'
 
 const { EDITOR_TABS, EDITOR_TYPES, CATEGORIES } = Values
 
@@ -18,9 +31,9 @@ const useEditorTabs = (activeFile, initialTab, editorStyles) => {
   // Get the fileType to use
   const fileType = activeFile.fileType
   // Get the tabs to display based on the active file type
-  const editorTabs = EDITOR_TABS[fileType]
+  const editorTabs = EDITOR_TABS[fileType] || EDITOR_TABS.file
 
-  // Momoize the initalTab or use the first defined tab
+  // Memoize the initialTab or use the first defined tab
   const codeTab = useMemo(() => {
     return editorTabs[initialTab] || editorTabs[Object.keys(editorTabs)[0]]
   }, [editorTabs, initialTab])
@@ -34,34 +47,38 @@ const useEditorTabs = (activeFile, initialTab, editorStyles) => {
   // codeTab is the initial Tab used when a new file is loaded
   // Otherwise activeTab will still be cached from the last file
   useLayoutEffect(() => {
-    if(cachedType === fileType) return
+    if (cachedType === fileType) return
 
     setCachedType(fileType)
     setActiveTab(codeTab)
   }, [cachedType, fileType, codeTab])
 
-  const onTabClick = useCallback(tab => {  
-    const clickedTab = isStr(tab) ? editorTabs[tab] : tab
-    clickedTab &&
-      activeTab?.id !== clickedTab.id &&
-      setActiveTab(clickedTab)
-  }, [activeTab, setActiveTab, editorTabs])
+  const onTabClick = useCallback(
+    tab => {
+      const clickedTab = isStr(tab) ? editorTabs[tab] : tab
+
+      clickedTab &&
+        activeTab?.id !== clickedTab.id &&
+        setActiveTab(clickedTab)
+    },
+    [activeTab, setActiveTab, editorTabs]
+  )
 
   const styles = useMemo(() => {
-    return editorStyles?.[
-      activeTab?.editors?.length === 1
-        ? 'full'
-        : activeTab.id === 'split'
-          /**
-           * Join the names of the editors to dynamiclly build the key to reference the stlyes
-           * Becuase the ID is `split`, we use the editor names to identify the styles applied
-           * example => editors: [ 'features', 'definitions' ] => 'features-definitions'
-           * The 'features-definitions' key is used to get the styles
-           * In theme/screens/editors.js there is a styles key for 'features-definitions'
-           */
-          ? activeTab.editors.join('-')
-          : activeTab.id
-    ] || noOpObj
+    /**
+     * Find the style key to use when referencing the theme styles from the activeTab ID
+     * When the ID is `split`, we use the editor names to identify the styles applied
+     * example => editors: [ 'features', 'definitions' ] => 'features-definitions'
+     * The 'features-definitions' key is used to get the styles
+     * In theme/screens/editors.js there is a styles key for 'features-definitions'
+     */
+    const styleKey = activeTab?.editors?.length === 1
+      ? 'full'
+      : activeTab.id === 'split'
+        ? activeTab.editors.join('-')
+        : activeTab.id
+    
+    return editorStyles?.[styleKey] || noOpObj
   }, [editorStyles, activeTab])
 
   return {
@@ -74,6 +91,7 @@ const useEditorTabs = (activeFile, initialTab, editorStyles) => {
 }
 
 const useEditorsArr = (activeTabEditors, activeFileType) => {
+  const {width:winWidth} = useDimensions()
   return useMemo(() => {
     const editors = isArr(activeTabEditors)
       ? activeTabEditors
@@ -82,53 +100,78 @@ const useEditorsArr = (activeTabEditors, activeFileType) => {
         : activeFileType
           ? [activeFileType]
           : noPropArr
-  
+
     return [
       editors,
       // Calc the width of each editor based on the number of editors to display
-      100 / editors.length,
-      editors.length
+      winWidth / editors.length,
+      editors.length,
     ]
-  }, [activeTabEditors, activeFileType])
+  }, [activeTabEditors, activeFileType, winWidth])
 }
 
-const RenderEditors = (props) => {
+const RenderEditors = props => {
   const {
     setTab,
     styles,
+    screenId,
     editorRef,
     activeTab,
-    activeFile,
+    activeFile
   } = props
 
-  const [
-    editorsArr,
-    editorWidth,
-    editorCount,
-  ] = useEditorsArr(
+  const [editorsArr, editorWidth, editorCount] = useEditorsArr(
     activeTab.editors,
     activeFile?.fileType
   )
-  
-  const {pendingFiles=noOpObj} = useStoreItems([CATEGORIES.PENDING_FILES])
 
-  return editorsArr.map(editorType => {
-    return (
+  const { pendingFiles = noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
+
+  const parentRef = useRef(null)
+  const {
+    dragging,
+    leftWidth,
+    onMouseUp,
+    onMouseDown,
+    onTouchStart,
+  } = useResizeHooks(parentRef, editorWidth, 400)
+
+  const addResize = editorCount > 1
+
+  return editorsArr.reduce((components, editorType, idx) => {
+    if(addResize && ((idx + 1) % 2) === 0){
+      components.push(
+        <ResizeHandle
+          dragging={dragging}
+          onTouchEnd={onMouseUp}
+          onMouseDown={onMouseDown}
+          onTouchStart={onTouchStart}
+          key={`${activeTab.id}-${editorType}-resize`}
+        />
+      )
+    }
+
+    components.push(
       <EditorFromType
         setTab={setTab}
         styles={styles}
-        aceRef={editorRef}
+        screenId={screenId}
+        editorRef={editorRef}
         editorType={editorType}
         activeFile={activeFile}
-        editorCount={editorCount}
-        editorWidth={editorWidth}
         key={`${activeTab.id}-${editorType}`}
+        width={(addResize && idx === 0) ? leftWidth : undefined}
         editorId={`${activeTab.id}-${activeFile.fileType}-editor`}
         value={pendingFiles[activeFile?.location] || activeFile?.content || ''}
       />
     )
-  })
+
+    return components
+  }, [])
 }
+
+
+const onTabFuncs = []
 
 /**
  * CodeEditor
@@ -137,10 +180,7 @@ const RenderEditors = (props) => {
  * @param {Object} props.activeFile - test file to load
  */
 export const CodeEditor = props => {
-  const {
-    initialTab,
-    activeFile=noOpObj
-  } = props
+  const { initialTab, activeFile = noOpObj, screenId } = props
 
   const editorStyles = useStyle(`screens.editors`)
   const actionsStyles = editorStyles?.actions
@@ -149,37 +189,40 @@ export const CodeEditor = props => {
     styles,
     editorTabs,
     activeTab,
-    onTabClick,
-    setActiveTab,
-  } = useEditorTabs(
-    activeFile,
-    initialTab,
-    editorStyles
-  )
+    onTabClick
+  } = useEditorTabs(activeFile, initialTab, editorStyles)
 
   const editorRef = useRef(null)
   const [isSaving, setIsSaving] = useState(false)
   const tabActions = useEditorActions(activeFile, editorRef, setIsSaving)
 
-  return exists(activeFile.content)
-    ? (<>
-        <RenderEditors
-          styles={styles}
-          setTab={onTabClick}
-          editorRef={editorRef}
-          activeTab={activeTab}
-          activeFile={activeFile}
-        />
-        <EditorTabs
-          showRun={true}
-          tabs={editorTabs}
-          activeTab={activeTab.id}
-          isSaving={isSaving}
-          styles={actionsStyles}
-          onTabSelect={onTabClick}
-          showFeatureTabs={activeFile.fileType === EDITOR_TYPES.FEATURE}
-          { ...tabActions }
-        />
-      </>)
-    : null
+  const showEditorTabs = Boolean(
+    activeFile.fileType === EDITOR_TYPES.FEATURE ||
+    activeFile.fileType === EDITOR_TYPES.WAYPOINT
+  )
+
+  return exists(activeFile.content) ? (
+    <>
+      <RenderEditors
+        styles={styles}
+        setTab={onTabClick}
+        screenId={screenId}
+        editorRef={editorRef}
+        activeTab={activeTab}
+        activeFile={activeFile}
+      />
+      <EditorTabs
+        showRun={true}
+        tabs={editorTabs}
+        screenId={screenId}
+        isSaving={isSaving}
+        styles={actionsStyles}
+        activeFile={activeFile}
+        activeTab={activeTab.id}
+        onTabSelect={onTabClick}
+        showEditorTabs={showEditorTabs}
+        {...tabActions}
+      />
+    </>
+  ) : null
 }

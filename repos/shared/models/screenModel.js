@@ -1,5 +1,5 @@
 const { buildModel } = require('./buildModel')
-const { noOp } = require('@keg-hub/jsutils')
+const { noOp, noPropArr } = require('@keg-hub/jsutils')
 /**
  * Models a UI screen
  * @typedef ScreenModel
@@ -15,10 +15,11 @@ const Model = {
   View: noOp,
   activeFile: {},
   active: false,
+  fileTypes: noPropArr,
 }
 
 const screenModel = overrides => buildModel(overrides, Model)
 
 module.exports = {
-  screenModel
+  screenModel,
 }

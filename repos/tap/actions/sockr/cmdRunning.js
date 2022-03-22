@@ -1,12 +1,12 @@
 import { addToast } from '../toasts/addToast'
-import { dispatch, getStore } from 'SVStore'
-import { Values, ActionTypes } from 'SVConstants'
+import { dispatch, getStore } from 'HKStore'
+import { Values, ActionTypes } from 'HKConstants'
 import { get, noOpObj } from '@keg-hub/jsutils'
-import { testRunModel } from 'SVModels'
+import { testRunModel } from 'HKModels'
 import { setTestRun } from '../runner/setTestRun'
 import { toggleTestRunning } from '../runner/toggleTestRunning'
-import { setScreenById } from 'SVActions/screens/setScreenById'
-import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
+import { setScreenById } from 'HKActions/screens/setScreenById'
+import { getReportsActiveFile } from 'HKUtils/helpers/getReportsActiveFile'
 
 const { CATEGORIES, SCREENS, SOCKR_MSG_TYPES } = Values
 
@@ -18,13 +18,13 @@ const { CATEGORIES, SCREENS, SOCKR_MSG_TYPES } = Values
  */
 export const cmdRunning = data => {
   const { items } = getStore().getState()
-  const activeFile = getResultsActiveFile() || noOpObj
+  const activeFile = getReportsActiveFile() || noOpObj
 
-  if(!activeFile || !activeFile.fileType)
+  if (!activeFile || !activeFile.fileType)
     return addToast({
       type: `error`,
       timeout: 6000,
-      message: `Can not set command running. No active test file exists!`
+      message: `Can not set command running. No active test file exists!`,
     })
 
   // Build the testFile model
@@ -33,7 +33,7 @@ export const cmdRunning = data => {
     running: true,
     lastRun: data.timestamp,
     file: activeFile.location,
-    testType: activeFile.fileType,
+    fileType: activeFile.fileType,
     command: get(data, 'data.cmd'),
     params: get(data, 'data.params'),
     messages: {
@@ -41,8 +41,8 @@ export const cmdRunning = data => {
         type: SOCKR_MSG_TYPES.CMD_RUN,
         timestamp: data.timestamp,
         message: `Running ${activeFile.fileType} tests for ${activeFile.name}`,
-      }
-    }
+      },
+    },
   })
 
   setTestRun(builtModel)
@@ -52,6 +52,6 @@ export const cmdRunning = data => {
   // TODO: get setting from store
   // Check if option is set to switch to a screen on test run
   // If options is set, then switch to that screen
-  // Switch to the results screen automatically
-  // setScreenById(SCREENS.RESULTS)
+  // Switch to the reports screen automatically
+  // setScreenById(SCREENS.REPORTS)
 }

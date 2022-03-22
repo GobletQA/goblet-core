@@ -7,5 +7,5 @@ export const app = theme => ({
     w: '100%',
     mW: '100%',
     bgC: tapColors.appBackground,
-  }
+  },
 })

@@ -7,11 +7,10 @@ module.exports.getKegHerkinUrl = () => {
     branchName = execSync(`git -C ${__dirname} branch --show-current`)
       .toString()
       .trim()
-  }
-  catch (err) {
+  } catch (err) {
     console.log(err.stack)
     branchName = 'master'
   }
-  
+
   return `http://herkin-${branchName}.${host}`
 }

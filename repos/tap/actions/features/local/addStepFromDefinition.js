@@ -1,8 +1,6 @@
-import { dispatch } from 'SVStore'
-import { addToast } from 'SVActions/toasts'
-import { uuid, noOpObj } from '@keg-hub/jsutils'
-import { Values, ActionTypes } from 'SVConstants'
-import { copyToDefinitionClipboard } from 'SVUtils/definitions'
+import { addToast } from 'HKActions/toasts'
+import { Values } from 'HKConstants'
+import { copyToDefinitionClipboard } from 'HKUtils/definitions'
 
 const { CATEGORIES } = Values
 
@@ -17,21 +15,20 @@ const { CATEGORIES } = Values
  *
  * @return {Object} - Found active feature
  */
-export const addStepFromDefinition = (args) => {
+export const addStepFromDefinition = args => {
   const { definition, clipboard } = args
-  if(!clipboard)
+  if (!clipboard)
     return addToast({
       type: 'warn',
-      message: `Clipboard does not exist!`
+      message: `Clipboard does not exist!`,
     })
-  
+
   addToast({
     type: 'info',
-    message: `Copied step definition to clipboard!`
+    message: `Copied step definition to clipboard!`,
   })
 
   return copyToDefinitionClipboard(definition)
 
-  // TODO: Add other options for auto setting the step definition into the feature 
-
+  // TODO: Add other options for auto setting the step definition into the feature
 }

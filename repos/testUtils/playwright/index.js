@@ -3,5 +3,5 @@ module.exports = {
   ...require('./getElement'),
   ...require('./getElements'),
   ...require('./evalElement'),
-  ...require('./evalAll')
+  ...require('./evalAll'),
 }

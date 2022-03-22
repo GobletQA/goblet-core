@@ -4,85 +4,78 @@ const sockrCmds = {
       filters: {},
       commands: {
         feature: {
-          description: "Run behavior driven tests with feature files",
+          description: 'Run behavior driven tests with feature files',
           cmd: 'bdd',
-          beforeArgs: [
-            'test',
-          ],
+          beforeArgs: ['run'],
           afterArgs: [],
           params: [
             {
-              name: "context",
+              name: 'context',
               withKey: true,
-              description: "Name of the test to be run. If not set, all feature files will be run",
-              type: "string",
+              description:
+                'Name of the test to be run. If not set, all feature files will be run',
+              type: 'string',
               required: false,
-              value: ""
+              value: '',
             },
             {
               name: 'tags',
               withKey: true,
-              description: "Use tags from feature files to filter which tests will run",
-              type: "string",
+              description:
+                'Use tags from feature files to filter which tests will run',
+              type: 'string',
               required: false,
-              value: ""
+              value: '',
             },
             {
-              name: "browsers",
+              name: 'browsers',
               withKey: true,
-              description: "Which browsers the tests should be run on",
-              type: "array",
+              description: 'Which browsers the tests should be run on',
+              type: 'array',
               required: false,
-              value: [
-                'chrome',
-                'firefox',
-                'webkit',
-                'all'
-              ]
-            }
-          ]
+              value: ['chrome', 'firefox', 'webkit', 'all'],
+            },
+          ],
         },
         unit: {
-          description: "Run unit tests through jest",
+          description: 'Run unit tests through jest',
           cmd: 'unit',
-          beforeArgs: [
-            'test',
-          ],
+          beforeArgs: ['test'],
           afterArgs: [],
           params: [
             {
-              name: "context",
+              name: 'context',
               withKey: true,
-              description: "Name of the unit test to be run. If not set, all unit tests will be run",
-              type: "string",
+              description:
+                'Name of the unit test to be run. If not set, all unit tests will be run',
+              type: 'string',
               required: false,
-              value: ""
+              value: '',
             },
-          ]
+          ],
         },
         waypoint: {
-          description: "Run waypoint tests using playwright and jest",
+          description: 'Run waypoint tests using playwright and jest',
           cmd: 'waypoint',
-          beforeArgs: [
-            'run',
-          ],
+          beforeArgs: ['run'],
           afterArgs: [],
           params: [
             {
-              name: "context",
+              name: 'context',
               withKey: true,
-              description: "Name of the test to be run. If not set, all waypoint tests will be run",
-              type: "string",
+              description:
+                'Name of the test to be run. If not set, all waypoint tests will be run',
+              type: 'string',
               required: false,
-              value: ""
+              value: '',
             },
-          ]
-        }
-      }
-    }
-  }
+          ],
+        },
+      },
+    },
+  },
 }
 
 module.exports = {
-  sockrCmds
+  sockrCmds,
 }

@@ -2,16 +2,9 @@ const { newServer } = require('./newServer')
 const { Logger } = require('@keg-hub/cli-utils')
 const { statusServer } = require('./statusServer')
 const { setServer, getServer } = require('./server')
-const { flatUnion } = require('../../utils/flatUnion')
 const { checkVncEnv } = require('../../utils/vncActiveEnv')
 const { getBrowserType } = require('../helpers/getBrowserType')
-const {
-  get,
-  noOpObj,
-  noPropArr,
-  deepMerge,
-  checkCall
-} = require('@keg-hub/jsutils')
+const { get, noOpObj } = require('@keg-hub/jsutils')
 
 /**
  * Starts browser-server using playwright
@@ -26,16 +19,18 @@ const {
  *
  * @returns {Object} - Contains the page, context, and browser created from playwright
  */
-const startServer = async (browserConf=noOpObj) => {
-  if(checkVncEnv().vncActive)
-    return Logger.warn(`Browser Websocket server should not be run in Screencast Environment`)
+const startServer = async (browserConf = noOpObj) => {
+  if (checkVncEnv().vncActive)
+    return Logger.warn(
+      `Browser Websocket server should not be run in Screencast Environment`
+    )
 
   const browser = getBrowserType(browserConf.type)
-  
+
   const pwServer = getServer()
   const status = await statusServer()
   const sPid = get(status, [browser, `pid`])
-  if(sPid){
+  if (sPid) {
     Logger.pair(`- Browser ${browser} server already running with pid:`, sPid)
     // If no playwright server is set, then set it
     !pwServer && setServer(status)
@@ -47,7 +42,6 @@ const startServer = async (browserConf=noOpObj) => {
   return await newServer(browser, browserConf)
 }
 
-
 module.exports = {
-  startServer
+  startServer,
 }

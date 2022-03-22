@@ -1,12 +1,8 @@
-import React from 'react'
-import { useStyle } from '@keg-hub/re-theme'
-import { checkCall, noOpObj } from '@keg-hub/jsutils'
-import { View, H5 } from '@keg-hub/keg-components'
-import { AceEditor } from 'SVComponents/aceEditor'
+import React, {useMemo, useCallback} from 'react'
+import { checkCall } from '@keg-hub/jsutils'
 import { NoActiveDefinition } from './noActiveDefinition'
-import { useAltActiveFile } from 'SVHooks/activeFile/useAltActiveFile'
-import { Values } from 'SVConstants'
-const { SCREENS, FILE_TYPES } = Values
+import { MonacoEditor } from 'HKComponents/monacoEditor/monacoEditor'
+import { removePendingFile, setPendingFile } from 'HKActions/files/local'
 
 /**
  * ActiveDefinitionsEditor - Renders an editor to modify a definition file
@@ -16,36 +12,46 @@ const { SCREENS, FILE_TYPES } = Values
  *
  * @returns {Component}
  */
-export const ActiveDefinitionsEditor = props => {
+export const ActiveDefinitionsEditor = React.memo(props => {
   const {
-    definitions,
-    styles=noOpObj,
-    ...args
+    styles,
+    activeDefinition:definition,
   } = props
 
-  const activeStyles = useStyle(`definitions.active`, styles)
-  const definition = useAltActiveFile(SCREENS.EDITOR, FILE_TYPES.DEFINITION)
+  const editorProps = useMemo(() => {
+    return {
+      wrapBehavioursEnabled: true,
+      animatedScroll: false,
+      dragEnabled: false,
+      tabSize: 2,
+      wrap: true,
+      ...props.editorProps,
+    }
+  }, [props.editorProps])
 
-  return definition
-    ? (
-        <AceEditor
-          key={definition.keyId || definition.uuid}
-          fileId={definition.uuid}
-          {...props}
-          onChange={text => checkCall(props.onChange, definition.uuid, text)}
-          editorId={`definition-editor-${definition.uuid}`}
-          value={definition.content || ''}
-          style={styles.editor}
-          mode='javascript'
-          editorProps={{
-            wrapBehavioursEnabled: true,
-            animatedScroll: false,
-            dragEnabled: false,
-            tabSize: 2,
-            wrap: true,
-            ...props.editorProps,
-          }}
-        />
-      )
-      : (<NoActiveDefinition styles={activeStyles.none} />)
-}
+  const onChange = useCallback(text => {
+    checkCall(props.onChange, definition.uuid, text)
+
+    if(!definition || !text) return
+    
+    definition.content !== text
+      ? setPendingFile(text, definition)
+      : removePendingFile(definition)
+  }, [props.onChange, definition])
+
+  return definition ? (
+    <MonacoEditor
+      key={definition.keyId || definition.uuid}
+      fileId={definition.uuid}
+      {...props}
+      onChange={onChange}
+      editorId={`definition-editor-${definition.uuid}`}
+      value={definition.content || ''}
+      style={styles?.editor}
+      mode='javascript'
+      editorProps={editorProps}
+    />
+  ) : (
+    <NoActiveDefinition />
+  )
+})

@@ -9,11 +9,9 @@ const { deepMerge, pickKeys } = require('@keg-hub/jsutils')
  *
  * @returns {Object} - Built model
  */
-const buildModel = (overrides, Model) => deepMerge(
-  Model,
-  pickKeys(overrides, Object.keys(Model))
-)
+const buildModel = (overrides, Model) =>
+  deepMerge(Model, pickKeys(overrides, Object.keys(Model)))
 
 module.exports = {
-  buildModel
+  buildModel,
 }

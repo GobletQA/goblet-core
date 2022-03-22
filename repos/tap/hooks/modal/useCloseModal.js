@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
 import { exists } from '@keg-hub/jsutils'
-import { setModalVisibility } from 'SVActions/modals'
+import { setModalVisibility } from 'HKActions/modals'
 
 const { SCREENS } = Values
 
@@ -14,7 +14,8 @@ const { SCREENS } = Values
  *
  * @returns {void}
  */
-export const useCloseModal = (tabId) => useCallback(() => {
-  const closeModal = exists(tabId) ? tabId !== SCREENS.EMPTY : true
-  closeModal && setModalVisibility(false)
-}, [tabId])
+export const useCloseModal = tabId =>
+  useCallback(() => {
+    const closeModal = exists(tabId) ? tabId !== SCREENS.EMPTY : true
+    closeModal && setModalVisibility(false)
+  }, [tabId])

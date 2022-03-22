@@ -1,5 +1,5 @@
 const { Then } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinSetup')
+const { getBrowserContext } = require('HerkinTestEnv')
 const { getPage } = getBrowserContext()
 const expect = require('expect')
 
@@ -7,7 +7,7 @@ const expect = require('expect')
  * Checks that the page title is not `title`
  * @param {string} title - text to compare to page title
  */
-const pageTitleIsNot = async (title) => {
+const pageTitleIsNot = async title => {
   const page = await getPage()
   expect(await page.title()).not.toBe(title)
 }
@@ -21,8 +21,8 @@ Module : pageTitleIsNot`,
       type: 'string',
       description: `String that does not match page title.`,
       example: 'Simpleville - LuxuryHotelAccommodations',
-    }
-  ]
+    },
+  ],
 })
 
 module.exports = { pageTitleIsNot }

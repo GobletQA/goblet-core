@@ -1,11 +1,21 @@
 version: "3.8"
 services:
   keg-herkin:
+    environment:
+      - HERKIN_PW_SOCKET=true
+      - HERKIN_ARTIFACTS_DIR
+      - HERKIN_FEATURES_DIR
+      - HERKIN_LOCAL_MOUNT
+      - HERKIN_USE_AUTH=false
+      - HERKIN_MOUNT_ROOT
+      - HERKIN_REPO_ROOT
+      - HERKIN_REPORTS_DIR
+      - HERKIN_ROOT_DIR
+      - HERKIN_STEPS_DIR
+      - HERKIN_SUPPORT_DIR
+      - HERKIN_UNIT_DIR
+      - HERKIN_WORK_DIR
+      - HERKIN_WAYPOINT_DIR
     volumes:
-      - ${HERKIN_TESTS_ROOT}:${DOC_APP_PATH}/tests
-    ports:
-      - ${API_PORT}:${API_PORT}
-      - ${NO_VNC_PORT}:${NO_VNC_PORT}
-      - ${SCREENCAST_API_PORT}:${SCREENCAST_API_PORT}
-      # Only expose this port if we want to expose the VNC server outside the container
-      # - ${VNC_SERVER_PORT}:${VNC_SERVER_PORT}
+      - ${HERKIN_REPO_ROOT}:${HERKIN_MOUNT_ROOT}/${HERKIN_LOCAL_MOUNT}
+

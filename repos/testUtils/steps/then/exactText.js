@@ -1,5 +1,5 @@
 const { Then } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinSetup')
+const { getBrowserContext } = require('HerkinTestEnv')
 const { getPage } = getBrowserContext()
 
 /**
@@ -9,15 +9,16 @@ const { getPage } = getBrowserContext()
  */
 const exactText = async (selector, data) => {
   const page = await getPage()
-  
+
   //get element tagName
   const getElTagName = await page.$eval(selector, el => el.tagName)
 
   //if tagName is (input or textarea) use value else use textContent
-  const content = (getElTagName === 'INPUT' || getElTagName === 'TEXTAREA') 
-    ? await page.$eval(selector, el => el.value) 
-    : await page.$eval(selector, el => el.textContent)
-  
+  const content =
+    getElTagName === 'INPUT' || getElTagName === 'TEXTAREA'
+      ? await page.$eval(selector, el => el.value)
+      : await page.$eval(selector, el => el.textContent)
+
   //assert element text contains expected text
   expect(content).toEqual(data)
 }
@@ -36,8 +37,8 @@ Module : exactText`,
       type: 'string',
       description: `The text of the element to verify.`,
       example: 'cucumber',
-    }
-  ]
+    },
+  ],
 })
 
 module.exports = { exactText }

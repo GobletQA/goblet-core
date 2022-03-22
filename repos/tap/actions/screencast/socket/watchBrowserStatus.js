@@ -1,10 +1,9 @@
-import { dispatch, getStore } from 'SVStore'
-import { Values } from 'SVConstants'
-import { addToast } from 'SVActions/toasts'
+import { dispatch, getStore } from 'HKStore'
+import { Values } from 'HKConstants'
+import { addToast } from 'HKActions/toasts'
 import { noOpObj, get } from '@keg-hub/jsutils'
-import { WSService } from 'SVServices/socketService'
+import { WSService } from 'HKServices/socketService'
 import { setBrowserStatus } from '../local/setBrowserStatus'
-
 
 const { CATEGORIES, SOCKR_MSG_TYPES } = Values
 
@@ -15,14 +14,12 @@ const { CATEGORIES, SOCKR_MSG_TYPES } = Values
  *
  * @returns {void}
  */
-export const watchBrowserStatus = (options=noOpObj) => {
+export const watchBrowserStatus = (options = noOpObj) => {
   const { items } = getStore()?.getState()
-  if(!items)
-    return console.warn(`No items set in the store`)
+  if (!items) return console.warn(`No items set in the store`)
 
-  WSService.emit(`browserStatus`, {
+  WSService.emit(SOCKR_MSG_TYPES.BROWSER_STATUS, {
     ...items[CATEGORIES.BROWSER_OPTS],
-    ...noOpObj
+    ...noOpObj,
   })
-
 }

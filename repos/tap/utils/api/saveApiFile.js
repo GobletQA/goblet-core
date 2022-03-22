@@ -1,6 +1,6 @@
-import { apiRequest } from './apiRequest'
-import { logData, isFunc } from '@keg-hub/jsutils'
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
+import { apiRepoRequest } from './apiRepoRequest'
+import { addToast } from 'HKActions/toasts/addToast'
 
 const { HttpMethods } = Values
 /**
@@ -10,18 +10,34 @@ const { HttpMethods } = Values
  * @public
  * @param {string} filePath - Path to the file to be saved on the backend
  * @param {string} content - Text content to save to the file
- * @param {function} [callback=undefined] - Callback function called after the request is made 
  *
- * @returns {*} - Response from the Backend API or callback function when it exists
+ * @returns {Object} - Response from the Backend API or callback function when it exists
  */
-export const saveApiFile = async (filePath, content, callback) => {
-  const response = filePath
-    ? await apiRequest({
-        method: HttpMethods.POST,
-        url: `/files/save`,
-        params: { path: filePath, content }
-      })
-    : logData(`Save File action requires a file path!`)
+export const saveApiFile = async (filePath, content, fileType) => {
+  if(!filePath)
+    return addToast({
+      type: 'error',
+      message: [
+        `Failed to save file. A file path is required`,
+        `FilePath: ${filePath}`
+      ].join(`\n`)
+    })
+    
+  const resp = await apiRepoRequest({
+    url: `/files/save`,
+    method: HttpMethods.POST,
+    params: {
+      content,
+      type: fileType,
+      path: filePath,
+    },
+  })
 
-  return isFunc(callback) ? callback(response) : response
+  if(!resp?.success || resp?.error)
+    addToast({
+        type: 'error',
+        message: resp?.error || `Error saving file, please try again later.`,
+      })
+
+  return resp
 }

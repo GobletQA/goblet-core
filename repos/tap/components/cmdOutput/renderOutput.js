@@ -1,56 +1,53 @@
-import React, { useMemo, useRef, useEffect } from "react"
+import React, { useMemo, useRef, useEffect } from 'react'
+import { noOpObj } from '@keg-hub/jsutils'
 import { useStyle } from '@keg-hub/re-theme'
-import { Row } from '@keg-hub/keg-components/row'
-import { Icon } from '@keg-hub/keg-components/icon'
 import { View } from '@keg-hub/keg-components/view'
-import { Text } from '@keg-hub/keg-components/text'
-import { wordCaps, noOpObj, mapObj } from '@keg-hub/jsutils'
+import { ReOutputMain, ReMessage, ReMessageText } from './cmd.restyle'
 
-const useRunMessages = (messages) => useMemo(() => {
-  return messages && Object.values(messages)
-}, [messages])
-
+const useRunMessages = messages =>
+  useMemo(() => {
+    return messages && Object.values(messages)
+  }, [messages])
 
 const bottomStyle = { maxHeight: 0, opacity: 0 }
-const AlwaysScrollToBottom = React.memo(() => {
+const AlwaysScrollToBottom = ({ messagesAmount }) => {
   const bottomRef = useRef()
+
   useEffect(() => {
-    bottomRef.current.scrollIntoView({behavior: 'smooth', block: 'end'})
-  })
-  return (<View ref={bottomRef} style={bottomStyle} />)
-})
+    bottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    // Tracks the message amount
+    // Every time a new message is added, then scroll the view to the bottom
+  }, [messagesAmount])
 
-const Message = React.memo(({ styles=noOpObj, message, timestamp, type }) => {
-  const defStyles = styles.default
-  const msgStyles = styles[type]
+  return <View ref={bottomRef} style={bottomStyle} />
+}
 
+const Message = React.memo(({ styles = noOpObj, message, timestamp, type }) => {
+  // TODO: Once the output is parsed
+  // Add restyle components for the different types of messages
+  // success / error / standard out, etc..
+  // Then based on the message type, use that component to render the message
   return (
-    <View style={[defStyles.main, msgStyles.main]} >
-      <Text style={[defStyles.text, msgStyles.text]} >
-        { message }
-      </Text>
-    </View>
+    <ReMessage>
+      <ReMessageText>{message}</ReMessageText>
+    </ReMessage>
   )
 })
 
-export const RenderOutput = ({ testRunModel=noOpObj, testFile }) => {
+export const RenderOutput = ({ testRunModel = noOpObj, testFile }) => {
   const styles = useStyle(`cmdOutput.renderOutput`)
   const messages = useRunMessages(testRunModel?.messages)
 
   return (
-    <View style={styles.main} >
-      {
-        messages &&
+    (
+      <ReOutputMain>
+        {messages &&
           messages.length &&
           messages.map(message => (
-            <Message
-              styles={styles}
-              key={message.timestamp}
-              {...message}
-            />
-          ))
-      }
-      <AlwaysScrollToBottom />
-    </View>
-  ) || null
+            <Message styles={styles} key={message.timestamp} {...message} />
+          ))}
+        <AlwaysScrollToBottom messagesAmount={messages && messages.length} />
+      </ReOutputMain>
+    ) || null
+  )
 }

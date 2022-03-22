@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  keg-herkin:
+    environment:
+      - DISPLAY
+      - GITHUB_CLIENT_ID
+      - GITHUB_AUTH_USERS
+      - HERKIN_USE_VNC=true
+      - HERKIN_USE_AUTH=true
+      - NO_VNC_PORT
+      - SCREENCAST_API_PORT
+      - SCREENCAST_PROXY_HOST
+      - VNC_PROXY_HOST
+      - VNC_SERVER_PORT
+      - VNC_VIEW_HEIGHT
+      - VNC_VIEW_WIDTH
+    ports:
+      - ${NO_VNC_PORT}:${NO_VNC_PORT}
+      - ${SCREENCAST_API_PORT}:${SCREENCAST_API_PORT}
+      # Only expose this port if we want to expose the VNC server outside the container
+      # - ${VNC_SERVER_PORT}:${VNC_SERVER_PORT}

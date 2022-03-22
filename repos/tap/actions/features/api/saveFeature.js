@@ -1,5 +1,3 @@
-
-
 /**
  * Saves a feature fileModel to the local file system by calling the backend API
  * @type function
@@ -7,6 +5,6 @@
  *
  * @returns {void}
  */
-export const saveFeature = (feature) => {
+export const saveFeature = feature => {
   // TODO
 }

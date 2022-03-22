@@ -1,6 +1,6 @@
-import { dispatch } from 'SVStore'
-import { Values, ActionTypes } from 'SVConstants'
-import { validateFeatureAction } from 'SVUtils'
+import { dispatch } from 'HKStore'
+import { Values, ActionTypes } from 'HKConstants'
+import { validateFeatureAction } from 'HKUtils/features/validateFeatureAction'
 const { CATEGORIES } = Values
 
 /**
@@ -11,7 +11,7 @@ const { CATEGORIES } = Values
  *
  * @return {void}
  */
-export const  removeFeatureTag = (parent, tag) => {
+export const removeFeatureTag = (parent, tag) => {
   const { feature, index } = validateFeatureAction(parent, 'tags')
 
   index > -1 &&
@@ -23,9 +23,11 @@ export const  removeFeatureTag = (parent, tag) => {
         category: CATEGORIES.FEATURES,
         item: {
           ...feature,
-          ast: { ...feature.ast, tags: feature.tags.filter(pTag => pTag !== tag) }
+          ast: {
+            ...feature.ast,
+            tags: feature.tags.filter(pTag => pTag !== tag),
+          },
         },
       },
     })
-
 }

@@ -14,7 +14,9 @@ import { isValidComponent } from '@keg-hub/keg-components'
  * @return {Object} - Rendered React component
  */
 export const renderCustomOrDefault = (Component, DefComponent, props) => {
-  return isValidComponent(Component)
-    ? (<Component { ...props } />)
-    : (<DefComponent { ...props } />)
+  return isValidComponent(Component) ? (
+    <Component {...props} />
+  ) : (
+    <DefComponent {...props} />
+  )
 }

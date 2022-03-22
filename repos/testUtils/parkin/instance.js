@@ -1,11 +1,13 @@
 const { Parkin } = require('@ltipton/parkin')
-const { world } = require('HerkinRepos/testUtils/support')
+const { getWorld } = require('HerkinRepos/testUtils/support')
 
 /**
- * Parkin singleton instance, accepting the 
- * herkin world: a merge of herkin defaults with 
+ * Parkin singleton instance, accepting the
+ * herkin world: a merge of herkin defaults with
  * the client's world object
  */
 module.exports = {
-  parkin: new Parkin(world)
+  // TODO: Need to validate that the correct config gets loaded here
+  // Would be better to load the correct herkin config and pass it to getWorld
+  parkin: new Parkin(getWorld()),
 }

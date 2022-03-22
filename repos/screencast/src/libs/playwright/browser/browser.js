@@ -15,7 +15,7 @@ let PW_BROWSERS = {}
  *
  * @returns {Object} - Playwright browser page || undefined
  */
-const getPage = (type=defaultBrowser) => {
+const getPage = (type = defaultBrowser) => {
   return get(PW_BROWSERS, [type, `page`])
 }
 
@@ -27,12 +27,13 @@ const getPage = (type=defaultBrowser) => {
  *
  * @returns {void}
  */
-const setPage = (page, type=defaultBrowser) => {
+const setPage = (page, type = defaultBrowser) => {
   try {
     const oldPage = !page && getPage(type)
     oldPage && oldPage.close()
+  } catch (err) {
+    Logger.warn(err.message)
   }
-  catch(err){ Logger.warn(err.message) }
 
   set(PW_BROWSERS, [type, `page`], page)
 }
@@ -44,7 +45,7 @@ const setPage = (page, type=defaultBrowser) => {
  *
  * @returns {Object} - Playwright browser context || undefined
  */
-const getContext = (type=defaultBrowser) => {
+const getContext = (type = defaultBrowser) => {
   return get(PW_BROWSERS, [type, `context`])
 }
 
@@ -56,13 +57,14 @@ const getContext = (type=defaultBrowser) => {
  *
  * @returns {void}
  */
-const setContext = (context, type=defaultBrowser) => {
+const setContext = (context, type = defaultBrowser) => {
   // If no context, get the old content and close it if it exists
   try {
     const oldContext = !context && getContext(type)
     oldContext && oldContext.close()
+  } catch (err) {
+    Logger.warn(err.message)
   }
-  catch(err){ Logger.warn(err.message) }
 
   set(PW_BROWSERS, [type, `context`], context)
 }
@@ -74,7 +76,7 @@ const setContext = (context, type=defaultBrowser) => {
  *
  * @return {Object|undefined} - Playwright browser object or undefined
  */
-const getBrowser = (type=defaultBrowser) => {
+const getBrowser = (type = defaultBrowser) => {
   return get(PW_BROWSERS, [type, `browser`])
 }
 
@@ -83,7 +85,7 @@ const getBrowser = (type=defaultBrowser) => {
  * @function
  * @return {Object|undefined} - Playwright browser object or undefined
  */
-const setBrowser = (browser, type=defaultBrowser) => {
+const setBrowser = (browser, type = defaultBrowser) => {
   setBrowsers(browser, type)
 }
 
@@ -102,12 +104,11 @@ const closeBrowser = (browser, type) => {
   try {
     browser = browser || get(PW_BROWSERS, [type, `browser`])
     browser && browser.close()
-  }
-  catch(err){
+  } catch (err) {
     Logger.warn(err.message)
   }
 
-  if(type && PW_BROWSERS[type]) delete PW_BROWSERS[type]
+  if (type && PW_BROWSERS[type]) delete PW_BROWSERS[type]
 
   browser = undefined
   return PW_BROWSERS
@@ -115,14 +116,14 @@ const closeBrowser = (browser, type) => {
 
 /**
  * Adds a browser to the Browsers object by type
- * If no second argument, use the browser.name method to set the type 
+ * If no second argument, use the browser.name method to set the type
  * If first param is a string name of a browser
  * Or if no first param, and second param is a string name of a browser
  * Then delete the browser from the browser object by browser name || type
- * @example 
+ * @example
  * setBrowsers(`chromium`) === setBrowsers(null, `chromium`) === (delete PW_BROWSERS.chromium)
  * @example
- * setBrowsers(chromeBrowserObj) === setBrowsers(browserObj, `chromium`) 
+ * setBrowsers(chromeBrowserObj) === setBrowsers(browserObj, `chromium`)
  * @function
  * @private
  *
@@ -132,30 +133,19 @@ const closeBrowser = (browser, type) => {
  * @return {Object} - The PW_BROWSERS cache, with the browser removed
  */
 const setBrowsers = (browser, type) => {
-
   // If browser type is passed as the first param
   // Then Remove the browser
-  if(isStr(browser) && !type)
-    return closeBrowser(
-      get(PW_BROWSERS, [browser, `browser`]),
-      browser
-    )
+  if (isStr(browser) && !type)
+    return closeBrowser(get(PW_BROWSERS, [browser, `browser`]), browser)
 
   // Or if no browser is passed, and a type is passed
   // Then Remove the browser
-  if(!browser)
-    return closeBrowser(
-      get(PW_BROWSERS, [type, `browser`]),
-      type
-    )
+  if (!browser) return closeBrowser(get(PW_BROWSERS, [type, `browser`]), type)
 
   const bType = type || browser.name() || defaultBrowser
 
   // Close the old browser if it exists
-  closeBrowser(
-    get(PW_BROWSERS, [bType, `browser`]),
-    bType
-  )
+  closeBrowser(get(PW_BROWSERS, [bType, `browser`]), bType)
 
   // Set the new browser
   PW_BROWSERS[bType] = { browser }

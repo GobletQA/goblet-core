@@ -1,7 +1,17 @@
-const { isObj, noOp } = require('@keg-hub/jsutils')
-const defaultConfig = require('HerkinConfigs/herkin.default.config.js')
 const fs = require('fs')
 const path = require('path')
+const { isObj, noOp } = require('@keg-hub/jsutils')
+const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
+
+/**
+ * **IMPORTANT**
+ * This is the one exception to the never load the default herkin.config file
+ * Because it does validation to ensure a custom config is valid
+ * Only this file and the getHerkinConfig file should load the default herkin.config
+ * All others should use getHerkinConfig
+ * **IMPORTANT**
+ */
+const defaultConfig = require('HerkinConfigs/herkin.default.config.js')
 
 /**
  * Error type specific to herkin config validation.
@@ -17,13 +27,13 @@ class HerkinConfigError extends Error {
 
 /**
  * Throws a missing file error
- * @param {string} key 
- * @param {string} path 
+ * @param {string} key
+ * @param {string} path
  * @param {string?} relativeTo - if defined, a path to the expected parent directory,
  * if null - the function will consider `path` an absolute path
  */
-const missingFileError = (key, loc, relativeTo=null) => { 
-  const pathType = relativeTo ? "Relative" : "Absolute"
+const missingFileError = (key, loc, relativeTo = null) => {
+  const pathType = relativeTo ? 'Relative' : 'Absolute'
   const relativeMessage = relativeTo ? `relative to:` : ''
   throw new HerkinConfigError(
     `${pathType} path "${key}"
@@ -33,7 +43,6 @@ const missingFileError = (key, loc, relativeTo=null) => {
     `
   )
 }
-
 
 /**
  * TODO: Update chechFilePaths to follow these rules
@@ -48,37 +57,38 @@ const missingFileError = (key, loc, relativeTo=null) => {
  * @param {Array<string>} expectedPaths - expected keys
  */
 const checkFilePaths = (paths, expectedPaths) => {
-  const { rootDir, testsRoot, ...relativePaths } = paths
+  const { repoRoot, workDir, ...relativePaths } = paths
 
-  if (!fs.existsSync(rootDir)) 
-    missingFileError('config.paths.rootDir', rootDir)
+  if (!fs.existsSync(repoRoot))
+    missingFileError('config.paths.repoRoot', repoRoot)
 
-  if (!fs.existsSync(testsRoot))
-    missingFileError('config.paths.testsRoot', testsRoot)
+  if (workDir && !fs.existsSync(workDir)) fs.mkdir(workDir, noOp)
 
-  Object
-    .entries(relativePaths)
-    .map(([key, testPath]) => {
-      const fullPath = path.join(testsRoot, testPath)
+  const baseDir = getRepoHerkinDir({ paths, __VALID_HERKIN_CONFIG: true })
 
-      if(!fs.existsSync(fullPath)) fs.mkdir(fullPath, noOp)
+  Object.entries(relativePaths).map(([key, testPath]) => {
+    const fullPath = path.join(baseDir, testPath)
 
-      if (!expectedPaths.includes(key))
-        throw new HerkinConfigError(
-          `Keys in ".paths" must be one of [${expectedPaths.join(', ')}].
+    if (!fs.existsSync(fullPath)) fs.mkdir(fullPath, noOp)
+
+    if (!expectedPaths.includes(key))
+      throw new HerkinConfigError(
+        `Keys in ".paths" must be one of [${expectedPaths.join(', ')}].
           Found: key = ${key}, path = ${path}`
-        )
-    })  
+      )
+  })
 }
 
 /**
  * Validates the herkin config's path object
- * @param {Object} paths 
+ * @param {Object} paths
  * @throws error if any paths are invalid
  */
 const checkValidPathConfig = paths => {
   if (!isObj(paths))
-    throw new HerkinConfigError(`Property "paths" must be an object. Found: ${paths}`)
+    throw new HerkinConfigError(
+      `Property "paths" must be an object. Found: ${paths}`
+    )
 
   const expectedPaths = Object.keys(defaultConfig.paths)
 

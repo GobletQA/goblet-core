@@ -1,14 +1,20 @@
 #!/usr/bin/env node
-const { getApp } = require('HerkinSharedApp')
 const { initSockr } = require('./libs/sockr')
-const apiEndpoints = require('HerkinBackEndpoints')
+const { getApp } = require('HerkinSharedApp')
 const { Logger } = require('@keg-hub/cli-utils')
+const apiEndpoints = require('HerkinBackEndpoints')
+const { isDeployedEnv } = require('HerkinSharedUtils/isDeployedEnv')
+const {
+  setReqRepo,
+  setupVNCProxy,
+  validateUser,
+} = require('HerkinBackMiddleware')
 const {
   setupCors,
+  setupCookie,
   setupLogger,
   setupServer,
   setupStatic,
-  setupVNCProxy,
 } = require('HerkinSharedMiddleware')
 
 /**
@@ -19,29 +25,26 @@ const {
  */
 const initApi = async () => {
   const app = getApp()
-  const {
-    server:serverConf,
-    sockr:sockrConf,
-  } = app.locals.config
+  const { server: serverConf, sockr: sockrConf } = app.locals.config
 
-  setupLogger(app)
   setupCors(app)
+  setupCookie(app)
+  setupLogger(app)
   setupServer(app)
   setupStatic(app)
+  validateUser(app)
+  setReqRepo(app)
   apiEndpoints(app)
   const wsProxy = setupVNCProxy(app)
 
-  const server = app.listen(
-    serverConf.port,
-    serverConf.host,
-    () => {
-      const serverUrl = `http://${serverConf.host}:${serverConf.port}`
-
-      Logger.empty()
-      Logger.pair(`Herkin Backend API listening on`, serverUrl)
-      Logger.empty()
-    }
-  )
+  const server = app.listen(serverConf.port, serverConf.host, () => {
+    Logger.empty()
+    Logger.pair(
+      `Herkin Backend API listening on`,
+      `http://${serverConf.host}:${serverConf.port}`
+    )
+    Logger.empty()
+  })
 
   server.on('upgrade', wsProxy.upgrade)
   const socket = await initSockr(app, server, sockrConf, 'tests')
@@ -49,6 +52,15 @@ const initApi = async () => {
   return { app, server, socket }
 }
 
+/**
+ * Ensure nodemon restarts properly
+ * Sometimes nodemon tries to restart faster then the process can shutdown
+ * This should force kill the process when it receives the SIGUSR2 event from nodemon
+ * Taken from https://github.com/standard-things/esm/issues/676#issuecomment-766338189
+ */
+!isDeployedEnv &&
+  process.once('SIGUSR2', () => process.kill(process.pid, 'SIGUSR2'))
+
 module.exports = {
-  initApi
+  initApi,
 }

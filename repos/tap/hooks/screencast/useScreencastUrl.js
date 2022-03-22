@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { Values } from 'SVConstants'
-import { getBaseApiUrl } from 'SVUtils/api/getBaseApiUrl'
+import { Values } from 'HKConstants'
+import { getBaseApiUrl } from 'HKUtils/api/getBaseApiUrl'
 
 const { HOST, PORT, VNC_ACTIVE } = Values.VNC_CONFIG
 
@@ -13,11 +13,11 @@ const { HOST, PORT, VNC_ACTIVE } = Values.VNC_CONFIG
 export const useScreencastUrl = () => {
   return useMemo(() => {
     // TODO: move this to a utility helper
-    if(!VNC_ACTIVE) return ``
-    
+    if (!VNC_ACTIVE) return ``
+
     const base = getBaseApiUrl()
     const { host, protocol } = new URL(base)
 
-    return `${protocol === 'https' ? 'wss' : 'ws' }://${host}/novnc`
+    return `${protocol === 'https' ? 'wss' : 'ws'}://${host}/novnc`
   }, [])
 }

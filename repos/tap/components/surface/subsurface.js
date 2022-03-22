@@ -1,40 +1,35 @@
-import { Drawer } from 'SVComponents'
+import React, { useState, useCallback } from 'react'
 import { Subheader } from '../subheader'
-import { noOpObj } from 'SVUtils/helpers'
+import { noOpObj } from '@keg-hub/jsutils'
 import { useStyle } from '@keg-hub/re-theme'
 import { DrawerToggle } from './drawerToggle'
-import { Grid, Row, View } from '@keg-hub/keg-components'
-import React, { useState, useCallback, useMemo } from 'react'
+import { Grid, Row, View, Drawer } from '@keg-hub/keg-components'
 
 export const SubSurface = props => {
-
   const {
     title,
     prefix,
     children,
     initialToggle,
-    styles=noOpObj,
+    styles = noOpObj,
     toggleDisabled,
-    classNames=noOpObj,
+    classNames = noOpObj,
   } = props
 
   const surfaceStyles = useStyle('subsurface', styles)
 
-  const [ toggled, setToggled ] = useState(initialToggle || true)
+  const [toggled, setToggled] = useState(initialToggle || true)
 
-  const onTogglePress = useCallback(event => {
-    setToggled(!toggled)
-  }, [ toggled, setToggled ])
+  const onTogglePress = useCallback(
+    event => {
+      setToggled(!toggled)
+    },
+    [toggled, setToggled]
+  )
 
   return (
-    <Grid
-      className={classNames.main}
-      style={surfaceStyles.main}
-    >
-      <Row
-        className={classNames.headerRow}
-        style={surfaceStyles.headerRow}
-      >
+    <Grid className={classNames.main} style={surfaceStyles.main}>
+      <Row className={classNames.headerRow} style={surfaceStyles.headerRow}>
         <Subheader
           classNames={classNames.header}
           styles={surfaceStyles.header}
@@ -51,8 +46,8 @@ export const SubSurface = props => {
       </Row>
       <Drawer
         className='sub-surface-drawer'
-        styles={ surfaceStyles.drawer }
-        toggled={ toggled }
+        styles={surfaceStyles.drawer}
+        toggled={toggled}
       >
         <Row
           className={classNames.containerRow}

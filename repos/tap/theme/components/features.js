@@ -1,8 +1,6 @@
-
 export const features = theme => {
   return {
-    main: {
-    },
+    main: {},
     list: {
       main: {
         flex: 1,
@@ -12,7 +10,7 @@ export const features = theme => {
       },
       item: {
         color: theme?.colors?.palette?.gray01,
-      }
+      },
     },
   }
 }

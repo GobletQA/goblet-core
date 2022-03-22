@@ -1,15 +1,15 @@
-import { dispatch, getStore } from 'SVStore'
-import { Values, ActionTypes } from 'SVConstants'
+import { dispatch, getStore } from 'HKStore'
+import { Values, ActionTypes } from 'HKConstants'
 import { noOpObj, isObj } from '@keg-hub/jsutils'
 
 const { CATEGORIES } = Values
 
 /**
  * Updates the store with the passed in browser status
- * 
+ *
  * @returns {Void}
  */
-export const setBrowserStatus = (status=noOpObj) => {
+export const setBrowserStatus = (status = noOpObj) => {
   const { items } = getStore()?.getState()
   const currStatus = items[CATEGORIES.SCREENCAST_STATUS] || noOpObj
   // Pull the lastCheck prop from status, because it should be set a level higher
@@ -28,5 +28,4 @@ export const setBrowserStatus = (status=noOpObj) => {
         },
       },
     })
-
 }

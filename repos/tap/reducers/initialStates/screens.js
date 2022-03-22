@@ -1,5 +1,5 @@
-import { screenModel } from 'SVModels'
-import { Values } from 'SVConstants'
+import { screenModel } from 'HKModels'
+import { Values } from 'HKConstants'
 
 const { CATEGORIES, SCREENS } = Values
 
@@ -10,10 +10,9 @@ const { CATEGORIES, SCREENS } = Values
  * @returns {void}
  */
 export const screens = {
-  [CATEGORIES.SCREENS]: Object.keys(SCREENS)
-    .reduce((models, name) => {
-      models[SCREENS[name]] = screenModel({ id: SCREENS[name] })
+  [CATEGORIES.SCREENS]: Object.keys(SCREENS).reduce((models, name) => {
+    models[SCREENS[name]] = screenModel({ id: SCREENS[name] })
 
-      return models
-    }, {})
+    return models
+  }, {}),
 }

@@ -1,6 +1,6 @@
 const { getOS } = require('../../utils/getOS')
-const { eitherArr } = require('@keg-hub/jsutils')
-const { browserNames } = require('HerkinSCConstants')
+const {eitherArr, noPropArr, isStr} = require('@keg-hub/jsutils')
+const { browserNames, browserMap } = require('HerkinSCConstants')
 
 /**
  * Creates an array of browsers relative the passed params object properties
@@ -17,28 +17,31 @@ const { browserNames } = require('HerkinSCConstants')
 const getBrowsers = params => {
   const {
     allBrowsers,
-    firefox=false,
-    chromium=false,
-    webkit=false,
-    browsers='',
+    webkit = false,
+    firefox = false,
+    chromium = false,
+    browsers=noPropArr,
   } = params
 
   const isMac = getOS() === 'mac'
+
   // get an array of browsers from the browsers string, comma or space delimited
-  const browsersArr = eitherArr(browsers, browsers.split(/\s|,/gi))
+  const browsersArr = eitherArr(browsers, isStr(browsers) ? browsers.split(/\s|,/gi) : noPropArr)
+    .map(type => browserMap[type] || type)
+    .filter(type => browserNames.includes(type))
 
   const found = Array.from(
     new Set([
-      ...browsersArr.filter(br => browserNames.includes(br)),
+      ...browsersArr,
       (allBrowsers || firefox) && 'firefox',
       (allBrowsers || chromium) && 'chromium',
-      (isMac && (allBrowsers || webkit)) && 'webkit'
+      isMac && (allBrowsers || webkit) && 'webkit',
     ])
   ).filter(Boolean)
-  
+
   return found.length ? found : [`chromium`]
 }
 
 module.exports = {
-  getBrowsers
+  getBrowsers,
 }

@@ -1,9 +1,9 @@
-import { getStore } from 'SVStore'
-import { Values } from 'SVConstants'
+import { getStore } from 'HKStore'
+import { Values } from 'HKConstants'
 import { addToast } from '../toasts/addToast'
 import { get, noOpObj } from '@keg-hub/jsutils'
 import { setTestRun } from '../runner/setTestRun'
-import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
+import { getReportsActiveFile } from 'HKUtils/helpers/getReportsActiveFile'
 
 const { CATEGORIES, SOCKR_MSG_TYPES } = Values
 
@@ -16,8 +16,9 @@ const { CATEGORIES, SOCKR_MSG_TYPES } = Values
  */
 export const cmdErr = (data, testRunModel) => {
   const { items } = getStore().getState()
-  const activeFile = getResultsActiveFile() || noOpObj
-  testRunModel = testRunModel || get(items, [CATEGORIES.TEST_RUNS, activeFile.location])
+  const activeFile = getReportsActiveFile() || noOpObj
+  testRunModel =
+    testRunModel || get(items, [CATEGORIES.TEST_RUNS, activeFile.location])
 
   testRunModel
     ? setTestRun({
@@ -29,13 +30,11 @@ export const cmdErr = (data, testRunModel) => {
             timestamp: data.timestamp,
             type: SOCKR_MSG_TYPES.STD_ERR,
           },
-        }
+        },
       })
     : addToast({
         type: `error`,
         timeout: 6000,
         message: `Can not set testRun message. A testRun model is required!`,
       })
-    
-
 }

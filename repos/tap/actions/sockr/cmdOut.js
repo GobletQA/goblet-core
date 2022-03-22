@@ -1,11 +1,33 @@
-import { getStore } from 'SVStore'
-import { Values } from 'SVConstants'
+import { getStore } from 'HKStore'
+import { Values } from 'HKConstants'
 import { addToast } from '../toasts/addToast'
 import { get, noOpObj } from '@keg-hub/jsutils'
 import { setTestRun } from '../runner/setTestRun'
-import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
+import { upsertSpec } from '../tracker/upsertSpec'
+import { getReportsActiveFile } from 'HKUtils/helpers/getReportsActiveFile'
 
-const { CATEGORIES, SOCKR_MSG_TYPES } = Values
+const {
+  CATEGORIES,
+  SOCKR_MSG_TYPES,
+  PARKIN_SPEC_RESULT_LOG
+} = Values
+
+const parseCheckSpecResult = data => {
+  if(!data || !data.message || !data.message.includes(PARKIN_SPEC_RESULT_LOG)) return
+
+  try {
+    const specItems = data.message.split(PARKIN_SPEC_RESULT_LOG)
+      .filter(item => {
+        const cleaned = item.trim()
+        return cleaned.startsWith(`{`) && cleaned.endsWith(`}`)
+      })
+
+    return specItems.length && specItems
+  }
+  catch(err){
+    console.warn(`Could not parse test spec`, err.message)
+  }
+}
 
 /**
  * Updates the messages array of the active testRunModel with a stdout message
@@ -15,9 +37,15 @@ const { CATEGORIES, SOCKR_MSG_TYPES } = Values
  * @returns {void}
  */
 export const cmdOut = (data, testRunModel) => {
+  // Check if it's a parsed spec output
+  // If it is, then call the upsertSpec action instead
+  const specItems = parseCheckSpecResult(data)
+  if(specItems) return specItems.map((item, idx) => upsertSpec(JSON.parse(item), idx))
+
   const { items } = getStore().getState()
-  const activeFile = getResultsActiveFile() || noOpObj
-  testRunModel = testRunModel || get(items, [CATEGORIES.TEST_RUNS, activeFile.location])
+  const activeFile = getReportsActiveFile() || noOpObj
+  testRunModel =
+    testRunModel || get(items, [CATEGORIES.TEST_RUNS, activeFile.location])
 
   testRunModel
     ? setTestRun({
@@ -29,12 +57,11 @@ export const cmdOut = (data, testRunModel) => {
             timestamp: data.timestamp,
             type: SOCKR_MSG_TYPES.STD_OUT,
           },
-        }
+        },
       })
     : addToast({
         type: `error`,
         timeout: 6000,
-        message: `Can not add testRun messages. A testRun model is required!`
+        message: `Can not add testRun messages. A testRun model is required!`,
       })
-
 }

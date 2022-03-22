@@ -10,8 +10,7 @@ const { checkCall } = require('@keg-hub/jsutils')
  * @return {Void}
  */
 const checkAndCall = async (args, arg, method) => {
-  Boolean(args.find(_arg => (_arg === arg))) &&
-    await checkCall(method)
+  Boolean(args.find(_arg => _arg === arg)) && (await checkCall(method))
 }
 
 /**
@@ -33,5 +32,5 @@ const checkArgs = async (args, methods) => {
 }
 
 module.exports = {
-  checkArgs
+  checkArgs,
 }

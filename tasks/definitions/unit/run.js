@@ -16,14 +16,16 @@ module.exports = {
     alias: ['test'],
     action: runUnit,
     example: 'keg herkin unit run',
-    description : 'Runs unit feature tests',
+    description: 'Runs unit feature tests',
     // TODO: Update to allow groupNames to be be array in cli-utils/tasks/sharedOptions
-    options: sharedOptions('run', {
-      jestConfig: {
-        default: 'configs/configs/jest.config.js'
+    options: sharedOptions(
+      'run',
+      {
+        jestConfig: {
+          default: 'configs/configs/jest.config.js',
+        },
       },
-    }, [
-      'jestConfig',
-    ])
-  }
+      ['jestConfig', 'mode', 'base']
+    ),
+  },
 }

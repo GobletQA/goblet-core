@@ -1,4 +1,4 @@
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
 import { get } from '@keg-hub/jsutils'
 
 const { CATEGORIES } = Values
@@ -11,6 +11,8 @@ const { CATEGORIES } = Values
  * @returns {Object} - Found active screen
  */
 export const getActiveScreen = (items, screenId) => {
-  return (screenId && get(items, [CATEGORIES.SCREENS, screenId])) ||
+  return (
+    (screenId && get(items, [CATEGORIES.SCREENS, screenId])) ||
     Object.values(items[CATEGORIES.SCREENS]).find(screen => screen.active)
+  )
 }

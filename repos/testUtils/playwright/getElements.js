@@ -1,8 +1,8 @@
-const { getBrowserContext } = require('HerkinSetup')
+const { getBrowserContext } = require('HerkinTestEnv')
 const { getPage } = getBrowserContext()
 
 /**
- * @param {String} selector 
+ * @param {String} selector
  * @return {Array<ElementHandle>} - array of Playwright.ElementHandle objects found with `selector`. May be empty.
  */
 const getElements = async selector => {

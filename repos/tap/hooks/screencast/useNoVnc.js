@@ -1,8 +1,31 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { Values } from 'HKConstants'
+import { useSelector } from '../useSelector'
 import { useScreenResize } from './useScreenResize'
-import { NoVncService } from 'SVServices/noVncService'
+import { actionBrowser } from 'HKActions/screencast/api/actionBrowser'
+
+const { STORAGE } = Values
+
 /**
- * Helper to initialize noVNC service 
+ * Helper method to auto open the ap url in the screencast browser when it loads
+ * @param {Object} repo - Repo metadata object from the store
+ */
+const openAppUrl = repo => {
+  const appUrl = repo?.world?.url || repo?.world?.app?.url
+
+  appUrl &&
+    actionBrowser({
+      ref: 'page',
+      actions: [{
+        action: 'goto',
+        props: [appUrl],
+      }],
+    }, false)
+}
+
+
+/**
+ * Helper to initialize noVNC service
  * @param {Object} element - Dom element to attach the canvas to
  * @param {string} vncUrl - Url to connect to the VNC websocket
  * @param {Object} creds - Credentials to connect to the VNC websocket
@@ -12,33 +35,30 @@ import { NoVncService } from 'SVServices/noVncService'
 export const useNoVnc = (element, vncUrl, creds) => {
   const [noVnc, setNoVnc] = useState(null)
   const [connected, setConnected] = useState(false)
+  const { repo } = useSelector(STORAGE.REPO)
+  
+  const onConnected = useCallback(isConnected => {
+    setConnected(isConnected)
+    isConnected && openAppUrl(repo)
+  }, [repo, connected, setConnected])
 
   useEffect(() => {
-    setNoVnc(new NoVncService(setConnected))
+    import('HKServices/noVncService')
+      .then(({ NoVncService }) => {
+        setNoVnc(new NoVncService(onConnected))
+      })
   }, [])
 
-  const {
-    screenRef,
-    screenRect,
-    setScreenRect,
-  } = useScreenResize(element)
-
   useEffect(() => {
-    noVnc &&
-      element &&
-      vncUrl &&
-      noVnc.init(element, vncUrl, creds)
+    noVnc && element && vncUrl && noVnc.init(element, vncUrl, creds)
 
     return () => noVnc && noVnc.disconnect()
-  }, [
-    creds,
-    noVnc,
-    vncUrl,
-    element,
-  ])
+  }, [creds, noVnc, vncUrl, element])
+
+  const { screenRef, screenRect, setScreenRect } = useScreenResize(element)
 
   return {
-    noVnc, 
+    noVnc,
     connected,
     screenRef,
     screenRect,

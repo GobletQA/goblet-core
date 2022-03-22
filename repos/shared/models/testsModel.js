@@ -13,11 +13,11 @@ const Model = {
   definitions: [],
   jest: [],
   unit: [],
-  waypoint: []
+  waypoint: [],
 }
 
 const testsModel = overrides => buildModel(overrides, Model)
 
 module.exports = {
-  testsModel
+  testsModel,
 }

@@ -1,7 +1,7 @@
-import React from 'react'
-import { capitalize, noOpObj, exists } from '@keg-hub/jsutils'
+import React, {useMemo} from 'react'
 import { useStyle } from '@keg-hub/re-theme'
-import { Icon, View, Touchable, Text } from 'SVComponents'
+import { capitalize, noOpObj, exists } from '@keg-hub/jsutils'
+import { Icon, View, Touchable, Text } from '@keg-hub/keg-components'
 
 /**
  * ListItemAction - Default component to render an Action of a ListItem
@@ -15,47 +15,42 @@ import { Icon, View, Touchable, Text } from 'SVComponents'
  *
  * @returns {Component}
  */
-export const ListItemAction = props => {
+export const ListItemAction = React.memo(props => {
   const {
     onPress,
-    parentStyles=noOpObj,
-    iconProps=noOpObj,
+    parentStyles = noOpObj,
+    iconProps = noOpObj,
     name,
     showFeedback,
-    styles=noOpObj
+    styles = noOpObj,
   } = props
 
   const mergedStyles = useStyle(parentStyles, styles)
   const iconStyles = useStyle(mergedStyles.icon, iconProps.styles)
-
+  const dataSet = useMemo(() => ({ type: name.toLowerCase() }), [name])
+  
   return (
-    <View
-      className='list-item-action-main'
-      style={mergedStyles.main}
-    >
+    <View className='list-item-action-main' style={mergedStyles.main}>
       <Touchable
         onPress={onPress}
-        showFeedback={exists(showFeedback) ? showFeedback : true}
-        style={mergedStyles.touchable}
+        dataSet={dataSet}
         className={'list-item-action'}
+        style={mergedStyles.touchable}
+        showFeedback={exists(showFeedback) ? showFeedback : true}
       >
-      {(iconProps) && (
-        <Icon
-          className='list-item-action-icon'
-          {...iconProps}
-          styles={iconStyles}
-        />
-      )}
-      {name && (
-        <Text
-          className={'list-item-action-name'}
-          style={mergedStyles.name}
-        >
-          { capitalize(name) }
-        </Text>
-      )}
+        {iconProps && (
+          <Icon
+            className='list-item-action-icon'
+            {...iconProps}
+            styles={iconStyles}
+          />
+        )}
+        {name && (
+          <Text className={`list-item-action-name`} style={mergedStyles.name}>
+            {capitalize(name)}
+          </Text>
+        )}
       </Touchable>
     </View>
   )
-  
-}
+})

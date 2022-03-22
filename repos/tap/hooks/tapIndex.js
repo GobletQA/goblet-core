@@ -1,6 +1,7 @@
 export * from './useIds'
 export * from './useSelector'
 export * from './useIconProps'
+export * from './useClassNames'
 export * from './useSetTimeout'
 export * from './useActiveScreenTab'
 export * from './useScreenSelect'

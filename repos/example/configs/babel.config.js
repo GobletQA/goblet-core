@@ -7,13 +7,13 @@ module.exports = {
       {
         useBuiltIns: 'usage',
         debug: Boolean(DEBUG_BABEL),
-        corejs: 3
-      }
-    ]
+        corejs: 3,
+      },
+    ],
   ],
   plugins: [
     '@babel/plugin-syntax-dynamic-import',
     '@babel/plugin-proposal-optional-chaining',
-    '@babel/plugin-proposal-class-properties'
-  ]
+    '@babel/plugin-proposal-class-properties',
+  ],
 }

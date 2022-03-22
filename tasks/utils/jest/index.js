@@ -1,4 +1,3 @@
-
 module.exports = {
-  ...require('./buildJestArgs')
+  ...require('./buildJestArgs'),
 }

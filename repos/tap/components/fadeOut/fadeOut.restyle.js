@@ -1,10 +1,5 @@
-import React from 'react'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
-import {
-  H5,
-  View,
-  Section,
-} from 'SVComponents'
+import { H5, View, Section } from '@keg-hub/keg-components'
 
 export const Fade = reStyle(View)((theme, props) => ({
   lt: 0,

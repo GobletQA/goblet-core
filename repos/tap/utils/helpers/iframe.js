@@ -1,4 +1,3 @@
-
 /**
  * Creates a new iframe at the provided url.
  * @param url The url to load.
@@ -7,18 +6,17 @@
  */
 export const fromURL = url => {
   if (!/^(https?|file|data):/.test(url))
-    throw new Error("Protocol should be http(s) or file.")
+    throw new Error('Protocol should be http(s) or file.')
 
-  const frame = document.createElement("iframe")
-  frame.style.display = "none"
+  const frame = document.createElement('iframe')
+  frame.style.display = 'none'
   frame.src = url
 
   return new Promise((resolve, reject) => {
-    frame.addEventListener("load", resolve)
-    frame.addEventListener("error", reject)
+    frame.addEventListener('load', resolve)
+    frame.addEventListener('error', reject)
     document.body.appendChild(frame)
-  })
-    .then(() => new Frame(frame))
+  }).then(() => new Frame(frame))
 }
 
 /**
@@ -64,5 +62,4 @@ export class Frame {
    * Closes the currently running iframe.
    */
   close = () => {}
-
 }

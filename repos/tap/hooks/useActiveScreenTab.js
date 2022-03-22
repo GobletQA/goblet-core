@@ -1,7 +1,7 @@
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { useStoreItems } from 'HKHooks/store/useStoreItems'
 import { reduceObj } from '@keg-hub/jsutils'
 import { useMemo } from 'react'
-import { Values } from 'SVConstants'
+import { Values } from 'HKConstants'
 
 const { CATEGORIES, SCREENS } = Values
 /**
@@ -15,15 +15,10 @@ export const useActiveScreenTab = id => {
   return useMemo(() => {
     if (screenModels && screenModels[id]) return screenModels[id]
     const model = reduceObj(screenModels, (__, screenModel, obj) => {
-      return screenModel?.active
-        ? screenModel
-        : obj
+      return screenModel?.active ? screenModel : obj
     })
 
     // return empty screen if nothing is found
-    return model
-      ? model
-      : screenModels[SCREENS.EMPTY]
-
+    return model ? model : screenModels[SCREENS.EMPTY]
   }, [id, screenModels])
 }

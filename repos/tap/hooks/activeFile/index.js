@@ -1,6 +1,10 @@
 export * from './useActiveFile'
-export * from './useAltActiveFile'
+export * from './useFileTypeMeta'
+export * from './useSaveActiveFile'
 export * from './useActiveTestRuns'
+export * from './useEditorFileName'
+export * from './useLoadFileByType'
 export * from './usePendingCallback'
-export * from './usePendingMark'
-export * from './useTestTypeOptions'
+export * from './useFileTypeOptions'
+
+
