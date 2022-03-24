@@ -71,6 +71,7 @@ const { getFirebaseProject } = require('../firebase/getFirebaseProject')
   await copyFromContainer({
     local: bundleDir,
     container: envs.CONTAINER_NAME,
+    // Copy directly from the web-build export in keg-core
     remote: `/keg/tap/node_modules/keg-core/web-build/.`,
   })
 }

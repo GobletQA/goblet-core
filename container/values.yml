@@ -94,6 +94,8 @@ env:
   # Define the type of API server to run => all | backend | screencast
   HERKIN_API_TYPE: 'all'
 
+  AZ_CONTAINER_REGISTRY: KegRegistryCentralUS
+
 actions:
   tap:
     build:

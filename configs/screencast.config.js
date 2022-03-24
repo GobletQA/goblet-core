@@ -13,7 +13,8 @@ const {
   VNC_PROXY_HOST = SCREENCAST_PROXY_HOST,
 } = process.env
 
-const host = SCREENCAST_PROXY_HOST || serverConfig.host || '0.0.0.0'
+const host = SCREENCAST_PROXY_HOST || serverConfig.host
+if(!host) throw new Error(`Missing host for Screencast API`)
 
 const screenDims = {
   width: parseInt(VNC_VIEW_WIDTH, 10) ?? 900,

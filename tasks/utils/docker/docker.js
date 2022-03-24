@@ -106,6 +106,19 @@ const dockerExec = async (cmd, preArgs, postArgs, opts) => {
   return await dockerCmd(cmdArgs, options, cwd)
 }
 
+const login = async (args=noPropArr, options=noOpObj, cwd=appRoot) => {
+  return await dockerCmd(['login', ...args], options, cwd)
+}
+
+const createContext = async (args, options=noOpObj, cwd=appRoot) => {
+  return await dockerCmd([`context` `create`, ...args], options, cwd)
+}
+
+const useContext = async (args, options=noOpObj, cwd=appRoot) => {
+  return await dockerCmd([`context`, `use`, ...args], options, cwd)
+}
+
+
 const docker = (...args) => resolveArgs(dockerExec, ...args)
 docker.run = (...args) => docker('run', ...args)
 docker.stop = (...args) => docker('stop', ...args)
@@ -113,6 +126,12 @@ docker.remove = (...args) => docker('rm', ...args)
 docker.exec = (...args) => docker('exec', ...args)
 docker.build = (...args) => buildX('build', (...args) => docker(...args), ...args)
 docker.attach = docker.exec
+docker.login = login
+docker.context = {
+  use: useContext,
+  create: createContext,
+}
+
 
 module.exports = {
   docker,

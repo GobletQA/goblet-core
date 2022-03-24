@@ -1,5 +1,7 @@
 const { addToProcess } = require('./addToProcess')
+const { get, deepMerge, noOpObj } = require('@keg-hub/jsutils')
 const { loadConfigs } = require('@keg-hub/parse-config')
+const { containerDir } = require('../../paths')
 
 /**
  * Cache holder for the loaded envs
@@ -14,11 +16,12 @@ let __LOADED_ENVS__
  * 
  * @returns {Object} - Loaded Envs object
  */
-const loadEnvs = (options, processAdd=true) => {
-  __LOADED_ENVS__ = __LOADED_ENVS__ || loadConfigs({
+const loadEnvs = (options=noOpObj, processAdd=true) => {
+  __LOADED_ENVS__ = __LOADED_ENVS__ || loadConfigs(deepMerge({
     name: 'herkin',
-    ...options
-  })
+    locations: [containerDir],
+    env: options.env || 'local',
+  }, options))
 
   // Add the loaded envs to the current process.env
   processAdd && addToProcess(__LOADED_ENVS__)

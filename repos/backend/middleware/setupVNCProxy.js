@@ -26,16 +26,19 @@ const setupVNCProxy = app => {
     port = 26369,
     protocol = 'ws',
     path = '/novnc',
-    host = `0.0.0.0`,
+    host,
     ...options
   } = get(app, 'locals.config.screencast.proxy', {})
+
+  if(!host) throw new Error(`Missing host for VNC Proxy!`)
+  const url = port ? `${host}:${port}` : host
 
   const wsProxy = createProxyMiddleware(path, {
     ws: true,
     changeOrigin: true,
     ...options,
     // onError: onProxyError(app),
-    target: `${protocol}://${host}:${port}`,
+    target: `${protocol}://${url}`,
   })
 
   app.use(wsProxy)

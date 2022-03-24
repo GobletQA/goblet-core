@@ -205,3 +205,5 @@ tests/artifacts/*
 configs/*firebase*.json
 
 !**/**/.gitkeep
+
+container/azure/**
