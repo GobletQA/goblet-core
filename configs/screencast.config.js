@@ -5,16 +5,15 @@ const {
   HERKIN_USE_VNC,
   DISPLAY = ':0.0',
   NO_VNC_PORT = 26369,
+  SCREENCAST_PROXY_HOST,
   VNC_VIEW_HEIGHT = 900,
   VNC_VIEW_WIDTH = 1440,
   VNC_SERVER_PORT = 26370,
   SCREENCAST_API_PORT = 5006,
-  SCREENCAST_PROXY_HOST,
   VNC_PROXY_HOST = SCREENCAST_PROXY_HOST,
 } = process.env
 
-const host = SCREENCAST_PROXY_HOST || serverConfig.host
-if(!host) throw new Error(`Missing host for Screencast API`)
+const host = SCREENCAST_PROXY_HOST || serverConfig.host || `0.0.0.0`
 
 const screenDims = {
   width: parseInt(VNC_VIEW_WIDTH, 10) ?? 900,

@@ -1,8 +1,5 @@
 import { useMemo } from 'react'
-import { Values } from 'HKConstants'
-import { getBaseApiUrl } from 'HKUtils/api/getBaseApiUrl'
-
-const { HOST, PORT, VNC_ACTIVE } = Values.VNC_CONFIG
+import { getScreencastUrl } from 'HKUtils/api/getScreencastUrl'
 
 /**
  * Hook to dynamically build the novnc url
@@ -11,13 +8,5 @@ const { HOST, PORT, VNC_ACTIVE } = Values.VNC_CONFIG
  * @returns {string} - Built novnc url
  */
 export const useScreencastUrl = () => {
-  return useMemo(() => {
-    // TODO: move this to a utility helper
-    if (!VNC_ACTIVE) return ``
-
-    const base = getBaseApiUrl()
-    const { host, protocol } = new URL(base)
-
-    return `${protocol === 'https' ? 'wss' : 'ws'}://${host}/novnc`
-  }, [])
+  return useMemo(() => getScreencastUrl, [])
 }

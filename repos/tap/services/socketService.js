@@ -1,8 +1,12 @@
+import { isDev } from 'HKUtils/isDev'
 import * as sockrActions from 'HKActions/sockr'
 import { camelCase, snakeCase, checkCall } from '@keg-hub/jsutils'
 import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
 
 const serverConfig = JSON.parse(process.env.WS_SERVER_CONFIG)
+
+// TODO: @lance-tipton - This should only exist in deployed envs
+if(isDev) serverConfig.port = ''
 
 /**
  * Callback event functions bound to the SocketService

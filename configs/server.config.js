@@ -2,6 +2,7 @@ const path = require('path')
 const { toBool } = require('@keg-hub/jsutils')
 const rootDir = path.join(__dirname, '../')
 
+// TODO: @lance-tipton - Remove these defaults. Should come from values files
 const {
   HERKIN_USE_AUTH,
   API_PORT = '5005',
@@ -21,6 +22,7 @@ const {
   HERKIN_SERVER_ORIGINS = 'localhost,dev.herkin.app,hekin.dev.app,herkin-develop.local.keghub.io',
 } = process.env
 
+// TODO: @lance-tipton - extract to shared utility methods
 const generateOrigins = () => {
   return (HERKIN_SERVER_ORIGINS).split(',')
     .reduce((acc, origin) => {

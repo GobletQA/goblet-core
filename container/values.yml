@@ -75,14 +75,17 @@ env:
   VNC_VIEW_HEIGHT: 900
   VNC_VIEW_WIDTH: 1440
 
+  # How the FE connects to the BE
+  # HERKIN_SERVER_HOST: 0.0.0.0
+
   # URL where the screencast is being displayed
   # This is the URL of the server the proxy connects to
   # Update this to call an externally available VNC websocket host
-  SCREENCAST_PROXY_HOST: 0.0.0.0
+  # SCREENCAST_PROXY_HOST: 0.0.0.0
 
   # Host of the novnc proxy to tigerVNC
   # This is internal, and generally should not change
-  VNC_PROXY_HOST: 0.0.0.0
+  # VNC_PROXY_HOST: 0.0.0.0
   
   # Required for VNC to work properly
   # Needs a display of some type
@@ -107,10 +110,15 @@ env:
   # TODO: @lance-tipton - Add to tasks as an option
   HERKIN_API_TYPE: 'all'
 
-  AZ_CONTAINER_REGISTRY: KegRegistryCentralUS
+  # TODO: @lance-tipton - Make this more dynamic - value comes from firebase?
+  GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com
 
 actions:
   tap:
+    build:
+      location: /keg/tap
+      cmds:
+        - yarn build:fe
     install:
       location: /keg/tap
       cmds:

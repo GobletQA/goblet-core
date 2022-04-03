@@ -99,6 +99,8 @@ const logResponse = (req, res, next) => {
   next()
 }
 
+// TODO: @lance-tipton - Switch to winston logger
+
 /**
  * Adds middleware logging for requests
  * @function

@@ -3,7 +3,7 @@ const package = require('./package.json')
 
 const { getHerkinConfig } = require('./repos/shared/utils/getHerkinConfig')
 const config = getHerkinConfig()
-const { process: proc, ...webSockConf } = config.server
+const { process: proc, cookie, ...webSockConf } = config.server
 const { serviceAccount, ...firebaseConfig } = config.firebase
 const {
   NODE_ENV,
@@ -32,7 +32,7 @@ module.exports = {
       'process.env.GITHUB_AUTH_USERS': GITHUB_AUTH_USERS,
       'process.env.VNC_VIEW_WIDTH': `${VNC_VIEW_WIDTH}`,
       'process.env.VNC_VIEW_HEIGHT': `${VNC_VIEW_HEIGHT}`,
-      'process.env.SERVER_HOST': config.server.host,
+      'process.env.HERKIN_SERVER_HOST': config.server.host,
       'process.env.SERVER_PORT': `${config.server.port}`,
       'process.env.SCREENCAST_HOST': config.screencast.server.host,
       'process.env.SCREENCAST_PORT': `${config.screencast.server.port}`,
