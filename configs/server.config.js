@@ -1,6 +1,10 @@
 const path = require('path')
-const { toBool } = require('@keg-hub/jsutils')
 const rootDir = path.join(__dirname, '../')
+const { toBool } = require('@keg-hub/jsutils')
+const { loadEnvs } = require('../repos/shared/utils/loadEnvs')
+const nodeEnv = process.env.NODE_ENV || `local`
+
+loadEnvs(nodeEnv === 'local')
 
 // TODO: @lance-tipton - Remove these defaults. Should come from values files
 const {

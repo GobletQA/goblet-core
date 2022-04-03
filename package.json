@@ -67,7 +67,7 @@
     "@keg-hub/args-parse": "8.0.0",
     "@keg-hub/ask-it": "1.1.0",
     "@keg-hub/cli-utils": "0.5.1",
-    "@keg-hub/jsutils": "8.8.0",
+    "@keg-hub/jsutils": "9.0.3",
     "@keg-hub/parse-config": "2.0.0",
     "@keg-hub/spawn-cmd": "0.3.0",
     "@ltipton/parkin": "1.1.0",
@@ -93,7 +93,7 @@
     "@keg-hub/args-parse": "7.1.0",
     "@keg-hub/ask-it": "^1.1.0",
     "@keg-hub/cli-utils": "0.5.0",
-    "@keg-hub/jsutils": "8.8.0",
+    "@keg-hub/jsutils": "9.0.3",
     "@monaco-editor/react": "4.3.1"
   },
   "devDependencies": {
