@@ -62,15 +62,16 @@ env:
   VNC_SERVER_PORT: 26370
   VNC_VIEW_HEIGHT: 900
   VNC_VIEW_WIDTH: 1440
+  HERKIN_SERVER_HOST: backend.herkin.app
 
   # URL where the screencast is being displayed
   # This is the URL of the server the proxy connects to
   # Update this to call an externally available VNC websocket host
-  SCREENCAST_PROXY_HOST: 0.0.0.0
+  SCREENCAST_PROXY_HOST: backend.herkin.app
 
   # Host of the novnc proxy to tigerVNC
   # This is internal, and generally should not change
-  VNC_PROXY_HOST: 0.0.0.0
+  VNC_PROXY_HOST: backend.herkin.app
   
   # Required for VNC to work properly
   # Needs a display of some type
@@ -95,13 +96,14 @@ env:
   HERKIN_API_TYPE: 'all'
 
   AZ_CONTAINER_REGISTRY: KegRegistryCentralUS
+  GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com
 
 actions:
   tap:
     build:
       location: /keg/tap
       cmds:
-        - yarn build
+        - yarn build:fe
     install:
       location: /keg/tap
       cmds:

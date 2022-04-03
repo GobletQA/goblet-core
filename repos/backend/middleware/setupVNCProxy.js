@@ -22,16 +22,20 @@ const onProxyError = app => {
  * Setup the novnc proxy to forward all requests to that server
  */
 const setupVNCProxy = app => {
+  const config = app.locals.config || {}
+
   const {
     port = 26369,
     protocol = 'ws',
     path = '/novnc',
     host,
     ...options
-  } = get(app, 'locals.config.screencast.proxy', {})
+  } = get(config, `screencast.proxy`, {})
 
-  if(!host) throw new Error(`Missing host for VNC Proxy!`)
-  const url = port ? `${host}:${port}` : host
+  const hostLoc = host || get(config, 'server.host')
+  if(!hostLoc) throw new Error(`VNC Proxy host is required!`)
+
+  const url = port ? `${hostLoc}:${port}` : hostLoc
 
   const wsProxy = createProxyMiddleware(path, {
     ws: true,

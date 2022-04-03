@@ -5,8 +5,8 @@ const rootDir = path.join(__dirname, '../')
 const {
   HERKIN_USE_AUTH,
   API_PORT = '5005',
+  HERKIN_SERVER_HOST = '0.0.0.0',
   HERKIN_PW_SOCKET,
-  HERKIN_SERVER_HOST,
   HERKIN_SERVER_ORIGINS='',
   HERKIN_LOG_LEVEL = 'debug',
   HERKIN_SOCKR_PATH = '/sockr-socket',
@@ -14,7 +14,6 @@ const {
   HERKIN_COOKIE_NAME = `keg-herkin`
 } = process.env
 
-if(!HERKIN_SERVER_HOST) throw new Error(`Missing host for Backend API`)
 
 const serverConfig = {
   port: API_PORT,

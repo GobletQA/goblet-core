@@ -3,7 +3,7 @@ const package = require('./package.json')
 
 const { getHerkinConfig } = require('./repos/shared/utils/getHerkinConfig')
 const config = getHerkinConfig()
-const { process: proc, ...webSockConf } = config.server
+const { process: proc, cookie, ...webSockConf } = config.server
 const { serviceAccount, ...firebaseConfig } = config.firebase
 const {
   NODE_ENV,

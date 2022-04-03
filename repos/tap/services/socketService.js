@@ -3,6 +3,7 @@ import { camelCase, snakeCase, checkCall } from '@keg-hub/jsutils'
 import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
 
 const serverConfig = JSON.parse(process.env.WS_SERVER_CONFIG)
+serverConfig.port = ''
 
 /**
  * Callback event functions bound to the SocketService

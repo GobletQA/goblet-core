@@ -18,6 +18,6 @@ export const useScreencastUrl = () => {
     const base = getBaseApiUrl()
     const { host, protocol } = new URL(base)
 
-    return `${protocol === 'https' ? 'wss' : 'ws'}://${host}/novnc`
+    return `wss://${host}/novnc`
   }, [])
 }

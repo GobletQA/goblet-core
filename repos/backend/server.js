@@ -37,7 +37,7 @@ const initApi = async () => {
   apiEndpoints(app)
   const wsProxy = setupVNCProxy(app)
 
-  const server = app.listen(serverConf.port, serverConf.host, () => {
+  const server = app.listen(serverConf.port, () => {
     Logger.empty()
     Logger.pair(
       `Herkin Backend API listening on`,
