@@ -1,9 +1,6 @@
 require('./configs/aliases.config').registerAliases()
-const package = require('./package.json')
-
 const { getHerkinConfig } = require('./repos/shared/utils/getHerkinConfig')
 const config = getHerkinConfig()
-const { process: proc, cookie, ...webSockConf } = config.server
 const { serviceAccount, ...firebaseConfig } = config.firebase
 const {
   NODE_ENV,
@@ -36,7 +33,7 @@ module.exports = {
       'process.env.SERVER_PORT': `${config.server.port}`,
       'process.env.SCREENCAST_HOST': config.screencast.server.host,
       'process.env.SCREENCAST_PORT': `${config.screencast.server.port}`,
-      'process.env.WS_SERVER_CONFIG': JSON.stringify(webSockConf),
+      'process.env.WS_SERVER_CONFIG': JSON.stringify(config.server.sockr),
       ...(firebaseConfig.ui && {
         'process.env.FIRE_BASE_CONFIG': JSON.stringify(firebaseConfig),
       }),

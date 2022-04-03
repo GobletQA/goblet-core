@@ -29,7 +29,7 @@ module.exports = {
   firebase,
   sockr: {
     ...sockrCmds,
-    ...serverConfig,
+    ...serverConfig.sockr,
   },
   server: serverConfig,
   screencast: screencastConfig,

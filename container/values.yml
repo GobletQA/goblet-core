@@ -110,6 +110,11 @@ env:
   # TODO: @lance-tipton - Add to tasks as an option
   HERKIN_API_TYPE: 'all'
 
+  # Default to the backend api and host
+  # But should be set when running as own server
+  # HERKIN_SOCKET_PORT: ${API_PORT}
+  # HERKIN_SOCKET_HOST:$ {HERKIN_SERVER_HOST}
+
   # TODO: @lance-tipton - Make this more dynamic - value comes from firebase?
   GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com
 

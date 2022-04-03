@@ -11,6 +11,8 @@ const {
   HERKIN_USE_AUTH,
   API_PORT = '5005',
   HERKIN_PW_SOCKET,
+  HERKIN_SOCKET_PORT,
+  HERKIN_SOCKET_HOST,
   HERKIN_COOKIE_SECRET,
   HERKIN_LOG_LEVEL = 'debug',
   HERKIN_COOKIE_SECURE = true,
@@ -57,13 +59,13 @@ const serverConfig = {
   host: HERKIN_SERVER_HOST,
   logLevel: HERKIN_LOG_LEVEL,
   origins: generateOrigins(),
+  auth: toBool(HERKIN_USE_AUTH),
+  hostPWSocket: toBool(HERKIN_PW_SOCKET),
   process: {
     root: rootDir,
     debug: Boolean(HERKIN_LOG_LEVEL == 'debug'),
     script: path.join(rootDir, 'scripts/sockr.cmd.sh'),
   },
-  hostPWSocket: toBool(HERKIN_PW_SOCKET),
-  auth: toBool(HERKIN_USE_AUTH),
   cookie: {
     key: HERKIN_COOKIE_KEY,
     name: HERKIN_COOKIE_NAME,
@@ -74,6 +76,11 @@ const serverConfig = {
     secure: toBool(HERKIN_COOKIE_SECURE),
     httpOnly: toBool(HERKIN_COOKIE_HTTP_ONLY),
     overwrite: toBool(HERKIN_COOKIE_OVERWRITE),
+  },
+  sockr: {
+    path: HERKIN_SOCKR_PATH,
+    port: HERKIN_SOCKET_PORT || API_PORT,
+    host: HERKIN_SOCKET_HOST || HERKIN_SERVER_HOST,
   }
 }
 
