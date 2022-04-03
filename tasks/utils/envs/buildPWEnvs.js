@@ -1,6 +1,5 @@
 const { addEnv } = require('./addEnv')
 const { noOpObj } = require('@keg-hub/jsutils')
-const { addToProcess } = require('./addToProcess')
 
 /**
  * Adds the default playwright ENVs to the current process

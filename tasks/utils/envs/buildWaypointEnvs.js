@@ -1,6 +1,5 @@
 const { addEnv } = require('./addEnv')
 const { buildPWEnvs } = require('./buildPWEnvs')
-const { addToProcess } = require('./addToProcess')
 const { setNodePath } = require('./setNodePath')
 const { buildJestTestEnvs } = require('../jest/buildJestTestEnvs')
 
