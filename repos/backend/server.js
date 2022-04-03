@@ -40,7 +40,8 @@ const initApi = async () => {
   apiEndpoints(app)
   setupLoggerRes(app)
   const wsProxy = setupVNCProxy(app)
-  const { insecureServer, secureServer:server } = setupServerListen(app)
+  const { insecureServer, secureServer } = setupServerListen(app)
+  const server = secureServer || insecureServer
 
   server.on('upgrade', wsProxy.upgrade)
   const socket = await initSockr(app, server, sockrConf, 'tests')

@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const { getApp } = require('HerkinSharedApp')
 const blacklist = require('express-blacklist')
 const expressDefend = require('express-defend')
@@ -7,6 +8,8 @@ const expressDefend = require('express-defend')
  * Path to the logs directory
  */
 const logDir = path.join(__dirname, `../../../logs`)
+// Ensure the logs directory exists
+!fs.existsSync(logDir) && fs.mkdirSync(logDir)
 
 /**
  * Sets up IP blocking via a blacklist

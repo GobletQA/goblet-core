@@ -20,13 +20,15 @@ const secure = (app) => {
   }
 
   const credentials = Object.entries(creds).reduce((conf, [key, loc]) => {
-    conf[key] = fs.readFileSync(loc, 'utf8')
+    fs.existsSync(loc) && (conf[key] = fs.readFileSync(loc, 'utf8'))
 
     return conf
   }, {})
 
   const httpServer = http.createServer(app)
-  const httpsServer = https.createServer(credentials, app)
+  const httpsServer = credentials.cert &&
+    credentials.key &&
+    https.createServer(credentials, app)
 
   const insecureServer = httpServer.listen(port, () => {
     Logger.empty()
@@ -34,12 +36,12 @@ const secure = (app) => {
     Logger.empty()
   })
 
-
-  const secureServer = httpsServer.listen(443, () => {
-    Logger.empty()
-    Logger.pair(`[Tap-Proxy] Secure Server running on: `, `http://${host}:443`)
-    Logger.empty()
-  })
+  const secureServer = httpsServer &&
+    httpsServer.listen(443, () => {
+      Logger.empty()
+      Logger.pair(`[Tap-Proxy] Secure Server running on: `, `http://${host}:443`)
+      Logger.empty()
+    })
 
   return { insecureServer, secureServer, app }
 }
