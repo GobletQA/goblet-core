@@ -6,6 +6,12 @@ env:
   RETHEME_PATH: "{{ cli.taps.retheme.path }}"
   JSUTILS_PATH: "{{ cli.taps.utils.path }}"
   PARKIN_PATH: "{{ cli.taps.parkin.path }}"
+  VALUES_PATH: "{{ cli.taps.herkin.path }}/container"
+  BACKEND_PATH: "{{ cli.taps.herkin.path }}/repos/backend"
+  SHARED_PATH: "{{ cli.taps.herkin.path }}/repos/shared"
+  REPOS_PATH: "{{ cli.taps.herkin.path }}/repos"
+  ROOT_PATH: "{{ cli.taps.herkin.path }}"
+  CONTAINER_PATH: "{{ cli.taps.herkin.path }}/container"
 
   # Set the paths to the linked external app
   # The app should be linked to the keg-cli with `kee`
@@ -13,7 +19,7 @@ env:
   KEG_DOCKER_FILE: "{{ cli.taps.herkin.path }}/container/Dockerfile"
   KEG_VALUES_FILE: "{{ cli.taps.herkin.path }}/container/values.yml"
   KEG_COMPOSE_DEFAULT: "{{ cli.taps.herkin.path }}/container/docker-compose.yml"
-
+  KEG_COMPOSE_STAGING: "{{ cli.taps.herkin.path }}/container/docker-compose.staging.yml"
   # --- IMPORTANT - Don't set this ENV --- #
   # Get's defined within the tasks
   # It will be overwritten, from within the tasks/*
@@ -50,6 +56,12 @@ env:
   DOC_JSUTILS_PATH: /keg/tap/node_modules/@keg-hub/jsutils
   DOC_PARKIN_PATH: /keg/tap/node_modules/@ltipton/parkin
   DOC_SOCKR_PATH: /keg/tap/node_modules/@ltipton/sockr
+  DOC_VALUES_PATH: /keg/tap/container
+  DOC_BACKEND_PATH: /keg/tap/repos/backend
+  DOC_SHARED_PATH: /keg/tap/repos/shared
+  DOC_REPOS_PATH: /keg/tap/repos
+  DOC_ROOT_PATH: /keg/tap
+  DOC_CONTAINER_PATH: /keg/tap/container
 
   EXPO_CLI_VERSION: 5.0.3
   KEG_NODE_VERSION: 14.17-alpine
@@ -92,16 +104,13 @@ env:
   HERKIN_LOCAL_MOUNT: herkin-local/current
 
   # Define the type of API server to run => all | backend | screencast
+  # TODO: @lance-tipton - Add to tasks as an option
   HERKIN_API_TYPE: 'all'
 
   AZ_CONTAINER_REGISTRY: KegRegistryCentralUS
 
 actions:
   tap:
-    build:
-      location: /keg/tap
-      cmds:
-        - yarn build
     install:
       location: /keg/tap
       cmds:

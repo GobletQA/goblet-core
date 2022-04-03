@@ -20,3 +20,4 @@ sync:
         - "/bundle"
         - "/repos/example"
         - "/docs"
+        - "/logs"

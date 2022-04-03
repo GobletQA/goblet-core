@@ -1,4 +1,4 @@
-const { eitherArr } = require('@keg-hub/jsutils')
+const { Logger } = require(`@keg-hub/cli-utils`)
 const { isDeployedEnv } = require('../utils/isDeployedEnv')
 
 /**
@@ -25,21 +25,19 @@ const getOrigin = req => {
 const setupCors = app => {
   if (!app) return
 
-  const config = app.locals.config.server
-  const allowedOrigins = !config.origins
-    ? ['*']
-    : eitherArr(config.origins, [config.origins])
-
   app.use((req, res, next) => {
     const origin = getOrigin(req)
 
     // If in a deployed env, then validate the origin
     // Otherwise allow the origin in development envs
     const foundOrigin = isDeployedEnv
-      ? allowedOrigins.includes(origin)
+      ? config.origins.includes(`*`) || config.origins.includes(origin)
         ? origin
-        : allowedOrigins[0]
+        : undefined
       : origin
+
+    // If no origin, then end the request as Unauthorized
+    if(!foundOrigin) return res.status(401).send(`Unauthorized`)
 
     res.setHeader('Access-Control-Allow-Origin', foundOrigin)
     res.setHeader('Vary', 'Origin,Access-Control-Request-Headers')

@@ -92,23 +92,34 @@ const logResponse = (req, res, next) => {
       Logger.colors.brightCyan(`\n[Keg-Herkin Res]`),
       !exists(data) || data.error ? data : getResInfo(data, res.statusCode)
     )
-    orgJson.apply(res, [data])
+
+    !res.headerSent && orgJson.apply(res, [data])
   }
 
   next()
 }
 
 /**
- * Adds middleware logging for requests and response
+ * Adds middleware logging for requests
  * @function
  *
  * @return {void}
  */
-const setupLogger = () => {
+const setupLoggerReq = () => {
   AppRouter.use(logRequest)
+}
+
+/**
+ * Adds middleware logging for response
+ * @function
+ *
+ * @return {void}
+ */
+const setupLoggerRes = () => {
   AppRouter.use(logResponse)
 }
 
 module.exports = {
-  setupLogger,
+  setupLoggerReq,
+  setupLoggerRes
 }

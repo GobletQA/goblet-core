@@ -78,6 +78,8 @@
     "cookie-session": "2.0.0",
     "core-js": "3.20.2",
     "express": "4.17.3",
+    "express-blacklist": "1.0.3",
+    "express-defend": "1.0.9",
     "http-proxy-middleware": "2.0.4",
     "jest": "26.4.2",
     "jest-html-reporter": "3.4.2",
@@ -85,7 +87,7 @@
     "mime": "3.0.0",
     "module-alias": "2.2.2",
     "nodemon": "2.0.13",
-    "playwright": "1.20.0"
+    "playwright": "1.20.2"
   },
   "resolutions": {
     "@keg-hub/args-parse": "7.1.0",

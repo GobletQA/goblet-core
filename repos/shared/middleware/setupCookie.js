@@ -1,5 +1,5 @@
 const cookieSession = require('cookie-session')
-const { isDeployedEnv } = require('../utils/isDeployedEnv')
+const { exists } = require('@keg-hub/jsutils')
 
 /**
  * Sets up a cookie that will be stored client side
@@ -8,27 +8,33 @@ const { isDeployedEnv } = require('../utils/isDeployedEnv')
 const setupCookie = app => {
   config = app.locals.config.server
   const {
-    name=`keg-herkin`,
-    key=`keg-herkin-cookie-7979`,
+    key,
+    name,
+    maxAge,
+    secure,
+    expires,
+    sameSite,
+    httpOnly,
+    overwrite,
     secret=key,
 } = config.cookie
 
   const cookieConf = {
-    httpOnly: true,
-    overwrite: true,
-    maxAge: 12 * 60 * 60 * 1000,
-    // Set expire date to tomorrow
-    expires: new Date(new Date().getTime() + 86400000),
-    keys: [key],
-    name: name,
-    secret: secret,
+    name,
+    maxAge,
+    httpOnly,
+    overwrite,
     // If not in a deploy env then
     // We need the set a strict same site value, and non-secure
     // This allow setting the cookie in a dev env without https
     // If https is ever setup, then this could be removed
-    sameSite: isDeployedEnv ? 'None' : 'Strict',
-    // Only set to secure if in a deployed env
-    secure: isDeployedEnv,
+    // sameSite: isDeployedEnv ? 'None' : 'Strict',
+    sameSite,
+    ...(exists(maxAge) && {maxAge}),
+    ...(exists(secure) && {secure}),
+    ...(exists(secret) && {secret}),
+    ...(exists(key) && {keys: [key]}),
+    ...(exists(expires) && {expires}),
   }
 
   /**

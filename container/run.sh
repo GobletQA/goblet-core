@@ -12,35 +12,41 @@
 # Starts the screen cast servers when not using a websocket from the hostmachine
 keg_start_screen_cast(){
   cd $DOC_APP_PATH
+  npx playwright install chromium
   yarn sc:daemon
 }
 
-# Serve the bundle and also run the backend api
-keg_herkin_serve(){
-  cd $DOC_APP_PATH
-  npx serve $DOC_BUILD_PATH --cors -n -l $KEG_PROXY_PORT &>/dev/null & disown;
-  node ./repos/backend/index.js
-  exit 0
+# Serve the backend server API only
+keg_herkin_serve_backend(){
+  echo $"[ KEG-CLI ] Running backend API server!" >&2
+  node ./repos/backend/index.js &>> /proc/1/fd/1 &
+  tail -f /dev/null && exit 0;
+}
+
+# Serve the screencast server API only
+keg_herkin_serve_screencast(){
+  echo $"[ KEG-CLI ] Running screencast API server!" >&2
+  node ./repos/screencast/index.js &>> /proc/1/fd/1 &
+  tail -f /dev/null && exit 0;
 }
 
 # Check if the vnc screen-cast servers should be started
-[[ "$HERKIN_USE_VNC" == "true" ]] && keg_start_screen_cast
+if [[ "$HERKIN_USE_VNC" == "true" ]]; then
+  keg_start_screen_cast
+fi
 
 # Check if we should be running only the backend API
 if [[ "$HERKIN_API_TYPE" == "backend" ]]; then
-  echo $"[ KEG-CLI ] Running backend API server!" >&2
-  node ./repos/backend/index.js
+  keg_herkin_serve_backend
 
 # Check if we should be running only the screencast API
 elif [[ "$HERKIN_API_TYPE" == "screencast" ]]; then
-  echo $"[ KEG-CLI ] Running screencast API server!" >&2
-  node ./repos/screencast/index.js
+  keg_herkin_serve_screencast
 
 # Check the NODE_ENV, and use that to know which environment to start
 # For non-development environments, we want to serve the bundle if it exists
 elif [[ ! " development develop local test " =~ " $NODE_ENV " ]]; then
-  [[ -d "$DOC_BUILD_PATH" ]] && keg_herkin_serve
-  echo $"[ KEG-CLI ] Serve path $DOC_BUILD_PATH does not exist!" >&2
+  keg_herkin_serve_backend
 
 # If none of the above exist, then we run the develop / local yarn command
 # And Serve the app bundle in development environemnts
@@ -49,4 +55,3 @@ else
   cd $DOC_APP_PATH
   [[ -z "$KEG_EXEC_CMD" ]] && yarn web || yarn $KEG_EXEC_CMD
 fi
-

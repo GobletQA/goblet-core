@@ -4,41 +4,17 @@ ARG KEG_BASE_IMAGE=mcr.microsoft.com/playwright:next-focal
 
 FROM $KEG_BASE_IMAGE as keg-builder
 
+WORKDIR /keg/tap
+
 # Copy in the package.json
-COPY ./package.json /keg-cache/package.json
+COPY package.json package.json
 
 # Install node_modules in a cached directory
 # This allows the Docker cache to be based off the package.json file 
 # Instead of the entire repo folder
-RUN cd /keg-cache; \
-    yarn install --non-interactive --ignore-optional
+RUN yarn install --non-interactive --ignore-optional
 
-# Copy in the root directory
-COPY . /keg-temp/
-
-# Flag to copy over the taps local folder instead of pulling from git
-ARG KEG_COPY_LOCAL
-ENV KEG_COPY_LOCAL=$KEG_COPY_LOCAL
-
-ARG GIT_APP_BRANCH=master
-ARG DOC_APP_PATH=/keg/tap
-ARG GIT_APP_URL=https://github.com/KegHub/keg-herkin.git
-
-ENV GIT_APP_URL=$GIT_APP_URL \
-    DOC_APP_PATH=$DOC_APP_PATH \
-    GIT_APP_BRANCH=$GIT_APP_BRANCH
-
-WORKDIR $DOC_APP_PATH
-
-# Check if we should use the local code copy, or pull from github
-# Then copy over the previously installed node_modules
-RUN if [[ -z "$KEG_COPY_LOCAL" ]]; then \
-      apk add --update --no-cache git; \
-      git clone --single-branch --branch $GIT_APP_BRANCH $GIT_APP_URL $DOC_APP_PATH; \
-    else \
-      cp -R /keg-temp/. $DOC_APP_PATH; \
-    fi; \
-    cp -R /keg-cache/. $DOC_APP_PATH/.
+COPY . .
 
 # Install and build gitfs for unbuntu-20
 FROM $KEG_BASE_IMAGE as gitfs-builder
@@ -78,7 +54,7 @@ ENV HOME=/root \
     PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin
 
 # Set the current directory to tap repo
-WORKDIR $DOC_APP_PATH
+WORKDIR /keg/tap
 
 COPY --from=gitfs-builder /keg/gitfs/dist /keg/gitfs/dist
 
@@ -99,13 +75,13 @@ RUN yarn global add npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
     sysctl -p; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
     rm -rf /keg/gitfs; \
-    rm -rf /ms-playwright; \
-    rm -rf /ms-playwright-agent; \
-    yarn add playwright@1.17.2; \
-    npx playwright install chromium
+    mkdir -p $DOC_APP_PATH/logs
+
+# TODO: @lance-tipton - investigate adding this, and remove from run.sh file
+# RUN npx playwright install chromium
 
 # Copy over the app from builder
-COPY --from=keg-builder $DOC_APP_PATH $DOC_APP_PATH
+COPY --from=keg-builder /keg/tap /keg/tap
 
 # Expose container ports
 EXPOSE $KEG_PROXY_PORT

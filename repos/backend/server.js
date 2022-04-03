@@ -1,20 +1,22 @@
 #!/usr/bin/env node
 const { initSockr } = require('./libs/sockr')
 const { getApp } = require('HerkinSharedApp')
-const { Logger } = require('@keg-hub/cli-utils')
 const apiEndpoints = require('HerkinBackEndpoints')
 const { isDeployedEnv } = require('HerkinSharedUtils/isDeployedEnv')
 const {
   setReqRepo,
   setupVNCProxy,
   validateUser,
+  setupBlacklist,
+  setupServerListen,
 } = require('HerkinBackMiddleware')
 const {
   setupCors,
   setupCookie,
-  setupLogger,
   setupServer,
   setupStatic,
+  setupLoggerReq,
+  setupLoggerRes,
 } = require('HerkinSharedMiddleware')
 
 /**
@@ -27,24 +29,18 @@ const initApi = async () => {
   const app = getApp()
   const { server: serverConf, sockr: sockrConf } = app.locals.config
 
+  setupBlacklist(app)
   setupCors(app)
   setupCookie(app)
-  setupLogger(app)
+  setupLoggerReq(app)
   setupServer(app)
   setupStatic(app)
   validateUser(app)
   setReqRepo(app)
   apiEndpoints(app)
+  setupLoggerRes(app)
   const wsProxy = setupVNCProxy(app)
-
-  const server = app.listen(serverConf.port, serverConf.host, () => {
-    Logger.empty()
-    Logger.pair(
-      `Herkin Backend API listening on`,
-      `http://${serverConf.host}:${serverConf.port}`
-    )
-    Logger.empty()
-  })
+  const { insecureServer, secureServer:server } = setupServerListen(app)
 
   server.on('upgrade', wsProxy.upgrade)
   const socket = await initSockr(app, server, sockrConf, 'tests')

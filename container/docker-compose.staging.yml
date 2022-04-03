@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  keg-herkin:
+    ipc: host
+    privileged: true
+    environment:
+      - API_PORT
+      - DOC_APP_PATH
+      - DOC_BUILD_PATH
+      - ENV
+      - FIRE_BASE_APP_ID
+      - FIRE_BASE_AUTH_DOMAIN
+      - FIRE_BASE_KEY
+      - FIRE_BASE_MEASURMENT_ID
+      - FIRE_BASE_MESSAGING_SENDER_ID
+      - FIRE_BASE_PERSISTENCE
+      - FIRE_BASE_PROJECT_ID
+      - FIRE_BASE_STORAGE_BUCKET
+      - FIRE_BASE_TOKEN
+      - HERKIN_APP_URL
+      - HERKIN_COOKIE_KEY
+      - HERKIN_COOKIE_NAME
+      - HERKIN_MOUNT_ROOT
+      - KEG_EXEC_CMD
+      - KEG_DOCKER_EXEC
+      - KEG_PROXY_PORT
+      - NODE_ENV
+      - HERKIN_API_TYPE
+      - KEG_PROXY_PRIVATE_KEY
+      - KEG_PROXY_CERT
+      - KEG_PROXY_CA
+      - KEG_PROXY_SSL
+    ports:
+      - 80:${API_PORT}
+      - 443:443
+    volumes:
+      - /home/herkin/.kegConfig/certs:/keg/certs:ro
+
