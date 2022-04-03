@@ -1,3 +1,7 @@
+const { loadEnvs } = require('../repos/shared/utils/loadEnvs')
+const nodeEnv = process.env.NODE_ENV || `local`
+loadEnvs(nodeEnv === 'local')
+
 const {
   FIRE_BASE_KEY,
   FIRE_BASE_AUTH_DOMAIN,
