@@ -2,6 +2,11 @@ import React from 'react'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { View } from '@keg-hub/keg-components'
 
+export const ReMessage = reStyle(View)(theme => ({
+  mB: theme.margin.size / 2,
+  minH: theme.margin.size * 2
+}))
+
 
 export const ReLoading = reStyle(View)(theme => ({
   alI: 'center',

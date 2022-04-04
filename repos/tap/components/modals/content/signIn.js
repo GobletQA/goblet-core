@@ -3,6 +3,7 @@ import { Modal } from '../modal'
 import { Values } from 'HKConstants'
 import { Git } from 'HKAssets/icons/git'
 import { isEmptyColl } from '@keg-hub/jsutils'
+import { ModalMessage } from '../modalMessage'
 import { ReSignInMain } from '../modal.restyle'
 import { useSelector } from 'HKHooks/useSelector'
 import { Loading } from '@keg-hub/keg-components'
@@ -45,7 +46,9 @@ export const SignInModal = props => {
     >
       <ReSignInMain>
         <Suspense fallback={<Loading />} >
-          <LazySignIn />
+          <LazySignIn
+            MessageComponent={ModalMessage}
+          />
         </Suspense>
       </ReSignInMain>
     </Modal>

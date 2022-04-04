@@ -11,8 +11,8 @@ const { Logger } = require('@keg-hub/cli-utils')
  *
  * @retruns {Object} - Insecure / Secure server object and Express app object
  */
-const secure = (app) => {
-  const { port, host } = app.locals.config.server
+const serverListen = (app) => {
+  const { securePort, port, host } = app.locals.config.server
   const creds = {
     key: process.env.KEG_PROXY_PRIVATE_KEY,
     cert: process.env.KEG_PROXY_CERT,
@@ -37,9 +37,9 @@ const secure = (app) => {
   })
 
   const secureServer = httpsServer &&
-    httpsServer.listen(443, () => {
+    httpsServer.listen(securePort, () => {
       Logger.empty()
-      Logger.pair(`[Tap-Proxy] Secure Server running on: `, `http://${host}:443`)
+      Logger.pair(`[Tap-Proxy] Secure Server running on: `, `https://${host}:443`)
       Logger.empty()
     })
 
@@ -54,7 +54,7 @@ const secure = (app) => {
  */
 const setupServerListen = () => {
   const app = getApp()
-  return secure(app)
+  return serverListen(app)
 }
 
 module.exports = {

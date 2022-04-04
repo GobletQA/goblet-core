@@ -10,6 +10,7 @@ loadEnvs(nodeEnv === 'local')
 const {
   HERKIN_USE_AUTH,
   API_PORT = '5005',
+  API_SECURE_PORT='443',
   HERKIN_PW_SOCKET,
   HERKIN_SOCKET_PORT,
   HERKIN_SOCKET_HOST,
@@ -55,6 +56,7 @@ const generateOrigins = () => {
 
 const serverConfig = {
   port: API_PORT,
+  securePort: API_SECURE_PORT,
   path: HERKIN_SOCKR_PATH,
   host: HERKIN_SERVER_HOST,
   logLevel: HERKIN_LOG_LEVEL,

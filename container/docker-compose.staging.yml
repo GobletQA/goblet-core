@@ -5,6 +5,7 @@ services:
     privileged: true
     environment:
       - API_PORT
+      - API_SECURE_PORT
       - DOC_APP_PATH
       - DOC_BUILD_PATH
       - ENV

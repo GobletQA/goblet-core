@@ -25,6 +25,7 @@ services:
       - HERKIN_SOCKET_HOST
       - KEG_EXEC_CMD
       - KEG_DOCKER_EXEC
+      - KEG_PROXY_HOST
       - KEG_PROXY_PORT
       - NODE_ENV
       - HERKIN_API_TYPE

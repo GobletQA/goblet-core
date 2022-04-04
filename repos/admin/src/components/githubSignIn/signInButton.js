@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import React, {useCallback, useState} from 'react'
 import { signInWithPopup, GithubAuthProvider } from 'firebase/auth'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { useIconProps } from 'HKHooks/useIconProps'
@@ -23,6 +23,7 @@ export const SignInButton = reStyle((props) => {
     onFail,
     provider,
     onSuccess,
+    onSigningIn,
     prefix=defPrefix,
     classes=defClasses,
     ...btnProps
@@ -30,6 +31,8 @@ export const SignInButton = reStyle((props) => {
   const iconProps = useIconProps(props, styles?.icon)
 
   const onBtnPress = useCallback(async evt => {
+    onSigningIn(true)
+
     signInWithPopup(auth, provider)
       .then(result => {
         const credential = GithubAuthProvider.credentialFromResult(result)
@@ -49,6 +52,7 @@ export const SignInButton = reStyle((props) => {
         })
       })
       .catch(err => onFail?.(err))
+
   }, [auth, provider, onSuccess, onFail])
   
   return (

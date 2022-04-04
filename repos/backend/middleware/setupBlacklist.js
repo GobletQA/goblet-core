@@ -1,5 +1,5 @@
-const path = require('path')
 const fs = require('fs')
+const path = require('path')
 const { getApp } = require('HerkinSharedApp')
 const blacklist = require('express-blacklist')
 const expressDefend = require('express-defend')
