@@ -34,7 +34,8 @@ const findRepo = asyncWrap(async (req, res, next) => {
       `Endpoint requires a locally mounted path, I.E. /repo/:repo-name/*`
     )
 
-  const { repo } = await Repo.status(config, { ...repoGit, ...req.session })
+  const { iat, exp, ...user } = req.user
+  const { repo } = await Repo.status(config, { ...repoGit, ...user })
 
   if (!repo) throw new Error(`Requested repo does not exist`)
 

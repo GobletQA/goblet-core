@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const { Repo } = require('HerkinBackLibs/repo')
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
 
@@ -10,20 +11,26 @@ const validate = asyncWrap(async (req, res) => {
   if (!id || !username || !token || !provider)
     throw new Error(`Provider metadata is unknown. Please sign in again`)
 
-  // Add the user data to the session
-  req.session.userId = id
-  req.session.token = token
-  req.session.username = username
-  req.session.provider = provider
+  const config = req.app.locals.config.server
 
-  // TODO: throwing an error here to debug Auth Sign in button not showing up
-  // When error is thrown, user is logged out, but sign in button is not displayed
-  // throw new Error(`Missing sign in button`)
-  
+  const {
+    exp,
+    secret,
+    algorithms
+  } = config.jwt
+
+  // Add the user data to the jwt
+  const jwtToken = jwt.sign({
+    userId: id,
+    token: token,
+    username: username,
+    provider: provider, 
+  }, secret, { algorithm: algorithms[0], expiresIn: exp })
+
   // Preload the users repos from the provider
-  const repos = await Repo.getUserRepos({token})
+  const repos = await Repo.getUserRepos({ token })
 
-  return apiRes(req, res, {id, username, provider, repos}, 200)
+  return apiRes(req, res, {id, username, provider, repos, jwt: jwtToken}, 200)
 })
 
 module.exports = {

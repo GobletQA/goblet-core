@@ -6,9 +6,11 @@ const { loadRepoContent } = require('../../../utils/loadRepoContent')
  * Runs the initializeHerkin workflow to setup a new repository
  */
 const connectRepo = asyncWrap(async (req, res) => {
-  // TODO: Add req.body / req.session validation before running
+  const { iat, exp, ...user } = req.user
+  
+  // TODO: Add req.body / req.user validation before running
   const repo = await Repo.fromWorkflow({
-    ...req.session,
+    ...user,
     ...req.body,
   })
 

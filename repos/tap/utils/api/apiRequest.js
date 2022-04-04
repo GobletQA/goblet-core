@@ -1,8 +1,9 @@
 import { addToast } from 'HKActions/toasts'
-import { isObj, get } from '@keg-hub/jsutils'
+import { isObj, get, noOpObj } from '@keg-hub/jsutils'
 import { getBaseApiUrl } from './getBaseApiUrl'
 import { gitAuthSignOut } from 'HKActions/admin'
 import { networkRequest } from 'HKServices/networkRequest'
+import { getStoredJwt } from'../storage/getStoredJwt'
 
 /**
  * Check the response from the API for an expired session
@@ -20,6 +21,21 @@ const isValidSession = async (success, statusCode, message) =>{
   })
 
   await gitAuthSignOut()
+}
+
+/**
+ * Pull the JWT from local storage and add it as a Bearer token
+ * Is only added if it exists
+ * @param {Object} headers - Existing headers to add to the request
+ *
+ * @return {Object} - Built headers object, with the JWT added if it exists
+ */
+const addHeaders = async (headers=noOpObj) => {
+  const jwt = await getStoredJwt()
+  return {
+    ...headers,
+   ...(jwt && { Authorization: `Bearer ${jwt}` })
+  }
 }
 
 /**
@@ -41,6 +57,14 @@ export const apiRequest = async request => {
 
   // Add to ensure cookies get sent with the requests
   builtRequest.withCredentials = true
+  builtRequest.headers = await addHeaders(builtRequest.headers)
+
+  // Header does not seem to be set from some reason - need to investigate
+  const jwt = await getStoredJwt()
+  builtRequest.headers = {
+    ...builtRequest.headers,
+   ...(jwt && { Authorization: `Bearer ${jwt}` })
+  }
 
   const { data, success, statusCode, errorMessage } = await networkRequest(
     builtRequest

@@ -1,4 +1,5 @@
 module.exports = {
+  ...require('./setupJWT'),
   ...require('./setupCors'),
   ...require('./setupCookie'),
   ...require('./setupLogger'),

@@ -11,8 +11,8 @@ const {
   setupServerListen,
 } = require('HerkinBackMiddleware')
 const {
+  setupJWT,
   setupCors,
-  setupCookie,
   setupServer,
   setupStatic,
   setupLoggerReq,
@@ -33,7 +33,7 @@ const initApi = async () => {
 
   setupBlacklist(app)
   setupCors(app)
-  setupCookie(app)
+  setupJWT(app, ['/auth/validate'])
   // TODO: @lance-tipton - Update setupLoggerReq to use requestMiddleware for logging
   // setupLoggerReq(app)
   app.use(requestMiddleware(app.locals.config.logger))

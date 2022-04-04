@@ -8,6 +8,10 @@ loadEnvs(nodeEnv === 'local')
 
 // TODO: @lance-tipton - Remove these defaults. Should come from values files
 const {
+  HERKIN_JWT_EXP,
+  HERKIN_JWT_ALGO,
+  HERKIN_JWT_SECRET,
+  HERKIN_JWT_CREDENTIALS,
   HERKIN_USE_AUTH,
   API_PORT = '5005',
   API_SECURE_PORT='443',
@@ -83,6 +87,12 @@ const serverConfig = {
     path: HERKIN_SOCKR_PATH,
     port: HERKIN_SOCKET_PORT || API_PORT,
     host: HERKIN_SOCKET_HOST || HERKIN_SERVER_HOST,
+  },
+  jwt: {
+    exp: HERKIN_JWT_EXP,
+    secret: HERKIN_JWT_SECRET,
+    algorithms: [HERKIN_JWT_ALGO || 'HS256'],
+    credentialsRequired: toBool(HERKIN_JWT_CREDENTIALS || true),
   }
 }
 

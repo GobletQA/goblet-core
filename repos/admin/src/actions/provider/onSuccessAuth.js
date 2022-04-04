@@ -1,9 +1,13 @@
+import { Values } from 'HKConstants'
+import { KeyStore } from 'KegNative/keyStore'
 import { isAllowedUser } from './isAllowedUser'
-import { signOutAuthUser } from './signOutAuthUser'
 import { GitUser } from 'HKAdminServices/gitUser'
 import { apiRequest } from 'HKUtils/api/apiRequest'
-import { isArr, pickKeys, noPropArr } from '@keg-hub/jsutils'
+import { signOutAuthUser } from './signOutAuthUser'
 import { setRepos } from 'HKActions/repo/local/setRepos'
+import { isArr, pickKeys, noPropArr } from '@keg-hub/jsutils'
+
+const { STORAGE } = Values
 
 /**
  * Formats the response from the git provider sign in
@@ -53,12 +57,13 @@ const formatUser = (data) => {
  * @return {Object} - Contains the user object and repos array returned from the Backend API
  */
 const validateResp = resp => {
-  if (!resp || resp.error || !resp.username || !resp.id || !resp.provider)
+  if (!resp || resp.error || !resp.username || !resp.id || !resp.provider || !resp.jwt)
     throw new Error(resp?.error || `Invalid user authentication`)
 
-  const { repos, ...user } = resp
+  const { repos, jwt, ...user } = resp
 
   return {
+    jwt,
     user,
     repos: isArr(repos) ? repos : noPropArr,
   }
@@ -91,13 +96,15 @@ export const onSuccessAuth = async (authData, callback) => {
       method: 'POST',
       url: `/auth/validate`,
     })
-
+    
     // If response if false, the session is invalid, and the user must sign in again
     if(error || !success) throw new Error(error)
 
-    const {repos, user} = validateResp(data)
+    const {repos, user, jwt} = validateResp(data)
 
     repos && repos.length && setRepos({repos})
+
+    await KeyStore.setItem(STORAGE.JWT, jwt)
     new GitUser(user)
 
   }

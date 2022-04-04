@@ -6,7 +6,8 @@ const { asyncWrap, apiRes } = require('HerkinSharedExp')
  * Calls Repo.getUserRepos which calls the workflow getUserRepos method
  */
 const getRepos = asyncWrap(async (req, res) => {
-  const repos = await Repo.getUserRepos(req.session)
+  const { iat, exp, ...user } = req.user
+  const repos = await Repo.getUserRepos(user)
 
   return apiRes(req, res, {repos}, 200)
 })
