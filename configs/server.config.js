@@ -12,6 +12,8 @@ const {
   HERKIN_JWT_ALGO,
   HERKIN_JWT_SECRET,
   HERKIN_JWT_CREDENTIALS,
+  HERKIN_JWT_REFRESH_EXP,
+  HERKIN_JWT_REFRESH_SECRET,
   HERKIN_USE_AUTH,
   API_PORT = '5005',
   API_SECURE_PORT='443',
@@ -91,6 +93,8 @@ const serverConfig = {
   jwt: {
     exp: HERKIN_JWT_EXP,
     secret: HERKIN_JWT_SECRET,
+    refreshExp: HERKIN_JWT_REFRESH_EXP,
+    refreshSecret: HERKIN_JWT_REFRESH_SECRET,
     algorithms: [HERKIN_JWT_ALGO || 'HS256'],
     credentialsRequired: toBool(HERKIN_JWT_CREDENTIALS || true),
   }
