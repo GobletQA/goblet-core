@@ -8,5 +8,5 @@ import { getScreencastUrl } from 'HKUtils/api/getScreencastUrl'
  * @returns {string} - Built novnc url
  */
 export const useScreencastUrl = () => {
-  return useMemo(() => getScreencastUrl, [])
+  return useMemo(() => getScreencastUrl(), [])
 }
