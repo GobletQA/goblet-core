@@ -16,12 +16,14 @@ const authActive = isAuthActive()
  * Checks if an initial test file should be loaded, and makes call to load it
  * @function
  * @param {Object} queryObj - Current url query params as an object
+ * @param {string} screenId - Id of the screen to load the file for
+ * @param {boolean} mergeQuery - Merge the current url query string with the updated file
  *
  * @return {void}
  */
-const loadInitTestFiles = async (queryObj, screenId) => {
+const loadInitTestFiles = async (queryObj, screenId, mergeQuery) => {
   // Load the initial file from query params if it exists
-  queryObj?.file && (await loadFile(queryObj?.file, screenId))
+  queryObj?.file && (await loadFile(queryObj?.file, screenId, mergeQuery))
 }
 
 /**
@@ -62,7 +64,7 @@ export const init = async () => {
   setScreenById(screenId)
 
   // Load the initial test file
-  await loadInitTestFiles(queryObj, screenId)
+  await loadInitTestFiles(queryObj, screenId, Boolean(screenId))
 
   // Setup the sidebar
   setActiveSidebar(SIDEBAR_TYPES.FILE_TREE)

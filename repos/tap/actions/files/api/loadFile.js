@@ -27,10 +27,12 @@ const findFileInTree = (nodes, file) =>
  * @type function
  * @param {Object|string} fileNode - treeNodeModel, name or location of the test file
  * @param {string} screenId - Id of the screen to load the fileModel for
+ * @param {boolean} mergeQuery - Merge the current url query string with the updated file
+ 
  *
  * @return {void}
  */
-export const loadFile = async (fileNode, screenId) => {
+export const loadFile = async (fileNode, screenId, mergeQuery) => {
   const { items } = getStore()?.getState()
   if (!items) return
 
@@ -48,7 +50,7 @@ export const loadFile = async (fileNode, screenId) => {
   const { file: fileModel } = resp?.data
 
   return fileModel
-    ? setActiveFileFromType(fileModel, screenId)
+    ? setActiveFileFromType(fileModel, screenId, mergeQuery)
     : addToast({
         type: `warn`,
         message: `Could not load file ${fileName} from the API!`,

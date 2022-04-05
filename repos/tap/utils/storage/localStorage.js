@@ -42,8 +42,7 @@ class Storage {
     if(!name) return console.error(`A key is required to remove a local storage item, instead got "${name}"`)
     
     try {
-      console.log(`Disabled removing ${name}`)
-      // return await KeyStore.removeItem(name)
+      return await KeyStore.removeItem(name)
     }
     catch (err) {}
   }

@@ -45,23 +45,6 @@ export const ReTagText = reStyle(Text)(theme => ({
   color: theme.tapColors.warnDark,
 }))
 
-export const ReHeaderText = reStyle(Text)(theme => ({
-  ...textStyle,
-  ftWt: 'bold',
-  ftSz: 12,
-  color: theme.tapColors.primaryDark,
-}))
-
-export const ReErrorText = reStyle(Text)(theme => ({
-  ...textStyle,
-  ftWt: 'bold',
-  color: theme.tapColors.dangerLight,
-}))
-
-export const ReSuccessText = reStyle(Text)(theme => ({
-  ...textStyle,
-  color: theme.tapColors.successLight,
-}))
 
 export const ReRunning = reStyle(Loading, 'styles')(theme => ({
   main: {
@@ -77,21 +60,4 @@ export const ReRunning = reStyle(Loading, 'styles')(theme => ({
   }
 }))
 
-export const ReErrorIcon = reStyle(Times)(theme => ({
-  pos: 'absolute',
-  marginLeft: theme.margin.size / 1.5,
-}), theme => ({
-  width: 14,
-  height: 14,
-  color: theme.tapColors.dangerLight,
-}))
-
-export const ReSuccessIcon = reStyle(Check)(theme => ({
-  pos: 'absolute',
-  marginLeft: theme.margin.size / 1.5,
-}), theme => ({
-  width: 14,
-  height: 14,
-  color: theme.tapColors.successLight,
-}))
 

@@ -80,6 +80,9 @@ const actionBrowser = async (args, browserConf) => {
   const component = pwComponents[ref]
   validateArgs(args, component)
 
+  // TODO: @lance-tipton - Add check for recording action
+  // Then call recorder class
+
   const responses = []
   return actions.reduce(async (toResolve, action) => {
     await toResolve

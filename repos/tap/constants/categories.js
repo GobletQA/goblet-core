@@ -27,6 +27,7 @@ export const categories = deepFreeze({
     SCREENCAST_STATUS: 'screencastStatus',
     PROVIDER_REPOS: 'providerRepos',
     SPEC_RESULTS: `specResults`,
+    RECORD_RESULTS: `recordResults`
   },
   SUB_CATEGORIES: {
     NODES: 'nodes',

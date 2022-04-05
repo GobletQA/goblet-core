@@ -121,10 +121,10 @@ env:
 
   # TODO: @lance-tipton - Make this more dynamic - value comes from firebase?
   GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com
-  HERKIN_JWT_EXP: 480000
+  HERKIN_JWT_EXP: 7200000
   HERKIN_JWT_SECRET: k3G-H3rkiN-1234
   HERKIN_JWT_CREDENTIALS: true
-  HERKIN_JWT_REFRESH_EXP: 960000
+  HERKIN_JWT_REFRESH_EXP: 7200000
   HERKIN_JWT_REFRESH_SECRET: 4321-nIKR3h-g3K
 
 actions:

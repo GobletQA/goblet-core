@@ -32,7 +32,12 @@ export const CreateFile = props => {
     setTimeout(() => evt?.target?.blur())
   }, [fileName, fileTypeMeta, onBlur])
 
-  const relLoc = fileTypeMeta.location.split('/current').pop()
+  // TODO: @lance-tipton - Sometimes logging out throws an error because fileTypeMeta no longer exists
+  // Should probably just return if that's the case. Need to investigate
+  // This is just a quick fix that seems to solve the problem
+  const relLoc = fileTypeMeta?.location
+    ? fileTypeMeta?.location?.split('/current').pop()
+    : `/<parent-folder>`
 
   useEffect(() => {
     if(curTypeRef.current === fileTypeMeta.type) return
