@@ -16,9 +16,7 @@ const {
   setupServer,
   setupStatic,
   setupLoggerReq,
-  setupLoggerRes,
-  errorMiddleware,
-  requestMiddleware,
+  setupLoggerErr,
 } = require('HerkinSharedMiddleware')
 
 /**
@@ -31,20 +29,17 @@ const initApi = async () => {
   const app = getApp()
   const { server: serverConf, sockr: sockrConf } = app.locals.config
 
+  setupLoggerReq(app)
   setupBlacklist(app)
   setupCors(app)
   setupJWT(app, ['/auth/validate'])
-  // TODO: @lance-tipton - Update setupLoggerReq to use requestMiddleware for logging
-  // setupLoggerReq(app)
-  app.use(requestMiddleware(app.locals.config.logger))
   setupServer(app)
   setupStatic(app)
   validateUser(app)
   setReqRepo(app)
   apiEndpoints(app)
-  // TODO: @lance-tipton - Update setupLoggerRes to use errorMiddleware for logging
-  // setupLoggerRes(app)
-  app.use(errorMiddleware(app.locals.config.logger))
+  setupLoggerErr(app)
+
   const wsProxy = setupVNCProxy(app)
   const { insecureServer, secureServer } = setupServerListen(app)
   const server = secureServer || insecureServer
