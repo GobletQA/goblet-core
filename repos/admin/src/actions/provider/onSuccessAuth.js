@@ -1,13 +1,11 @@
-import { Values } from 'HKConstants'
-import { KeyStore } from 'KegNative/keyStore'
 import { isAllowedUser } from './isAllowedUser'
 import { GitUser } from 'HKAdminServices/gitUser'
 import { apiRequest } from 'HKUtils/api/apiRequest'
 import { signOutAuthUser } from './signOutAuthUser'
 import { setRepos } from 'HKActions/repo/local/setRepos'
+import { localStorage } from'HKUtils/storage/localStorage'
 import { isArr, pickKeys, noPropArr } from '@keg-hub/jsutils'
 
-const { STORAGE } = Values
 
 /**
  * Formats the response from the git provider sign in
@@ -104,7 +102,7 @@ export const onSuccessAuth = async (authData, callback) => {
 
     repos && repos.length && setRepos({repos})
 
-    await KeyStore.setItem(STORAGE.JWT, jwt)
+    await localStorage.setJwt(jwt)
     new GitUser(user)
 
   }

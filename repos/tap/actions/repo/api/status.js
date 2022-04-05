@@ -6,7 +6,7 @@ import { removeRepo } from '../local/removeRepo'
 import { setActiveModal } from 'HKActions/modals'
 import { apiRequest } from 'HKUtils/api/apiRequest'
 import { checkCall, noOpObj } from '@keg-hub/jsutils'
-import { getStoredRepo } from 'HKUtils/storage/getStoredRepo'
+import { localStorage } from'HKUtils/storage/localStorage'
 
 const { MODAL_TYPES, STATUS_TYPES } = Values
 
@@ -80,7 +80,7 @@ export const statusRepo = async params => {
     message: `Getting Repo status...`,
   })
 
-  const savedRepo = await getStoredRepo()
+  const savedRepo = await localStorage.getRepo()
 
   const {
     data,

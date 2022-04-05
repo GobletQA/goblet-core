@@ -1,10 +1,8 @@
-import { Values } from 'HKConstants'
-import { KeyStore } from 'KegNative/keyStore'
 import { isAuthActive } from 'HKUtils/isAuthActive'
+import { localStorage } from'HKUtils/storage/localStorage'
 import { clearUser } from 'HKAdminActions/user/local/clearUser'
 import { upsertUser } from 'HKAdminActions/user/local/upsertUser'
 
-const { STORAGE } = Values
 const authActive = isAuthActive()
 
 /**
@@ -38,11 +36,7 @@ export class GitUser {
 
     if (__CURRENT_USER) return __CURRENT_USER
 
-    const savedData = await KeyStore.getItem(STORAGE.USER)
-    let parsedUser
-    try {
-      parsedUser = JSON.parse(savedData)
-    } catch (err) {}
+    const parsedUser = await localStorage.getUser()
 
     __CURRENT_USER = parsedUser && new GitUser(parsedUser)
 
@@ -55,7 +49,7 @@ export class GitUser {
   static signOut = async () => {
     __CURRENT_USER = undefined
     clearUser()
-    await KeyStore.removeItem(STORAGE.USER)
+    await localStorage.removeUser()
   }
 
   constructor(data) {
@@ -71,7 +65,7 @@ export class GitUser {
 
     __CURRENT_USER = this
 
-    KeyStore.setItem(STORAGE.USER, JSON.stringify(data))
+    localStorage.setUser(JSON.stringify(data))
 
     upsertUser(__CURRENT_USER)
 

@@ -9,11 +9,12 @@ import {
   ReHeaderText,
   ReErrorText,
   ReSuccessText,
-  TrackerMain,
-  TrackerTests,
-  ReTrackerText,
-} from './tracker.restyle'
+  RecorderMain,
+  RecorderTests,
+  ReRecorderText,
+} from './recorder.restyle'
 const { CATEGORIES } = Values
+
 
 const useSplitContent = (activeFile) => {
   return useMemo(() => activeFile.content.split(`\n`).map((line, idx) => ([line, idx])), [activeFile.content])
@@ -49,10 +50,10 @@ const RunningLine = props => {
   const { line } = props
 
   return (
-    <ReTrackerText className='tracker-text-running'>
+    <ReRecorderText className='tracker-text-running'>
       {line}
       <ReRunning size='small' />
-    </ReTrackerText>
+    </ReRecorderText>
   )
 }
 
@@ -84,7 +85,7 @@ const RenderLine = props => {
     : (<MappedResult line={line} result={mappedResult} />)
 }
 
-const RenderTracker = props => {
+const RenderRecorder = props => {
   const {activeFile} = props
   const splitContent = useSplitContent(activeFile)
   const { specResults } = useSelector(CATEGORIES.SPEC_RESULTS)
@@ -102,12 +103,12 @@ const RenderTracker = props => {
 }
 
 
-export const Tracker = props => {
+export const Recorder = props => {
   return (
-    <TrackerMain className='tracker-main'>
-      <TrackerTests className='tracker-tests'>
-        <RenderTracker {...props} />
-      </TrackerTests>
-    </TrackerMain>
+    <RecorderMain className='tracker-main'>
+      <RecorderTests className='tracker-tests'>
+        <RenderRecorder {...props} />
+      </RecorderTests>
+    </RecorderMain>
   )
 }

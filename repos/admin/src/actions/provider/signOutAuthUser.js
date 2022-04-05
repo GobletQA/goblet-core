@@ -1,11 +1,11 @@
 import { Values } from 'HKConstants'
-import { KeyStore } from 'KegNative/keyStore'
 import { GitUser } from 'HKAdminServices/gitUser'
 import { isAuthActive } from 'HKUtils/isAuthActive'
+import { localStorage } from'HKUtils/storage/localStorage'
 import { getProviderMetadata } from 'HKAdminServices/providers'
 import { setActiveModal } from 'HKActions/modals/setActiveModal'
 
-const { MODAL_TYPES, STORAGE } = Values
+const { MODAL_TYPES } = Values
 const authActive = isAuthActive()
 const { auth } = getProviderMetadata()
 
@@ -18,7 +18,7 @@ const { auth } = getProviderMetadata()
  */
 export const signOutAuthUser = async () => {
 
-  await KeyStore.removeItem(STORAGE.JWT)
+  await localStorage.removeJwt()
   const currentUser = GitUser.getUser()
 
   // Remove local user data here

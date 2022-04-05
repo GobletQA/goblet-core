@@ -1,6 +1,6 @@
 import { setItems } from 'HKActions'
 import { Values } from 'HKConstants'
-import { removeStoredRepo } from 'HKUtils/storage/removeStoredRepo'
+import { localStorage } from'HKUtils/storage/localStorage'
 import { clearFileTree } from 'HKActions/files/local/clearFileTree'
 import { clearFeatures } from 'HKActions/features/local/clearFeatures'
 import { clearActiveFile } from 'HKActions/files/local/clearActiveFile'
@@ -32,5 +32,5 @@ export const removeRepo = async () => {
   tryAction(clearActiveFile, 'clearActiveFile')
   tryAction(clearPendingFiles, 'clearPendingFiles')
 
-  await removeStoredRepo()
+  await localStorage.removeRepo()
 }

@@ -2,7 +2,8 @@ import React, { useCallback, useState, useRef } from 'react'
 import { Canvas } from './canvas'
 import { noOpObj } from '@keg-hub/jsutils'
 import { ScreencastTabs } from './screencastTabs'
-import { Tracker } from 'HKComponents/tracker/tracker'
+// import { Tracker } from 'HKComponents/tracker/tracker'
+import { Recorder } from 'HKComponents/recorder/recorder'
 import { useNoVnc, useScreencastUrl } from 'HKHooks/screencast'
 import { ResizeHandle } from 'HKComponents/resize/resizeHandle'
 import { useResizeHooks } from 'HKComponents/resize/useResizeHooks'
@@ -82,7 +83,7 @@ export const Screencast = props => {
             title={'Tests Status'}
             className={`screencast-tracker-surface`}
           >
-            <Tracker
+            <Recorder
               isRunning={isRunning}
               activeFile={activeFile}
             />
