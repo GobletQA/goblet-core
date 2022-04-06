@@ -41,8 +41,13 @@ const initializeHerkin = async args => {
     return await setupHerkin(args, gitArgs, true)
   }
 
-  Logger.log(`Creating new branch...`)
-  const branch = await branchRepo(gitArgs)
+  gitArgs.createBranch
+    ? Logger.log(`Creating new branch...`)
+    : Logger.log(`Reusing existing branch...`)
+
+  const branch = gitArgs.createBranch
+    ? await branchRepo(gitArgs)
+    : gitArgs.branch
 
   Logger.log(`Mounting remote repo...`)
   await mountRepo({ ...gitArgs, branch })

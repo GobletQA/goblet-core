@@ -1,8 +1,8 @@
 import React from 'react'
-import { get, exists, deepMerge } from '@keg-hub/jsutils'
+import { get, exists } from '@keg-hub/jsutils'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { Autocomplete } from '@keg-hub/keg-components/autocomplete'
-import { Text, View, Select, Option, Input, Label } from '@keg-hub/keg-components'
+import { Text, View, Select, Option, Input, Label, Switch } from '@keg-hub/keg-components'
 
 export const ReMain = reStyle(View)((theme, { zIndex }) => ({
   pos: 'relative',
@@ -66,6 +66,8 @@ export const ReSelect = reStyle(Select, 'styles')(theme => ({
 }))
 
 export const ReOption = reStyle(Option)(theme => ({}))
+
+export const ReSwitch = reStyle(Switch)(theme => ({}))
 
 export const ReLabel = reStyle(Label)(theme => ({
   fl: 1,

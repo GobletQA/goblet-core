@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react'
+import React, { useEffect, useRef, useCallback, forwardRef } from 'react'
 import { FormAside } from './formAside'
 import { useStyle } from '@keg-hub/re-theme'
 import { Label } from '@keg-hub/keg-components'
@@ -19,7 +19,7 @@ import {
  *
  */
 export const InputHoc = (Component, RootComponent=ReMain) => {
-  const InputComp = (props) => {
+  const InputComp = forwardRef((props, ref) => {
     const {
       post,
       Aside,
@@ -64,6 +64,7 @@ export const InputHoc = (Component, RootComponent=ReMain) => {
             styles={styles}
             required={required}
             {...(Aside && { type: post ? 'post' : 'pre' })}
+            ref={ref}
           />
           {post && Aside && (
             <FormAside
@@ -80,7 +81,7 @@ export const InputHoc = (Component, RootComponent=ReMain) => {
         )}
       </RootComponent>
     )
-  }
+  })
 
   InputComp.displayName = `InputHoc(${Component.name || Component.displayName || 'FormComponent'})`
 

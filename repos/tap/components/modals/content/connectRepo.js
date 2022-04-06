@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo, useEffect } from 'react'
+import React, { useCallback, useState, useMemo, useEffect, useRef } from 'react'
 import { Modal } from '../modal'
 import { Values } from 'HKConstants'
 import { Git } from 'HKAssets/icons/git'
@@ -14,6 +14,7 @@ import { setScreenById } from 'HKActions/screens/setScreenById'
 import { setActiveModal } from 'HKActions/modals/setActiveModal'
 import { SignOutButton } from 'HKComponents/buttons/signOutButton'
 import { ControlledAuto } from 'HKComponents/form/controlledAuto'
+import { ControlledSwitch } from 'HKComponents/form/controlledSwitch'
 import { CondensedButton } from 'HKComponents/buttons/condensedButton'
 import { setModalVisibility } from 'HKActions/modals/setModalVisibility'
 import { ConnectRepoButton } from 'HKComponents/buttons/connectRepoButton'
@@ -72,6 +73,38 @@ const useSelectItem = (item, setItem) => {
   return useCallback(update => {
     update.text !== item && setItem(update.text)
   }, [item, setItem])
+}
+
+
+const useSwitchBranch = () => {
+  const switchRef = useRef()
+  const [createBranch, setCreateBranch] = useState(true)
+
+  const onSwitchCreateBranch = useCallback((value) => {
+    setCreateBranch(value)
+    switchRef.current.setChecked(value)
+  }, [createBranch, switchRef.current])
+
+  const switchHelper = createBranch
+    ? `Create a new branch from the selected branch`
+    : `Reuse the selected branch`
+    
+  const switchTitle = createBranch
+    ? 'New Branch'
+    : `Reuse Branch`
+
+  useEffect(() => {
+    switchRef.current.setChecked(createBranch)
+  }, [])
+  
+  return {
+    switchRef,
+    switchTitle,
+    switchHelper,
+    createBranch,
+    setCreateBranch,
+    onSwitchCreateBranch
+  }
 }
 
 /**
@@ -133,11 +166,19 @@ export const ConnectRepoModal = props => {
 
   // On initial load of the component, load the users repos
   useEffect(() => ((!providerRepos || !providerRepos.length) && getRepos()), [])
-  
+
   const [branch, setBranch] = useState('')
   const [connectError, setConnectError] = useState(false)
   const [repoUrl, setRepoUrl] = useState('')
   const [isConnecting, setIsConnecting] = useState(false)
+
+  const {
+    switchRef,
+    switchTitle,
+    switchHelper,
+    createBranch,
+    onSwitchCreateBranch,
+  } = useSwitchBranch()
 
   const onRepoSelect = useSelectItem(repoUrl, setRepoUrl)
   const onBranchSelect = useSelectItem(branch, setBranch)
@@ -183,11 +224,12 @@ export const ConnectRepoModal = props => {
       footerLeft={(<SignOutButton disabled={isConnecting} />)}
       footerRight={(
         <ConnectRepoButton
-          repoUrl={repoUrl}
           branch={branch}
+          repoUrl={repoUrl}
           onError={onError}
-          onConnect={onLoadRepo}
           disabled={disabled}
+          onConnect={onLoadRepo}
+          createBranch={createBranch}
           onConnecting={onConnecting}
         />
       )}
@@ -197,7 +239,7 @@ export const ConnectRepoModal = props => {
         loading={isConnecting && 'Connecting Repo ...'}
       />
       <ControlledAuto
-        zIndex={2}
+        zIndex={3}
         Aside={Link}
         text={repoUrl}
         values={repos}
@@ -211,7 +253,7 @@ export const ConnectRepoModal = props => {
         placeholder='https://github.com/organization/repo-name'
       />
       <ControlledAuto
-        zIndex={1}
+        zIndex={2}
         Aside={Branch}
         text={branch}
         required={true}
@@ -223,6 +265,14 @@ export const ConnectRepoModal = props => {
         disabled={isConnecting}
         onSelect={onBranchSelect}
         className={'modal-repo-branch-field'}
+      />
+      <ControlledSwitch
+        zIndex={1}
+        ref={switchRef}
+        title={switchTitle}
+        helper={switchHelper}
+        onValueChange={onSwitchCreateBranch}
+        className={'modal-repo-branch-new-field'}
       />
     </Modal>
   )

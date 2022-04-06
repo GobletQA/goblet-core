@@ -1,8 +1,8 @@
 const path = require('path')
 const { throwErr } = require('./throwErr')
-const { isObj } = require('@keg-hub/jsutils')
 const { ensurePath } = require('./ensurePath')
 const { getRepoPath } = require('./getRepoPath')
+const { isObj, exists } = require('@keg-hub/jsutils')
 
 /**
  * Builds the arguments required for syncing a git repo
@@ -23,11 +23,15 @@ const configureGitArgs = async args => {
 
   const repoPath = getRepoPath(args)
 
+  const branchCreate = repo?.createBranch
+  const createBranch = exists(branchCreate) ? branchCreate : true
+
   // Ensure the repo path exists, and if not then throw
   const pathExists = await ensurePath(repoPath)
   !pathExists && throwErr(`Repo directory could not be created`)
 
   return {
+    createBranch,
     local: repoPath,
     remote: repo.url,
     email: user.email,
