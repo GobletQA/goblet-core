@@ -29,6 +29,7 @@ export const InputHoc = (Component, RootComponent=ReMain) => {
       helper,
       styles,
       required,
+      preHelper,
       asideProps,
       ...inputProps
     } = props
@@ -49,6 +50,9 @@ export const InputHoc = (Component, RootComponent=ReMain) => {
             </ReLabelText>
             {error && (<ReErrorText children={error} />)}
           </ReLabel>
+        )}
+        {preHelper && (
+          <ReHelperText children={preHelper} />
         )}
         <ReContainer style={styles?.container}>
           {!post && Aside && (

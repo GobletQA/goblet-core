@@ -87,11 +87,11 @@ const useSwitchBranch = () => {
 
   const switchHelper = createBranch
     ? `Create a new branch from the selected branch`
-    : `Reuse the selected branch`
+    : `Use the selected branch`
     
   const switchTitle = createBranch
-    ? 'New Branch'
-    : `Reuse Branch`
+    ? 'Branch From'
+    : `Branch`
 
   useEffect(() => {
     switchRef.current.setChecked(createBranch)
@@ -258,7 +258,7 @@ export const ConnectRepoModal = props => {
         text={branch}
         required={true}
         values={branches}
-        title={'Branch'}
+        title={switchTitle}
         placeholder='main'
         onChange={setBranch}
         emptyShowList={true}
@@ -269,8 +269,7 @@ export const ConnectRepoModal = props => {
       <ControlledSwitch
         zIndex={1}
         ref={switchRef}
-        title={switchTitle}
-        helper={switchHelper}
+        preHelper={switchHelper}
         onValueChange={onSwitchCreateBranch}
         className={'modal-repo-branch-new-field'}
       />
