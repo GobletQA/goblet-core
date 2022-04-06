@@ -107,15 +107,18 @@ export const Tab = React.memo(props => {
     styles,
     tabStyle,
     onTabSelect,
-    disabled=false
+    disabled=false,
+    clickable=true,
   } = props
 
   const [styleRef, themeStyles] = useThemeHover(styles?.default, styles?.hover)
   const mergedStyles = useStyle(themeStyles, active && styles?.active, tabStyle)
   const onPress = useCallback(() => onTabSelect(id), [id, onTabSelect])
 
+  const ParentComponent = clickable ? Touchable : View
+
   return (
-    <Touchable
+    <ParentComponent
       onPress={onPress}
       disabled={disabled}
       className='tabbar-tab'
@@ -131,6 +134,6 @@ export const Tab = React.memo(props => {
           styles={mergedStyles}
         />
       </View>
-    </Touchable>
+    </ParentComponent>
   )
 })

@@ -1,20 +1,31 @@
 const fs = require('fs')
 const path = require('path')
-const {noOp} = require('@keg-hub/jsutils')
+const {noOp, checkCall, deepMerge} = require('@keg-hub/jsutils')
 const { EventsRecorder } = require('./eventsRecorder')
 
 class Recorder {
-  
+  options = {}
+  onEvents = []
+  recordTag = `// <<CONTENT>>`
+
+
   constructor(config) {
-    this.setBrowser(config)
+    this.setupRecorder(config)
   }
 
-  setBrowser = ({ activeFile, page, context, browser, onEvent=noOp }) => {
-    this.page = page
-    this.context = context
-    this.browser = browser 
-    this.onEvent = onEvent
-    activeFile && (this.activeFile = activeFile)
+  fireEvent = (...args) => {
+    this.onEvents.map(func => checkCall(func, ...args))
+  }
+
+  setupRecorder = config => {
+    const { activeFile, page, context, browser, onEvent=noOp, options } = config
+
+    if(page) this.page = page
+    if(context) this.context = context
+    if(browser) this.browser = browser
+    if(onEvent) this.onEvents.push(onEvent)
+    if(activeFile) this.activeFile = activeFile
+    if(options) this.options = deepMerge(this.options, options)
   }
 
   start = async ({ url, ...config }) => {
@@ -26,19 +37,20 @@ class Recorder {
       return console.warn(`Active file does not exit!`)
 
     this.recording = true
-    this.setBrowser(config)
+    this.setupRecorder(config)
+    this.addRecordTag()
 
-    this.onEvent('RECORDING-STARTED')
+    this.fireEvent('RECORDING-STARTED')
 
     // Create a binding to receive actions from the page.
     await this.context.exposeBinding('herkinRecordAction', this.onInjectedAction)
 
     // Load the page.
     this.page = this.page || await this.context.newPage()
-    await this.page.goto(url)
+    url && await this.page.goto(url)
 
     // Inject the script that detects actions and highlights elements.
-    const injectedScript = fs.readFileSync(path.join(__dirname, './injectedScript'))
+    const injectedScript = fs.readFileSync(path.join(__dirname, 'inject/record.js')).toString()
     await this.page.addScriptTag({content: injectedScript})
     await this.page.addInitScript({content: injectedScript})
 
@@ -51,7 +63,7 @@ class Recorder {
   stop = async (close) => {
     if(!this.context) return console.warn('No recording in progress to stop')
 
-    this.onEvent('RECORDING-STOPPED')
+    this.fireEvent('RECORDING-STOPPED')
 
     const updatedFile = this.generateCode()
     this.page = null
@@ -59,7 +71,9 @@ class Recorder {
     this.browser = null
     this.activeFile = null
     this.recording = false
+    this.onEvents = []
 
+    this.fireEvent('UPDATED-FILE-CONTENT', updatedFile)
     return updatedFile
   }
 
@@ -70,7 +84,21 @@ class Recorder {
     const linesOfCode = EventsRecorder.getCode().map(line => '    ' + line)
 
     // TODO: replace the content in the file and save it
-    return this.activeFile.replace('    // <<CONTENT>>', linesOfCode.join('\n\n'))
+    return this.activeFile.replace(this.recordTag, linesOfCode.join('\n\n'))
+  }
+
+  addRecordTag = () => {
+    if(this.activeFile.includes(this.recordTag))
+      return console.log(`Record tag already exists in active file content`)
+
+    const lines = this.activeFile.split(`\n`)
+    const totalLines = lines.length
+    const location = totalLines < this.options.line
+      ? this.options.line
+      : totalLines
+
+    lines.splice(location, 0, this.recordTag)
+    this.activeFile = lines.join(`\n`)
   }
 
   /**
@@ -80,12 +108,16 @@ class Recorder {
    */
   onInjectedAction = (source, pageEvent) => {
     EventsRecorder?.recordEvent(pageEvent)
+    // TODO: do something with the updated file
+    // const updatedFile = this.generateCode()
+
   }
 
   /**
    * Called by playwright when the page finished loading (including after subsequent navigations).
    */
-  onPageLoad = () => {
+  onPageLoad = (...args) => {
+    // TODO: @lance-tipton - this is not firing on initial page load
     EventsRecorder?.recordEvent({type: 'pageload'})
   }
 

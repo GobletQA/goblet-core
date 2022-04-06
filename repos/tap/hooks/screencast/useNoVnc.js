@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Values } from 'HKConstants'
-import { useSelector } from '../useSelector'
+import { useSelector } from 'HKHooks/useSelector'
 import { useScreenResize } from './useScreenResize'
 import { actionBrowser } from 'HKActions/screencast/api/actionBrowser'
 

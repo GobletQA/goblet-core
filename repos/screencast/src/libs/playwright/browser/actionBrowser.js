@@ -1,4 +1,5 @@
 const { startBrowser } = require('./startBrowser')
+const { Recorder }  = require('../recorder/recorder')
 const { isArr, isStr, isFunc, noPropArr } = require('@keg-hub/jsutils')
 
 /**
@@ -56,6 +57,23 @@ const callAction = async (action, component, pwComponents, prevResp) => {
       )
 }
 
+const doRecordAction = async (action, component, pwComponents, prevResp) => {
+  const { props } = action
+  const [activeFile, recordOpts, url] = props
+
+  const recorder = new Recorder({
+    ...pwComponents,
+    options: recordOpts,
+    activeFile: activeFile.content,
+  })
+  
+  // TODO: @lance-tipton - Need a way to keep reference to the recorder
+  // either make Recorder a singleton, or track it by reference ID?
+  const started = await recorder.start({ url })
+  return { recording: started }
+}
+
+
 /**
  * Execute an action on a browser
  * @param {Object} args
@@ -87,6 +105,7 @@ const actionBrowser = async (args, browserConf) => {
   return actions.reduce(async (toResolve, action) => {
     await toResolve
     const prevResp = responses[responses.length - 1]
+
     // If the action if a method, cal if an pass the callAction method and params
     const resp = isFunc(action.action)
       ? await action.action(
@@ -97,7 +116,11 @@ const actionBrowser = async (args, browserConf) => {
           prevResp,
           responses
         )
-      : await callAction(action, component, pwComponents, prevResp)
+      : action.action === 'record'
+        ? await doRecordAction(action, component, pwComponents, prevResp)
+        : await callAction(action, component, pwComponents, prevResp)
+
+    responses.push(resp)
 
     return responses
   }, Promise.resolve())
