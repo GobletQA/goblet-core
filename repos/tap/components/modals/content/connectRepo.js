@@ -14,7 +14,8 @@ import { setScreenById } from 'HKActions/screens/setScreenById'
 import { setActiveModal } from 'HKActions/modals/setActiveModal'
 import { SignOutButton } from 'HKComponents/buttons/signOutButton'
 import { ControlledAuto } from 'HKComponents/form/controlledAuto'
-import { ControlledSwitch } from 'HKComponents/form/controlledSwitch'
+import { ControlledInput } from 'HKComponents/form/controlledInput'
+import { ControlledCheckbox } from 'HKComponents/form/controlledCheckbox'
 import { CondensedButton } from 'HKComponents/buttons/condensedButton'
 import { setModalVisibility } from 'HKActions/modals/setModalVisibility'
 import { ConnectRepoButton } from 'HKComponents/buttons/connectRepoButton'
@@ -76,34 +77,16 @@ const useSelectItem = (item, setItem) => {
 }
 
 
-const useSwitchBranch = () => {
-  const switchRef = useRef()
+const useCreateNewBranch = () => {
   const [createBranch, setCreateBranch] = useState(true)
 
-  const onSwitchCreateBranch = useCallback((value) => {
-    setCreateBranch(value)
-    switchRef.current.setChecked(value)
-  }, [createBranch, switchRef.current])
+  const onCreateBranch = useCallback((event) => {
+    setCreateBranch(event.target.checked)
+  }, [createBranch])
 
-  const switchHelper = createBranch
-    ? `Create a new branch from the selected branch`
-    : `Use the selected branch`
-    
-  const switchTitle = createBranch
-    ? 'Branch From'
-    : `Branch`
-
-  useEffect(() => {
-    switchRef.current.setChecked(createBranch)
-  }, [])
-  
   return {
-    switchRef,
-    switchTitle,
-    switchHelper,
     createBranch,
-    setCreateBranch,
-    onSwitchCreateBranch
+    onCreateBranch
   }
 }
 
@@ -167,18 +150,13 @@ export const ConnectRepoModal = props => {
   // On initial load of the component, load the users repos
   useEffect(() => ((!providerRepos || !providerRepos.length) && getRepos()), [])
 
+  const [branchName, setBranchName] = useState('')
   const [branch, setBranch] = useState('')
   const [connectError, setConnectError] = useState(false)
   const [repoUrl, setRepoUrl] = useState('')
   const [isConnecting, setIsConnecting] = useState(false)
 
-  const {
-    switchRef,
-    switchTitle,
-    switchHelper,
-    createBranch,
-    onSwitchCreateBranch,
-  } = useSwitchBranch()
+  const {createBranch, onCreateBranch} = useCreateNewBranch()
 
   const onRepoSelect = useSelectItem(repoUrl, setRepoUrl)
   const onBranchSelect = useSelectItem(branch, setBranch)
@@ -239,7 +217,7 @@ export const ConnectRepoModal = props => {
         loading={isConnecting && 'Connecting Repo ...'}
       />
       <ControlledAuto
-        zIndex={3}
+        zIndex={5}
         Aside={Link}
         text={repoUrl}
         values={repos}
@@ -253,12 +231,12 @@ export const ConnectRepoModal = props => {
         placeholder='https://github.com/organization/repo-name'
       />
       <ControlledAuto
-        zIndex={2}
+        zIndex={4}
         Aside={Branch}
         text={branch}
         required={true}
         values={branches}
-        title={switchTitle}
+        title={`Branch`}
         placeholder='main'
         onChange={setBranch}
         emptyShowList={true}
@@ -266,13 +244,28 @@ export const ConnectRepoModal = props => {
         onSelect={onBranchSelect}
         className={'modal-repo-branch-field'}
       />
-      <ControlledSwitch
-        zIndex={1}
-        ref={switchRef}
-        preHelper={switchHelper}
-        onValueChange={onSwitchCreateBranch}
-        className={'modal-repo-branch-new-field'}
-      />
+      {branch && (
+        <ControlledCheckbox
+          zIndex={3}
+          postInline
+          checked={createBranch}
+          onChange={onCreateBranch}
+          InlineComponent={`Create New Branch${branch ? ' from ' + branch : ''}`}
+        />
+      )}
+      {branch && createBranch && (
+        <ControlledInput
+          zIndex={2}
+          Aside={Branch}
+          required={true}
+          value={branchName}
+          disabled={isConnecting}
+          title={`Name`}
+          placeholder='my-awesome-branch'
+          onValueChange={setBranchName}
+          className={'modal-repo-branch-name-field'}
+        />
+      )}
     </Modal>
   )
 }

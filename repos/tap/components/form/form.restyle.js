@@ -2,7 +2,15 @@ import React from 'react'
 import { get, exists } from '@keg-hub/jsutils'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { Autocomplete } from '@keg-hub/keg-components/autocomplete'
-import { Text, View, Select, Option, Input, Label, Switch } from '@keg-hub/keg-components'
+import {
+  Text,
+  View,
+  Select,
+  Option,
+  Label,
+  Switch,
+  Checkbox
+} from '@keg-hub/keg-components'
 
 export const ReMain = reStyle(View)((theme, { zIndex }) => ({
   pos: 'relative',
@@ -62,8 +70,27 @@ export const ReContainer = reStyle(View)(theme => ({
 export const ReSelect = reStyle(Select, 'styles')(theme => ({
   main: {
     fl: 1,
+    w: 35
   }
 }))
+
+export const ReCheckbox = reStyle(Checkbox, 'styles')(theme => ({
+  main: {
+    fl: 1,
+    w: 'auto'
+  }
+}))
+
+export const ReInlineText = reStyle(Text)(theme => ({
+  alignItems: `center`,
+  height: 35,
+  width: `100%`,
+  paddingLeft: 15,
+  display: `flex`,
+  fontSize: 14,
+
+}))
+
 
 export const ReOption = reStyle(Option)(theme => ({}))
 
@@ -85,6 +112,7 @@ const sideStyles = {
   maxW: 35,
   w: 35,
   h: 35,
+  minW: 35,
   jtC: 'center',
   alI: 'center',
   bW: 1,
