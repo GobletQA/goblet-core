@@ -2,7 +2,6 @@ const express = require('express')
 const { getHerkinConfig, resetHerkinConfig } = require('HerkinSharedConfig')
 
 let _APP
-let _CONFIG_TYPE
 
 /**
  * Reloads the herkin config be deleting the current config and calling getHerkinConfig
@@ -31,15 +30,7 @@ const reloadHerkinConfig = type => {
  * @returns {Object} - Express App Object
  */
 const setupApp = type => {
-  if (_APP.locals.config) return _APP
-
-  // Cache the initial type loaded
-  // In the event the config is reloaded, we can use the same time
-  if (!_CONFIG_TYPE) _CONFIG_TYPE = type
-
-  const config = getHerkinConfig()
-  _APP.locals.config =
-    _CONFIG_TYPE && config[_CONFIG_TYPE] ? config[_CONFIG_TYPE] : config
+  !_APP.locals.config && (_APP.locals.config = getHerkinConfig())
 
   return _APP
 }

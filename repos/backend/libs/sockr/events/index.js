@@ -3,4 +3,5 @@ module.exports = {
   ...require('./browserStatus'),
   ...require('./connection'),
   ...require('./repoStatus'),
+  ...require('./browserRecorder'),
 }

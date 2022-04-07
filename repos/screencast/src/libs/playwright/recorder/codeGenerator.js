@@ -6,24 +6,26 @@ class CodeGenerator {
   }
 
   getCode = () => {
-    return this.recorder.getProcessedEvents().map(event => {
-      switch (event.type) {
-        case 'click':
-          return this.generateCodeForClickEvent(event)
-        case 'mousedown':
-          return this.generateCodeForMouseDownEvent(event)
-        case 'mouseup':
-          return this.generateCodeForMouseUpEvent(event)
-        case 'keypress':
-          return this.generateCodeForKeyboardEvent(event)
-        case 'fill':
-          return this.generateCodeForFillEvent(event)
-        case 'pageload':
-          return this.generateCodeForPageLoadEvent(event)
-      }
-  
-      return ''
-    })
+    return this.recorder.getProcessedEvents().map(event => this.codeFromEvent(event))
+  }
+
+  codeFromEvent = (event) => {
+    switch (event.type) {
+      case 'click':
+        return this.generateCodeForClickEvent(event)
+      case 'mousedown':
+        return this.generateCodeForMouseDownEvent(event)
+      case 'mouseup':
+        return this.generateCodeForMouseUpEvent(event)
+      case 'keypress':
+        return this.generateCodeForKeyboardEvent(event)
+      case 'fill':
+        return this.generateCodeForFillEvent(event)
+      case 'pageload':
+        return this.generateCodeForPageLoadEvent(event)
+    }
+
+    return ''
   }
 
   generateCodeForClickEvent = (event) => {

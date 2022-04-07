@@ -83,7 +83,8 @@ const browserAction = asyncWrap(async (req, res) => {
   const { body, app } = req
   const { ref, actions, ...browser } = body
   const browserConf = joinConf(browser, app)
-  await actionBrowser({ ref, actions }, browserConf)
+
+  await actionBrowser({ ref, actions, id: req.user.userId }, browserConf)
 
   return apiRes(req, res, noOpObj, 200)
 })

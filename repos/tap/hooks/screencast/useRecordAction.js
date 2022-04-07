@@ -1,10 +1,10 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { Values } from 'HKConstants'
 import { useSelector } from 'HKHooks/useSelector'
-import { addToast } from 'HKActions/toasts/addToast'
-import { noOpObj, get, noOp } from '@keg-hub/jsutils'
+import { noOpObj, noOp } from '@keg-hub/jsutils'
 import { useActiveFile } from 'HKHooks/activeFile/useActiveFile'
 import { actionBrowser } from 'HKActions/screencast/api/actionBrowser'
+import { startBrowserRecorder } from 'HKActions/screencast/socket/startBrowserRecorder'
 
 const { STORAGE } = Values
 
@@ -31,14 +31,9 @@ export const useRecordAction = props => {
   return useCallback(
     async event => {
       const appUrl = repo?.world?.url || repo?.world?.app?.url
-
-      actionBrowser({
+      const action = {
         ref: 'page',
         actions: [
-          {
-            action: 'goto',
-            props: [appUrl],
-          },
           {
             action: 'record',
             props: [
@@ -54,7 +49,10 @@ export const useRecordAction = props => {
             ],
           }
         ],
-      }, false)
+      }
+
+      startBrowserRecorder(action)
+      // actionBrowser(, false)
     },
     [onRecord, testFile, repo]
   )

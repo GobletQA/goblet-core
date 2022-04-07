@@ -53,6 +53,7 @@ export const types = deepFreeze({
     CMD_FAIL: 'cmdFail',
     AUTH_TOKEN: 'authToken',
     BROWSER_STATUS: `browserStatus`,
+    BROWSER_RECORDER: 'browserRecorder'
   },
   STATUS_TYPES: {
     VNC: 'vnc',

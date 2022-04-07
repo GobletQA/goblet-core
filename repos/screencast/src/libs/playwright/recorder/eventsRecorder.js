@@ -6,9 +6,18 @@ const { CodeGenerator } = require('./codeGenerator')
 */
 class EventsRecorder {
   rawEvents = []
+  generator = null
+
+  constructor(){
+    this.generator = new CodeGenerator(this)
+  }
 
   recordEvent = (event) => {
     this.rawEvents.push(event)
+  }
+
+  codeFromEvent = event => {
+    return this.generator.codeFromEvent(event)
   }
 
   /**
@@ -95,8 +104,7 @@ class EventsRecorder {
   }
 
   getCode = () => {
-    const generator = new CodeGenerator(this)
-    return generator.getCode()
+    return this.generator.getCode()
   }
 }
 

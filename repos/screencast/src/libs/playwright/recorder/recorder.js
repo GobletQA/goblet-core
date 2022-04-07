@@ -1,15 +1,28 @@
 const fs = require('fs')
 const path = require('path')
-const {noOp, checkCall, deepMerge} = require('@keg-hub/jsutils')
+const {noOp, checkCall, deepMerge, noOpObj} = require('@keg-hub/jsutils')
 const { EventsRecorder } = require('./eventsRecorder')
 
+const RecorderInstances = []
+
 class Recorder {
+  id = null
   options = {}
   onEvents = []
   recordTag = `// <<CONTENT>>`
+  trackEvents = []
+  lastEvent = {}
 
+  static getInstance = (id, config) => {
+    if(RecorderInstances[id]) return RecorderInstances[id]
+    
+    RecorderInstances[id] = new Recorder(config, id)
 
-  constructor(config) {
+    return RecorderInstances[id]
+  }
+
+  constructor(config, id) {
+    this.id = id
     this.setupRecorder(config)
   }
 
@@ -40,7 +53,7 @@ class Recorder {
     this.setupRecorder(config)
     this.addRecordTag()
 
-    this.fireEvent('RECORDING-STARTED')
+    this.fireEvent({ type: 'RECORD-GENERAL', message: 'Recording started' })
 
     // Create a binding to receive actions from the page.
     await this.context.exposeBinding('herkinRecordAction', this.onInjectedAction)
@@ -63,7 +76,7 @@ class Recorder {
   stop = async (close) => {
     if(!this.context) return console.warn('No recording in progress to stop')
 
-    this.fireEvent('RECORDING-STOPPED')
+    this.fireEvent({ type: 'RECORD-GENERAL',  message: 'Recording stopped' })
 
     const updatedFile = this.generateCode()
     this.page = null
@@ -72,8 +85,10 @@ class Recorder {
     this.activeFile = null
     this.recording = false
     this.onEvents = []
+    this.fireEvent({message: 'Updated file content', data: updatedFile})
 
-    this.fireEvent('UPDATED-FILE-CONTENT', updatedFile)
+    delete RecorderInstances[id]
+
     return updatedFile
   }
 
@@ -81,7 +96,8 @@ class Recorder {
     if (!this.activeFile)
       return console.warn(`Active file does not exit!`)
 
-    const linesOfCode = EventsRecorder.getCode().map(line => '    ' + line)
+    const linesOfCode = EventsRecorder.getCode()
+    // .map(line => '    ' + line)
 
     // TODO: replace the content in the file and save it
     return this.activeFile.replace(this.recordTag, linesOfCode.join('\n\n'))
@@ -107,9 +123,61 @@ class Recorder {
    * @param PageEvent 
    */
   onInjectedAction = (source, pageEvent) => {
-    EventsRecorder?.recordEvent(pageEvent)
-    // TODO: do something with the updated file
-    // const updatedFile = this.generateCode()
+    
+    const lastEvtMD = this.lastEvent.type === 'mousedown'
+    const lastEvtMU = this.lastEvent.type === 'mouseup'
+
+    console.log(`------- pageEvent -------`)
+    console.log(pageEvent)
+
+    // If last event was mouse up, and current event is click, use click only
+    if(lastEvtMU && pageEvent.type === 'click'){
+      // Get the cached mousedown event
+      const downEvent = this.trackEvents.shift() || noOpObj
+      this.trackEvents = []
+      
+      // Use the original target of the mousedown event
+      const event = {
+        ...pageEvent,
+        target: downEvent.target || pageEvent.target
+      }
+  
+      const code = EventsRecorder.codeFromEvent(event)
+
+      this.fireEvent({
+        type: 'RECORD-ACTION',
+        data: { ...event, code },
+        message: `${event.type} action recorded`,
+      })
+    }
+
+    // If last event was mouse down, and current event is mouse up
+    // Then track mouse up and wait for click event
+    else if(lastEvtMD && pageEvent.type === 'mouseup'){
+      this.trackEvents.push(pageEvent)
+    }
+
+    // If last event was mouse down, and current event is mouse up
+    // Then track mouse up and wait for click event
+    else if(pageEvent.type === 'mousedown'){
+      this.trackEvents.push(pageEvent)
+    }
+    // else if(pageEvent.type === 'keypress'){
+    //   this.trackEvents.push(pageEvent)
+    // }
+
+    // Otherwise if now in a mouse-down state, handle event
+    else {
+      this.trackEvents = []
+      const code = EventsRecorder.codeFromEvent(pageEvent)
+      this.fireEvent({
+        type: 'RECORD-ACTION',
+        data: { ...pageEvent, code },
+        message: `${pageEvent.type} action recorded`,
+      })
+    }
+
+    this.lastEvent = pageEvent
 
   }
 
@@ -117,6 +185,7 @@ class Recorder {
    * Called by playwright when the page finished loading (including after subsequent navigations).
    */
   onPageLoad = (...args) => {
+    this.fireEvent({ message: 'page loaded' })
     // TODO: @lance-tipton - this is not firing on initial page load
     EventsRecorder?.recordEvent({type: 'pageload'})
   }

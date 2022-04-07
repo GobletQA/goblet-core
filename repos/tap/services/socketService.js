@@ -1,5 +1,6 @@
 import { isDev } from 'HKUtils/isDev'
 import * as sockrActions from 'HKActions/sockr'
+import { localStorage } from'HKUtils/storage/localStorage'
 import { camelCase, snakeCase, checkCall } from '@keg-hub/jsutils'
 import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
 
@@ -31,6 +32,9 @@ const events = {
   browserStatus: function (message, instance, event) {
     // TODO: Update to call browser status update local action
     //
+  },
+  browserRecorder: function(message, instance, event){
+    
   },
 }
 
@@ -65,13 +69,14 @@ class SocketService {
    *
    * @returns {void}
    */
-  emit = (event, data) => {
+  emit = async (event, data) => {
     // Get a matching event type from sockr
     // Or use the passed in event if one does not exist
     const eventType = EventTypes[snakeCase(event)] || event
+    const jwt = await localStorage.getJwt()
 
     // Emit the event to the backend
-    SockrService.emit(eventType, data)
+    SockrService.emit(eventType, { ...data, token: jwt })
   }
 
   /**
@@ -84,8 +89,9 @@ class SocketService {
    *
    * @returns {*} Response from SockrService.runCommand
    */
-  runCommand = (data, params) => {
-    SockrService.runCommand(data, params)
+  runCommand = async (data, params) => {
+    const jwt = await localStorage.getJwt()
+    SockrService.runCommand({ ...data, token: jwt }, params)
   }
 
   /**

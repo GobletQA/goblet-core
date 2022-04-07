@@ -2,12 +2,14 @@
 require('../../../configs/aliases.config').registerAliases()
 
 const { getApp } = require('HerkinSharedApp')
-const apiEndpoints = require('HerkinSCEndpoints')
+const { validateUser } = require('./middleware')
 const { Logger } = require('@keg-hub/cli-utils')
+const apiEndpoints = require('HerkinSCEndpoints')
 const {
   setupCors,
-  setupLogger,
   setupServer,
+  setupLoggerReq,
+  setupLoggerErr,
 } = require('HerkinSharedMiddleware')
 
 /**
@@ -17,13 +19,17 @@ const {
  * @returns {Object} - Express app, server and socket.io socket
  */
 const initApi = async () => {
-  const app = getApp('screencast')
-  const { server: serverConf } = app.locals.config
+  const app = getApp()
 
-  setupLogger(app)
+  const { screencast } = app.locals.config
+  const { server: serverConf } = screencast
+
+  setupLoggerReq(app)
   setupCors(app)
   setupServer(app)
+  validateUser(app)
   apiEndpoints(app)
+  setupLoggerErr(app)
 
   const server = app.listen(serverConf.port, serverConf.host, () => {
     const serverUrl = `http://${serverConf.host}:${serverConf.port}`
@@ -36,7 +42,9 @@ const initApi = async () => {
   return { app, server }
 }
 
-!module.parent && module.id !== '.'
+
+
+require.main === module
   ? initApi()
   : (module.exports = () => {
       initApi()

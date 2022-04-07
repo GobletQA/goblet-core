@@ -10,7 +10,7 @@ const start = () => {
   initApi()
 }
 
-!module.parent && module.id !== '.'
+require.main === module
   ? start()
   : (module.exports = {
       ...require('./src/libs'),

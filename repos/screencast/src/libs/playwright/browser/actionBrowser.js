@@ -14,7 +14,9 @@ const throwErr = message => {
  * Helper to validate the correct arguments exist to run the actions
  */
 const validateArgs = (args, component) => {
-  const { ref, actions = noPropArr } = args
+  const { ref, actions = noPropArr, id } = args
+
+  if (!isStr(id)) throwErr(`Invalid authorization id`)
 
   if (!isStr(ref))
     throwErr(`Playwright ${ref} must be one of browser, context, or page`)
@@ -43,7 +45,7 @@ const validateArgs = (args, component) => {
  *
  * @returns {*} - Response from the component action
  */
-const callAction = async (action, component, pwComponents, prevResp) => {
+const callAction = async (action, component, pwComponents, prevResp, id, onEvent) => {
   const comp = pwComponents[action.ref] || component
   // Ensure props is an array
   const props = isArr(action.props) ? [...action.props] : []
@@ -57,16 +59,17 @@ const callAction = async (action, component, pwComponents, prevResp) => {
       )
 }
 
-const doRecordAction = async (action, component, pwComponents, prevResp) => {
+const doRecordAction = async (action, component, pwComponents, prevResp, id, onRecordEvent) => {
   const { props } = action
   const [activeFile, recordOpts, url] = props
 
-  const recorder = new Recorder({
+  const recorder = Recorder.getInstance(id, {
     ...pwComponents,
     options: recordOpts,
+    onEvent: onRecordEvent,
     activeFile: activeFile.content,
   })
-  
+
   // TODO: @lance-tipton - Need a way to keep reference to the recorder
   // either make Recorder a singleton, or track it by reference ID?
   const started = await recorder.start({ url })
@@ -93,13 +96,11 @@ const doRecordAction = async (action, component, pwComponents, prevResp) => {
  * @returns {Array} - Responses of all executed actions in order of execution
  */
 const actionBrowser = async (args, browserConf) => {
-  const { ref = 'browser', actions = noPropArr } = args
+  const { ref = 'browser', actions = noPropArr, id, onRecordEvent } = args
   const pwComponents = await startBrowser(browserConf)
   const component = pwComponents[ref]
   validateArgs(args, component)
 
-  // TODO: @lance-tipton - Add check for recording action
-  // Then call recorder class
 
   const responses = []
   return actions.reduce(async (toResolve, action) => {
@@ -114,11 +115,12 @@ const actionBrowser = async (args, browserConf) => {
           component,
           pwComponents,
           prevResp,
-          responses
+          responses,
+          id
         )
       : action.action === 'record'
-        ? await doRecordAction(action, component, pwComponents, prevResp)
-        : await callAction(action, component, pwComponents, prevResp)
+        ? await doRecordAction(action, component, pwComponents, prevResp, id, onRecordEvent)
+        : await callAction(action, component, pwComponents, prevResp, id)
 
     responses.push(resp)
 
