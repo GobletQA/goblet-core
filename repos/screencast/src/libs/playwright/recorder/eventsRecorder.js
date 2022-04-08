@@ -7,6 +7,10 @@ const { CodeGenerator } = require('./codeGenerator')
 class EventsRecorder {
   rawEvents = []
   generator = null
+  trackEvents = []
+  lastEvent = {}
+  keypressEvents = []
+  keypressTimer = null
 
   constructor(){
     this.generator = new CodeGenerator(this)
@@ -14,10 +18,6 @@ class EventsRecorder {
 
   recordEvent = (event) => {
     this.rawEvents.push(event)
-  }
-
-  codeFromEvent = event => {
-    return this.generator.codeFromEvent(event)
   }
 
   /**
@@ -101,6 +101,151 @@ class EventsRecorder {
     }
     
     return processedEvents
+  }
+
+
+  processKeyPressEvents = (fireEvent) => {
+    if(!this.keypressEvents.length) return
+
+    const events = []
+
+    const finalEvt = this.keypressEvents
+      .reduce((acc, evt) => {
+        if(!acc){
+          // Check if the input already had text before
+          evt.inputValue !== evt.key &&
+            (evt.previousValue = evt.inputValue.slice(0, -1))
+
+          return evt
+        }
+        
+        const targetEqual = evt.target === acc.target
+        const charEqual = evt.inputValue.slice(0, -1) === acc.inputValue
+
+        // If the targets are equal but not the text 
+        // Then assume the target was cleared, and replace with new text
+        if(targetEqual && !charEqual){
+          events.push(acc)
+          events.push({...acc, inputValue: ''})
+
+          return evt
+        }
+
+        // If not target equal, then input was changed
+        // So store the current acc, and switch to the new event
+        else if(!targetEqual && charEqual){
+          events.push(acc)
+          return evt
+        }
+
+        // Otherwise the events are the same
+        // So update the current acc with the next evt
+        return {
+          ...acc,
+          ...evt,
+        }
+      }, false)
+
+    // Add the final event to the end of any cached events
+    events.push(finalEvt)
+    
+    
+    // Loop all found events, generate the code, and call the fireEvent callback
+    events.map(evt => {
+      // Check if it's a keypress event or should convert into fill event
+      const type = evt.key === evt.inputValue
+        ? `keypress`
+        : evt.previousValue
+          ? evt.key === evt.inputValue.slice(evt.previousValue.length)
+            ? `keypress`
+            : `fill`
+          : `fill`
+
+      fireEvent({
+        type: 'RECORD-ACTION',
+        data: {
+          ...evt,
+          type,
+          code: this.generator.codeFromEvent({ ...evt, type })
+        },
+        message: `keypress actions recorded`,
+      })
+    })
+
+    this.keypressEvents = []
+    this.keypressTimer = undefined
+  }
+
+
+  checkFillSequence = (pageEvent, fireEvent) => {
+    // If a timer is already set, clear it out
+    if(this.keypressTimer){
+      clearTimeout(this.keypressTimer)
+      delete this.keypressTimer
+    }
+
+    // Add the keypress event and reset the keypress timer 
+    if(pageEvent.type === 'keypress'){
+      this.keypressEvents.push(pageEvent)
+      this.keypressTimer = setTimeout(() => this.processKeyPressEvents.call(this, fireEvent), 2000)
+      return false
+    }
+
+    // Non-keypress event and keypress exists the process the keypress events
+    else if(this.keypressEvents.length) {
+      this.processKeyPressEvents(fireEvent)
+    }
+
+    return true
+  }
+
+  checkClickSequence = (pageEvent, fireEvent) => {
+    const lastEvtMD = this.lastEvent.type === 'mousedown'
+    const lastEvtMU = this.lastEvent.type === 'mouseup'
+    
+    this.lastEvent = pageEvent
+
+    // If last event was mouse up, and current event is click, use click only
+    if(lastEvtMU && pageEvent.type === 'click'){
+      // Get the cached mousedown event
+      const downEvent = this.trackEvents.shift() || noOpObj
+      this.trackEvents = []
+      
+      // Use the original target of the mousedown event
+      const event = {
+        ...pageEvent,
+        target: downEvent.target || pageEvent.target
+      }
+  
+      fireEvent({
+        type: 'RECORD-ACTION',
+        data: {
+          ...event,
+          code: this.generator.codeFromEvent(event)
+        },
+        message: `${event.type} action recorded`,
+      })
+
+      return false
+    }
+
+    // If last event was mouse down, and current event is mouse up
+    // Then track mouse up and wait for click event
+    else if(lastEvtMD && pageEvent.type === 'mouseup'){
+      this.trackEvents.push(pageEvent)
+      return false
+    }
+
+    // If this event is mousedown
+    // Then track event and wait for mouseup event
+    else if(pageEvent.type === 'mousedown'){
+      this.trackEvents.push(pageEvent)
+      return false
+    }
+
+    this.trackEvents = []
+
+    return true
   }
 
   getCode = () => {

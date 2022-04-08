@@ -1,6 +1,6 @@
 const { Logger } = require('@keg-hub/cli-utils')
-const { isStr, get, set } = require('@keg-hub/jsutils')
 const { defaultBrowser } = require('HerkinSCConstants')
+const { isStr, get, set, isFunc } = require('@keg-hub/jsutils')
 
 /**
  * Cache holder for all launched playwright browsers by type
@@ -36,6 +36,15 @@ const setPage = (page, type = defaultBrowser) => {
   }
 
   set(PW_BROWSERS, [type, `page`], page)
+
+  // Add listener to delete the context when closed
+  page &&
+    isFunc(page.on) &&
+    page.on('close', () => {
+      if(!type || !PW_BROWSERS[type] || !PW_BROWSERS[type].page) return
+
+      delete PW_BROWSERS[type].page
+    })
 }
 
 /**
@@ -67,6 +76,23 @@ const setContext = (context, type = defaultBrowser) => {
   }
 
   set(PW_BROWSERS, [type, `context`], context)
+
+  // Add listener to delete the context when closed
+  context &&
+    isFunc(context.on) &&
+    context.on('close', () => {
+      if(!type || !PW_BROWSERS[type]) return
+
+      if(!PW_BROWSERS[type].context) return
+      delete PW_BROWSERS[type].context
+
+      // PW_BROWSERS[type].page &&
+      //   isFunc(PW_BROWSERS[type].page.close) &&
+      //   PW_BROWSERS[type].page.close()
+
+      if(!PW_BROWSERS[type].page) return
+      delete PW_BROWSERS[type].page
+    })
 }
 
 /**
@@ -87,7 +113,15 @@ const getBrowser = (type = defaultBrowser) => {
  */
 const setBrowser = (browser, type = defaultBrowser) => {
   setBrowsers(browser, type)
+  // Add listener to delete the browser when closed
+  browser &&
+    isFunc(browser.on) &&
+    browser.on('disconnected', () => {
+      if (!type || !PW_BROWSERS[type] || !PW_BROWSERS[type].browser) return
+      delete PW_BROWSERS[type].browser
+    })
 }
+
 
 /**
  * Closes a browser, and removes it from the PW_BROWSERS object

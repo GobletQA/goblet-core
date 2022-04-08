@@ -78,7 +78,9 @@ class Recorder {
 
     this.fireEvent({ type: 'RECORD-GENERAL',  message: 'Recording stopped' })
 
+    // Since events are tracked in real time this should not be needed
     const updatedFile = this.generateCode()
+
     this.page = null
     this.context = null
     this.browser = null
@@ -123,62 +125,22 @@ class Recorder {
    * @param PageEvent 
    */
   onInjectedAction = (source, pageEvent) => {
-    
-    const lastEvtMD = this.lastEvent.type === 'mousedown'
-    const lastEvtMU = this.lastEvent.type === 'mouseup'
+    const noKeypress = EventsRecorder.checkFillSequence(pageEvent, this.fireEvent.bind(this))
+    const noClick = noKeypress && EventsRecorder.checkClickSequence(pageEvent, this.fireEvent.bind(this))
 
-    console.log(`------- pageEvent -------`)
-    console.log(pageEvent)
+    // TODO: @lance-tipton - Add other event listeners 
+    // Delete on input not being tracked
+    // Dragging, focus, blur, all need to be added
 
-    // If last event was mouse up, and current event is click, use click only
-    if(lastEvtMU && pageEvent.type === 'click'){
-      // Get the cached mousedown event
-      const downEvent = this.trackEvents.shift() || noOpObj
-      this.trackEvents = []
-      
-      // Use the original target of the mousedown event
-      const event = {
-        ...pageEvent,
-        target: downEvent.target || pageEvent.target
-      }
-  
-      const code = EventsRecorder.codeFromEvent(event)
-
+    noClick &&
       this.fireEvent({
         type: 'RECORD-ACTION',
-        data: { ...event, code },
-        message: `${event.type} action recorded`,
-      })
-    }
-
-    // If last event was mouse down, and current event is mouse up
-    // Then track mouse up and wait for click event
-    else if(lastEvtMD && pageEvent.type === 'mouseup'){
-      this.trackEvents.push(pageEvent)
-    }
-
-    // If last event was mouse down, and current event is mouse up
-    // Then track mouse up and wait for click event
-    else if(pageEvent.type === 'mousedown'){
-      this.trackEvents.push(pageEvent)
-    }
-    // else if(pageEvent.type === 'keypress'){
-    //   this.trackEvents.push(pageEvent)
-    // }
-
-    // Otherwise if now in a mouse-down state, handle event
-    else {
-      this.trackEvents = []
-      const code = EventsRecorder.codeFromEvent(pageEvent)
-      this.fireEvent({
-        type: 'RECORD-ACTION',
-        data: { ...pageEvent, code },
+        data: {
+          ...pageEvent,
+          code: EventsRecorder.generator.codeFromEvent(pageEvent)
+        },
         message: `${pageEvent.type} action recorded`,
       })
-    }
-
-    this.lastEvent = pageEvent
-
   }
 
   /**
