@@ -1,16 +1,20 @@
-import React, {forwardRef} from 'react'
+import React, {forwardRef, useCallback, useRef} from 'react'
 import { InputHoc } from './inputHoc'
 import {
   RePreside,
   RePostside,
   ReContainer,
   ReCheckbox,
-  ReInlineText
+  ReInlineText,
+  ReInlineTouch
 } from './form.restyle'
+
 
 const ControlledCheck = forwardRef((props, ref) => {
   const {
     styles,
+    checked,
+    onChange,
     preInline,
     postInline,
     InlineComponent,
@@ -20,6 +24,14 @@ const ControlledCheck = forwardRef((props, ref) => {
   const Wrapper = preInline
     ? RePostside
     : postInline && RePreside
+
+  const onTouch = useCallback(() => {
+    
+    console.log(ref)
+    
+    onChange?.({ target: { checked: !checked } })
+  }, [checked, onChange, ref])
+
 
   return (
     <ReContainer className='controlled-checkbox-container' >
@@ -32,6 +44,8 @@ const ControlledCheck = forwardRef((props, ref) => {
         <Wrapper>
           <ReCheckbox
             ref={ref}
+            checked={checked}
+            onChange={onChange}
             className='controlled-checkbox'
             styles={styles?.checkbox}
             {...checkboxProps}
@@ -40,15 +54,23 @@ const ControlledCheck = forwardRef((props, ref) => {
       ):(
         <ReCheckbox
           ref={ref}
+          checked={checked}
+          onChange={onChange}
           className='controlled-checkbox'
           styles={styles?.checkbox}
           {...checkboxProps}
         />
       )}
       {postInline && InlineComponent && (
-        <ReInlineText className='controlled-checkbox-post-inline' >
-          {InlineComponent}
-        </ReInlineText>
+        <ReInlineTouch
+          onPress={onTouch}
+          showFeedback={true}
+          className='controlled-checkbox-inline-touch'
+        >
+          <ReInlineText className='controlled-checkbox-post-inline' >
+            {InlineComponent}
+          </ReInlineText>
+        </ReInlineTouch>
       )}
     </ReContainer>
   )

@@ -7,6 +7,7 @@ import { Link } from 'HKAssets/icons/link'
 import { useTheme } from '@keg-hub/re-theme'
 import { Branch } from 'HKAssets/icons/branch'
 import { ModalMessage } from '../modalMessage'
+import { FileCode } from 'HKAssets/icons/fileCode'
 import { noPropArr, isUrl } from '@keg-hub/jsutils'
 import { getRepos } from 'HKActions/repo/api/getRepos'
 import { useStoreItems } from 'HKHooks/store/useStoreItems'
@@ -30,7 +31,7 @@ const {
 /**
  * Memoized callback method called when the connect repo button is pressed
  */
- const useOnLoadRepo = (connectError, repoUrl, branch, setRepoUrl, setBranch, user) => {
+const useOnLoadRepo = (connectError, repoUrl, branch, setRepoUrl, setBranch, user) => {
   return useCallback(
     async resp => {
       if (!resp)
@@ -60,7 +61,6 @@ const {
   )
 }
 
-
 const useRepoBranches = (repoUrl, repos) => {
   return useMemo(() => {
     return repos &&
@@ -76,9 +76,8 @@ const useSelectItem = (item, setItem) => {
   }, [item, setItem])
 }
 
-
 const useCreateNewBranch = () => {
-  const [createBranch, setCreateBranch] = useState(true)
+  const [createBranch, setCreateBranch] = useState(false)
 
   const onCreateBranch = useCallback((event) => {
     setCreateBranch(event.target.checked)
@@ -250,22 +249,22 @@ export const ConnectRepoModal = props => {
           postInline
           checked={createBranch}
           onChange={onCreateBranch}
-          InlineComponent={`Create New Branch${branch ? ' from ' + branch : ''}`}
+          InlineComponent={`Create new branch${branch ? ' from ' + branch : ''}`}
         />
-      )}
+      ) || null}
       {branch && createBranch && (
         <ControlledInput
           zIndex={2}
-          Aside={Branch}
+          title={`Name`}
           required={true}
+          Aside={FileCode}
           value={branchName}
           disabled={isConnecting}
-          title={`Name`}
-          placeholder='my-awesome-branch'
           onValueChange={setBranchName}
+          placeholder='my-awesome-branch'
           className={'modal-repo-branch-name-field'}
         />
-      )}
+      ) || null}
     </Modal>
   )
 }

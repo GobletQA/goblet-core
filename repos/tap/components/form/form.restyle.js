@@ -9,7 +9,8 @@ import {
   Option,
   Label,
   Switch,
-  Checkbox
+  Checkbox,
+  Touchable
 } from '@keg-hub/keg-components'
 
 export const ReMain = reStyle(View)((theme, { zIndex }) => ({
@@ -81,14 +82,26 @@ export const ReCheckbox = reStyle(Checkbox, 'styles')(theme => ({
   }
 }))
 
-export const ReInlineText = reStyle(Text)(theme => ({
-  alignItems: `center`,
-  height: 35,
-  width: `100%`,
-  paddingLeft: 15,
-  display: `flex`,
-  fontSize: 14,
+export const ReInlineTouch = reStyle(Touchable)(theme => ({
+  fl: 1,
+  d: `flex`,
+}))
 
+export const ReInlineText = reStyle(Text)(theme => ({
+  h: 35,
+  pL: 10,
+  w: `100%`,
+  d: `flex`,
+  bW: 1,
+  shR: 1,
+  bRad: 5,
+  ftSz: 12,
+  shO: 0.10,
+  bS: 'solid',
+  cursor: `pointer`,
+  alignItems: `center`,
+  bC: theme.tapColors.border,
+  bgC: theme.tapColors.white,
 }))
 
 
