@@ -1,4 +1,4 @@
-import React, {forwardRef, useCallback, useRef} from 'react'
+import React, {forwardRef, useCallback, createRef } from 'react'
 import { InputHoc } from './inputHoc'
 import {
   RePreside,
@@ -8,7 +8,6 @@ import {
   ReInlineText,
   ReInlineTouch
 } from './form.restyle'
-
 
 const ControlledCheck = forwardRef((props, ref) => {
   const {
@@ -25,13 +24,13 @@ const ControlledCheck = forwardRef((props, ref) => {
     ? RePostside
     : postInline && RePreside
 
-  const onTouch = useCallback(() => {
-    
-    console.log(ref)
-    
-    onChange?.({ target: { checked: !checked } })
-  }, [checked, onChange, ref])
+  const checkRef = ref || createRef()
 
+  const onTouch = useCallback((event) => {
+    const invert = !checked
+    checkRef?.current?.setChecked(invert)
+    onChange?.({target: {checked: invert}})
+  }, [checked, onChange, checkRef])
 
   return (
     <ReContainer className='controlled-checkbox-container' >
@@ -43,7 +42,7 @@ const ControlledCheck = forwardRef((props, ref) => {
       {Wrapper ? (
         <Wrapper>
           <ReCheckbox
-            ref={ref}
+            ref={checkRef}
             checked={checked}
             onChange={onChange}
             className='controlled-checkbox'

@@ -80,7 +80,7 @@ const useCreateNewBranch = () => {
   const [createBranch, setCreateBranch] = useState(false)
 
   const onCreateBranch = useCallback((event) => {
-    setCreateBranch(event.target.checked)
+    event?.target && setCreateBranch(event?.target?.checked)
   }, [createBranch])
 
   return {
