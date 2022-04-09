@@ -34,7 +34,10 @@ const events = {
     //
   },
   browserRecorder: function(message, instance, event){
-    
+    console.log(`------- message -------`)
+    console.log(message)
+    console.log(`------- event -------`)
+    console.log(event)
   },
 }
 

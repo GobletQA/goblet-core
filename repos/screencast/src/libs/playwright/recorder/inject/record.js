@@ -1,3 +1,37 @@
+
+const modifierKeys = [
+  'altKey',
+  'ctrlKey',
+  'metaKey',
+  'shiftKey'
+]
+
+const eventCoords = [
+  'offsetX',
+  'offsetY',
+  'pageX',
+  'pageY',
+  'screenX',
+  'screenY',
+  'clientX',
+  'clientY',
+]
+
+function exists(item){
+  return (item !== undefined && item !== null && !Number.isNaN(item))
+}
+
+function loopKeyNames (e, names, checkExists) {
+  return names.reduce(function(acc, name) {
+    if(checkExists && exists(e[name]) || e[name]){
+      if(!acc) acc = {}
+      acc[name] = e[name]
+    }
+
+    return acc
+  }, false)
+}
+
 function positionInNodeList(el, nodeList) {
   for (let i = 0; i < nodeList.length; i++) {
     if (el === nodeList[i]) {
@@ -63,13 +97,37 @@ function makeTargetSelector(e) {
   return findUniqueCssSelector(e.target);
 }
 
+
 function makeEventData(e) {
-  return {
+  const event = {
+    key: e.key,
     type: e.type,
     target: makeTargetSelector(e),
-    key: e.key,
-    inputValue: e.target.value + (e.key && e.key.length === 1 ? e.key : ''),
-  };
+  }
+
+  if(e.type === 'keypress') event.value = e.target.value + (e.key && e.key.length === 1 ? e.key : '')
+  else if(exists(e.target.value)) event.value = e.target.value
+
+  if(exists(e.target.type)) event.elementType = e.target.type
+  if(exists(e.target.tagName)) event.elementTag = e.target.tagName.toLowerCase()
+
+  if(event.elementType === 'checkbox' || event.elementType === 'radio')
+    event.elementChecked = e.target.checked
+  
+  if(event.elementType === 'select'){
+    event.selectedIndex = e.target.selectedIndex
+    event.selectedText = e.target[event.selectedIndex].text
+  }
+
+  if(exists(e.dataTransfer)) event.dataTransfer = dataTransfer
+
+  const modifiers = loopKeyNames(e, modifierKeys)
+  if(modifiers) event.modifiers = modifiers
+
+  const coords = loopKeyNames(e, eventCoords, true)
+  if(coords) event.coords = coords
+
+  return event
 }
 
 let highlighter;
@@ -95,3 +153,11 @@ window.addEventListener('mousedown', e => window.herkinRecordAction(makeEventDat
 window.addEventListener('mouseup', e => window.herkinRecordAction(makeEventData(e)));
 window.addEventListener('click', e => window.herkinRecordAction(makeEventData(e)));
 window.addEventListener('keypress', e => window.herkinRecordAction(makeEventData(e)));
+window.addEventListener('scroll', e => window.herkinRecordAction(makeEventData(e)));
+window.addEventListener('cut', e => window.herkinRecordAction(makeEventData(e)));
+window.addEventListener('copy', e => window.herkinRecordAction(makeEventData(e)));
+window.addEventListener('paste', e => window.herkinRecordAction(makeEventData(e)));
+
+// window.addEventListener('pointerover', e => window.herkinRecordAction(makeEventData(e)));
+// window.addEventListener('pointerout', e => window.herkinRecordAction(makeEventData(e)));
+

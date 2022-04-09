@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const { constants } = require('./constants')
 const {noOp, checkCall, deepMerge, noOpObj} = require('@keg-hub/jsutils')
 const { EventsRecorder } = require('./eventsRecorder')
 
@@ -9,7 +10,6 @@ class Recorder {
   id = null
   options = {}
   onEvents = []
-  recordTag = `// <<CONTENT>>`
   trackEvents = []
   lastEvent = {}
 
@@ -26,8 +26,10 @@ class Recorder {
     this.setupRecorder(config)
   }
 
-  fireEvent = (...args) => {
-    this.onEvents.map(func => checkCall(func, ...args))
+  fireEvent = (event) => {
+    if(event && (event.type === constants.recordAction)) EventsRecorder?.recordEvent(event)
+  
+    this.onEvents.map(func => checkCall(func, event))
   }
 
   setupRecorder = config => {
@@ -78,35 +80,21 @@ class Recorder {
 
     this.fireEvent({ type: 'RECORD-GENERAL',  message: 'Recording stopped' })
 
-    // Since events are tracked in real time this should not be needed
-    const updatedFile = this.generateCode()
-
     this.page = null
     this.context = null
     this.browser = null
     this.activeFile = null
     this.recording = false
     this.onEvents = []
-    this.fireEvent({message: 'Updated file content', data: updatedFile})
+    this.fireEvent({message: 'Updated file content' })
 
     delete RecorderInstances[id]
 
     return updatedFile
   }
 
-  generateCode = () => {
-    if (!this.activeFile)
-      return console.warn(`Active file does not exit!`)
-
-    const linesOfCode = EventsRecorder.getCode()
-    // .map(line => '    ' + line)
-
-    // TODO: replace the content in the file and save it
-    return this.activeFile.replace(this.recordTag, linesOfCode.join('\n\n'))
-  }
-
   addRecordTag = () => {
-    if(this.activeFile.includes(this.recordTag))
+    if(this.activeFile.includes(constants.recordTag))
       return console.log(`Record tag already exists in active file content`)
 
     const lines = this.activeFile.split(`\n`)
@@ -115,7 +103,7 @@ class Recorder {
       ? this.options.line
       : totalLines
 
-    lines.splice(location, 0, this.recordTag)
+    lines.splice(location, 0, constants.recordTag)
     this.activeFile = lines.join(`\n`)
   }
 
@@ -131,10 +119,9 @@ class Recorder {
     // TODO: @lance-tipton - Add other event listeners 
     // Delete on input not being tracked
     // Dragging, focus, blur, all need to be added
-
     noClick &&
       this.fireEvent({
-        type: 'RECORD-ACTION',
+        type: constants.recordAction,
         data: {
           ...pageEvent,
           code: EventsRecorder.generator.codeFromEvent(pageEvent)
@@ -147,11 +134,13 @@ class Recorder {
    * Called by playwright when the page finished loading (including after subsequent navigations).
    */
   onPageLoad = (...args) => {
-    this.fireEvent({ message: 'page loaded' })
-    // TODO: @lance-tipton - this is not firing on initial page load
-    EventsRecorder?.recordEvent({type: 'pageload'})
+    this.fireEvent({
+      message: 'page loaded',
+      // TODO: add url and other metadata to data object
+      data: {},
+      type: constants.recordAction,
+    })
   }
-
 }
 
 module.exports = {

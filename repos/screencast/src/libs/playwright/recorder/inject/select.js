@@ -68,7 +68,7 @@ function makeEventData(e) {
     type: e.type,
     target: makeTargetSelector(e),
     key: e.key,
-    inputValue: e.target.value + (e.key && e.key.length === 1 ? e.key : ''),
+    value: e.target.value + (e.key && e.key.length === 1 ? e.key : ''),
   };
 }
 
@@ -94,4 +94,4 @@ window.addEventListener('mousemove', e => highlightOnHover(e));
 window.addEventListener('mousedown', e => window.herkinRecordAction(makeEventData(e)));
 window.addEventListener('mouseup', e => window.herkinRecordAction(makeEventData(e)));
 window.addEventListener('click', e => window.herkinRecordAction(makeEventData(e)));
-window.addEventListener('keypress', e => window.herkinRecordAction(makeEventData(e)));
+window.addEventListener('keydown', e => window.herkinRecordAction(makeEventData(e)));

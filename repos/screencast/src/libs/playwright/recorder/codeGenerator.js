@@ -5,10 +5,6 @@ class CodeGenerator {
     this.recorder = recorder
   }
 
-  getCode = () => {
-    return this.recorder.getProcessedEvents().map(event => this.codeFromEvent(event))
-  }
-
   codeFromEvent = (event) => {
     switch (event.type) {
       case 'click':
@@ -21,14 +17,70 @@ class CodeGenerator {
         return this.generateCodeForKeyboardEvent(event)
       case 'fill':
         return this.generateCodeForFillEvent(event)
+
+      // Events to be implemented
       case 'pageload':
         return this.generateCodeForPageLoadEvent(event)
+      case 'select':
+        return this.generateCodeForSelectOptionEvent(event)
+      case 'pagereload':
+        return this.generateCodeForPageReloadEvent(event)
+      case 'screenshot':
+        return this.generateCodeForScreenshotEvent(event)
+      case 'route':
+        return this.generateCodeForRouteEvent(event)
+      case 'pdf':
+      case 'print':
+        return this.generateCodeForPrintEvent(event)
     }
 
     return ''
   }
 
+
+  generateCodeForPrintEvent = (event) => {
+    // TODO: find a way to track this in the dom
+    // Maybe come from the Herkin UI
+    // See https://playwright.dev/docs/api/class-page#page-pdf
+    // return `await page.pdf(${JSON.stringify(event.options)})`
+    return ``
+  }
+
+  generateCodeForScreenshotEvent = (event) => {
+    // TODO: find a way to track this in the dom
+    // Maybe come from the Herkin UI
+    // See https://playwright.dev/docs/api/class-page#page-screenshot
+    // return `await page.screenshot(${JSON.stringify(event.options)})`
+    return ``
+  }
+
+  generateCodeForRouteEvent = (event) => {
+    // TODO: find a way to track this in the dom
+    // See https://playwright.dev/docs/api/class-page#page-route
+    // return `await page.route('${url}', ${JSON.stringify(event.options)})`
+    return ``
+  }
+
+  generateCodeForPageReloadEvent = (event) => {
+    // TODO: find a way to track this in the dom
+    // Currently this will never be called, because we don't track select onchange events
+    // See https://playwright.dev/docs/api/class-page#page-reload
+    // return `await page.reload(${JSON.stringify(event.options)})`
+    return ``
+  }
+
+  generateCodeForSelectOptionEvent = (event) => {
+    // TODO: find a way to track this in the dom
+    // Currently this will never be called, because we don't track select onchange events
+    // return `await page.selectOption('${event.target}', '${event.value}')`
+    return ``
+  }
+
   generateCodeForClickEvent = (event) => {
+    // Use click plus element type to change code to checkbox
+    // page.check(event.target)
+    // If event.checked === true, then call page.uncheck(event.target)
+    // Or call page.setChecked(event.target, event.checked)
     return `await page.click('${event.target}')`
   }
 
@@ -45,12 +97,17 @@ class CodeGenerator {
   }
 
   generateCodeForFillEvent = (event) => {
-    return `await page.fill('${event.target}', '${event.inputValue}')`
+    // Possibly use page.type(event.target, event.value)
+    // Depending on time between events
+    return `await page.fill('${event.target}', '${event.value}')`
   }
 
   generateCodeForPageLoadEvent = (event) => {
     return `await page.waitForLoadState()`
   }
+  
+  // mousemove
+  
 }
 
 

@@ -27,9 +27,11 @@ const browserRecorder = app => {
       actions,
       id: socket.id,
       onRecordEvent: (event) => {
+        // console.log(event)
+        // Manager.emitAll(`browserRecorder`, { data: event })
         // TODO: @lance-tipton - emit socket event to FE
-        console.log(`------- event -------`)
-        console.log(event)
+        console.log(`------- emit event ${event.type} -------`)
+        Manager.emit(socket, `browserRecorder`, {data: event})
       },
     }, joinConf(browser, app))
 
