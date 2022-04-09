@@ -1,6 +1,8 @@
 import { isDev } from 'HKUtils/isDev'
 import * as sockrActions from 'HKActions/sockr'
 import { localStorage } from'HKUtils/storage/localStorage'
+import { recordEvent } from 'HKActions/browser/recordEvent'
+import { updateStatus } from 'HKActions/browser/updateStatus'
 import { camelCase, snakeCase, checkCall } from '@keg-hub/jsutils'
 import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
 
@@ -29,15 +31,11 @@ const events = {
     const actionName = camelCase((event.split(':')[1] || '').toLowerCase())
     checkCall(sockrActions[actionName], message)
   },
-  browserStatus: function (message, instance, event) {
-    // TODO: Update to call browser status update local action
-    //
+  browserStatus: function (message) {
+    updateStatus(message)
   },
-  browserRecorder: function(message, instance, event){
-    console.log(`------- message -------`)
-    console.log(message)
-    console.log(`------- event -------`)
-    console.log(event)
+  browserRecorder: function(message){
+    recordEvent(message)
   },
 }
 

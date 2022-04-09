@@ -1,6 +1,6 @@
 // TODO: @lance-tipton - figure out how to decouple this from
 const { get, noOpObj } = require('@keg-hub/jsutils')
-const { actionBrowser } = require('HerkinSCPlaywright')
+const { actionBrowser, doRecordAction } = require('HerkinSCPlaywright')
 
 /**
  * Builds a browser config merging the passed in params and global config.browser settings
@@ -20,21 +20,22 @@ const joinConf = (options, app) => {
 const browserRecorder = app => {
   return async ({ data, socket, config, Manager, io }) => {
     // TODO: add token validation
-    const { token, ref, actions, ...browser } = data
+    const { token, ref, action, ...browser } = data
 
-    const responses = await actionBrowser({
-      ref,
-      actions,
+    const recorder = await doRecordAction({
+      action,
       id: socket.id,
-      onRecordEvent: (event) => {
+      browserConf: joinConf(browser, app),
+      onRecordEvent:(event) => {
         // console.log(event)
         // Manager.emitAll(`browserRecorder`, { data: event })
         // TODO: @lance-tipton - emit socket event to FE
-        console.log(`------- emit event ${event.type} -------`)
-        Manager.emit(socket, `browserRecorder`, {data: event})
-      },
-    }, joinConf(browser, app))
+        console.log(`------- emit event ${event.name} -------`)
+        Manager.emit(socket, `browserRecorder`, { ...event, group: socket.id })
+      }
+    })
 
+    Manager.cache[socket.id] = { id: socket.id,  recorder }
   }
 }
 

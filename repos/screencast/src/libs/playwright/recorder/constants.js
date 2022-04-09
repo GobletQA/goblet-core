@@ -12,7 +12,8 @@ const constants = {
   pointerover: `pointerover`,
 
   recordTag: `// <<CONTENT>>`,
-  recordAction: `RECORD-ACTION`,
+  recordAction: `RECORD:ACTION`,
+  recordGeneral: 'RECORD:GENERAL'
 }
 
 module.exports = {

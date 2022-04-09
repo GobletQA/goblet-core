@@ -3,15 +3,14 @@ const path = require('path')
 const { constants } = require('./constants')
 const {noOp, checkCall, deepMerge, noOpObj} = require('@keg-hub/jsutils')
 const { EventsRecorder } = require('./eventsRecorder')
+const injectedScript = fs.readFileSync(path.join(__dirname, 'inject/record.js')).toString()
 
-const RecorderInstances = []
+const RecorderInstances = {}
 
 class Recorder {
   id = null
   options = {}
   onEvents = []
-  trackEvents = []
-  lastEvent = {}
 
   static getInstance = (id, config) => {
     if(RecorderInstances[id]) return RecorderInstances[id]
@@ -33,29 +32,26 @@ class Recorder {
   }
 
   setupRecorder = config => {
-    const { activeFile, page, context, browser, onEvent=noOp, options } = config
+    const { page, context, browser, onEvent=noOp, options } = config
 
     if(page) this.page = page
     if(context) this.context = context
     if(browser) this.browser = browser
     if(onEvent) this.onEvents.push(onEvent)
-    if(activeFile) this.activeFile = activeFile
     if(options) this.options = deepMerge(this.options, options)
   }
 
   start = async ({ url, ...config }) => {
   
-    if(this.recording)
+    if(this.recording){
+      this.fireEvent({ name: constants.recordGeneral, message: 'Recording already inprogress' })
       return console.warn('Recording already in progress, end it first')
-
-    if(!this.activeFile)
-      return console.warn(`Active file does not exit!`)
+    }
 
     this.recording = true
     this.setupRecorder(config)
-    this.addRecordTag()
 
-    this.fireEvent({ type: 'RECORD-GENERAL', message: 'Recording started' })
+    this.fireEvent({ name: constants.recordGeneral, message: 'Recording started' })
 
     // Create a binding to receive actions from the page.
     await this.context.exposeBinding('herkinRecordAction', this.onInjectedAction)
@@ -65,7 +61,6 @@ class Recorder {
     url && await this.page.goto(url)
 
     // Inject the script that detects actions and highlights elements.
-    const injectedScript = fs.readFileSync(path.join(__dirname, 'inject/record.js')).toString()
     await this.page.addScriptTag({content: injectedScript})
     await this.page.addInitScript({content: injectedScript})
 
@@ -75,36 +70,40 @@ class Recorder {
     return true
   }
 
-  stop = async (close) => {
-    if(!this.context) return console.warn('No recording in progress to stop')
+  stop = async (closeBrowser) => {
+    if(!this.context || !this.recording){
+      this.fireEvent({ name: constants.recordGeneral,  message: 'Recording context does not exist' })
+    }
 
-    this.fireEvent({ type: 'RECORD-GENERAL',  message: 'Recording stopped' })
+    // Only close the browser if the arg passed is true
+    // Otherwise we can make the browser reusable
+    // And we don't have to create a new one 
+    closeBrowser &&
+      this.browser &&
+      await this.browser.close()
 
-    this.page = null
-    this.context = null
-    this.browser = null
-    this.activeFile = null
+    // If there's a page
+    // Get it's current url
+    // Then close and reopen the page as a fresh instance
+    // To simulate ending the recording process
+    if(!closeBrowser && this.page){
+      const url = this.page.url()
+      this.page.close()
+      // Create a new page
+      const page = await this.context.newPage()
+      // Then  goto that page
+      url && await page.goto(url)
+    }
+
+    delete this.page
+    delete this.context
+    delete this.browser
     this.recording = false
+    this.options = {}
     this.onEvents = []
-    this.fireEvent({message: 'Updated file content' })
+    delete RecorderInstances[this.id]
 
-    delete RecorderInstances[id]
-
-    return updatedFile
-  }
-
-  addRecordTag = () => {
-    if(this.activeFile.includes(constants.recordTag))
-      return console.log(`Record tag already exists in active file content`)
-
-    const lines = this.activeFile.split(`\n`)
-    const totalLines = lines.length
-    const location = totalLines < this.options.line
-      ? this.options.line
-      : totalLines
-
-    lines.splice(location, 0, constants.recordTag)
-    this.activeFile = lines.join(`\n`)
+    this.fireEvent({ name: constants.recordGeneral,  message: 'Recording stopped' })
   }
 
   /**
@@ -113,20 +112,21 @@ class Recorder {
    * @param PageEvent 
    */
   onInjectedAction = (source, pageEvent) => {
-    const noKeypress = EventsRecorder.checkFillSequence(pageEvent, this.fireEvent.bind(this))
-    const noClick = noKeypress && EventsRecorder.checkClickSequence(pageEvent, this.fireEvent.bind(this))
+    const fireEvent = this.fireEvent.bind(this)
+    const noKeypress = EventsRecorder.checkFillSequence(pageEvent, fireEvent)
+    const noClick = noKeypress && EventsRecorder.checkClickSequence(pageEvent, fireEvent)
 
     // TODO: @lance-tipton - Add other event listeners 
     // Delete on input not being tracked
     // Dragging, focus, blur, all need to be added
     noClick &&
       this.fireEvent({
-        type: constants.recordAction,
+        name: constants.recordAction,
         data: {
           ...pageEvent,
           code: EventsRecorder.generator.codeFromEvent(pageEvent)
         },
-        message: `${pageEvent.type} action recorded`,
+        message: `User action ${pageEvent.type} recorded`,
       })
   }
 
@@ -138,7 +138,7 @@ class Recorder {
       message: 'page loaded',
       // TODO: add url and other metadata to data object
       data: {},
-      type: constants.recordAction,
+      name: constants.recordAction,
     })
   }
 }

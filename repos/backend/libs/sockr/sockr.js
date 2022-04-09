@@ -4,6 +4,7 @@ const {
   authToken,
   repoStatus,
   connection,
+  disconnect,
   browserStatus,
   browserRecorder,
   ...customEvents
@@ -21,6 +22,7 @@ const initSockr = (app, server, config = noOpObj, cmdType) => {
         ...config.events,
         ...customEvents,
         authToken: authToken(app),
+        disconnect: disconnect(app),
         connection: connection(app),
         repoStatus: repoStatus(app),
         browserStatus: browserStatus(app),

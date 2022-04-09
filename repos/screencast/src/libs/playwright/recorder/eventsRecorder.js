@@ -1,4 +1,3 @@
-
 const { constants } = require('./constants')
 const { CodeGenerator } = require('./codeGenerator')
 
@@ -83,13 +82,13 @@ class EventsRecorder {
           : constants.fill
 
       fireEvent({
-        type: constants.recordAction,
+        name: constants.recordAction,
         data: {
           ...evt,
           type,
           code: this.generator.codeFromEvent({ ...evt, type })
         },
-        message: `keypress actions recorded`,
+        message: `User action ${constants.keypress} recorded`,
       })
     })
 
@@ -147,12 +146,12 @@ class EventsRecorder {
       }
   
       fireEvent({
-        type: constants.recordAction,
+        name: constants.recordAction,
         data: {
           ...event,
           code: this.generator.codeFromEvent(event)
         },
-        message: `${event.type} action recorded`,
+        message: `User action ${event.type} recorded`,
       })
 
       return false

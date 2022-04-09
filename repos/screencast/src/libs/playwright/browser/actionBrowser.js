@@ -59,21 +59,22 @@ const callAction = async (action, component, pwComponents, prevResp, id, onEvent
       )
 }
 
-const doRecordAction = async (action, component, pwComponents, prevResp, id, onRecordEvent) => {
+const doRecordAction = async ({ action, id, onRecordEvent, pwComponents, browserConf }) => {
   const { props } = action
-  const [activeFile, recordOpts, url] = props
+  const [recordOpts, url] = props
+  pwComponents = pwComponents || await startBrowser(browserConf)
 
   const recorder = Recorder.getInstance(id, {
     ...pwComponents,
     options: recordOpts,
     onEvent: onRecordEvent,
-    activeFile: activeFile.content,
   })
 
   // TODO: @lance-tipton - Need a way to keep reference to the recorder
   // either make Recorder a singleton, or track it by reference ID?
-  const started = await recorder.start({ url })
-  return { recording: started }
+  await recorder.start({ url })
+
+  return recorder
 }
 
 
@@ -119,7 +120,7 @@ const actionBrowser = async (args, browserConf) => {
           id
         )
       : action.action === 'record'
-        ? await doRecordAction(action, component, pwComponents, prevResp, id, onRecordEvent)
+        ? await doRecordAction({ action, id, onRecordEvent, pwComponents, browserConf })
         : await callAction(action, component, pwComponents, prevResp, id)
 
     responses.push(resp)
@@ -130,4 +131,5 @@ const actionBrowser = async (args, browserConf) => {
 
 module.exports = {
   actionBrowser,
+  doRecordAction,
 }
