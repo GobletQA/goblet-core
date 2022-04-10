@@ -1,28 +1,14 @@
 const { AppRouter } = require('HerkinSharedRouter')
-const { get, noOpObj } = require('@keg-hub/jsutils')
+const { noOpObj } = require('@keg-hub/jsutils')
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { joinBrowserConf } = require('HerkinSharedUtils/joinBrowserConf')
 const {
-  actionBrowser,
   stopBrowser,
   startBrowser,
+  actionBrowser,
   statusBrowser,
   restartBrowser,
 } = require('HerkinSCPlaywright')
-
-/**
- * Builds a browser config merging the passed in params and global config.browser settings
- * @param {Object} options - Options for interfacing with Playwright Browser object
- * @param {Object} app - Express Server Application
- *
- * @return {Object} - Browser config object
- */
-const joinConf = (options, app) => {
-  return {
-    ...get(app, 'locals.config.browser', noOpObj),
-    ...get(app, 'locals.config.screencast.browser', noOpObj),
-    ...options,
-  }
-}
 
 /**
  * Starts a Playwright Browser using the passed in params as launch options
@@ -31,10 +17,8 @@ const joinConf = (options, app) => {
  *
  */
 const browserStart = asyncWrap(async (req, res) => {
-  const { query, app } = req
-  const browserConf = joinConf(query, app)
-  const { browser, context, page } = await startBrowser(browserConf)
-  const status = await statusBrowser(browserConf, browser, context, page)
+  const { query } = req
+  const { status } = await startBrowser(joinBrowserConf(query))
 
   return apiRes(req, res, status, 200)
 })
@@ -44,8 +28,8 @@ const browserStart = asyncWrap(async (req, res) => {
  *
  */
 const browserStatus = asyncWrap(async (req, res) => {
-  const { query, app } = req
-  const status = await statusBrowser(joinConf(query, app))
+  const { query } = req
+  const status = await statusBrowser(joinBrowserConf(query))
 
   return apiRes(req, res, status, 200)
 })
@@ -55,10 +39,8 @@ const browserStatus = asyncWrap(async (req, res) => {
  *
  */
 const browserRestart = asyncWrap(async (req, res) => {
-  const { params, app } = req
-  const browserConf = joinConf(params, app)
-  const { browser, context, page } = await restartBrowser(browserConf)
-  const status = await statusBrowser(browserConf, browser, context, page)
+  const { params } = req
+  const { status } = await restartBrowser(joinBrowserConf(params))
 
   return apiRes(req, res, status, 200)
 })
@@ -68,9 +50,8 @@ const browserRestart = asyncWrap(async (req, res) => {
  *
  */
 const browserStop = asyncWrap(async (req, res) => {
-  const { params, app } = req
-  const browserConf = joinConf(params, app)
-  const status = await stopBrowser(browserConf)
+  const { params } = req
+  const status = await stopBrowser(joinBrowserConf(params))
 
   return apiRes(req, res, status, 200)
 })
@@ -80,9 +61,9 @@ const browserStop = asyncWrap(async (req, res) => {
  *
  */
 const browserAction = asyncWrap(async (req, res) => {
-  const { body, app } = req
+  const { body } = req
   const { ref, actions, ...browser } = body
-  const browserConf = joinConf(browser, app)
+  const browserConf = joinBrowserConf(browser)
 
   await actionBrowser({ ref, actions, id: req.user.userId }, browserConf)
 

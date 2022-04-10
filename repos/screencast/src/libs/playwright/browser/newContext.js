@@ -34,10 +34,19 @@ const ensureContext = async (browser, browserConf) => {
   const pwContext = getContext(browserConf.type)
   if (pwContext) return pwContext
 
-  const context = await browser.newContext(getContextOpts(browserConf.context))
-  setContext(context, browserConf.type)
+  try {
+    const context = await browser.newContext(getContextOpts(browserConf.context))
+    setContext(context, browserConf.type)
 
-  return context
+    return context
+  }
+  catch(err){
+    console.log(`------- TODO: Fix This, check for error name / type and handle properly -------`)
+    console.log(`------- is browser-closed error -------`)
+    console.log(err.message.includes(`browserContext.newPage: Browser closed`))
+    console.log(`------- err.message -------`)
+    console.log(err.message)
+  }
 }
 
 /**

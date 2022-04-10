@@ -3,7 +3,7 @@ import { Values } from 'HKConstants'
 import { noOpObj } from '@keg-hub/jsutils'
 import { WSService } from 'HKServices/socketService'
 
-const { CATEGORIES, SOCKR_MSG_TYPES } = Values
+const { SOCKR_MSG_TYPES } = Values
 
 /**
  * Gets the browser status from the server
@@ -12,6 +12,6 @@ const { CATEGORIES, SOCKR_MSG_TYPES } = Values
  *
  * @returns {void}
  */
-export const startBrowserRecorder = (options = noOpObj) => {
+export const setRecorderStatus = (options = noOpObj) => {
   WSService.emit(SOCKR_MSG_TYPES.BROWSER_RECORDER, options)
 }

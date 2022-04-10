@@ -3,10 +3,13 @@ const { AppRouter } = require('HerkinSharedRouter')
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
 const {
   stopScreencast,
-  statusScreencast,
   startScreencast,
+  statusScreencast,
 } = require('HerkinSCScreencast')
 
+/**
+ * Endpoint to get the current status  of the browser
+ */
 const scStatus = asyncWrap(async (req, res) => {
   const { query } = req
   const status = await statusScreencast({
@@ -18,6 +21,9 @@ const scStatus = asyncWrap(async (req, res) => {
   return apiRes(req, res, status, 200)
 })
 
+/**
+ * Endpoint to restart browser or start the browser if not running
+ */
 const scRestart = asyncWrap(async (req, res) => {
   const { params } = req
 
@@ -27,6 +33,9 @@ const scRestart = asyncWrap(async (req, res) => {
   return apiRes(req, res, status, 200)
 })
 
+/**
+ * Endpoint to start browser if it's not running
+ */
 const scStart = asyncWrap(async (req, res) => {
   const { params } = req
   const status = await startScreencast(params)
@@ -34,6 +43,9 @@ const scStart = asyncWrap(async (req, res) => {
   return apiRes(req, res, status, 200)
 })
 
+/**
+ * Endpoint to stop browser if it's running
+ */
 const scStop = asyncWrap(async (req, res) => {
   const { params } = req
   const status = await stopScreencast(params)

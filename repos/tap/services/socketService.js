@@ -34,8 +34,28 @@ const events = {
   browserStatus: function (message) {
     updateStatus(message)
   },
-  browserRecorder: function(message){
+  recordStarted: function(message){
     setBrowserRecording(message)
+  },
+  
+  recordEnded: function(message){
+    setBrowserRecording(message)
+  },
+  recordGeneral: function(message){
+    console.log(`------- recordGeneral -------`)
+    console.log(message)
+  },
+  recordAction: function(message){
+    console.log(`------- recordAction -------`)
+    console.log(message)
+  },
+  recordGeneral: function(message){
+    console.log(`------- recordGeneral -------`)
+    console.log(message)
+  },
+  recordStarted: function(message){
+    console.log(`------- recordStarted -------`)
+    console.log(message)
   },
 }
 

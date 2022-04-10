@@ -1,41 +1,80 @@
-// TODO: @lance-tipton - figure out how to decouple this from
-const { get, noOpObj } = require('@keg-hub/jsutils')
-const { actionBrowser, doRecordAction } = require('HerkinSCPlaywright')
+const { noOpObj } = require('@keg-hub/jsutils')
+const { joinBrowserConf } = require('HerkinSharedUtils/joinBrowserConf')
+
+// TODO: @lance-tipton - figure out how to decouple this - Move all socket actions to screencast dir
+const { stopBrowser, startRecording } = require('HerkinSCPlaywright')
 
 /**
- * Builds a browser config merging the passed in params and global config.browser settings
- * @param {Object} options - Options for interfacing with Playwright Browser object
- * @param {Object} app - Express Server Application
+ * Stats a the browser recorder from a socket.io event
+ * Stores the recorder in the sockr Manager cache
+ * Adds hook to emit an event when a recorder event fires
+ * Adds hook to stop the browser when the recorders onCleanup event is fired
  *
- * @return {Object} - Browser config object
+ * @param {Object} data - Data object passed to the socket event from the FE
+ * @param {Object} socket - Socket.io Socket object
+ * @param {Object} Manager - Sockr Manager instance
+ * @param {Object} app - Express app instance
+ *
+ * @returns {void}
  */
-const joinConf = (options, app) => {
-  return {
-    ...get(app, 'locals.config.browser', noOpObj),
-    ...get(app, 'locals.config.screencast.browser', noOpObj),
-    ...options,
-  }
+const handleStart = async (data, socket, Manager, app) => {
+  const { token, ref, action, ...browser } = data
+  const browserConf = joinBrowserConf(browser, app)
+
+  const recorder = await startRecording({
+    action,
+    browserConf,
+    id: socket.id,
+    onRecordEvent:(event) => {
+      console.log(`Emit ${event.name} event`, event)
+      Manager.emit(socket, event.name, { ...event, group: socket.id })
+    },
+    onCleanup: async closeBrowser => {
+      closeBrowser && await stopBrowser(browserConf)
+    }
+  })
+
+  Manager.cache[socket.id] = { id: socket.id,  recorder }
 }
 
+
+/**
+ * Stops the browser recorder from recording actions
+ * Pulls the Recorder instance from Sockr Manager Cache
+ * Then calls the recorders stop method
+ *
+ * @param {Object} data - Data object passed to the socket event from the FE
+ * @param {Object} socket - Socket.io Socket object
+ * @param {Object} Manager - Sockr Manager instance
+ *
+ * @returns {void}
+ */
+const handleStop = async (data, socket, Manager) => {
+  const { action=noOpObj } = data
+  const cache = Manager.cache[socket.id]
+
+  // TODO: handle socket.io error - missing cache to stop recorder
+  if(!cache || !cache.recorder)
+    return console.log(`Missing socket cache or recorder`, cache)
+
+  await cache.recorder.stop(...action.props)
+}
+
+/**
+ * Handler for registering Browser Recorder start and stop events
+ * @function
+ * @param {Object} app - Express App object
+ *
+ * @returns {function} - Custom Event Method passed to Sockr to be called from the frontend
+ */
 const browserRecorder = app => {
-  return async ({ data, socket, config, Manager, io }) => {
+  return async ({ data, socket, Manager }) => {
     // TODO: add token validation
-    const { token, ref, action, ...browser } = data
+    const { action } = data
 
-    const recorder = await doRecordAction({
-      action,
-      id: socket.id,
-      browserConf: joinConf(browser, app),
-      onRecordEvent:(event) => {
-        // console.log(event)
-        // Manager.emitAll(`browserRecorder`, { data: event })
-        // TODO: @lance-tipton - emit socket event to FE
-        console.log(`------- emit event ${event.name} -------`)
-        Manager.emit(socket, `browserRecorder`, { ...event, group: socket.id })
-      }
-    })
-
-    Manager.cache[socket.id] = { id: socket.id,  recorder }
+    action.action === 'start'
+      ? await handleStart(data, socket, Manager, app)
+      : await handleStop(data, socket, Manager, app)
   }
 }
 

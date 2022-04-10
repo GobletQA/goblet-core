@@ -24,6 +24,6 @@ export const setBrowserRecording = (event) => {
   exists(event.isRecording) &&
     addToast({
       type: 'info',
-      message: `Browser Recording started`,
+      message: `Browser Recording ${event.isRecording ? 'started' : 'stopped'}`,
     })
 }

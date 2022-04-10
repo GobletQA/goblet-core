@@ -11,9 +11,11 @@ const constants = {
   pointerout: `pointerout`,
   pointerover: `pointerover`,
 
-  recordTag: `// <<CONTENT>>`,
-  recordAction: `RECORD:ACTION`,
-  recordGeneral: 'RECORD:GENERAL'
+  recordEnded: 'RECORD-ENDED',
+  recordGeneral: 'RECORD-ERROR',
+  recordAction: `RECORD-ACTION`,
+  recordGeneral: 'RECORD-GENERAL',
+  recordStarted: 'RECORD-STARTED',
 }
 
 module.exports = {

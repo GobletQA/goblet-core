@@ -17,4 +17,8 @@ export const screencast = deepFreeze({
     restart: true,
     // TODO: Add browser options here
   },
+  RECORD_ACTIONS: {
+    STOP:`stop`,
+    START:`start`,
+  }
 })

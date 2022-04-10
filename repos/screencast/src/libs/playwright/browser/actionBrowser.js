@@ -59,22 +59,44 @@ const callAction = async (action, component, pwComponents, prevResp, id, onEvent
       )
 }
 
-const doRecordAction = async ({ action, id, onRecordEvent, pwComponents, browserConf }) => {
-  const { props } = action
+/**
+ * Execute an action on a browser
+ * @param {Object} args
+ * @param {Object} action - Action object for running a browser action
+ * @param {string} id - Socket Id that is starting the recorder
+ * @param {Array} [action.props] - Props to pass to the recorder action
+ * @param {string} action.action - Name of the action being run
+ * @param {Function} [onRecordEvent] - Method called when a record event fires
+ * @param {Function} [onCleanup] - Method called when the recorder stop is called
+ * @param {Object} [pwComponents] - Contains the playwright browser / context / page to be used
+ * @param {Object} [browserConf] - Config for creating a new browser
+ *
+ *
+ * @returns {Object} - Instance of the Recorder class
+ */
+const startRecording = async data => {
+  const {
+    id,
+    action,
+    onCleanup,
+    browserConf,
+    pwComponents,
+    onRecordEvent,
+  } = data
+
+  const { props, action:method } = action
+
   const [recordOpts, url] = props
-  pwComponents = pwComponents || await startBrowser(browserConf)
+  const browserItems = pwComponents || await startBrowser(browserConf)
 
   const recorder = Recorder.getInstance(id, {
-    ...pwComponents,
+    onCleanup,
+    ...browserItems,
     options: recordOpts,
     onEvent: onRecordEvent,
   })
 
-  // TODO: @lance-tipton - Need a way to keep reference to the recorder
-  // either make Recorder a singleton, or track it by reference ID?
-  await recorder.start({ url })
-
-  return recorder
+  return await recorder.start({ url })
 }
 
 
@@ -120,7 +142,7 @@ const actionBrowser = async (args, browserConf) => {
           id
         )
       : action.action === 'record'
-        ? await doRecordAction({ action, id, onRecordEvent, pwComponents, browserConf })
+        ? await startRecording({ action, id, onRecordEvent, pwComponents, browserConf })
         : await callAction(action, component, pwComponents, prevResp, id)
 
     responses.push(resp)
@@ -131,5 +153,5 @@ const actionBrowser = async (args, browserConf) => {
 
 module.exports = {
   actionBrowser,
-  doRecordAction,
+  startRecording,
 }
