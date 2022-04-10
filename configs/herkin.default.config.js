@@ -35,6 +35,14 @@ module.exports = {
   screencast: screencastConfig,
 
   /**
+   * Options for browser recorder
+   * @type {Object}
+   */
+  recorder: {
+    locator: `-- 🍷 GOBLET`,
+  },
+
+  /**
    * Paths to a repos herkin specific files
    * @type {Object}
    */

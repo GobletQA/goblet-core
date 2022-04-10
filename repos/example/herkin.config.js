@@ -1,6 +1,9 @@
 const path = require('path')
 
 module.exports = {
+  recorder: {
+    locator: `-- 🍷 GOBLET`,
+  },
   paths: {
     repoRoot: path.join(__dirname),
     workDir: 'herkin',

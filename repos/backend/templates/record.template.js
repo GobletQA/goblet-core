@@ -6,7 +6,7 @@ const { chromium } = require('playwright')
   const page = await context.newPage()
   await page.goto('{{appUrl}}')
 
-  // {-{ HERKIN-RECORDER }-}
+  // -- 🍷 GOBLET
 
   await context.close()
   await browser.close()
