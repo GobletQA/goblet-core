@@ -29,6 +29,11 @@ const {
 } = Values
 
 /**
+ * Custom styles for checkbox options
+ */
+const checkboxOptStyle = { wrapper: { bgC: 'transparent', bC: 'transparent' }}
+
+/**
  * Memoized callback method called when the connect repo button is pressed
  */
 const useOnLoadRepo = (connectError, repoUrl, branch, setRepoUrl, setBranch, user) => {
@@ -247,8 +252,10 @@ export const ConnectRepoModal = props => {
         <ControlledCheckbox
           zIndex={3}
           postInline
+          title={'Options'}
           checked={createBranch}
           onChange={onCreateBranch}
+          styles={checkboxOptStyle}
           InlineComponent={`Create new branch${branch ? ' from ' + branch : ''}`}
         />
       ) || null}

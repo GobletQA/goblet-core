@@ -11,14 +11,13 @@ import { localStorage } from'HKUtils/storage/localStorage'
  * @param {boolean} success - True if the request was successful
  * @param {number} statusCode - Response code returned from the Backend API
  * @param {string} message - Response message returned from the Backend API
+ * @param {boolean} showAlert - Should show failed alert message
  */
-const isValidSession = async (success, statusCode, message) =>{
+const isValidSession = async (success, statusCode, message, showAlert) =>{
   if(success || statusCode !== 401) return true
 
-  addToast({
-    type: 'warn',
-    message: message || `User session is expired, please sign in`,
-  })
+  showAlert &&
+    addToast({ type: 'warn', message: message || `User session is expired, please sign in` })
 
   await gitAuthSignOut()
 }
@@ -63,7 +62,13 @@ export const apiRequest = async request => {
     builtRequest
   )
 
-  await isValidSession(success, statusCode, get(data, 'message', errorMessage))
+  
+  await isValidSession(
+    success,
+    statusCode,
+    get(data, 'message', errorMessage),
+    !builtRequest.url.endsWith(`/repo/status`)
+  )
 
   return success
     ? { 

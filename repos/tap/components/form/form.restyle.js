@@ -95,13 +95,15 @@ export const ReInlineText = reStyle(Text)(theme => ({
   bW: 1,
   shR: 1,
   bRad: 5,
-  ftSz: 12,
+  ftSz: 14,
   shO: 0.10,
   bS: 'solid',
   cursor: `pointer`,
   alignItems: `center`,
-  bC: theme.tapColors.border,
-  bgC: theme.tapColors.white,
+  bC: 'transparent',
+  bgC: 'transparent',
+  // bC: theme.tapColors.border,
+  // bgC: theme.tapColors.white,
 }))
 
 

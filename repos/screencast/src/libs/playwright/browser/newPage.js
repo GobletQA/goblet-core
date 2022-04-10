@@ -43,13 +43,12 @@ const ensurePage = async (context, browserConf) => {
   catch(err){
     console.log(`------- TODO: Fix This, check for error name / type and handle properly -------`)
     console.log(`------- is target-closed error -------`)
-    console.log(err.message === `browserContext.newPage: Target closed`)
+    console.log(err.message.includes(`browserContext.newPage: Target closed`))
+    console.log(`------- is browser-closed error -------`)
+    console.log(err.message.includes(`browserContext.newPage: Browser closed`))
+
     console.log(`------- err.message -------`)
     console.log(err.message)
-    console.log(`------- ERROR on initial open browser -------`)
-    console.error(err.stack)
-    console.log(`------- browserConf -------`)
-    console.log(browserConf)
   }
 }
 

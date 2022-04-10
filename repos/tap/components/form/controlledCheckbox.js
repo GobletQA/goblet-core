@@ -32,6 +32,7 @@ const ControlledCheck = forwardRef((props, ref) => {
     onChange?.({target: {checked: invert}})
   }, [checked, onChange, checkRef])
 
+
   return (
     <ReContainer className='controlled-checkbox-container' >
       {preInline && InlineComponent && (
@@ -40,7 +41,7 @@ const ControlledCheck = forwardRef((props, ref) => {
         </ReInlineText>
       )}
       {Wrapper ? (
-        <Wrapper>
+        <Wrapper style={styles?.wrapper} >
           <ReCheckbox
             ref={checkRef}
             checked={checked}
