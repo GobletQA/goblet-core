@@ -1,8 +1,10 @@
 const connection = app => {
   return ({ socket, config, Manager, io }) => {
-    // console.log(`------- socket -------`)
-    // console.log(socket)
-    
+
+    // Todo Update to be the group / room name for the connected user
+    const cache = Manager.cache[socket.id]
+    cache.socketGroupId = 'keg-herkin'
+
   }
 }
 

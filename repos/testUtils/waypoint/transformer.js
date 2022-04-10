@@ -12,8 +12,8 @@ const { createHash } = require('crypto')
 
     return createHash('md5')
       .update(babelCacheKey)
-      .update('my custom cache key thing')
-      .digest('hex');
+      .update('keg-herkin')
+      .digest('hex')
   },
   process(src, filename, ...rest) {
     const name = filename.split('/').pop()
