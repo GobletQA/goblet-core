@@ -28,7 +28,10 @@ class Recorder {
   fireEvent = (event) => {
     if(event && (event.type === constants.recordAction)) EventsRecorder?.recordEvent(event)
   
-    this.onEvents.map(func => checkCall(func, event))
+    this.onEvents.map(func => checkCall(
+      func,
+      {...event, isRecording: this.recording}
+    ))
   }
 
   setupRecorder = config => {
@@ -51,7 +54,10 @@ class Recorder {
     this.recording = true
     this.setupRecorder(config)
 
-    this.fireEvent({ name: constants.recordGeneral, message: 'Recording started' })
+    this.fireEvent({
+      message: 'Recording started',
+      name: constants.recordGeneral,
+    })
 
     // Create a binding to receive actions from the page.
     await this.context.exposeBinding('herkinRecordAction', this.onInjectedAction)
@@ -103,7 +109,10 @@ class Recorder {
     this.onEvents = []
     delete RecorderInstances[this.id]
 
-    this.fireEvent({ name: constants.recordGeneral,  message: 'Recording stopped' })
+    this.fireEvent({
+      message: 'Recording stopped',
+      name: constants.recordGeneral,
+    })
   }
 
   /**

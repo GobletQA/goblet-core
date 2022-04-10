@@ -1,10 +1,10 @@
 import { isDev } from 'HKUtils/isDev'
 import * as sockrActions from 'HKActions/sockr'
 import { localStorage } from'HKUtils/storage/localStorage'
-import { recordEvent } from 'HKActions/browser/recordEvent'
-import { updateStatus } from 'HKActions/browser/updateStatus'
 import { camelCase, snakeCase, checkCall } from '@keg-hub/jsutils'
 import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
+import { updateStatus } from 'HKActions/screencast/socket/updateStatus'
+import { setBrowserRecording } from 'HKActions/screencast/local/setBrowserRecording'
 
 const serverConfig = JSON.parse(process.env.WS_SERVER_CONFIG)
 
@@ -35,7 +35,7 @@ const events = {
     updateStatus(message)
   },
   browserRecorder: function(message){
-    recordEvent(message)
+    setBrowserRecording(message)
   },
 }
 

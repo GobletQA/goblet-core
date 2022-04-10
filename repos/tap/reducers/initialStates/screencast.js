@@ -14,4 +14,7 @@ export const screencast = {
   [CATEGORIES.BROWSER_OPTS]: {
     ...BROWSER_DEFAULTS,
   },
+  [CATEGORIES.RECORDING_BROWSER]: {
+    isRecording: false
+  }
 }

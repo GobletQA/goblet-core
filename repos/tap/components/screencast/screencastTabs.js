@@ -50,9 +50,7 @@ const RecordActions = props => {
   return (
     <ActionsContainer className='screencast-tab-actions'>
       <ActionMain className='screencast-tab-action-record'>
-        <RecordButton
-          text='Record Actions'
-        />
+        <RecordButton />
       </ActionMain>
     </ActionsContainer>
   )

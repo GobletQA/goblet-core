@@ -1,7 +1,14 @@
 import React from 'react'
+import { Values } from 'HKConstants'
 import { Record } from 'HKAssets/icons/record'
 import { HerkinButton } from './button.restyle'
+import { useSelector } from 'HKHooks/useSelector'
+import { SlowFlash } from 'HKComponents/slowFlash'
 import { useRecordAction } from 'HKHooks/screencast/useRecordAction'
+import { tapColors } from 'HKTheme/tapColors'
+
+const { CATEGORIES } = Values
+
 
 /**
  * RecordButton - Component for start a test run using sockr
@@ -14,18 +21,29 @@ import { useRecordAction } from 'HKHooks/screencast/useRecordAction'
  *
  */
 export const RecordButton = props => {
-  const { children, text = 'Record', styles, ...args } = props
+  const { children, text = 'Record', altText, styles, ...args } = props
+  const { recordingBrowser } = useSelector(CATEGORIES.RECORDING_BROWSER)
+  const { isRecording } = recordingBrowser
+
   const onRecord = useRecordAction(args)
+  const recordText = altText || `Recording`
 
   return (
-    <HerkinButton
-      {...args}
-      type='danger'
-      Icon={Record}
-      onClick={onRecord}
-      classPrefix='record-actions'
+    <SlowFlash
+      minOpacity={0.5}
+      flashing={isRecording}
     >
-      {children || text}
-    </HerkinButton>
+      <HerkinButton
+        {...args}
+        themePath='button.outline.danger'
+        Icon={Record}
+        color={tapColors.danger}
+        onClick={onRecord}
+        classPrefix='record-actions'
+        styles={{text: {color: tapColors.danger}}}
+      >
+        {children || (isRecording ? recordText : text)}
+      </HerkinButton>
+    </SlowFlash>
   )
 }

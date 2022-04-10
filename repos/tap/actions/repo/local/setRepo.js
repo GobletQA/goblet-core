@@ -1,5 +1,4 @@
 import { dispatch } from 'HKStore'
-import { keyMap } from '@keg-hub/jsutils'
 import { Values, ActionTypes } from 'HKConstants'
 import { setFileTypeConstants } from 'HKConstants/values'
 import { upsertFeatures } from 'HKActions/features/local'
