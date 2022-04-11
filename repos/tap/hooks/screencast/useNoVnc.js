@@ -5,7 +5,7 @@ import { useScreenResize } from './useScreenResize'
 import { getWorldVal } from 'HKUtils/repo/getWorldVal'
 import { actionBrowser } from 'HKActions/screencast/api/actionBrowser'
 
-const { STORAGE } = Values
+const { STORAGE, CATEGORIES } = Values
 
 /**
  * Helper method to auto open the ap url in the screencast browser when it loads
@@ -24,7 +24,6 @@ const openAppUrl = repo => {
     }, false)
 }
 
-
 /**
  * Helper to initialize noVNC service
  * @param {Object} element - Dom element to attach the canvas to
@@ -36,12 +35,13 @@ const openAppUrl = repo => {
 export const useNoVnc = (element, vncUrl, creds) => {
   const [noVnc, setNoVnc] = useState(null)
   const [connected, setConnected] = useState(false)
-  const { repo } = useSelector(STORAGE.REPO)
+  const { repo, recordingBrowser } = useSelector(STORAGE.REPO, CATEGORIES.RECORDING_BROWSER)
+  const { isRecording } = recordingBrowser
   
   const onConnected = useCallback(isConnected => {
     setConnected(isConnected)
-    isConnected && openAppUrl(repo)
-  }, [repo, connected, setConnected])
+    !isRecording && isConnected && openAppUrl(repo)
+  }, [repo, connected, setConnected, isRecording])
 
   useEffect(() => {
     import('HKServices/noVncService')

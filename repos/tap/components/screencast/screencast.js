@@ -22,6 +22,7 @@ const useTabSelect = (activeTab, setActiveTab) => {
 
 export const Screencast = props => {
   const {
+    screenId,
     isRunning,
     activeTab,
     activeFile,
@@ -59,6 +60,7 @@ export const Screencast = props => {
         className={`screencast-recorder-surface`}
       >
         <Recorder
+          screenId={screenId}
           isRunning={isRunning}
           activeFile={activeFile}
         />

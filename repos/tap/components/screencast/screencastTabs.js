@@ -32,7 +32,7 @@ const BrowserActions = props => {
     <ActionsContainer className='screencast-tab-actions'>
       <ActionMain className='screencast-tab-action-start'>
         <HerkinButton type='primary' Icon={Browser} onClick={onRestartBrowser}>
-          Start Browser
+          Restart Browser
         </HerkinButton>
       </ActionMain>
       <ActionMain className='screencast-tab-action-run'>

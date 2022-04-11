@@ -22,6 +22,7 @@ const ScreencastScreen = ({ styles, ...props }) => {
         {...props}
         isRunning={isRunning}
         activeFile={activeFile}
+        screenId={SCREENS.SCREENCAST}
         title={capitalize(activeFile?.fileType || '')}
         tests={activeFile?.modified || activeFile?.content || ''}
       />

@@ -3,6 +3,7 @@ import { addToast } from '../../toasts/addToast'
 import { Values, ActionTypes } from 'HKConstants'
 import { updateUrlQuery } from 'HKUtils/url/updateUrlQuery'
 import { getActiveScreen } from 'HKUtils/helpers/getActiveScreen'
+import { updateAllScreensActiveFile } from 'HKActions/files/local/updateAllScreensActiveFile'
 
 const { CATEGORIES, SUB_CATEGORIES } = Values
 
@@ -39,6 +40,8 @@ export const setActiveFile = (fileModel, screenId, mergeQuery) => {
       },
     },
   })
+
+  updateAllScreensActiveFile(updatedFile, screenModel.id)
 
   return updatedFile
 }
