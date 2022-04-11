@@ -1,11 +1,11 @@
-import { useCallback } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { Values } from 'HKConstants'
 import { useSelector } from 'HKHooks/useSelector'
-import { noOpObj, noOp, checkCall } from '@keg-hub/jsutils'
-import { useActiveFile } from 'HKHooks/activeFile/useActiveFile'
+import { noOp, checkCall } from '@keg-hub/jsutils'
+import { getWorldVal } from 'HKUtils/repo/getWorldVal'
 import { setRecorderStatus } from 'HKActions/screencast/socket/setRecorderStatus'
 
-const { CATEGORIES, STORAGE, RECORD_ACTIONS } = Values
+const { CATEGORIES, RECORD_ACTIONS } = Values
 
 /**
  * Hook to run the tests of the active file by calling the runTests action
@@ -18,16 +18,18 @@ export const useRecordAction = props => {
     onRecord = noOp,
   } = props
 
-  const { repo, recordingBrowser } = useSelector(STORAGE.REPO, CATEGORIES.RECORDING_BROWSER)
+  const [loading, setLoading] = useState(false)
+  const { recordingBrowser } = useSelector(CATEGORIES.RECORDING_BROWSER)
+
   const { isRecording } = recordingBrowser
-  const appUrl = repo?.world?.url || repo?.world?.app?.url
+  const appUrl = getWorldVal(`url`, `app.url`)
 
   // TODO: @lance-tipton - Set line where recording should start
   // Allow the user to click a location / line on the Recorder panel to set a marker
   // Store this line, which will be the line where the recording stops
   const recordLine = 20
 
-  return useCallback(
+  const onClick = useCallback(
     async event => {
       const options = {
         ref: 'page',
@@ -36,9 +38,22 @@ export const useRecordAction = props => {
           : { props: [{}, appUrl], action: RECORD_ACTIONS.START }
       }
 
+      setLoading(true)
       setRecorderStatus(options)
       checkCall(onRecord, options)
     },
     [isRecording, appUrl, onRecord]
   )
+
+  useEffect(() => {
+    isRecording && loading && setLoading(false)
+  }, [isRecording, loading])
+
+  return {
+    loading,
+    onClick,
+    setLoading,
+    isRecording
+  }
+  
 }

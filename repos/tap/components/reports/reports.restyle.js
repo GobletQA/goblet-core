@@ -1,5 +1,5 @@
 import { reStyle } from '@keg-hub/re-theme/reStyle'
-import { Text, View, Column, Loading } from '@keg-hub/keg-components'
+import { Text, View } from '@keg-hub/keg-components'
 
 export const ReReportsMain = reStyle(View)(theme => ({}))
 

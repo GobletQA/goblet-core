@@ -33,5 +33,12 @@ export const body = theme => ({
     width: 14,
     height: 14,
     position: 'relative',
+  },
+  [`.record-actions-button-icon div.keg-indicator > div[role="progressbar"] > div`]: {
+    left: -18,
+    width: 20,
+    height: 20,
+    position: 'relative',
+    color: tapColors.danger,
   }
 })

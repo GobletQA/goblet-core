@@ -2,7 +2,6 @@ import React, { useCallback, useState, useRef } from 'react'
 import { Canvas } from './canvas'
 import { noOpObj } from '@keg-hub/jsutils'
 import { ScreencastTabs } from './screencastTabs'
-// import { Tracker } from 'HKComponents/tracker/tracker'
 import { Recorder } from 'HKComponents/recorder/recorder'
 import { useNoVnc, useScreencastUrl } from 'HKHooks/screencast'
 import { ResizeHandle } from 'HKComponents/resize/resizeHandle'
@@ -26,7 +25,6 @@ export const Screencast = props => {
     isRunning,
     activeTab,
     activeFile,
-    hideTracker,
   } = props
 
   const [tab, setTab] = useState(activeTab)
@@ -55,9 +53,27 @@ export const Screencast = props => {
       <LSurface
         hasToggle={false}
         capitalize={false}
+        leftWidth={leftWidth}
+        prefix={'Recorder'}
+        title={'Record Actions'}
+        className={`screencast-recorder-surface`}
+      >
+        <Recorder
+          isRunning={isRunning}
+          activeFile={activeFile}
+        />
+      </LSurface>
+      <ResizeHandle
+        dragging={dragging}
+        onTouchEnd={onMouseUp}
+        onMouseDown={onMouseDown}
+        onTouchStart={onTouchStart}
+      />
+      <RSurface
+        hasToggle={false}
+        capitalize={false}
         prefix={'Screencast'}
         title={'Test Runner'}
-        leftWidth={leftWidth}
         className={`screencast-canvas-surface`}
       >
         <Canvas
@@ -67,39 +83,13 @@ export const Screencast = props => {
           height={screenRect.height}
         />
         {dragging && (<CanvasCover className='screencast-canvas-cover' />)}
-      </LSurface>
-      {!hideTracker && (
-        <>
-          <ResizeHandle
-            dragging={dragging}
-            onTouchEnd={onMouseUp}
-            onMouseDown={onMouseDown}
-            onTouchStart={onTouchStart}
-          />
-          <RSurface
-            hasToggle={false}
-            capitalize={false}
-            prefix={'Recorder'}
-            title={'Record Actions'}
-            className={`screencast-recorder-surface`}
-          >
-            <Recorder
-              isRunning={isRunning}
-              activeFile={activeFile}
-            />
-            {/* <Tracker
-              isRunning={isRunning}
-              activeFile={activeFile}
-            /> */}
-          </RSurface>
-          <ScreencastTabs
-            activeTab={tab}
-            isRunning={isRunning}
-            canvasRef={canvasRef}
-            onTabSelect={tabSelect}
-          />
-        </>
-      )}
+      </RSurface>
+      <ScreencastTabs
+        activeTab={tab}
+        isRunning={isRunning}
+        canvasRef={canvasRef}
+        onTabSelect={tabSelect}
+      />
     </SCMain>
   )
 }

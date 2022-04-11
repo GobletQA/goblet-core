@@ -1,13 +1,47 @@
-import React from 'react'
-import { Values } from 'HKConstants'
+import React, { useMemo } from 'react'
+
+import { tapColors } from 'HKTheme/tapColors'
 import { Record } from 'HKAssets/icons/record'
 import { HerkinButton } from './button.restyle'
-import { useSelector } from 'HKHooks/useSelector'
 import { SlowFlash } from 'HKComponents/slowFlash'
 import { useRecordAction } from 'HKHooks/screencast/useRecordAction'
-import { tapColors } from 'HKTheme/tapColors'
+import { Loading } from '@keg-hub/keg-components'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
 
-const { CATEGORIES } = Values
+
+export const ReLoading = reStyle(Loading, 'styles')(theme => ({
+  main: {
+    pos: `relative`,
+    mL: theme.margin.size * 1.5,
+    c: theme.tapColors.danger,
+  },
+  indicator: {
+    icon: {
+      // See /theme/domStyles/body.js for how the height and width get set
+      color: theme.tapColors.danger,
+    }
+  }
+}))
+
+
+const useRecordProps = (isRecording, loading) => {
+  return useMemo(() => {
+    const Icon = loading ? ReLoading : Record
+    return isRecording
+      ? {
+          Icon,
+          color: tapColors.buttonText,
+          themePath: 'button.contained.danger',
+          styles: {text: {color: tapColors.buttonText}}
+        }
+      : {
+          Icon,
+          color: tapColors.danger,
+          themePath: 'button.outline.danger',
+          styles: {text: {color: tapColors.danger}}
+        }
+  }, [isRecording, loading])
+}
 
 
 /**
@@ -21,26 +55,27 @@ const { CATEGORIES } = Values
  *
  */
 export const RecordButton = props => {
-  const { children, text = 'Record', altText, styles, ...args } = props
-  const { recordingBrowser } = useSelector(CATEGORIES.RECORDING_BROWSER)
-  const { isRecording } = recordingBrowser
+  const { children, text = 'Record', altText, onRecord } = props
 
-  const onRecord = useRecordAction(args)
-  const recordText = altText || `Recording`
+  const {
+    loading,
+    onClick,
+    isRecording,
+  } = useRecordAction({ onRecord })
+  const recordText = altText || `Stop`
+  const recordProps =  useRecordProps(isRecording, loading)
 
   return (
     <SlowFlash
-      minOpacity={0.5}
+      duration={250}
+      minOpacity={0.3}
       flashing={isRecording}
     >
       <HerkinButton
-        {...args}
-        themePath='button.outline.danger'
-        Icon={Record}
-        color={tapColors.danger}
-        onClick={onRecord}
+        {...recordProps}
+        onClick={onClick}
+        Icon={recordProps.Icon}
         classPrefix='record-actions'
-        styles={{text: {color: tapColors.danger}}}
       >
         {children || (isRecording ? recordText : text)}
       </HerkinButton>

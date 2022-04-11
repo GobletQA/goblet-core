@@ -1,7 +1,6 @@
 import { getStore } from 'HKStore'
 import { Values } from 'HKConstants'
 import { setItem } from 'HKActions'
-import { addToast } from 'HKActions/toasts/addToast'
 import { getActiveFile } from 'HKUtils/helpers/getActiveFile'
 import { setActiveFileFromType } from 'HKActions/files/local/setActiveFileFromType'
 
@@ -48,11 +47,5 @@ export const recordAction = (message) => {
       [timestamp]: {timestamp, ...data},
     }
   })
-  
-  addToast({
-    type: 'info',
-    message: `Received record event ${data.target}:${data.type}`
-  })
-
 }
 

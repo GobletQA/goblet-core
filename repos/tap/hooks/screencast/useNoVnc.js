@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Values } from 'HKConstants'
 import { useSelector } from 'HKHooks/useSelector'
 import { useScreenResize } from './useScreenResize'
+import { getWorldVal } from 'HKUtils/repo/getWorldVal'
 import { actionBrowser } from 'HKActions/screencast/api/actionBrowser'
 
 const { STORAGE } = Values
@@ -11,7 +12,7 @@ const { STORAGE } = Values
  * @param {Object} repo - Repo metadata object from the store
  */
 const openAppUrl = repo => {
-  const appUrl = repo?.world?.url || repo?.world?.app?.url
+  const appUrl = getWorldVal(`url`, `app.url`, undefined, repo)
 
   appUrl &&
     actionBrowser({
