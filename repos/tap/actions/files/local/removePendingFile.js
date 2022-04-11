@@ -1,5 +1,4 @@
-import { getStore, dispatch } from 'HKStore'
-import { setActiveFile } from './setActiveFile'
+import { dispatch } from 'HKStore'
 import { Values, ActionTypes } from 'HKConstants'
 
 const { CATEGORIES } = Values

@@ -13,9 +13,7 @@ class Recorder {
   onEvents = []
 
   static getInstance = (id, config) => {
-    if(RecorderInstances[id]) return RecorderInstances[id]
-    
-    RecorderInstances[id] = new Recorder(config, id)
+    RecorderInstances[id] = RecorderInstances[id] || new Recorder(config, id)
 
     return RecorderInstances[id]
   }
@@ -37,15 +35,24 @@ class Recorder {
   }
 
   setupRecorder = config => {
-    const { page, context, browser, options, onEvent=noOp, onCleanup=noOp } = config
+    const {
+      page,
+      context,
+      browser,
+      options,
+      onEvent=noOp,
+      onCleanup=noOp,
+      onCreateNewPage,
+    } = config
 
     if(page) this.page = page
     if(context) this.context = context
     if(browser) this.browser = browser
-    if(onEvent) this.onEvents.push(onEvent)
     if(options) this.options = deepMerge(this.options, options)
 
-    this.onCleanup = onCleanup
+    if(onEvent) this.onEvents.push(onEvent)
+    if(onCleanup) this.onCleanup = onCleanup
+    if(onCreateNewPage) this.onCreateNewPage = onCreateNewPage
 
     return this
   }
@@ -61,19 +68,18 @@ class Recorder {
       this.recording = true
       this.setupRecorder(config)
 
+      if(!this.page)
+        throw new Error(`A Playwright page instance is required, but not set.`)
+
       // Create a binding to receive actions from the page.
-      await this.context.exposeBinding('herkinRecordAction', this.onInjectedAction)
-
-      // Load the page.
-      this.page = this.page || await this.context.newPage()
-      url && await this.page.goto(url)
-
+      await this.page.exposeBinding('herkinRecordAction', this.onInjectedAction)
       // Inject the script that detects actions and highlights elements.
       await this.page.addScriptTag({content: injectedScript})
       await this.page.addInitScript({content: injectedScript})
-
-      // Also detect page loads.
+      //  Detect page loads.
       this.page.on('load', this.onPageLoad)
+
+      url && await this.page.goto(url)
 
       this.fireEvent({
         message: 'Recording started',
@@ -81,6 +87,8 @@ class Recorder {
       })
     }
     catch(err){
+      console.error(err.stack)
+      
       await this.cleanUp(true)
 
       this.fireEvent({
@@ -93,17 +101,13 @@ class Recorder {
   }
 
   stop = async (closeBrowser) => {
-
     try {
   
-      if(!this.context || !this.recording){
+      if(!this.context || !this.recording)
         this.fireEvent({
           name: constants.recordError,
           message: 'Recording context does not exist'
         })
-      }
-
-      await this.cleanUp(closeBrowser)
 
       // If there's a page
       // Get it's current url
@@ -112,18 +116,28 @@ class Recorder {
       if(!closeBrowser && this.page){
         const url = this.page.url()
         this.page.close()
+        this.page = undefined
+
         // Create a new page
-        const page = await this.context.newPage()
+        this.page = await this.context.newPage()
+        console.log(`------- calling create new page -------`)
+        await this.onCreateNewPage(this.page, this)
+
         // Then  goto that page
-        url && await page.goto(url)
+        url && await this.page.goto(url)
       }
 
+      this.recording = false
       this.fireEvent({
         name: constants.recordEnded,
         message: 'Recording stopped',
       })
+
+      await this.cleanUp(closeBrowser)
     }
     catch(err){
+      console.error(err.stack)
+
       this.fireEvent({
         name: constants.recordError,
         message: err.message,
@@ -160,47 +174,38 @@ class Recorder {
   /**
    * Called by playwright when the page finished loading (including after subsequent navigations).
    */
-  onPageLoad = (...args) => {
+  onPageLoad = async (page) => {
+    const title = await page.title()
+
     this.fireEvent({
       message: 'page loaded',
       // TODO: add url and other metadata to data object
-      data: {},
+      data: {
+        title,
+        type: 'pageload',
+        url: page.url(),
+        // Not sure it we want to actually include the code for this
+        // code: EventsRecorder.generator.codeFromEvent({ type: 'pageload' })
+      },
       name: constants.recordAction,
     })
   }
 
 
-  cleanupBrowser = async () => {
-    try {
-      // Only close the browser if the arg passed is true
-      // Otherwise we can make the browser reusable
-      // And we don't have to create a new one 
-      this.page && await this.page.close()
-      this.context && await this.context.close()
-      this.browser && await this.browser.close()
-    }
-    catch(err){
-      this.fireEvent({
-        name: constants.recordError,
-        message: err.message,
-      })
-    }
+  cleanUp = async (includeBrowser) => {
+    await this.onCleanup(includeBrowser, this)
+
+    includeBrowser &&
+      this.browser &&
+      await this.browser.close()
 
     delete this.page
     delete this.context
     delete this.browser
-
-    return this
-  }
-
-  cleanUp = async (closeBrowser) => {
-    await this.onCleanup(closeBrowser, this)
-
-    closeBrowser && await this.cleanupBrowser()
-
     this.recording = false
     this.options = {}
     this.onEvents = []
+
     if(this.id) delete RecorderInstances[this.id]
   }
 }

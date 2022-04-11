@@ -1,8 +1,12 @@
 const { noOpObj } = require('@keg-hub/jsutils')
 const { joinBrowserConf } = require('HerkinSharedUtils/joinBrowserConf')
 
-// TODO: @lance-tipton - figure out how to decouple this - Move all socket actions to screencast dir
-const { stopBrowser, startRecording } = require('HerkinSCPlaywright')
+// TODO: @lance-tipton - Move all socket.io setup and files to screencast folder
+const {
+  setPage,
+  stopBrowser,
+  startRecording,
+} = require('HerkinSCPlaywright')
 
 /**
  * Stats a the browser recorder from a socket.io event
@@ -31,10 +35,13 @@ const handleStart = async (data, socket, Manager, app) => {
     },
     onCleanup: async closeBrowser => {
       closeBrowser && await stopBrowser(browserConf)
-    }
+    },
+    onCreateNewPage: async page => {
+      page && await setPage(page)
+    },
   })
 
-  Manager.cache[socket.id] = { id: socket.id,  recorder }
+  Manager.cache[socket.id].recorder = recorder
 }
 
 
@@ -58,6 +65,8 @@ const handleStop = async (data, socket, Manager) => {
     return console.log(`Missing socket cache or recorder`, cache)
 
   await cache.recorder.stop(...action.props)
+  delete cache.recorder
+
 }
 
 /**

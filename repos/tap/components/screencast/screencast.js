@@ -79,14 +79,18 @@ export const Screencast = props => {
           <RSurface
             hasToggle={false}
             capitalize={false}
-            prefix={'Tracker'}
-            title={'Tests Status'}
-            className={`screencast-tracker-surface`}
+            prefix={'Recorder'}
+            title={'Record Actions'}
+            className={`screencast-recorder-surface`}
           >
             <Recorder
               isRunning={isRunning}
               activeFile={activeFile}
             />
+            {/* <Tracker
+              isRunning={isRunning}
+              activeFile={activeFile}
+            /> */}
           </RSurface>
           <ScreencastTabs
             activeTab={tab}

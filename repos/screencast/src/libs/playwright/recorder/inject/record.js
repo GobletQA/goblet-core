@@ -1,4 +1,8 @@
 
+/**
+ * All modifier keys to be added to tracked events when active
+ * @type {Array}
+ */
 const modifierKeys = [
   'altKey',
   'ctrlKey',
@@ -6,6 +10,10 @@ const modifierKeys = [
   'shiftKey'
 ]
 
+/**
+ * All position values to be added to tracked events 
+ * @type {Array}
+ */
 const eventCoords = [
   'offsetX',
   'offsetY',
@@ -17,10 +25,24 @@ const eventCoords = [
   'clientY',
 ]
 
-function exists(item){
-  return (item !== undefined && item !== null && !Number.isNaN(item))
+/**
+ * Helper to check if a value exists
+ * @type {Function}
+ * @param {*} value - To be checked if it exists
+ *
+ */
+function exists(value){
+  return (value !== undefined && value !== null && !Number.isNaN(value))
 }
 
+/**
+ * Helper to lookup items in a names array and see if they exists on the passed in element
+ * @type {Function}
+ * @param {Object} e - Dom element to check against
+ * @param {Array} names - Array of keys to check
+ * @param {boolean} checkExists - True if should check if the values exists to falsy values are included
+ *
+ */
 function loopKeyNames (e, names, checkExists) {
   return names.reduce(function(acc, name) {
     if(checkExists && exists(e[name]) || e[name]){
@@ -32,77 +54,104 @@ function loopKeyNames (e, names, checkExists) {
   }, false)
 }
 
+
+/**
+ * Finds the position of an element within a list of element
+ * Uses shortcuts where possible through the element.id or element tagName
+ * Otherwise it will try to generate a selector from the element classList and tagName
+ * @type {Function}
+ * @param {Object} el - Dom element to generate a selector for
+ * @param {Array} nodeList - List of dom nodes that may contain the element
+ *
+ */
 function positionInNodeList(el, nodeList) {
   for (let i = 0; i < nodeList.length; i++) {
-    if (el === nodeList[i]) {
-      return i;
-    }
+    if (el === nodeList[i]) return i
   }
-  return -1;
+
+  return -1
 }
 
-function findUniqueCssSelector(el) {
-  const doc = el.ownerDocument;
+/**
+ * Tries to generate a unique selector for the passed in element
+ * Uses shortcuts where possible through the element.id or element tagName
+ * Otherwise it will try to generate a selector from the element classList and tagName
+ * @type {Function}
+ * @param {Object} el - Dom element to generate a selector for
+ *
+ */
+function findCssSelector(el) {
+  const doc = el.ownerDocument
 
-  if (el.id && doc.querySelectorAll("#" + CSS.escape(el.id)).length === 1) {
-    return "#" + CSS.escape(el.id);
-  }
+  // If it's got an id, and no other elements have the same id, use it
+  if (el.id && doc.querySelectorAll("#" + CSS.escape(el.id)).length === 1)
+    return "#" + CSS.escape(el.id)
 
   // Inherently unique by tag name
-  const tagName = el.localName;
-  if (tagName === "html") {
-    return "html";
-  }
-  if (tagName === "head") {
-    return "head";
-  }
-  if (tagName === "body") {
-    return "body";
-  }
+  const tagName = el.localName
 
-  // We might be able to find a unique class name
-  let selector, index, matches;
+  if (tagName === "html")
+    return "html"
+  if (tagName === "head")
+    return "head"
+  if (tagName === "body")
+    return "body"
+
+  // If no id, try to generate a selector from it's classList and tagName
+  let selector
+  let index
+  let matches
+
   for (let i = 0; i < el.classList.length; i++) {
-    // Is this className unique by itself?
-    selector = "." + CSS.escape(el.classList.item(i));
-    matches = doc.querySelectorAll(selector);
-    if (matches.length === 1) {
-      return selector;
-    }
-    // Maybe it's unique with a tag name?
-    selector = CSS.escape(tagName) + selector;
-    matches = doc.querySelectorAll(selector);
-    if (matches.length === 1) {
-      return selector;
-    }
-    // Maybe it's unique using a tag name and nth-child
-    index = positionInNodeList(el, el.parentNode.children) + 1;
-    selector = selector + ":nth-child(" + index + ")";
-    matches = doc.querySelectorAll(selector);
-    if (matches.length === 1) {
-      return selector;
-    }
+
+    // Check if the className unique on the page
+    selector = "." + CSS.escape(el.classList.item(i))
+    matches = doc.querySelectorAll(selector)
+    if (matches.length === 1) return selector
+
+    // Check unique with a tag name only
+    selector = CSS.escape(tagName) + selector
+    matches = doc.querySelectorAll(selector)
+    if (matches.length === 1) return selector
+
+    // Check unique with tag name and nth-child
+    index = positionInNodeList(el, el.parentNode.children) + 1
+    selector = selector + ":nth-child(" + index + ")"
+    matches = doc.querySelectorAll(selector)
+    if (matches.length === 1) return selector
+
   }
 
-  // Not unique enough yet.
-  index = positionInNodeList(el, el.parentNode.children) + 1;
-  selector = CSS.escape(tagName) + ":nth-child(" + index + ")";
-  if (el.parentNode !== doc) {
-    selector = findUniqueCssSelector(el.parentNode) + " > " + selector;
-  }
-  return selector;
-}
+  // Validate if it's unique relative to all other dom nodes
+  index = positionInNodeList(el, el.parentNode.children) + 1
+  selector = CSS.escape(tagName) + ":nth-child(" + index + ")"
 
-function makeTargetSelector(e) {
-  return findUniqueCssSelector(e.target);
+  if (el.parentNode !== doc)
+    selector = findCssSelector(el.parentNode) + " > " + selector
+
+  return selector
 }
 
 
-function makeEventData(e) {
+/**
+ * Helper to build the event data that's passed from the browser back to playwright
+ * Uses the passed in event to create the required metadata
+ * @type {Function}
+ * @param {Object} e - Dom event fired from an event listener
+ *
+ */
+function buildEvent(e) {
+  
+  // TODO: this needs more investigation
+  if(e.type === 'click'){
+    e.stopPropagation()
+    e.preventDefault()
+  }
+
   const event = {
     key: e.key,
     type: e.type,
-    target: makeTargetSelector(e),
+    target: findCssSelector(e.target),
   }
 
   if(e.type === 'keypress') event.value = e.target.value + (e.key && e.key.length === 1 ? e.key : '')
@@ -130,34 +179,58 @@ function makeEventData(e) {
   return event
 }
 
-let highlighter;
+/**
+ * Cache holder for the element that highlights elements in the dome
+ * Listens to the mousemove event
+ * @type {Object}
+ */
+let highlightEl
 
-function highlightOnHover(e) {
-  if (!highlighter) {
-    highlighter = document.createElement('div');
-    highlighter.style.position = 'absolute';
-    highlighter.style.zIndex = '1000';
-    highlighter.style.background = '#f005';
-    highlighter.style.pointerEvents = 'none';
-    document.body.appendChild(highlighter);
+/**
+ * All sides of a rect to set the highlightEl size
+ * @type {Array}
+ */
+const sides = ['top', 'left', 'width', 'height']
+
+/**
+ * Highlights the element on the dom that is currently hovered by the mouse pointer
+ * Listens to the mousemove event
+ * @param {Object} e - Dom event fired from an event listener
+ */
+function hoverHighlighter(e) {
+  if (!highlightEl) {
+    highlightEl = document.createElement('div')
+    highlightEl.style.position = 'absolute'
+    highlightEl.style.zIndex = '2147483640'
+    highlightEl.style.background = '#f005'
+    highlightEl.style.pointerEvents = 'none'
+    document.body.appendChild(highlightEl)
   }
-  const rect = e.target.getBoundingClientRect();
-  highlighter.style.top = rect.top + 'px';
-  highlighter.style.left = rect.left + 'px';
-  highlighter.style.width = rect.width + 'px';
-  highlighter.style.height = rect.height + 'px';
+  const rect = e.target.getBoundingClientRect()
+  sides.forEach(side => highlightEl.style[side] = rect[side] + 'px')
 }
 
-window.addEventListener('mousemove', e => highlightOnHover(e));
-window.addEventListener('mousedown', e => window.herkinRecordAction(makeEventData(e)));
-window.addEventListener('mouseup', e => window.herkinRecordAction(makeEventData(e)));
-window.addEventListener('click', e => window.herkinRecordAction(makeEventData(e)));
-window.addEventListener('keypress', e => window.herkinRecordAction(makeEventData(e)));
-window.addEventListener('scroll', e => window.herkinRecordAction(makeEventData(e)));
-window.addEventListener('cut', e => window.herkinRecordAction(makeEventData(e)));
-window.addEventListener('copy', e => window.herkinRecordAction(makeEventData(e)));
-window.addEventListener('paste', e => window.herkinRecordAction(makeEventData(e)));
+/**
+ * Listen to mousemove to allow updating the highlightEl
+ */
+window.addEventListener('mousemove', e => hoverHighlighter(e))
 
-// window.addEventListener('pointerover', e => window.herkinRecordAction(makeEventData(e)));
-// window.addEventListener('pointerout', e => window.herkinRecordAction(makeEventData(e)));
+const actions = [
+ 'mousedown',
+ 'mouseup',
+ 'click',
+ 'keypress',
+ 'scroll',
+ 'cut',
+ 'copy',
+ 'paste',
+ 'pointerout',
+ 'pointerover',
+]
+/**
+ * Helper to build the event data that's passed from the browser back to playwright
+ * Uses the passed in event to create the required metadata
+ */
+actions.forEach((action) => window.addEventListener(action, e => window.herkinRecordAction(buildEvent(e))))
+
 

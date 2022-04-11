@@ -162,7 +162,7 @@ const RenderEditors = props => {
         key={`${activeTab.id}-${editorType}`}
         width={(addResize && idx === 0) ? leftWidth : undefined}
         editorId={`${activeTab.id}-${activeFile.fileType}-editor`}
-        value={pendingFiles[activeFile?.location] || activeFile?.content || ''}
+        defaultValue={pendingFiles[activeFile?.location] || activeFile?.content || ''}
       />
     )
 

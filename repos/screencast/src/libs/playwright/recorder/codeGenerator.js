@@ -17,10 +17,10 @@ class CodeGenerator {
         return this.generateCodeForKeyboardEvent(event)
       case 'fill':
         return this.generateCodeForFillEvent(event)
-
-      // Events to be implemented
       case 'pageload':
         return this.generateCodeForPageLoadEvent(event)
+
+      // Events to be implemented
       case 'select':
         return this.generateCodeForSelectOptionEvent(event)
       case 'pagereload':
@@ -103,7 +103,7 @@ class CodeGenerator {
   }
 
   generateCodeForPageLoadEvent = (event) => {
-    return `await page.waitForLoadState()`
+    return `await page.waitForLoadState('domcontentloaded')`
   }
   
   // mousemove

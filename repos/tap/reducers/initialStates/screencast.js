@@ -16,5 +16,9 @@ export const screencast = {
   },
   [CATEGORIES.RECORDING_BROWSER]: {
     isRecording: false
+  },
+  [CATEGORIES.RECORDING_ACTIONS]: {
+    lineNumber: false,
+    actions: {}
   }
 }

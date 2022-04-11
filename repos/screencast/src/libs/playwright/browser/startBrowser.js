@@ -1,6 +1,8 @@
 const { newPage } = require('./newPage')
-const { getPage, getContext, getBrowser } = require('./browser')
 const { noOpObj } = require('@keg-hub/jsutils')
+const { browserStatus } = require('HerkinSCConstants')
+const { buildStatus } = require('../helpers/buildStatus')
+const { getPage, getContext, getBrowser } = require('./browser')
 /**
  * Starts browser using playwright
  * See {@link https://playwright.dev/docs/api/class-browsertype#browser-type-launch|Playwright Docs} for more info
@@ -17,11 +19,19 @@ const { noOpObj } = require('@keg-hub/jsutils')
 const startBrowser = async (browserConf = noOpObj) => {
   await newPage(browserConf)
 
-  return {
+  const pwComponents = {
     page: getPage(browserConf.type),
     context: getContext(browserConf.type),
     browser: getBrowser(browserConf.type),
   }
+
+  // Build the status object for the newly started browser
+  const status = buildStatus(
+    browserConf.type,
+    Boolean(pwComponents.browser && pwComponents.context && pwComponents.page),
+  )
+
+  return { status, ...pwComponents }
 }
 
 module.exports = {

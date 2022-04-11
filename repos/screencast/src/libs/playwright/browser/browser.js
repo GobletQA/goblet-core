@@ -1,6 +1,6 @@
 const { Logger } = require('@keg-hub/cli-utils')
+const { isStr, isFunc, get, set } = require('@keg-hub/jsutils')
 const { defaultBrowser } = require('HerkinSCConstants')
-const { isStr, get, set, isFunc } = require('@keg-hub/jsutils')
 
 /**
  * Cache holder for all launched playwright browsers by type
@@ -28,24 +28,32 @@ const getPage = (type = defaultBrowser) => {
  * @returns {void}
  */
 const setPage = (page, type = defaultBrowser) => {
-  try {
-    const oldPage = !page && getPage(type)
-    oldPage && oldPage.close()
-  } catch (err) {
-    Logger.warn(err.message)
+
+  const oldPage = getPage(type)
+
+  if(oldPage){
+    if(oldPage && page){
+      console.log(`oldPage already set`)
+      console.log(`typeof oldPage`, typeof oldPage)
+      console.log(`typeof page`, typeof page)
+      console.log(`page are equal`, page === oldPage)
+    }
+
+    return oldPage
   }
 
   set(PW_BROWSERS, [type, `page`], page)
-
-  // Add listener to delete the context when closed
+  
+  // // Add listener to delete the context when closed
   page &&
     isFunc(page.on) &&
     page.on('close', () => {
-      if(!type || !PW_BROWSERS[type] || !PW_BROWSERS[type].page) return
-
+      if(!PW_BROWSERS[type] || !PW_BROWSERS[type].page) return
       delete PW_BROWSERS[type].page
     })
+  
 }
+
 
 /**
  * Returns the cached Playwright context
@@ -67,31 +75,28 @@ const getContext = (type = defaultBrowser) => {
  * @returns {void}
  */
 const setContext = (context, type = defaultBrowser) => {
-  // If no context, get the old content and close it if it exists
-  try {
-    const oldContext = !context && getContext(type)
-    oldContext && oldContext.close()
-  } catch (err) {
-    Logger.warn(err.message)
+  
+  const oldContext = getContext(type)
+  
+  if(oldContext){
+    if(context && oldContext){
+      console.log(`oldContext already set`)
+      console.log(`typeof oldContext`, typeof oldContext)
+      console.log(`typeof context`, typeof context)
+      console.log(`Contexts are equal`, context === oldContext)
+    }
+
+    return oldContext
   }
 
   set(PW_BROWSERS, [type, `context`], context)
 
-  // Add listener to delete the context when closed
+  // // Add listener to delete the context when closed
   context &&
     isFunc(context.on) &&
-    context.on('close', () => {
-      if(!type || !PW_BROWSERS[type]) return
-
-      if(!PW_BROWSERS[type].context) return
+    context.on('close', async () => {
+      if(!PW_BROWSERS[type] || !PW_BROWSERS[type].context) return
       delete PW_BROWSERS[type].context
-
-      // PW_BROWSERS[type].page &&
-      //   isFunc(PW_BROWSERS[type].page.close) &&
-      //   PW_BROWSERS[type].page.close()
-
-      if(!PW_BROWSERS[type].page) return
-      delete PW_BROWSERS[type].page
     })
 }
 
@@ -112,14 +117,34 @@ const getBrowser = (type = defaultBrowser) => {
  * @return {Object|undefined} - Playwright browser object or undefined
  */
 const setBrowser = (browser, type = defaultBrowser) => {
-  setBrowsers(browser, type)
-  // Add listener to delete the browser when closed
+  const oldBrowser = getBrowser(type)
+
+  if(oldBrowser){
+    if(browser && oldBrowser){
+      console.log(`oldBrowser already set`)
+      console.log(`typeof oldBrowser`, typeof oldBrowser)
+      console.log(`typeof browser`, typeof browser)
+      console.log(`browsers are equal`, browser === oldBrowser)
+    }
+
+    return PW_BROWSERS
+  }
+
+  const bType = type || browser.name() || defaultBrowser
+
+  // Set the new browser
+  PW_BROWSERS[bType] = { browser }
+
+  // // Add listener to delete the browser when closed
   browser &&
     isFunc(browser.on) &&
-    browser.on('disconnected', () => {
-      if (!type || !PW_BROWSERS[type] || !PW_BROWSERS[type].browser) return
+    browser.on('disconnected', async () => {
+      if (!PW_BROWSERS[type] || !PW_BROWSERS[type].browser) return
+
       delete PW_BROWSERS[type].browser
     })
+
+  return PW_BROWSERS
 }
 
 
@@ -134,55 +159,13 @@ const setBrowser = (browser, type = defaultBrowser) => {
  *
  * @return {Object} - The PW_BROWSERS cache, with the browser removed
  */
-const closeBrowser = (browser, type) => {
+const closeBrowser = async (browser) => {
   try {
-    browser = browser || get(PW_BROWSERS, [type, `browser`])
-    browser && browser.close()
-  } catch (err) {
+    browser && await browser.close()
+  }
+  catch (err) {
     Logger.warn(err.message)
   }
-
-  if (type && PW_BROWSERS[type]) delete PW_BROWSERS[type]
-
-  browser = undefined
-  return PW_BROWSERS
-}
-
-/**
- * Adds a browser to the Browsers object by type
- * If no second argument, use the browser.name method to set the type
- * If first param is a string name of a browser
- * Or if no first param, and second param is a string name of a browser
- * Then delete the browser from the browser object by browser name || type
- * @example
- * setBrowsers(`chromium`) === setBrowsers(null, `chromium`) === (delete PW_BROWSERS.chromium)
- * @example
- * setBrowsers(chromeBrowserObj) === setBrowsers(browserObj, `chromium`)
- * @function
- * @private
- *
- * @param {Object|string} browser - Playwright browser object || Browser type
- * @param {string} type - Playwright browser type ( chromium | firefox | webkit )
- *
- * @return {Object} - The PW_BROWSERS cache, with the browser removed
- */
-const setBrowsers = (browser, type) => {
-  // If browser type is passed as the first param
-  // Then Remove the browser
-  if (isStr(browser) && !type)
-    return closeBrowser(get(PW_BROWSERS, [browser, `browser`]), browser)
-
-  // Or if no browser is passed, and a type is passed
-  // Then Remove the browser
-  if (!browser) return closeBrowser(get(PW_BROWSERS, [type, `browser`]), type)
-
-  const bType = type || browser.name() || defaultBrowser
-
-  // Close the old browser if it exists
-  closeBrowser(get(PW_BROWSERS, [bType, `browser`]), bType)
-
-  // Set the new browser
-  PW_BROWSERS[bType] = { browser }
 
   return PW_BROWSERS
 }
@@ -194,4 +177,5 @@ module.exports = {
   setContext,
   getBrowser,
   setBrowser,
+  closeBrowser,
 }

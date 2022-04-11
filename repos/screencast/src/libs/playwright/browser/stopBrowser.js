@@ -3,7 +3,7 @@ const { Logger } = require('@keg-hub/cli-utils')
 const { browserStatus } = require('HerkinSCConstants')
 const { buildStatus } = require('../helpers/buildStatus')
 const { getBrowserOpts } = require('../helpers/getBrowserOpts')
-const { setPage, getBrowser, setContext, setBrowser } = require('./browser')
+const { getBrowser, closeBrowser, setBrowser } = require('./browser')
 /**
  * Closes the current browser reference
  * Resets all the cache holders to undefined
@@ -17,10 +17,10 @@ const { setPage, getBrowser, setContext, setBrowser } = require('./browser')
  */
 const stopBrowser = async (browserConf = noOpObj, type) => {
   type = type || browserConf.type
+
+  const browser = getBrowser(type)
   // Ensure the browser, page, and context are always reset
-  setPage(undefined, type)
-  setContext(undefined, type)
-  setBrowser(undefined, type)
+  browser && await closeBrowser(browser)
 
   return buildStatus(type, browserStatus.stopped)
 }

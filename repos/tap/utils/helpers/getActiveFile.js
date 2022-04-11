@@ -1,6 +1,5 @@
-import { Values } from 'HKConstants'
 import { getStore } from 'HKStore'
-import { pickKeys } from '@keg-hub/jsutils'
+import { Values } from 'HKConstants'
 
 const { CATEGORIES } = Values
 
@@ -14,15 +13,15 @@ const { CATEGORIES } = Values
  *
  * @return {Object} - Found active feature
  */
-export const getActiveFile = (items, itemId) => {
+export const getActiveFile = (items, screenId) => {
   const storeItems = items || getStore()?.getState()?.items
   const screenModels = storeItems[CATEGORIES.SCREENS]
 
   return Object.values(screenModels).reduce((found, model) => {
     return found
       ? found
-      : itemId
-      ? screenModels[itemId].activeFile
-      : model.active && model.activeFile
+      : screenId
+        ? screenModels[screenId].activeFile
+        : model.active && model.activeFile
   }, false)
 }

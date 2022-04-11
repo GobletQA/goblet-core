@@ -34,22 +34,10 @@ const ensurePage = async (context, browserConf) => {
   const pwPage = getPage(browserConf.type)
   if (pwPage) return pwPage
 
-  try {
-    const page = await context.newPage(getPageOpts(browserConf.page))
-    setPage(page, browserConf.type)
+  const page = await context.newPage(getPageOpts(browserConf.page))
+  setPage(page, browserConf.type)
 
-    return page
-  }
-  catch(err){
-    console.log(`------- TODO: Fix This, check for error name / type and handle properly -------`)
-    console.log(`------- is target-closed error -------`)
-    console.log(err.message.includes(`browserContext.newPage: Target closed`))
-    console.log(`------- is browser-closed error -------`)
-    console.log(err.message.includes(`browserContext.newPage: Browser closed`))
-
-    console.log(`------- err.message -------`)
-    console.log(err.message)
-  }
+  return page
 }
 
 /**

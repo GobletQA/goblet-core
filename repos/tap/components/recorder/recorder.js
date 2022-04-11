@@ -1,12 +1,11 @@
-import React, {useMemo} from 'react'
+import React, {useMemo, useState, useCallback} from 'react'
 import { Values } from 'HKConstants'
 import { useSelector } from 'HKHooks/useSelector'
+import { MonacoEditor } from 'HKComponents/monacoEditor/monacoEditor'
 import {
-  ReRunning,
-  ReMetaText,
+  ReLineText,
   RecorderMain,
-  RecorderTests,
-  ReRecorderText,
+  RecorderLines,
 } from './recorder.restyle'
 const { CATEGORIES } = Values
 
@@ -21,7 +20,7 @@ const RenderLine = props => {
     line,
   } = props
 
-  return <ReMetaText className='recorder-text-meta'>{line}</ReMetaText>
+  return <ReLineText className='recorder-text-meta'>{line}</ReLineText>
 }
 
 const RenderRecorder = props => {
@@ -43,11 +42,34 @@ const RenderRecorder = props => {
 
 
 export const Recorder = props => {
+  const {
+    styles,
+    activeFile,
+    ...otherProps
+  } = props
+  
+  // const [content, setContent] = useState(activeFile.content || '')
+  const onChange = useCallback(() => {
+    
+  })
+
+  const content = useMemo(() => {
+    return activeFile.content
+  }, [activeFile.content])
+
   return (
     <RecorderMain className='recorder-main'>
-      <RecorderTests className='recorder-tests'>
+      <MonacoEditor
+        {...otherProps}
+        onChange={onChange}
+        style={styles?.editor}
+        activeFile={activeFile}
+        fileId={activeFile?.location}
+        value={content}
+      />
+      {/* <RecorderLines className='recorder-lines'>
         <RenderRecorder {...props} />
-      </RecorderTests>
+      </RecorderLines> */}
     </RecorderMain>
   )
 }

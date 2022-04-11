@@ -4,6 +4,8 @@ import { localStorage } from'HKUtils/storage/localStorage'
 import { camelCase, snakeCase, checkCall } from '@keg-hub/jsutils'
 import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
 import { updateStatus } from 'HKActions/screencast/socket/updateStatus'
+
+import { recordAction } from 'HKActions/screencast/local/recordAction'
 import { setBrowserRecording } from 'HKActions/screencast/local/setBrowserRecording'
 
 const serverConfig = JSON.parse(process.env.WS_SERVER_CONFIG)
@@ -37,24 +39,14 @@ const events = {
   recordStarted: function(message){
     setBrowserRecording(message)
   },
-  
+  recordAction: function(message){
+    recordAction(message)
+  },
   recordEnded: function(message){
     setBrowserRecording(message)
   },
   recordGeneral: function(message){
     console.log(`------- recordGeneral -------`)
-    console.log(message)
-  },
-  recordAction: function(message){
-    console.log(`------- recordAction -------`)
-    console.log(message)
-  },
-  recordGeneral: function(message){
-    console.log(`------- recordGeneral -------`)
-    console.log(message)
-  },
-  recordStarted: function(message){
-    console.log(`------- recordStarted -------`)
     console.log(message)
   },
 }

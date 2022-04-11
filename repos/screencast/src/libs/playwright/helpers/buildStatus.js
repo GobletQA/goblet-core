@@ -14,8 +14,8 @@ const buildStatus = (type, status, message) => {
   const name = capitalize(getBrowserType(type))
   return {
     status: status,
-    running: status === browserStatus.running,
     message: message || `${name} Browser is ${status}`,
+    running: status === browserStatus.running || status === true,
   }
 }
 

@@ -2,6 +2,5 @@ module.exports = {
   ...require('./getBrowsers'),
   ...require('./getBrowserOpts'),
   ...require('./getContextOpts'),
-  ...require('./getBrowserType'),
-  ...require('./getBrowserStatus'),
+  ...require('./getBrowserType')
 }

@@ -64,17 +64,18 @@ import { isFunc, noOpObj } from '@keg-hub/jsutils'
 
 export const MonacoEditor = props => {
   const {
-    editorRef:parentRef,
-    activeFile, // The fileModel of the activeFile (activeFile.content === value)
-    editorId, // ID to use for the specific editor
-    fileId, // Absolute Path to the file
     mode, // Coding language
-    onMount,
-    onBeforeMount,
-    onChange, // Callback called when the value changes
+    value, // Actual code of the file
     setTab,
+    fileId, // Absolute Path to the file
+    onMount,
+    editorId, // ID to use for the specific editor
+    activeFile, // The fileModel of the activeFile (activeFile.content === value)
+    onChange, // Callback called when the value changes
+    defaultValue,  // Initial value of code if value is not set
     style=noOpObj,
-    value // Actual code of the file
+    onBeforeMount,
+    editorRef:parentRef,
   } = props
 
   const editorRef = useRef(null)
@@ -122,12 +123,13 @@ export const MonacoEditor = props => {
   return (
     <Editor
       {...editorProps}
+      value={value}
       path={fileId}
-      beforeMount={onBeforeMount}
       onMount={onMountCB}
       onChange={onChangeCB}
-      defaultValue={value}
       defaultLanguage={mode}
+      beforeMount={onBeforeMount}
+      defaultValue={defaultValue}
     />
   )
 }

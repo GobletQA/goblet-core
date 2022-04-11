@@ -82,6 +82,7 @@ const startRecording = async data => {
     browserConf,
     pwComponents,
     onRecordEvent,
+    onCreateNewPage,
   } = data
 
   const { props, action:method } = action
@@ -91,6 +92,7 @@ const startRecording = async data => {
 
   const recorder = Recorder.getInstance(id, {
     onCleanup,
+    onCreateNewPage,
     ...browserItems,
     options: recordOpts,
     onEvent: onRecordEvent,

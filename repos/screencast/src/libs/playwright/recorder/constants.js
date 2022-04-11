@@ -1,6 +1,6 @@
 
 const constants = {
-  pressTimeout: 2000,
+  pressTimeout: 1000,
   fill: `fill`,
   click: 'click',
   scroll: 'scroll',

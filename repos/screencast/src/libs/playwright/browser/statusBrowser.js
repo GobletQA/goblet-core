@@ -1,6 +1,13 @@
-const { getBrowserStatus } = require('../helpers/getBrowserStatus')
+const {noOpObj } = require('@keg-hub/jsutils')
+const { startBrowser } = require('./startBrowser')
 
-// Reexport getBrowserStatus as statusBrowser for consistency
+
+
+const statusBrowser = async (browserConf = noOpObj) => {
+  return await startBrowser(browserConf)
+}
+
+
 module.exports = {
-  statusBrowser: getBrowserStatus,
+  statusBrowser,
 }

@@ -41,15 +41,15 @@ export const ActiveDefinitionsEditor = React.memo(props => {
 
   return definition ? (
     <MonacoEditor
-      key={definition.keyId || definition.uuid}
       fileId={definition.uuid}
+      key={definition.keyId || definition.uuid}
       {...props}
-      onChange={onChange}
-      editorId={`definition-editor-${definition.uuid}`}
-      value={definition.content || ''}
-      style={styles?.editor}
       mode='javascript'
+      onChange={onChange}
+      style={styles?.editor}
       editorProps={editorProps}
+      defaultValue={definition.content || ''}
+      editorId={`definition-editor-${definition.uuid}`}
     />
   ) : (
     <NoActiveDefinition />

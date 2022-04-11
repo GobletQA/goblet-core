@@ -29,7 +29,7 @@ const browserStart = asyncWrap(async (req, res) => {
  */
 const browserStatus = asyncWrap(async (req, res) => {
   const { query } = req
-  const status = await statusBrowser(joinBrowserConf(query))
+  const { status } = await statusBrowser(joinBrowserConf(query))
 
   return apiRes(req, res, status, 200)
 })

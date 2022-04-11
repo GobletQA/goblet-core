@@ -74,23 +74,44 @@ const newBrowserWS = async (browserConf, checkStatus = true) => {
  * @returns {Object} - Contains the browser reference created from playwright
  */
 const newBrowser = async (browserConf = noOpObj, checkStatus) => {
-  // If the websocket is active, then start a websocket browser
-  if (checkVncEnv().socketActive)
-    return await newBrowserWS(browserConf, checkStatus)
+  try {
+    // If the websocket is active, then start a websocket browser
+    if (checkVncEnv().socketActive)
+      return await newBrowserWS(browserConf, checkStatus)
 
-  const type = getBrowserType(browserConf.type)
+    const type = getBrowserType(browserConf.type)
 
-  const pwBrowser = getBrowser(type)
-  if (pwBrowser) {
-    Logger.log(`- Found already running Browser`)
-    return { browser: pwBrowser }
+    const pwBrowser = getBrowser(type)
+    if (pwBrowser) {
+      Logger.log(`- Found already running Browser`)
+      return { browser: pwBrowser }
+    }
+
+    // Hack due to multiple calls on frontend startup
+    // If more then one calls, and the browser is not create
+    // then it will create two browsers
+    // So this re-calls the same method when creatingBrowser is set
+    // To allow consecutive calls on start up
+    if(newBrowser.creatingBrowser)
+      return new Promise((res, rej) => {
+        setTimeout(() => res(newBrowser(browserConf, checkStatus)), 500)
+      })
+
+    newBrowser.creatingBrowser = true
+
+    Logger.log(`- Starting Browser ${type}...`)
+    const browser = await playwright[type].launch(getBrowserOpts(browserConf))
+    setBrowser(browser, type)
+
+    newBrowser.creatingBrowser = false
+
+    return { browser }
   }
-
-  Logger.log(`- Starting Browser ${type}...`)
-  const browser = await playwright[type].launch(getBrowserOpts(browserConf))
-  setBrowser(browser, type)
-
-  return { browser }
+  catch(err){
+    // Ensure creatingBrowser gets set to falue
+    newBrowser.creatingBrowser = false
+    throw err
+  }
 }
 
 module.exports = {
