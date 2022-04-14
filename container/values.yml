@@ -96,7 +96,7 @@ env:
   HERKIN_API_TYPE: 'all'
 
   AZ_CONTAINER_REGISTRY: KegRegistryCentralUS
-  GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com
+  GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com,nnorman15@gmail.com,lance.tipton@workboard.com
 
 actions:
   tap:
