@@ -81,7 +81,7 @@ export const InputHoc = (Component, RootComponent=ReMain) => {
           )}
         </ReContainer>
         {helper && (
-          <ReHelperText children={helper} />
+          <ReHelperText children={helper} className='herkin-input-helper-text' />
         )}
       </RootComponent>
     )

@@ -1,10 +1,10 @@
-import React, { useCallback, useState, useMemo, useEffect, useRef } from 'react'
+import React, { useCallback, useState, useMemo, useEffect } from 'react'
 import { Modal } from '../modal'
 import { Values } from 'HKConstants'
 import { Git } from 'HKAssets/icons/git'
-import { Sync } from 'HKAssets/icons/sync'
 import { Link } from 'HKAssets/icons/link'
-import { useTheme } from '@keg-hub/re-theme'
+import { tapColors } from 'HKTheme/tapColors'
+import { Text } from '@keg-hub/keg-components'
 import { Branch } from 'HKAssets/icons/branch'
 import { ModalMessage } from '../modalMessage'
 import { FileCode } from 'HKAssets/icons/fileCode'
@@ -17,9 +17,13 @@ import { SignOutButton } from 'HKComponents/buttons/signOutButton'
 import { ControlledAuto } from 'HKComponents/form/controlledAuto'
 import { ControlledInput } from 'HKComponents/form/controlledInput'
 import { ControlledCheckbox } from 'HKComponents/form/controlledCheckbox'
-import { CondensedButton } from 'HKComponents/buttons/condensedButton'
 import { setModalVisibility } from 'HKActions/modals/setModalVisibility'
 import { ConnectRepoButton } from 'HKComponents/buttons/connectRepoButton'
+import { SyncReposButton } from 'HKComponents/buttons/syncReposButton'
+
+
+// TODO: @lance-tipton - Add ability to create a new repo, use Values.CREATE_NEW_REPO as selector
+
 
 const {
   SCREENS,
@@ -94,48 +98,14 @@ const useCreateNewBranch = () => {
   }
 }
 
-/**
- * Button to sync repos from the current auth provider
- */
-const SyncRepos = props => {
-  const theme = useTheme()
-  const styles = useMemo(() => {
-    return {
-      default: {
-        main: {},
-        touch: {
-          opacity: 0.4,
-          ...theme.transition(['opacity'], 0.8),
-        },
-        container: {
-          alignItems: 'center',
-        },
-        icon: {
-          fontSize: 15,
-          color: theme.tapColors.white,
-          marginBottom: 3,
-        },
-        text: {
-          fontSize: 8,
-          color: theme.tapColors.white,
-        },
-      },
-      hover: {
-        touch: {
-          opacity: 1,
-        },
-      },
-    }
-  }, [theme])
 
+const branchNameStyle = {color: tapColors.primary, fontWeight: 'bold'}
+const NewBranchText = ({ branch }) => {
   return (
-    <CondensedButton
-      Icon={Sync}
-      text={'Sync Repos'}
-      classPrefix={'sync'}
-      onClick={getRepos}
-      styles={styles}
-    />
+    <Text>
+      {`Create new branch${branch ? ' from ' : ''}`}
+      {branch && (<Text style={branchNameStyle}>"{branch}"</Text>)}
+    </Text>
   )
 }
 
@@ -202,7 +172,7 @@ export const ConnectRepoModal = props => {
       backdrop={false}
       visible={visible}
       classPrefix='modal-load-repo'
-      headerRight={(<SyncRepos />)}
+      headerRight={(<SyncReposButton />)}
       footerLeft={(<SignOutButton disabled={isConnecting} />)}
       footerRight={(
         <ConnectRepoButton
@@ -256,7 +226,7 @@ export const ConnectRepoModal = props => {
           checked={createBranch}
           onChange={onCreateBranch}
           styles={checkboxOptStyle}
-          InlineComponent={`Create new branch${branch ? ' from ' + branch : ''}`}
+          InlineComponent={<NewBranchText branch={branch} />}
         />
       ) || null}
       {branch && createBranch && (

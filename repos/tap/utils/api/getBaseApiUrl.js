@@ -5,6 +5,7 @@ if(typeof window !== 'undefined') urlMeta = new URL(window.location.origin)
 const { hostname, protocol } = urlMeta
 const __IS_SECURE_HOST = protocol === 'https' ? true : false
 let __BASE_API_URL
+
 /**
  * Returns the true if the current host url is secure (__IS_SECURE_HOST)
  *
