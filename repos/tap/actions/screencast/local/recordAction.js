@@ -1,11 +1,9 @@
-import { getStore } from 'HKStore'
-import { Values } from 'HKConstants'
-import { setItem } from 'HKActions'
+import { ActionTypes, Values } from 'HKConstants'
+import { getStore, dispatch } from 'HKStore'
 import { getActiveFile } from 'HKUtils/helpers/getActiveFile'
 import { setActiveFileFromType } from 'HKActions/files/local/setActiveFileFromType'
 
 const { CATEGORIES } = Values
-
 
 const addToActiveFile = (items, data, lineNumber) => {
 
@@ -32,6 +30,10 @@ const addToActiveFile = (items, data, lineNumber) => {
  */
 export const recordAction = (message) => {
   const { data, timestamp } = message
+  
+  // TODO: figure out if I want to keep these events
+  if(data.type === `pointerover`) return
+
   if(!data)
     return console.warn(`Browser record action received, but returned no data`, message)
 
@@ -40,12 +42,30 @@ export const recordAction = (message) => {
 
   data.code && addToActiveFile(items, data, recorderActions.lineNumber)
 
-  setItem(CATEGORIES.RECORDING_ACTIONS, {
+  const updatedActions = {
     ...recorderActions,
     actions: {
       ...recorderActions.actions,
       [timestamp]: {timestamp, ...data},
     }
+  }
+
+  if(data.code && recorderActions.lineNumber){
+    updatedActions.lineNumber = recorderActions.lineNumber + 1,
+    updatedActions.range = {
+      ...recorderActions.range,
+      endLineNumber: recorderActions.range.endLineNumber + 1,
+      startLineNumber: recorderActions.range.endLineNumber + 1,
+    }
+  }
+  
+  dispatch({
+    type: ActionTypes.UPSERT_ITEMS,
+    payload: {
+      category: CATEGORIES.RECORDING_ACTIONS,
+      items: updatedActions,
+    }
   })
+
 }
 

@@ -69,9 +69,10 @@ export const MonacoEditor = props => {
     setTab,
     fileId, // Absolute Path to the file
     onMount,
+    onChange, // Callback called when the value changes
     editorId, // ID to use for the specific editor
     activeFile, // The fileModel of the activeFile (activeFile.content === value)
-    onChange, // Callback called when the value changes
+    glyphMargin,
     defaultValue,  // Initial value of code if value is not set
     style=noOpObj,
     onBeforeMount,
@@ -89,9 +90,11 @@ export const MonacoEditor = props => {
     onMount?.(editor, monaco)
   }, [onMount, activeFile, value, parentRef])
 
-  const onChangeCB = useCallback((updated, evt) => {
-    onChange?.(updated, evt)
-  }, [onChange, activeFile, value])
+  // const onChangeCB = useCallback((updated, evt) => {
+  //   onChange?.(updated, evt)
+    
+  //   // ed.getPosition()
+  // }, [onChange, activeFile, value])
 
 
   const editorProps = useMemo(() => {
@@ -110,15 +113,16 @@ export const MonacoEditor = props => {
       options: {
         'semanticHighlighting.enabled': true,
         fontSize: 14,
-        useShadows: false,
-        scrollBeyondLastLine: false,
-        wordWrap: 'bounded',
         codeLens: false,
+        useShadows: false,
         contextmenu: false,
+        wordWrap: 'bounded',
         horizontal: 'hidden',
+        lineNumbersMinChars: 3,
+        glyphMargin: glyphMargin,
       }
     }
-  }, [style, mode])
+  }, [style, mode, glyphMargin])
 
   return (
     <Editor
@@ -126,7 +130,7 @@ export const MonacoEditor = props => {
       value={value}
       path={fileId}
       onMount={onMountCB}
-      onChange={onChangeCB}
+      onChange={onChange}
       defaultLanguage={mode}
       beforeMount={onBeforeMount}
       defaultValue={defaultValue}

@@ -10,7 +10,7 @@ export const setBrowserOptions = (options = noOpObj) => {
     type: ActionTypes.UPSERT_ITEMS,
     payload: {
       category: CATEGORIES.BROWSER_OPTS,
-      item: options,
+      items: options,
     },
   })
 }

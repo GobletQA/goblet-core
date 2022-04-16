@@ -40,5 +40,14 @@ export const body = theme => ({
     height: 20,
     position: 'relative',
     color: tapColors.danger,
+  },
+  // Custom styles for recording line number indicator
+  // Currently just a red-dot, could be styled better
+  [`.cgmr.editor-glyph-margin`]: {
+    maxW: 15,
+    maxH: 15,
+    bRad: '50%',
+    left: `8px !important`,
+    background: tapColors.danger,
   }
 })
