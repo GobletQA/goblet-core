@@ -26,12 +26,42 @@ const eventCoords = [
 ]
 
 /**
+ * Cache holder for the element that highlights elements in the dome
+ * Listens to the mousemove event
+ * @type {Object}
+ */
+let highlightEl
+
+/**
+ * All sides of a rect to set the highlightEl size
+ * @type {Array}
+ */
+const sides = ['top', 'left', 'width', 'height']
+
+/**
+ * All dom events that are listened to and capture in the Recorder
+ * @type {Array}
+ */
+const actions = [
+ 'mousedown',
+ 'mouseup',
+ 'click',
+ 'keypress',
+ 'scroll',
+ 'cut',
+ 'copy',
+ 'paste',
+ 'pointerout',
+ 'pointerover',
+]
+
+/**
  * Helper to check if a value exists
  * @type {Function}
  * @param {*} value - To be checked if it exists
  *
  */
-function exists(value){
+const exists = (value) => {
   return (value !== undefined && value !== null && !Number.isNaN(value))
 }
 
@@ -43,8 +73,8 @@ function exists(value){
  * @param {boolean} checkExists - True if should check if the values exists to falsy values are included
  *
  */
-function loopKeyNames (e, names, checkExists) {
-  return names.reduce(function(acc, name) {
+const loopKeyNames = (e, names, checkExists) => {
+  return names.reduce((acc, name) => {
     if(checkExists && exists(e[name]) || e[name]){
       if(!acc) acc = {}
       acc[name] = e[name]
@@ -64,7 +94,7 @@ function loopKeyNames (e, names, checkExists) {
  * @param {Array} nodeList - List of dom nodes that may contain the element
  *
  */
-function positionInNodeList(el, nodeList) {
+const positionInNodeList = (el, nodeList) => {
   for (let i = 0; i < nodeList.length; i++) {
     if (el === nodeList[i]) return i
   }
@@ -80,7 +110,7 @@ function positionInNodeList(el, nodeList) {
  * @param {Object} el - Dom element to generate a selector for
  *
  */
-function findCssSelector(el) {
+const findCssSelector = (el) => {
   const doc = el.ownerDocument
 
   // If it's got an id, and no other elements have the same id, use it
@@ -132,7 +162,6 @@ function findCssSelector(el) {
   return selector
 }
 
-
 /**
  * Helper to build the event data that's passed from the browser back to playwright
  * Uses the passed in event to create the required metadata
@@ -140,8 +169,8 @@ function findCssSelector(el) {
  * @param {Object} e - Dom event fired from an event listener
  *
  */
-function buildEvent(e) {
-  
+const buildEvent = (e) => {
+
   // TODO: this needs more investigation
   if(e.type === 'click'){
     e.stopPropagation()
@@ -180,30 +209,14 @@ function buildEvent(e) {
 }
 
 /**
- * Cache holder for the element that highlights elements in the dome
- * Listens to the mousemove event
- * @type {Object}
- */
-let highlightEl
-
-/**
- * All sides of a rect to set the highlightEl size
- * @type {Array}
- */
-const sides = ['top', 'left', 'width', 'height']
-
-/**
  * Highlights the element on the dom that is currently hovered by the mouse pointer
  * Listens to the mousemove event
  * @param {Object} e - Dom event fired from an event listener
  */
-function hoverHighlighter(e) {
+const hoverHighlighter = (e, styles) => {
   if (!highlightEl) {
     highlightEl = document.createElement('div')
-    highlightEl.style.position = 'absolute'
-    highlightEl.style.zIndex = '2147483640'
-    highlightEl.style.background = '#f005'
-    highlightEl.style.pointerEvents = 'none'
+    Object.keys(styles).forEach(key => highlightEl.style[key] = styles[key])
     document.body.appendChild(highlightEl)
   }
   const rect = e.target.getBoundingClientRect()
@@ -211,26 +224,32 @@ function hoverHighlighter(e) {
 }
 
 /**
- * Listen to mousemove to allow updating the highlightEl
+ * Init script that checks if the script should run based on recording state
  */
-window.addEventListener('mousemove', e => hoverHighlighter(e))
+const initGobletRecording = async () => {
+  /**
+   * Check if the browser events should be recorder
+   * Calls a globally injected script via playwright
+   */
+  const isRecording = await window.isGobletRecording()
+  if(!isRecording) return
 
-const actions = [
- 'mousedown',
- 'mouseup',
- 'click',
- 'keypress',
- 'scroll',
- 'cut',
- 'copy',
- 'paste',
- 'pointerout',
- 'pointerover',
-]
-/**
- * Helper to build the event data that's passed from the browser back to playwright
- * Uses the passed in event to create the required metadata
- */
-actions.forEach((action) => window.addEventListener(action, e => window.herkinRecordAction(buildEvent(e))))
+  /**
+   * Get the custom styles for the highlight element
+   */
+  const styles = await window.getGobletRecordOption('highlightStyles')
+
+  /**
+   * Listen to mousemove to allow updating the highlightEl
+   */
+  window.addEventListener('mousemove', e => hoverHighlighter(e, styles))
+
+  /**
+   * Helper to build the event data that's passed from the browser back to playwright
+   * Uses the passed in event to create the required metadata
+   */
+  actions.forEach((action) => window.addEventListener(action, e => window.herkinRecordAction(buildEvent(e))))
+}
 
 
+initGobletRecording()

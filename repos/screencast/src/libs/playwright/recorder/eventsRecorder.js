@@ -86,7 +86,7 @@ class EventsRecorder {
         data: {
           ...evt,
           type,
-          code: this.generator.codeFromEvent({ ...evt, type })
+          ...this.generator.codeFromEvent({ ...evt, type })
         },
         message: `User action ${constants.keypress} recorded`,
       })
@@ -149,7 +149,7 @@ class EventsRecorder {
         name: constants.recordAction,
         data: {
           ...event,
-          code: this.generator.codeFromEvent(event)
+          ...this.generator.codeFromEvent(event)
         },
         message: `User action ${event.type} recorded`,
       })

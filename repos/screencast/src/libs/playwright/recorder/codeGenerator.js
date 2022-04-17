@@ -1,3 +1,6 @@
+const { constants } = require('./constants')
+const { noOpObj } = require('@keg-hub/jsutils')
+
 class CodeGenerator {
   recorder = undefined
 
@@ -7,34 +10,36 @@ class CodeGenerator {
 
   codeFromEvent = (event) => {
     switch (event.type) {
-      case 'click':
+      case constants.click:
         return this.generateCodeForClickEvent(event)
-      case 'mousedown':
+      case constants.mousedown:
         return this.generateCodeForMouseDownEvent(event)
-      case 'mouseup':
+      case constants.mouseup:
         return this.generateCodeForMouseUpEvent(event)
-      case 'keypress':
+      case constants.keypress:
         return this.generateCodeForKeyboardEvent(event)
-      case 'fill':
+      case constants.fill:
         return this.generateCodeForFillEvent(event)
-      case 'pageload':
+      case constants.pageload:
         return this.generateCodeForPageLoadEvent(event)
+      case constants.contentloaded:
+        return this.generateCodeForContentLoadEvent(event)
 
       // Events to be implemented
-      case 'select':
+      case constants.select:
         return this.generateCodeForSelectOptionEvent(event)
-      case 'pagereload':
+      case constants.pagereload:
         return this.generateCodeForPageReloadEvent(event)
-      case 'screenshot':
+      case constants.screenshot:
         return this.generateCodeForScreenshotEvent(event)
-      case 'route':
+      case constants.route:
         return this.generateCodeForRouteEvent(event)
-      case 'pdf':
-      case 'print':
+      case constants.pdf:
+      case constants.print:
         return this.generateCodeForPrintEvent(event)
     }
 
-    return ''
+    return noOpObj
   }
 
 
@@ -42,38 +47,37 @@ class CodeGenerator {
     // TODO: find a way to track this in the dom
     // Maybe come from the Herkin UI
     // See https://playwright.dev/docs/api/class-page#page-pdf
-    // return `await page.pdf(${JSON.stringify(event.options)})`
-    return ``
+    // return {code: `await page.pdf(${JSON.stringify(event.options)})`}
+    return noOpObj
   }
 
   generateCodeForScreenshotEvent = (event) => {
     // TODO: find a way to track this in the dom
     // Maybe come from the Herkin UI
     // See https://playwright.dev/docs/api/class-page#page-screenshot
-    // return `await page.screenshot(${JSON.stringify(event.options)})`
-    return ``
+    // return {code: `await page.screenshot(${JSON.stringify(event.options)})`}
+    return noOpObj
   }
 
   generateCodeForRouteEvent = (event) => {
     // TODO: find a way to track this in the dom
     // See https://playwright.dev/docs/api/class-page#page-route
-    // return `await page.route('${url}', ${JSON.stringify(event.options)})`
-    return ``
+    // return {code: `await page.route('${url}', ${JSON.stringify(event.options)})`}
+    return noOpObj
   }
 
   generateCodeForPageReloadEvent = (event) => {
     // TODO: find a way to track this in the dom
     // Currently this will never be called, because we don't track select onchange events
     // See https://playwright.dev/docs/api/class-page#page-reload
-    // return `await page.reload(${JSON.stringify(event.options)})`
-    return ``
+    return {code: `await page.reload(${JSON.stringify(event.options)})`}
   }
 
   generateCodeForSelectOptionEvent = (event) => {
     // TODO: find a way to track this in the dom
     // Currently this will never be called, because we don't track select onchange events
-    // return `await page.selectOption('${event.target}', '${event.value}')`
-    return ``
+    // return {code: `await page.selectOption('${event.target}', '${event.value}')`}
+    return noOpObj
   }
 
   generateCodeForClickEvent = (event) => {
@@ -81,33 +85,41 @@ class CodeGenerator {
     // page.check(event.target)
     // If event.checked === true, then call page.uncheck(event.target)
     // Or call page.setChecked(event.target, event.checked)
-    return `await page.click('${event.target}')`
+    return {code: `await page.click('${event.target}')`}
   }
 
   generateCodeForMouseDownEvent = (event) => {
-    return `await page.mouse.down('${event.target}')`
+    return {code: `await page.mouse.down('${event.target}')`}
   }
 
   generateCodeForMouseUpEvent = (event) => {
-    return `await page.mouse.up('${event.target}')`
+    return {code: `await page.mouse.up('${event.target}')`}
   }
 
   generateCodeForKeyboardEvent = (event) => {
-    return `await page.press('${event.target}', '${event.key}')`
+    return {code: `await page.press('${event.target}', '${event.key}')`}
   }
 
   generateCodeForFillEvent = (event) => {
     // Possibly use page.type(event.target, event.value)
     // Depending on time between events
-    return `await page.fill('${event.target}', '${event.value}')`
+    return {code: `await page.fill('${event.target}', '${event.value}')`}
   }
 
   generateCodeForPageLoadEvent = (event) => {
-    return `await page.waitForLoadState('domcontentloaded')`
+    return {
+      codeLineLength:  2,
+      code: [
+        `await page.goto('${event.url}')`,
+        `await page.waitForLoadState('domcontentloaded')`
+      ].join(`\n`),
+    }
   }
-  
-  // mousemove
-  
+
+  generateCodeForContentLoadEvent = (event) => {
+    return {code: `await page.waitForLoadState('domcontentloaded')`}
+  }
+
 }
 
 

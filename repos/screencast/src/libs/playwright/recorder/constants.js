@@ -1,21 +1,27 @@
 
 const constants = {
   pressTimeout: 1000,
+  pdf: `pdf`,
   fill: `fill`,
-  click: 'click',
-  scroll: 'scroll',
+  click: `click`,
+  print: `print`,
+  route: `route`,
+  scroll: `scroll`,
   mouseup: `mouseup`,
   pageload: `pageload`,
   keypress: `keypress`,
   mousedown: `mousedown`,
   pointerout: `pointerout`,
+  screenshot: `screenshot`,
+  pagereload: `pagereload`,
   pointerover: `pointerover`,
+  contentloaded: `contentloaded`,
 
-  recordEnded: 'RECORD-ENDED',
-  recordGeneral: 'RECORD-ERROR',
+  recordEnded: `RECORD-ENDED`,
+  recordGeneral: `RECORD-ERROR`,
   recordAction: `RECORD-ACTION`,
-  recordGeneral: 'RECORD-GENERAL',
-  recordStarted: 'RECORD-STARTED',
+  recordGeneral: `RECORD-GENERAL`,
+  recordStarted: `RECORD-STARTED`,
 }
 
 module.exports = {
