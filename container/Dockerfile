@@ -27,8 +27,9 @@ RUN apt-get update; \
     fuse \
     libffi-dev \
     libgit2-dev \
+    python3-pip \
     python3.8-venv; \
-    git clone https://github.com/lancetipton/gitfs.git /keg/gitfs; \
+    git clone -b master --single-branch https://github.com/lancetipton/gitfs.git /keg/gitfs; \
     cd /keg/gitfs; \
     python3 -m pip install build; \
     python3 -m build
@@ -70,6 +71,7 @@ RUN yarn global add npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
     python3 -m pip install /keg/gitfs/dist/gitfs-0.5.2-py3-none-any.whl; \
     apt-get clean && \
     apt-get autoclean; \
+    apt-get autoremove; \
     rm -rf /var/cache/apk/*; \
     echo fs.inotify.max_user_watches=1048576 | tee -a /etc/sysctl.conf; \
     sysctl -p; \
