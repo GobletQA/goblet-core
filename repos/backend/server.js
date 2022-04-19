@@ -42,6 +42,7 @@ const initApi = async () => {
 
   const wsProxy = setupVNCProxy(app)
   const { insecureServer, secureServer } = setupServerListen(app)
+
   const server = secureServer || insecureServer
 
   server.on('upgrade', wsProxy.upgrade)

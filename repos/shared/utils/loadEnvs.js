@@ -1,9 +1,21 @@
-const { addToProcess } = require('@keg-hub/cli-utils')
-const { loadConfigs } = require('@keg-hub/parse-config')
-
 const path = require('path')
+const { addToProcess } = require('@keg-hub/cli-utils')
+
 const appRoot = path.join(__dirname, '../../../')
 const nodeEnv = process.env.NODE_ENV || `local`
+
+const testRemovePrefix = [
+  'KEG_',
+  'DOC_',
+  'HERKIN_JWT_',
+  'GITHUB_'
+]
+
+const testRemoveIncludes = [
+  'SECRET',
+  'TOKEN',
+  'PASSWORD'
+]
 
 /**
  * Cache holder for the loaded envs
@@ -19,7 +31,22 @@ let __LOADED_ENVS__
  * @returns {Object} - Loaded Envs object
  */
 const loadEnvs = (processAdd) => {
-  __LOADED_ENVS__ = __LOADED_ENVS__ || loadConfigs({
+  if(process.env.JEST_WORKER_ID !== undefined){
+    Object.entries(process.env)
+      .map(([key, val ]) => {
+        const shouldRemove = testRemovePrefix.find(prefix => key.startsWith(prefix)) ||
+          testRemoveIncludes.find(word => key.includes(word))
+
+        if(!shouldRemove) return
+
+        process.env[key] = undefined
+        delete process.env[key]
+      })
+
+    return {}
+  }
+
+  __LOADED_ENVS__ = __LOADED_ENVS__ || require('@keg-hub/parse-config').loadConfigs({
     env: nodeEnv,
     name: 'herkin',
     locations: [appRoot],

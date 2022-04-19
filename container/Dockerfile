@@ -19,8 +19,11 @@ COPY . .
 # Install and build gitfs for unbuntu-20
 FROM $KEG_BASE_IMAGE as gitfs-builder
 
+RUN git clone -b master --single-branch https://github.com/lancetipton/gitfs.git /keg/gitfs
+
 RUN apt-get update; \
     apt-get install -qy --no-install-recommends \
+    gcc \
     virtualenv \
     python-dev \
     libfuse-dev \
@@ -28,9 +31,9 @@ RUN apt-get update; \
     libffi-dev \
     libgit2-dev \
     python3-pip \
-    python3.8-venv; \
-    git clone -b master --single-branch https://github.com/lancetipton/gitfs.git /keg/gitfs; \
-    cd /keg/gitfs; \
+    python3.8-venv
+
+RUN cd /keg/gitfs; \
     python3 -m pip install build; \
     python3 -m build
 
@@ -57,16 +60,23 @@ ENV HOME=/root \
 # Set the current directory to tap repo
 WORKDIR /keg/tap
 
-COPY --from=gitfs-builder /keg/gitfs/dist /keg/gitfs/dist
+COPY --from=gitfs-builder /keg/gitfs /keg/gitfs
+
+# Copy over the app from builder
+COPY --from=keg-builder /keg/tap /keg/tap
 
 # Install the dependecies with yarn setup, nstall gitFS
 RUN yarn global add npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
     apt-get update && apt-get install -y --no-install-recommends \
     novnc \
     tigervnc-standalone-server \
+    gcc \
     fuse \
     libffi-dev \
-    libgit2-dev; \
+    libgit2-dev \
+    python3-pip \
+    python3-dev \
+    python3.8-venv; \
     mkdir -p /var/lib/gitfs; \
     python3 -m pip install /keg/gitfs/dist/gitfs-0.5.2-py3-none-any.whl; \
     apt-get clean && \
@@ -76,14 +86,10 @@ RUN yarn global add npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
     echo fs.inotify.max_user_watches=1048576 | tee -a /etc/sysctl.conf; \
     sysctl -p; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
+    mkdir -p $DOC_APP_PATH/logs; \
     rm -rf /keg/gitfs; \
-    mkdir -p $DOC_APP_PATH/logs
-
-# TODO: @lance-tipton - investigate adding this, and remove from run.sh file
-# RUN npx playwright install chromium
-
-# Copy over the app from builder
-COPY --from=keg-builder /keg/tap /keg/tap
+    rm -rf /ms-playwright; \
+    npx playwright install chromium
 
 # Expose container ports
 EXPOSE $KEG_PROXY_PORT
