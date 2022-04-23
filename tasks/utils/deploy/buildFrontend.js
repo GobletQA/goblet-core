@@ -1,6 +1,6 @@
-const { appRoot, bundleDir, coreBuildDir } = require('../../paths')
 const { setupBuild } = require('./setupBuild')
-const { Logger, yarn, fileSys } = require('@keg-hub/cli-utils')
+const { appRoot, bundleDir, coreBuildDir } = require('../../paths')
+const { Logger, yarn, runCmd, fileSys } = require('@keg-hub/cli-utils')
 
 const bundleCmd = `web:bundle`
 
@@ -21,6 +21,10 @@ const buildFrontend = async args => {
   const { log } = params
 
   const cmdOpts = {cwd: appRoot, envs}
+
+  log && Logger.log(`Installing sharp-cli and it's dependencies...`)
+  await runCmd(`apt`, [`install`, `-y`, `g++`, `make`], { ...cmdOpts })
+  await yarn([`global`, `add`, `sharp-cli`], cmdOpts)
 
   // Build the tap frontend application
   log && Logger.pair(`Running frontend build command`, `yarn ${bundleCmd}`)
