@@ -127,7 +127,7 @@ env:
   AZ_CONTAINER_REGISTRY: KegRegistryCentralUS
 
   # TODO: @lance-tipton - Make this more dynamic - value comes from firebase?
-  GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com,nnorman15@gmail.com,lance.tipton@workboard.com
+  GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com,nnorman15@gmail.com,lance.tipton@workboard.com,mpcarolin.dev@gmail.com
 
 actions:
   tap:

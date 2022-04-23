@@ -7,32 +7,15 @@
  *  * Data: { ref: `refs/heads/${newBranch}`, sha: <hash-from-step-2> }
  */
 
-const path = require('path')
-const url = require('url')
+
 const axios = require('axios')
 const { limbo } = require('@keg-hub/jsutils')
 const { Logger } = require('@keg-hub/cli-utils')
-const { throwErr } = require('../utils/throwErr')
-const { buildHeaders } = require('../utils/buildHeaders')
+const { throwGitError, buildHeaders, buildAPIUrl } = require('./gitUtils')
 
-const throwBranchError = (err, remoteUrl, message) => {
-  message && Logger.error(message)
-  console.error(err.stack)
-  Logger.empty()
-
-  throwErr(`Error creating git branch from remote ${remoteUrl}`)
-}
-
-const buildAPIUrl = remote => {
-  const repoUrl = new url.URL(remote)
-  repoUrl.host = 'api.github.com'
-  repoUrl.pathname = path.join(`repos`, repoUrl.pathname, `git/refs`)
-
-  return repoUrl.toString()
-}
 
 const getBranchHash = async ({ branch, remote, token, log }) => {
-  const remoteUrl = buildAPIUrl(remote)
+  const remoteUrl = buildAPIUrl(remote, [`git/refs`])
   const params = {
     method: 'GET',
     url: `${remoteUrl}/heads/${branch}`,
@@ -44,7 +27,7 @@ const getBranchHash = async ({ branch, remote, token, log }) => {
   const [err, resp] = await limbo(axios(params))
 
   err &&
-    throwBranchError(
+    throwGitError(
       err,
       remoteUrl,
       `[WRK-FL BRANCH] Github API error while getting branch ${branch} sha`
@@ -52,7 +35,7 @@ const getBranchHash = async ({ branch, remote, token, log }) => {
 
   return (
     resp?.data?.object?.sha ||
-    throwBranchError(
+    throwGitError(
       new Error(resp?.data),
       remoteUrl,
       `[WRK-FL BRANCH] Branch sha does not exist in Github API response`
@@ -61,7 +44,7 @@ const getBranchHash = async ({ branch, remote, token, log }) => {
 }
 
 const createNewBranch = async ({ branch, remote, token, log }, hash) => {
-  const remoteUrl = buildAPIUrl(remote)
+  const remoteUrl = buildAPIUrl(remote, [`git/refs`])
   const newBranch = `${branch}-herkin-${new Date().getTime()}`
 
   const params = {
@@ -79,7 +62,7 @@ const createNewBranch = async ({ branch, remote, token, log }, hash) => {
   const [err] = await limbo(axios(params))
 
   err &&
-    throwBranchError(
+    throwGitError(
       err,
       remoteUrl,
       `[WRK-FL BRANCH] Github API error while getting branch ${branch} sha`
