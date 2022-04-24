@@ -16,10 +16,10 @@ import { setActiveModal } from 'HKActions/modals/setActiveModal'
 import { SignOutButton } from 'HKComponents/buttons/signOutButton'
 import { ControlledAuto } from 'HKComponents/form/controlledAuto'
 import { ControlledInput } from 'HKComponents/form/controlledInput'
-import { ControlledCheckbox } from 'HKComponents/form/controlledCheckbox'
-import { setModalVisibility } from 'HKActions/modals/setModalVisibility'
-import { ConnectRepoButton } from 'HKComponents/buttons/connectRepoButton'
 import { SyncReposButton } from 'HKComponents/buttons/syncReposButton'
+import { setModalVisibility } from 'HKActions/modals/setModalVisibility'
+import { ControlledCheckbox } from 'HKComponents/form/controlledCheckbox'
+import { ConnectRepoButton } from 'HKComponents/buttons/connectRepoButton'
 
 
 // TODO: @lance-tipton - Add ability to create a new repo, use Values.CREATE_NEW_REPO as selector

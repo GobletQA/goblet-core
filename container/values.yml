@@ -63,7 +63,7 @@ env:
   DOC_ROOT_PATH: /keg/tap
   DOC_CONTAINER_PATH: /keg/tap/container
 
-  EXPO_CLI_VERSION: 5.0.3
+  EXPO_CLI_VERSION: 5.3.2
   KEG_NODE_VERSION: 14.17-alpine
 
   # Default port of the app to expose from the container
