@@ -86,80 +86,18 @@ const loopKeyNames = (e, names, checkExists) => {
 
 
 /**
- * Finds the position of an element within a list of element
- * Uses shortcuts where possible through the element.id or element tagName
- * Otherwise it will try to generate a selector from the element classList and tagName
+ * Checks if the element is visitable on the page 
+ * Uses the passed in event to create the required metadata
  * @type {Function}
- * @param {Object} el - Dom element to generate a selector for
- * @param {Array} nodeList - List of dom nodes that may contain the element
+ * @param {Object} e - Dom event fired from an event listener
  *
  */
-const positionInNodeList = (el, nodeList) => {
-  for (let i = 0; i < nodeList.length; i++) {
-    if (el === nodeList[i]) return i
-  }
-
-  return -1
-}
-
-/**
- * Tries to generate a unique selector for the passed in element
- * Uses shortcuts where possible through the element.id or element tagName
- * Otherwise it will try to generate a selector from the element classList and tagName
- * @type {Function}
- * @param {Object} el - Dom element to generate a selector for
- *
- */
-const findCssSelector = (el) => {
-  const doc = el.ownerDocument
-
-  // If it's got an id, and no other elements have the same id, use it
-  if (el.id && doc.querySelectorAll("#" + CSS.escape(el.id)).length === 1)
-    return "#" + CSS.escape(el.id)
-
-  // Inherently unique by tag name
-  const tagName = el.localName
-
-  if (tagName === "html")
-    return "html"
-  if (tagName === "head")
-    return "head"
-  if (tagName === "body")
-    return "body"
-
-  // If no id, try to generate a selector from it's classList and tagName
-  let selector
-  let index
-  let matches
-
-  for (let i = 0; i < el.classList.length; i++) {
-
-    // Check if the className unique on the page
-    selector = "." + CSS.escape(el.classList.item(i))
-    matches = doc.querySelectorAll(selector)
-    if (matches.length === 1) return selector
-
-    // Check unique with a tag name only
-    selector = CSS.escape(tagName) + selector
-    matches = doc.querySelectorAll(selector)
-    if (matches.length === 1) return selector
-
-    // Check unique with tag name and nth-child
-    index = positionInNodeList(el, el.parentNode.children) + 1
-    selector = selector + ":nth-child(" + index + ")"
-    matches = doc.querySelectorAll(selector)
-    if (matches.length === 1) return selector
-
-  }
-
-  // Validate if it's unique relative to all other dom nodes
-  index = positionInNodeList(el, el.parentNode.children) + 1
-  selector = CSS.escape(tagName) + ":nth-child(" + index + ")"
-
-  if (el.parentNode !== doc)
-    selector = findCssSelector(el.parentNode) + " > " + selector
-
-  return selector
+const isVisible = (element, computedStyle) => {
+  return (element.offsetWidth <= 0 || element.offsetHeight <= 0) ||
+    (computedStyle && computedStyle.visibility === "hidden") ||
+    (computedStyle && computedStyle.display === "none")
+    ? false
+    : true
 }
 
 /**
@@ -171,8 +109,11 @@ const findCssSelector = (el) => {
  */
 const buildEvent = (e) => {
 
-  // TODO: this needs more investigation
   if(e.type === 'click'){
+    // Only capture first mouse button. Ignore right clicks
+    if (e.button !== 0 || !e.isTrusted || !isVisible(e.target)) return
+
+    // TODO: this needs more investigation
     e.stopPropagation()
     e.preventDefault()
   }
@@ -204,6 +145,10 @@ const buildEvent = (e) => {
 
   const coords = loopKeyNames(e, eventCoords, true)
   if(coords) event.coords = coords
+
+  if(typeof window !== 'undefined' && window.__gobletTest){
+    event.element = e.target
+  }
 
   return event
 }

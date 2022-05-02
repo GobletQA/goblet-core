@@ -4,7 +4,7 @@ import { Values } from 'HKConstants'
 import { CreateFile } from './createFile'
 import { File } from 'HKAssets/icons/file'
 import { addToast } from 'HKActions/toasts'
-import { noPropArr } from '@keg-hub/jsutils'
+import { noPropArr, capitalize } from '@keg-hub/jsutils'
 import { isVNCMode } from 'HKUtils/isVNCMode'
 import { FileNameSelect } from './fileNameSelect'
 import { FileCode } from 'HKAssets/icons/fileCode'
@@ -14,8 +14,8 @@ import { createFile } from 'HKActions/files/api/createFile'
 import { formatFileName } from 'HKUtils/helpers/formatFileName'
 import { setActiveModal } from 'HKActions/modals/setActiveModal'
 import { useFileGroups } from 'HKHooks/activeFile/useFileGroups'
+import { ControlledAuto } from 'HKComponents/form/controlledAuto'
 import { HerkinButton } from 'HKComponents/buttons/button.restyle'
-import { ControlledSelect } from 'HKComponents/form/controlledSelect'
 import { useFileTypeMeta } from 'HKHooks/activeFile/useFileTypeMeta'
 import { setModalVisibility } from 'HKActions/modals/setModalVisibility'
 import { useFileTypeOptions } from 'HKHooks/activeFile/useFileTypeOptions'
@@ -110,8 +110,9 @@ const useSelectFileType = props => {
     setFileLocation,
   } = props
   return useCallback(
-    type => {
-      if (fileType === type) return
+    meta => {
+      const type = meta.key.toLowerCase()
+      if (!type || fileType === type) return
 
       setFileType(type)
 
@@ -126,7 +127,7 @@ const useSelectFileType = props => {
        * This auto selects the first file of the fileType
        */
       const newTreeNodes = fileGroups[type]
-      const firstNode = newTreeNodes[0]
+      const firstNode = newTreeNodes && newTreeNodes[0]
       firstNode && setFileLocation(firstNode.value)
 
     },
@@ -205,6 +206,17 @@ export const FileSelectorModal = props => {
     setActiveModal(MODAL_TYPES.CONNECT_REPO)
   }, [])
 
+
+  const fileTypeOptions = useMemo(() => {
+    return typeOptions.map(meta => {
+      return {
+        ...meta,
+        activeShowList: true,
+        text: capitalize(meta.label),
+      }
+    })
+  }, [typeOptions])
+
   return (
     <Modal
       Icon={File}
@@ -232,16 +244,23 @@ export const FileSelectorModal = props => {
         />
       }
     >
-      <ControlledSelect
+
+      <ControlledAuto
+        zIndex={5}
+        required={true}
         Aside={FileCode}
-        value={fileType}
         title={'File Type'}
+        emptyShowList={true}
         disabled={isLoading}
-        options={typeOptions}
-        onValueChange={onSetFileType}
+        values={fileTypeOptions}
+        onSelect={onSetFileType}
+        text={capitalize(fileType)}
+        placeholder='Select a file type'
         className={'modal-file-settings-field-file-type'}
       />
+
       <FileNameSelect
+        zIndex={4}
         fileType={fileType}
         disabled={isLoading}
         treeNodes={treeNodes}

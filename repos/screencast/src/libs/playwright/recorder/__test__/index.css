@@ -1,0 +1,52 @@
+
+.main-app {
+  padding: 40px;
+  text-align: center;
+}
+
+.main-header {
+  margin-bottom: 40px;
+  font-weight: bold;
+  max-width: 80vw;
+}
+
+.container {
+  display: flex;
+  flex: 1;
+  margin-bottom: 40px;
+  flex-direction: column;
+  max-width: 80vw;
+  text-align: left;
+}
+
+.button-container {
+  
+}
+
+.input-container {
+  
+}
+
+.select-container {
+  
+}
+
+.header-5 { 
+  margin-bottom: 10px;
+}
+
+.wrapper {
+  margin-bottom: 10px;
+}
+
+button {
+  
+}
+
+input {
+  
+}
+
+select {
+  
+}

@@ -11,6 +11,7 @@
 
 # Starts the screen cast servers when not using a websocket from the hostmachine
 keg_start_screen_cast(){
+  npx playwright install
   cd $DOC_APP_PATH
   yarn sc:daemon
 }

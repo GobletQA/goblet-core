@@ -25,6 +25,7 @@ const setFileLocError = (setError, fileLocation) => {
  */
 export const FileNameSelect = props => {
   const {
+    zIndex,
     styles,
     fileType,
     treeNodes,
@@ -79,8 +80,8 @@ export const FileNameSelect = props => {
 
   return (
     <ControlledAuto
-      zIndex={5}
       error={error}
+      zIndex={zIndex}
       styles={styles}
       required={true}
       onBlur={onBlur}

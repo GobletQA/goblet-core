@@ -87,9 +87,7 @@ RUN yarn global add npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
     sysctl -p; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
     mkdir -p $DOC_APP_PATH/logs; \
-    rm -rf /keg/gitfs; \
-    rm -rf /ms-playwright; \
-    npx playwright install chromium
+    rm -rf /keg/gitfs
 
 # Expose container ports
 EXPOSE $KEG_PROXY_PORT

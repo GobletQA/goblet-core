@@ -1,0 +1,119 @@
+<html>
+  <head>
+    <script src="./index.js"></script>
+    <script src="../inject/selector.js"></script>
+    <script src="../inject/record.js"></script>
+    <script src="../inject/mouseHelper.js"></script>
+    <link href="reset.css" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="main root app" id="root" >
+      <article class="main-app" >
+
+        <header class="main-header" data-testId="header" >
+          <h2 class="header-2" >
+            Selector Test Page
+          </h2>
+        </header>
+
+        <section class="container button-contianer" id="button-container" data-testId="button-container" >
+          <header class="button-header" >
+            <h5 class="header-5 button-header-text" >
+              Button Selector Tests
+            </h5>
+          </header>
+        
+        
+          <div class="wrapper button-wrap" >
+            <button class="button-element" data-testId="button-element" >
+              Button + Class
+            </button>
+          </div>
+          <div class="wrapper button-wrap" >
+            <button id="button-element" >
+              Button + ID
+            </button>
+          </div>
+          <div class="wrapper button-wrap button-wrap-dup" data-button-wrapper="3" >
+            <button class="button-element-dup" id="button-element-1" data-button-element >
+              Button + Class + ID
+            </button>
+          </div>
+          <div class="wrapper button-wrap" id="button-wrap-dup" data-button-wrapper="4" >
+            <button class="button-element-dup" data-button-element >
+              Button + Class Duplicate
+            </button>
+          </div>
+          
+          <div class="wrapper button-wrap" data-button-wrapper="5" >
+            <button class="button-element-dup" data-button-element >
+              Button + Parent Data-Attr
+            </button>
+          </div>
+          
+        </section>
+      
+        <section class="container input-contianer" id="input-container" >
+          <header class="input-header" >
+            <h5 class="header-5 input-header-text" >
+              Input Selector Tests
+            </h5>
+          </header>
+        
+          <div class="wrapper input-wrap" >
+            <input class="input-element"  value="Input + Class" />
+          </div>
+          <div class="wrapper input-wrap" >
+            <input id="input-element"  value="Input + ID" />
+          </div>
+          <div class="wrapper input-wrap" >
+            <input class="input-element-dup" id="input-element-1" value="Input + Class + ID" />
+          </div>
+          <div class="wrapper input-wrap" >
+            <input class="input-element-dup" value="Input + Class Dup" />
+          </div>
+        </section>
+
+        <section class="container select-contianer" id="select-container" >
+          <header class="select-header" >
+            <h5 class="header-5 select-header-text" >
+              Select Selector Tests
+            </h5>
+          </header>
+        
+          <div class="wrapper select-wrap" >
+            <select class="select-element">
+              <option>No Selected + Class</option>
+              <option>Option 2</option>
+              <option>Option 3</option>
+            </select>
+          </div>
+          <div class="wrapper select-wrap" >
+            <select id="select-element">
+              <option>No Selected + ID</option>
+              <option>Option 2</option>
+              <option>Option 3</option>
+            </select>
+          </div>
+          <div class="wrapper select-wrap" >
+            <select class="select-element-dup" id="select-element">
+              <option>No Selected + Class + ID</option>
+              <option>Option 2</option>
+              <option>Option 3</option>
+            </select>
+          </div>
+          <div class="wrapper select-wrap" >
+            <select class="select-element-dup" id="select-element">
+              <option>No Selected + Class Dup</option>
+              <option>Option 2</option>
+              <option>Option 3</option>
+            </select>
+          </div>
+        </section>
+
+      </article>
+    </div>
+
+  </body>
+</html>
