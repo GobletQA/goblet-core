@@ -1,5 +1,25 @@
 # TODO
 
+
+## Record
+* Context menu
+  * Displays when interacting with page, not in record mode
+  * Allows copy to clipboard a selector for an element
+  * Allows creating an alias to a selector
+* Multi-selector select
+  * Allows choosing which selector to use
+  * Shows in context menu
+  * Shows when option is toggled on
+* Recording options menu
+  * Set options when recording
+* Pop-Over Component
+  * Used by context menu
+  * Used by MultiSelector Select
+  * Used for Option screens
+    * Record
+    * Run Tests
+    * Browser settings
+
 ## Screencast
 * **Browser Server**
   * When starting server on boot, tests fail to run
