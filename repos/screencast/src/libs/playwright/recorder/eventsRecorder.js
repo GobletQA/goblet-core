@@ -6,9 +6,9 @@ const { CodeGenerator } = require('./codeGenerator')
 */
 class EventsRecorder {
   rawEvents = []
+  lastEvent = {}
   generator = null
   trackEvents = []
-  lastEvent = {}
   keypressEvents = []
   keypressTimer = null
 
@@ -97,6 +97,11 @@ class EventsRecorder {
   }
 
 
+  /**
+  * Checks if the event is part of a sequence of character inputs
+  * Generates a timer which tracks character input within a given amount of time
+  * Allows joining multiple events into a single event specific to character input, a.k.a. typing
+  */
   checkFillSequence = (pageEvent, fireEvent) => {
     // If a timer is already set, clear it out
     if(this.keypressTimer){
@@ -122,6 +127,25 @@ class EventsRecorder {
     return true
   }
 
+
+  /**
+   * Check for missing target, for cases where a selector could not be generated
+   * Builds and dispatches events for events without a target selector
+   * @returns {boolean} - True if the event has a target
+   */
+  checkTargetSelector = (pageEvent, fireEvent) => {
+    if(pageEvent.target) return true
+    
+    fireEvent({
+      name: constants.missingTarget,
+      data: {
+        ...pageEvent,
+        codeLineLength:  0,
+      }
+    })
+
+    return false
+  }
 
   /**
   * Checks that a sequence of down/up/click starts on the same target

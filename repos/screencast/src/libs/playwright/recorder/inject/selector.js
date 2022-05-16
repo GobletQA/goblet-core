@@ -40,19 +40,16 @@ const searchUpDomTree = (el, doc, selector) => {
   matches = doc.querySelectorAll(wPTSelector)
   if (matches.length === 1) return wPTSelector
 
+}
 
-
+const uniqueByNth = (el, doc) => {
   // Check unique with tag name and nth-child
-  // const index = positionInNodeList(el, el.parentNode.children) + 1
-  // const nChildSelector = selector + ":nth-child(" + index + ")"
-  // matches = doc.querySelectorAll(nChildSelector)
-  // if (matches.length === 1) return nChildSelector
+  const index = positionInNodeList(el, el.parentNode.children) + 1
+  const nChildSelector = CSS.escape(el.tagName) + ":nth-child(" + index + ")"
 
-  // if(el.parentNode === doc) return nChildSelector
-
-  // const childSelector = CSS.escape(tagName) + ":nth-child(" + index + ")"
-
-  
+  return el.parentNode === doc || doc.querySelectorAll(nChildSelector).length === 1
+    ? nChildSelector
+    : searchUpDomTree(el, doc, nChildSelector)
 }
 
 const uniqueByDataAttribute = (el, doc) => {
@@ -116,16 +113,22 @@ const findCssSelector = (el) => {
 
   const tagSelector = uniqueByTag(el.localName, doc)  
   if(tagSelector) return tagSelector
+
+  const nthSelector = uniqueByNth(el, doc)
+  if(nthSelector) return nthSelector
+
 }
 
 if(typeof window !== 'undefined'){
   window.findCssSelector = findCssSelector
 
-  window.__gobletTest = window.__gobletTest || {}
-  window.__gobletTest.selector = {
-    uniqueById: uniqueById,
-    uniqueByTag: uniqueByTag,
-    findCssSelector: findCssSelector,
-    uniqueByClassName: uniqueByClassName,
-  }
+  window.__gobletTest && (
+    window.__gobletTest.selector = {
+      uniqueById: uniqueById,
+      uniqueByTag: uniqueByTag,
+      findCssSelector: findCssSelector,
+      uniqueByClassName: uniqueByClassName,
+    }
+  )
+
 }

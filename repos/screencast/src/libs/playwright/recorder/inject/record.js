@@ -107,13 +107,13 @@ const isVisible = (element, computedStyle) => {
  * @param {Object} e - Dom event fired from an event listener
  *
  */
-const buildEvent = (e) => {
+const buildEvent = (e, disableClick=true) => {
 
-  if(e.type === 'click'){
+  if(e.type === 'click' && disableClick){
     // Only capture first mouse button. Ignore right clicks
     if (e.button !== 0 || !e.isTrusted || !isVisible(e.target)) return
 
-    // TODO: this needs more investigation
+    // TODO: @lance-tipton - Add options to enable/disable when recording
     e.stopPropagation()
     e.preventDefault()
   }
@@ -121,7 +121,7 @@ const buildEvent = (e) => {
   const event = {
     key: e.key,
     type: e.type,
-    target: findCssSelector(e.target),
+    target: window.findCssSelector(e.target),
   }
 
   if(e.type === 'keypress') event.value = e.target.value + (e.key && e.key.length === 1 ? e.key : '')
@@ -190,10 +190,18 @@ const initGobletRecording = async () => {
   window.addEventListener('mousemove', e => hoverHighlighter(e, styles))
 
   /**
+   * Get the value for disabling clicks
+   */
+  const disableClick = await window.getGobletRecordOption('disableClick')
+
+  /**
    * Helper to build the event data that's passed from the browser back to playwright
    * Uses the passed in event to create the required metadata
    */
-  actions.forEach((action) => window.addEventListener(action, e => window.herkinRecordAction(buildEvent(e))))
+  actions.forEach((action) => window.addEventListener(
+    action,
+    e => window.herkinRecordAction(buildEvent(e, disableClick))
+  ))
 }
 
 

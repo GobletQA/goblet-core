@@ -22,6 +22,7 @@ const constants = {
   recordAction: `RECORD-ACTION`,
   recordGeneral: `RECORD-GENERAL`,
   recordStarted: `RECORD-STARTED`,
+  missingTarget: `RECORD-MISSING-TARGET`,
 }
 
 module.exports = {
