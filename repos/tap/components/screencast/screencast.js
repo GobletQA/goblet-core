@@ -55,8 +55,6 @@ export const Screencast = props => {
         hasToggle={false}
         capitalize={false}
         leftWidth={leftWidth}
-        prefix={'Recorder'}
-        title={'Record Actions'}
         className={`screencast-recorder-surface`}
       >
         <Recorder

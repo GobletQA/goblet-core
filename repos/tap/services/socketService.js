@@ -5,8 +5,8 @@ import { camelCase, snakeCase, checkCall } from '@keg-hub/jsutils'
 import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
 import { updateStatus } from 'HKActions/screencast/socket/updateStatus'
 
-import { recordAction } from 'HKActions/screencast/local/recordAction'
-import { setBrowserRecording } from 'HKActions/screencast/local/setBrowserRecording'
+import { recordAction } from 'HKActions/recorder/local/recordAction'
+import { setBrowserRecording } from 'HKActions/recorder/local/setBrowserRecording'
 
 const serverConfig = JSON.parse(process.env.WS_SERVER_CONFIG)
 

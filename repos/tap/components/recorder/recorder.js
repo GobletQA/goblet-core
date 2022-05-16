@@ -4,7 +4,7 @@ import { RecorderMain } from './recorder.restyle'
 import { useSelector } from 'HKHooks/useSelector'
 import { noOpObj, noPropArr } from '@keg-hub/jsutils'
 import { EditorFromType } from 'HKComponents/codeEditor/editorFromType'
-import { setRecordLineNumber } from 'HKActions/screencast/local/setRecordLineNumber'
+import { setRecordLineNumber } from 'HKActions/recorder/local/setRecordLineNumber'
 
 const { CATEGORIES } = Values
 
