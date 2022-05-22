@@ -57,19 +57,21 @@ const RecordActions = props => {
 }
 
 
-const useTabs = (tabs = noPropArr, onRun = noOp) =>
+const useTabs = (tabs = noPropArr, onRun = noOp, showRecord, actions) =>
   useMemo(() => {
     return [
       ...tabs,
       { onRun, id: `browser-actions`, Tab: BrowserActions, clickable: false },
-      { id: `record-actions`, Tab: RecordActions, clickable: false },
-    ]
-  }, [tabs, onRun])
+      showRecord && { id: `record-actions`, Tab: RecordActions, clickable: false },
+      ...(actions || []),
+    ].filter(tab => tab)
+  }, [tabs, onRun, actions])
 
 export const ScreencastTabs = props => {
   const {
     onRun,
     activeTab,
+    showRecord,
     onTabSelect,
     // TODO: Pass in all custom actions for interacting with the screencast browser
     actions,
@@ -77,7 +79,7 @@ export const ScreencastTabs = props => {
 
   const [tab, setTab] = useState(activeTab)
 
-  const tabs = useTabs(tabs, onRun)
+  const tabs = useTabs(tabs, onRun, showRecord, actions)
   const onSelectTab = useOnTabSelect(tab, setTab, onTabSelect, tabsIgnore)
 
   useEffect(() => {

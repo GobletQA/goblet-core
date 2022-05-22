@@ -28,6 +28,10 @@ export const Screencast = props => {
     activeFile,
   } = props
 
+  // TODO: @lance-tipton - extract this to a helper
+  // Only show record button for waypoint and unit test file types
+  const showRecord = activeFile.fileType === `waypoint` || activeFile.fileType === `unit`
+
   const [tab, setTab] = useState(activeTab)
   const tabSelect = useTabSelect(tab, setTab)
 
@@ -88,8 +92,11 @@ export const Screencast = props => {
         activeTab={tab}
         isRunning={isRunning}
         canvasRef={canvasRef}
+        showRecord={showRecord}
         onTabSelect={tabSelect}
       />
     </SCMain>
   )
 }
+
+
