@@ -1,0 +1,5 @@
+env:
+  HERKIN_SERVER_HOST: herkin.backend.herkin.app
+  SCREENCAST_PROXY_HOST: herkin.backend.herkin.app
+  VNC_PROXY_HOST: herkin.backend.herkin.app
+
