@@ -23,7 +23,7 @@ class Repo {
    * @returns {Array} - Found repos and their branches
    */
   static getUserRepos = async opts => {
-    const repos = await getUserRepos({ ...opts, loadMocks: true})
+    const repos = await getUserRepos({...opts, loadMocks: true})
 
     return repos.filter(repo => isObj(repo))
       .map(repo => {

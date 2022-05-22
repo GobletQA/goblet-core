@@ -1,4 +1,5 @@
 const { startBrowser } = require('./startBrowser')
+const { Player }  = require('../player/player')
 const { Recorder }  = require('../recorder/recorder')
 const { isArr, isStr, isFunc, noPropArr } = require('@keg-hub/jsutils')
 
@@ -102,6 +103,32 @@ const startRecording = async data => {
 }
 
 
+const startPlaying = async data => {
+  const {
+    id,
+    repo,
+    action,
+    onCleanup,
+    browserConf,
+    onPlayEvent,
+    pwComponents,
+    onCreateNewPage,
+  } = data
+
+  const { props, action:method } = action
+  const [playerOpts, url] = props
+  const browserItems = pwComponents || await startBrowser(browserConf)
+
+  const player = Player.getInstance(id, {
+    onCleanup,
+    onCreateNewPage,
+    ...browserItems,
+    onEvent: onPlayEvent,
+  })
+
+  return await player.start({ options: playerOpts, repo })
+}
+
 /**
  * Execute an action on a browser
  * @param {Object} args
@@ -155,5 +182,6 @@ const actionBrowser = async (args, browserConf) => {
 
 module.exports = {
   actionBrowser,
+  startPlaying,
   startRecording,
 }

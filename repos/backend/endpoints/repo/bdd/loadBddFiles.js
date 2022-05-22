@@ -1,15 +1,12 @@
-const { loadFeatures } = require('HerkinBackLibs/features')
-const { loadDefinitions } = require('HerkinBackLibs/definitions')
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
-const { definitionsByType, fileModelArrayToObj } = require('HerkinShared/utils')
+const { fileModelArrayToObj } = require('HerkinShared/utils')
+const { getFeatures } = require('HerkinShared/repo/getFeatures')
 
 const loadBddFiles = asyncWrap(async (req, res) => {
-  const definitions = await loadDefinitions(
+  const { definitionTypes, definitions, features } = await getFeatures(
     res.locals.repo,
     req.app.locals.config
   )
-  const definitionTypes = definitionsByType(definitions)
-  const features = await loadFeatures(res.locals.repo, definitionTypes)
 
   return apiRes(
     req,

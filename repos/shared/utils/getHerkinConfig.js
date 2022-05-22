@@ -257,11 +257,23 @@ const resetHerkinConfig = () => {
   __HERKIN_CONFIG = undefined
 }
 
+/**
+ * Returns the default herkin config
+ * Should not be used for loading repo information
+ *
+ * @returns {Object} - default Herkin Config
+ */
+const getDefaultHerkinConfig = () => {
+  return defaultConfig
+}
+
+
 module.exports = {
   findConfig,
   getConfigAtPath,
   getHerkinConfig,
   loadCustomConfig,
+  getDefaultHerkinConfig,
   loadConfigFromFolder,
   resetHerkinConfig,
 }

@@ -1,6 +1,7 @@
 const path = require('path')
 const glob = require('glob')
 const { DefinitionsParser } = require('./definitionsParser')
+const { getDefaultHerkinConfig } = require('HerkinSharedConfig')
 const { getPathFromBase } = require('HerkinSharedUtils/getPathFromBase')
 
 /**
@@ -45,21 +46,21 @@ const parseDefinitions = (repo, definitionFiles) => {
 /**
  * Loads the definitions file from the passed in repo instance
  * @param {Object} repo - Repo Class instance for the currently active repo
- * @param {Object} herkinConfig - The global herkin.config
+ * @param {Object} [herkinConfig] - The global herkin.config
  *
  * @returns {Array} - Loaded Definitions models
  */
 const loadDefinitions = async (repo, herkinConfig) => {
   // Clear out any steps that were already loaded
   DefinitionsParser.clear()
+  herkinConfig = herkinConfig || getDefaultHerkinConfig()
 
   const { stepsDir } = repo.paths
   const pathToSteps = getPathFromBase(stepsDir, repo)
   const definitionFiles = stepsDir && (await loadDefinitionsFiles(pathToSteps))
 
-  const { testUtilsDir } = herkinConfig.internalPaths
   const herkinDefinitionFiles = await loadDefinitionsFiles(
-    `${testUtilsDir}/steps`
+    `${herkinConfig.internalPaths.testUtilsDir}/steps`
   )
 
   const clientDefinitions =

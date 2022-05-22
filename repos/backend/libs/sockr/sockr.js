@@ -1,4 +1,5 @@
 const { noOpObj } = require('@keg-hub/jsutils')
+const { validateToken }  = require('./validateToken')
 const { sockr } = require('@ltipton/sockr/src/server')
 const {
   authToken,
@@ -6,6 +7,7 @@ const {
   connection,
   disconnect,
   browserStatus,
+  browserRunTests,
   browserRecorder,
   ...customEvents
 } = require('./events')
@@ -24,9 +26,10 @@ const initSockr = (app, server, config = noOpObj, cmdType) => {
         authToken: authToken(app),
         disconnect: disconnect(app),
         connection: connection(app),
-        repoStatus: repoStatus(app),
-        browserStatus: browserStatus(app),
-        browserRecorder: browserRecorder(app),
+        repoStatus: validateToken(app, repoStatus(app)),
+        browserStatus: validateToken(app, browserStatus(app)),
+        browserRunTests: validateToken(app, browserRunTests(app)),
+        browserRecorder: validateToken(app, browserRecorder(app)),
       },
     },
     cmdType

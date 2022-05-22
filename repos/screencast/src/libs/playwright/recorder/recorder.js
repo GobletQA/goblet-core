@@ -1,8 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const { constants } = require('./constants')
-const {noOp, checkCall, deepMerge, noOpObj} = require('@keg-hub/jsutils')
 const { EventsRecorder } = require('./eventsRecorder')
+const {noOp, checkCall, deepMerge} = require('@keg-hub/jsutils')
 
 
 /**

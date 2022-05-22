@@ -1,3 +1,5 @@
+import { getStore } from 'HKStore'
+import { Values } from 'HKConstants'
 import { isDev } from 'HKUtils/isDev'
 import * as sockrActions from 'HKActions/sockr'
 import { localStorage } from'HKUtils/storage/localStorage'
@@ -12,6 +14,21 @@ const serverConfig = JSON.parse(process.env.WS_SERVER_CONFIG)
 
 // TODO: @lance-tipton - This should only exist in deployed envs
 if(!isDev) serverConfig.port = ''
+
+const { STORAGE } = Values
+
+/**
+ * Helper to get the repo name form the store
+ * @function
+ * @private
+ *
+ * @returns {string} - Name of the current repo
+ */
+const getRepoData = () => {
+  const storeItems = getStore()?.getState()?.items
+  return storeItems[STORAGE.REPO] || noOpObj
+}
+
 
 /**
  * Callback event functions bound to the SocketService
@@ -83,13 +100,23 @@ class SocketService {
    * @returns {void}
    */
   emit = async (event, data) => {
+    const repoData = getRepoData()
+
+    const repo = {
+      name: repoData?.name,
+      local: repoData?.git?.local,
+      remote: repoData?.git?.remote,
+      branch: repoData?.git?.branch,
+    }
+    const token = await localStorage.getJwt()
+
     // Get a matching event type from sockr
     // Or use the passed in event if one does not exist
     const eventType = EventTypes[snakeCase(event)] || event
-    const jwt = await localStorage.getJwt()
 
     // Emit the event to the backend
-    SockrService.emit(eventType, { ...data, token: jwt })
+    // TODO: figure out whats' happening to the token ???
+    SockrService.emit(eventType, { ...data, token, jwt: token, repo })
   }
 
   /**

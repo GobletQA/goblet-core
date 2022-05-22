@@ -20,5 +20,9 @@ export const screencast = deepFreeze({
   RECORD_ACTIONS: {
     STOP:`stop`,
     START:`start`,
+  },
+  PLAY_ACTIONS: {
+    STOP:`stop`,
+    START:`start`,
   }
 })

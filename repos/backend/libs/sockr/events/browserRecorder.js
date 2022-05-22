@@ -22,7 +22,7 @@ const {
  * @returns {void}
  */
 const handleStart = async (data, socket, Manager, app) => {
-  const { token, ref, action, ...browser } = data
+  const { token, ref, action, repo, ...browser } = data
   const browserConf = joinBrowserConf(browser, app)
 
   const recorder = await startRecording({

@@ -1,10 +1,11 @@
 const { constants } = require('./constants')
 const { CodeRunner } = require('./codeRunner')
-const {noOp, checkCall, deepMerge} = require('@keg-hub/jsutils')
+const {noOp, checkCall, deepMerge, noOpObj} = require('@keg-hub/jsutils')
 
+const PlayerInstances = {}
 
 /**
- * @type Recorder
+ * @type Player
  * @property {string} id - Id of the recorder instants
  * @property {function[]} onEvents - Callback methods called when an event is fired
  * @property {Object} page - Playwright page instance
@@ -18,6 +19,31 @@ const {noOp, checkCall, deepMerge} = require('@keg-hub/jsutils')
 class Player {
 
   playing = false
+  id = null
+  onEvents = []
+  page = undefined
+  context = undefined
+  browser = undefined
+  onCleanup = noOp
+  onCreateNewPage = undefined
+  options = {}
+
+
+  /**
+   * Helper to keep track of all Recorder instances
+   * Cached created instances based on Id
+   * If the instance does not exist it will be created
+   * @static
+   * @type {function}
+   * @param {string} id - Id to use when creating the recorder instance
+   * @param {Object} config - Recorder config object
+   */
+  static getInstance = (id, config) => {
+    PlayerInstances[id] = PlayerInstances[id] || new Player(config, id)
+
+    return PlayerInstances[id]
+  }
+
 
   constructor(config, id) {
     this.id = id
@@ -50,6 +76,7 @@ class Player {
   setupPlayer = config => {
     const {
       page,
+      repo,
       context,
       browser,
       options,
@@ -62,6 +89,7 @@ class Player {
     if(context) this.context = context
     if(browser) this.browser = browser
     if(options) this.options = deepMerge(this.options, options)
+    if(repo) this.repo = repo
 
     if(onEvent) this.onEvents.push(onEvent)
     if(onCleanup) this.onCleanup = onCleanup
@@ -82,8 +110,8 @@ class Player {
       await this.page.exposeFunction(`isGobletPlaying`, this.onIsPlaying)
     }
     catch(err){
-      console.log(`------- Playing addInitScripts Error -------`)
-      console.error(err.stack)
+      // console.log(`------- Playing addInitScripts Error -------`)
+      // console.error(err.stack)
     }
   }
 
@@ -92,7 +120,9 @@ class Player {
    * @member {Recorder}
    * @type {function}
    */
-  start = async ({ url, ...config }) => {
+  start = async (startCof) => {
+    const { url, ...config } = startCof
+
     try {
   
       if(this.playing){
@@ -108,8 +138,8 @@ class Player {
         throw new Error(`A Playwright page instance is required, but does not exist.`)
 
       await this.addInitScripts()
-      const codeRunner = await new CodeRunner(this)
-      await codeRunner.run()
+      const codeRunner = new CodeRunner(this)
+      await codeRunner.run(this.options.activeFile.content)
 
       this.fireEvent({
         message: 'Playing started',

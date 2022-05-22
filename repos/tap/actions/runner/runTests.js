@@ -4,6 +4,12 @@ import { WSService } from 'HKServices'
 import { addToast } from 'HKActions/toasts'
 import { clearSpecs } from 'HKActions/tracker/clearSpecs'
 import { buildCmdParams } from 'HKUtils/helpers/buildCmdParams'
+const { SOCKR_MSG_TYPES, PLAY_ACTIONS } = Values
+import { noOp, checkCall } from '@keg-hub/jsutils'
+import { getWorldVal } from 'HKUtils/repo/getWorldVal'
+
+
+
 
 /**
  * Uses a web-socket to run tests on a file from the backend
@@ -29,6 +35,7 @@ export const runTests = async (
   clearSpecs()
 
   const state = getStore()?.getState()
+  const appUrl = getWorldVal(`url`, `app.url`)
 
   const params = buildCmdParams({
     state,
@@ -37,4 +44,21 @@ export const runTests = async (
   })
 
   WSService.runCommand(testCmd, params)
+  // TODO: Update to run tests with this instead
+  // const options = {
+  //   ref: 'page',
+  //   action: { 
+  //     props: [
+  //       {
+  //         params,
+  //         testCmd,
+  //         activeFile,
+  //       },
+  //       appUrl
+  //     ],
+  //     action: PLAY_ACTIONS.START
+  //   }
+  // }
+
+  // WSService.emit(SOCKR_MSG_TYPES.BROWSER_RUN_TESTS, options)
 }
