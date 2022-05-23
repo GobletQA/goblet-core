@@ -1,4 +1,5 @@
-const { metadata, newBrowser } = require('HerkinSC')
+const { metadata } = require('HerkinSCPlaywright/helpers/metadata')
+const { newBrowser } = require('HerkinSCPlaywright/browser/newBrowser')
 
 /**
  * Initializes tests by connecting to the browser loaded at the websocket

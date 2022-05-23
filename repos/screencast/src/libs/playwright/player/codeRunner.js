@@ -1,5 +1,6 @@
 const { NodeVM } = require('vm2')
-const { Parkin } = require('@ltipton/parkin')
+// const { Parkin } = require('@ltipton/parkin')
+const { setParkinInstance } = require('HerkinParkin/instance')
 const { getWorld } = require('HerkinRepos/testUtils/support')
 const { getDefinitions } = require('HerkinShared/repo/getDefinitions')
 
@@ -41,8 +42,10 @@ const setupGlobals = (Runner) => {
 
 const setupParkin = async (Runner) => {
   const PK = new Parkin(Runner?.player?.repo?.world || getWorld())
+  setParkinInstance(PK)
   await getDefinitions(Runner?.player?.repo)
-  
+
+  return PK
 }
 
 class CodeRunner {
@@ -56,13 +59,14 @@ class CodeRunner {
   constructor(player) {
     this.player = player
     setupGlobals(this)
+    this.PK = setupParkin(this)
   }
   
   /**
    * Runs the code passed to it via the player
    */
   run = async (content) => {
-    const resp = await parkin.run(content)
+    const resp = await this.PK.run(content)
     console.log(`------- resp -------`)
     console.log(resp)
   }
