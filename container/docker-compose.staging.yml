@@ -37,5 +37,5 @@ services:
       - 80:${API_PORT}
       - 443:443
     volumes:
-      - /home/herkin/.kegConfig/certs:/keg/certs:ro
+      - /home/goblet/.kegConfig/certs:/keg/certs:ro
 

@@ -1,4 +1,3 @@
-const { Logger } = require(`@keg-hub/cli-utils`)
 const { isDeployedEnv } = require('../utils/isDeployedEnv')
 
 /**
@@ -23,7 +22,9 @@ const getOrigin = req => {
  * @returns {void}
  */
 const setupCors = app => {
-  if (!app) return
+  const config = app?.locals?.config?.server
+  if (!app) throw new Error(`Error setting up Cors. Express app does not exist`)
+  if(!config) throw new Error(`Error setting up Cors. Server config does not exist`)
 
   app.use((req, res, next) => {
     const origin = getOrigin(req)
