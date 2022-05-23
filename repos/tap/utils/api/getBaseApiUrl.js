@@ -2,22 +2,8 @@ import { isDev } from '../isDev'
 let __BASE_API_URL
 
 /**
- * Returns the true if the current host url is secure
- *
- * @returns {boolean} - True if the host is secure
- */
-export const isSecureHost = () => {
-  if(typeof window === 'undefined') return false
-
-  const { protocol } = new URL(window.location.origin)
-  return protocol === 'http' ? false : true
-}
-
-/**
  * Builds the base url for all api calls using ENVs replaced at build time
  *
- * TODO: @lance-tipton - Make this dynamic
- * Staging api should be = `https://herkin.backend.herkin.app`
  * @returns {string} - Base Backend API url
  */
 export const getBaseApiUrl = () => {
@@ -43,7 +29,7 @@ export const getBaseApiUrl = () => {
   // They should always match
   // Deployed environments will be https, local is http
   const { protocol } = new URL(window.location.origin)
-  const proto = protocol === 'https' ? 'https' : 'http'
+  const proto = protocol.includes('https') ? 'https' : 'http'
   __BASE_API_URL = `${proto}://${noProtoHost}`
 
   // TODO: Remove this once it's working properly

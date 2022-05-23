@@ -1,4 +1,5 @@
 {
+  "delay": "500",
   "exec": "node ./repos/backend/index.js",
   "watch": [
     "config",

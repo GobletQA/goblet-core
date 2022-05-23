@@ -1,5 +1,5 @@
 import { Values } from 'HKConstants'
-import { getBaseApiUrl, isSecureHost } from 'HKUtils/api/getBaseApiUrl'
+import { getBaseApiUrl } from 'HKUtils/api/getBaseApiUrl'
 const { HOST, PORT, VNC_ACTIVE } = Values.VNC_CONFIG
 
 /**
@@ -8,7 +8,8 @@ const { HOST, PORT, VNC_ACTIVE } = Values.VNC_CONFIG
 export const getScreencastUrl = () => {
   const base = getBaseApiUrl()
   const { host } = new URL(base)
-  const protocol = isSecureHost() ? `wss` : `ws`
-  const screencastUrl = `${protocol}://${HOST || host}${PORT ? ':' + PORT : ''}/novnc`
+  const { protocol } = new URL(window.location.origin)
+  const proto = protocol.includes('https') ? 'wss' : 'ws'
+  const screencastUrl = `${proto}://${HOST || host}${PORT ? ':' + PORT : ''}/novnc`
   return VNC_ACTIVE ? screencastUrl : ''
 }

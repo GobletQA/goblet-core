@@ -1,4 +1,5 @@
 {
+  "delay": "500",
   "exec": "node ./repos/screencast/src/server.js",
   "watch": [
     "config",
