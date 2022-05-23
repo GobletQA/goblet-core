@@ -1,3 +1,5 @@
+// Command => `keg herkin deploy fe --env prod --vnc --log`
+
 const { Logger } = require('@keg-hub/cli-utils')
 const { sharedOptions } = require('../../utils/task/sharedOptions')
 const { deployFrontend } = require('../../utils/deploy/deployFrontend')
