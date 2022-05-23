@@ -48,12 +48,37 @@ const startSockify = async ({
     return (SOCK_PROC = status)
   }
 
+  const creds = {
+    key: process.env.KEG_PROXY_PRIVATE_KEY,
+    cert: process.env.KEG_PROXY_CERT,
+    ca: process.env.KEG_PROXY_CA,
+  }
+
+  const credentials = Object.entries(creds).reduce((conf, [key, loc]) => {
+    fs.existsSync(loc) && (conf[key] = fs.readFileSync(loc, 'utf8'))
+
+    return conf
+  }, {})
+  const wssArgs = credentials.cert && credentials.key
+    ? [`--cert=${credentials.cert}`, `--key=${credentials.key}`]
+    : []
+
+  // console.log(`websockify ${[
+  //   '-v',
+  //   ...wssArgs,
+  //   '--web',
+  //   '/usr/share/novnc',
+  //   `${proxy.host}:${proxy.port}`,
+  //   `${vnc.host}:${vnc.port}`,
+  // ]}`)
+
   Logger.log(`- Starting websockify server...`)
   SOCK_PROC = await childProc({
     cmd: 'websockify',
     args: flatUnion(
       [
         '-v',
+        ...wssArgs,
         '--web',
         '/usr/share/novnc',
         `${proxy.host}:${proxy.port}`,
