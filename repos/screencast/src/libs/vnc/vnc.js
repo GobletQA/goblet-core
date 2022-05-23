@@ -50,19 +50,19 @@ const startVNC = async ({
   const config = getHerkinConfig()
   const { vnc } = config.screencast
 
-  // console.log(
-  //   `Xtigervnc ${[
-  //     `-verbose`,
-  //     `-SecurityTypes`,
-  //     `None`,
-  //     '-geometry',
-  //     `${vnc.width}x${vnc.height}x24`,
-  //     `-rfbport`,
-  //     vnc.port,
-  //     `-alwaysshared`,
-  //     vnc.display,
-  //   ].join(' ')}`
-  // )
+  console.log(
+    `Xtigervnc ${[
+      `-verbose`,
+      `-SecurityTypes`,
+      `None`,
+      '-geometry',
+      `${vnc.width}x${vnc.height}x24`,
+      `-rfbport`,
+      vnc.port,
+      `-alwaysshared`,
+      vnc.display,
+    ].join(' ')}`
+  )
 
   VNC_PROC = await childProc({
     log: true,
@@ -84,7 +84,7 @@ const startVNC = async ({
     options: deepMerge(
       {
         detached: true,
-        stdio: 'ignore',
+        // stdio: 'ignore',
         cwd: cwd || config.internalPaths.herkinRoot,
         env: {
           ...process.env,

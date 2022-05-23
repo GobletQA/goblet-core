@@ -1,3 +1,4 @@
+const fs = require('fs')
 const { Logger } = require('@keg-hub/cli-utils')
 const { getHerkinConfig } = require('HerkinSharedConfig')
 const { findProc, killProc } = require('HerkinSCLibs/proc')
@@ -55,10 +56,11 @@ const startSockify = async ({
   }
 
   const credentials = Object.entries(creds).reduce((conf, [key, loc]) => {
-    fs.existsSync(loc) && (conf[key] = fs.readFileSync(loc, 'utf8'))
+    fs.existsSync(loc) && (conf[key] = creds[key])
 
     return conf
   }, {})
+
   const wssArgs = credentials.cert && credentials.key
     ? [`--cert=${credentials.cert}`, `--key=${credentials.key}`]
     : []
@@ -81,15 +83,15 @@ const startSockify = async ({
         ...wssArgs,
         '--web',
         '/usr/share/novnc',
-        `${proxy.host}:${proxy.port}`,
-        `${vnc.host}:${vnc.port}`,
+        `0.0.0.0:${proxy.port}`,
+        `0.0.0.0:${vnc.port}`,
       ],
       args
     ),
     options: deepMerge(
       {
         detached: true,
-        stdio: 'ignore',
+        // stdio: 'ignore',
         cwd: cwd || config.internalPaths.herkinRoot,
         env: { ...process.env },
       },
