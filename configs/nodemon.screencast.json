@@ -1,4 +1,10 @@
 {
+  "exec": "node ./repos/screencast/src/server.js",
+  "watch": [
+    "config",
+    "repos/shared",
+    "repos/screencast"
+  ],
   "ignoreRoot": [
     ".git",
     "docs",

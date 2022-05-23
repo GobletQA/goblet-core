@@ -38,5 +38,6 @@
   "HerkinSCVnc": "repos/screencast/src/libs/vnc",
   "HerkinSC": "repos/screencast",
 
-  "HerkinWF": "repos/workflows"
+  "HerkinWF": "repos/workflows",
+  "HerkinServerLogs": "logs"
 }

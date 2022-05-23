@@ -1,0 +1,26 @@
+{
+  "exec": "node ./repos/backend/index.js",
+  "watch": [
+    "config",
+    "repos/backend",
+    "repos/screencast/src/endpoints",
+    "repos/screencast/src/libs",
+    "repos/shared",
+    "repos/workflows",
+    "node_modules/@ltipton/sockr/src/server",
+    "node_modules/@ltipton/parkin/build/cjs"
+  ],
+  "ignoreRoot": [
+    ".git",
+    "docs",
+    "node_modules/keg-core",
+    "node_modules/.bin",
+    "repos/example",
+    "repos/testUtils",
+    "repos/tap",
+    "scripts",
+    "tasks",
+    "tests",
+    "temp"
+  ]
+}

@@ -18,7 +18,7 @@
   "private": false,
   "scripts": {
     "api": "yarn api:back",
-    "api:back": "nodemon --watch ./repos/backend --watch ./repos/screencast/src/libs --watch ./repos/screencast/src/endpoints --watch node_modules/@ltipton/parkin/build/cjs --watch ./repos/shared --watch ./repos/workflows --watch node_modules/@ltipton/sockr/src/server --watch ./config --exec 'node ./repos/backend/index.js'",
+    "api:back": "nodemon --config configs/nodemon.backend.json",
     "api:sc": "yarn sc:api",
     "build": "exit 0",
     "build:fe": "node ./tasks/runTask.js deploy build -- frontend=true",
@@ -42,7 +42,7 @@
     "setup": "yarn install --ignore-engines; cd node_modules/keg-core; yarn postinstall --ignore-engines",
     "start": "cd node_modules/keg-core; expo start",
     "sc": "PWDEBUG=1 DEBUG=pw:api node ./repos/screencast/src/screencast.js",
-    "sc:api": "nodemon --watch ./repos/screencast --watch ./repos/shared --watch ./config --exec 'node ./repos/screencast/src/server.js'",
+    "sc:api": "nodemon --config configs/nodemon.screencast.json",
     "sc:d": "yarn sc:daemon",
     "sc:daemon": "PWDEBUG=1 DEBUG=pw:api node ./repos/screencast/src/screencast.js --daemon",
     "sc:k": "yarn sc:kill",
