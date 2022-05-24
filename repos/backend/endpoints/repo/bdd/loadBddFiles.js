@@ -1,6 +1,6 @@
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
-const { fileModelArrayToObj } = require('HerkinShared/utils')
-const { getFeatures } = require('HerkinShared/repo/getFeatures')
+const { getFeatures } = require('HerkinSharedRepo/getFeatures')
+const { fileModelArrayToObj } = require('HerkinSharedUtils/fileModelArrayToObj')
 
 const loadBddFiles = asyncWrap(async (req, res) => {
   const { definitionTypes, definitions, features } = await getFeatures(

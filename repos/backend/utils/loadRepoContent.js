@@ -1,7 +1,8 @@
 const { loadFeatures } = require('HerkinSharedFeatures/features')
 const { buildFileTree } = require('HerkinSharedFileSys/fileTree')
 const { loadDefinitions } = require('HerkinSharedDefinitions/definitions')
-const { definitionsByType, fileModelArrayToObj } = require('HerkinShared/utils')
+const { definitionsByType } = require('HerkinSharedUtils/definitionsByType')
+const { fileModelArrayToObj } = require('HerkinSharedUtils/fileModelArrayToObj')
 
 /**
  * Loads all the needed content for a repo

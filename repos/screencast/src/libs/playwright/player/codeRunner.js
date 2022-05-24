@@ -2,7 +2,7 @@ const { NodeVM } = require('vm2')
 // const { Parkin } = require('@ltipton/parkin')
 const { setParkinInstance } = require('HerkinParkin/instance')
 const { getWorld } = require('HerkinRepos/testUtils/support')
-const { getDefinitions } = require('HerkinShared/repo/getDefinitions')
+const { getDefinitions } = require('HerkinSharedRepo/getDefinitions')
 
 
 // TODO - @lance-tipton Add proper globals for test methods

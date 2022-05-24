@@ -1,5 +1,5 @@
 const { loadFeatures } = require('HerkinSharedFeatures/features')
-const { getDefinitions } = require('HerkinShared/repo/getDefinitions')
+const { getDefinitions } = require('HerkinSharedRepo/getDefinitions')
 
 const getFeatures = async (repo, config) => {
   const {definitions, definitionTypes} = await getDefinitions(repo, config)

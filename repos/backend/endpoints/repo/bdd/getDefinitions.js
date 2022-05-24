@@ -1,6 +1,7 @@
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
 const { loadDefinitions } = require('HerkinSharedDefinitions/definitions')
-const { definitionsByType, fileModelArrayToObj } = require('HerkinShared/utils')
+const { definitionsByType } = require('HerkinSharedUtils/definitionsByType')
+const { fileModelArrayToObj } = require('HerkinSharedUtils/fileModelArrayToObj')
 
 const getDefinitions = asyncWrap(async (req, res) => {
   const definitions = await loadDefinitions(
