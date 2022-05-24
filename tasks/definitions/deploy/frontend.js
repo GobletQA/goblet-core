@@ -1,4 +1,4 @@
-// Command => `keg herkin deploy fe --env prod --vnc --log`
+// Command => `keg herkin deploy fe --env prod`
 
 const { Logger } = require('@keg-hub/cli-utils')
 const { sharedOptions } = require('../../utils/task/sharedOptions')
@@ -35,8 +35,25 @@ module.exports = {
     example: 'keg herkin deploy frontend <options>',
     description: 'Run Keg-Herkin deploy frontend tasks',
     options: {
-      ...sharedOptions.deploy(`deploy`, `frontend`),
       ...sharedOptions.version(`deploy`, `frontend`),
+      mode: {
+        allowed: ['vnc', 'local'],
+        example: `keg herkin deploy --mode local`,
+        default: 'vnc',
+        description: 'Mode to run keg-herkin in. In not set, uses launch option',
+      },
+      vnc: {
+        example: `keg herkin deploy --vnc`,
+        default: true,
+        description: `Build keg-herkin in vnc mode. Same as '--mode vnc' option`,
+      },
+      log: {
+        alias: ['lg'],
+        description: 'Log task output',
+        type: 'bool',
+        default: true,
+        example: '--no-log',
+      },
       tokenFile: {
         alias: ['tf'],
         example: 'keg herkin deploy frontend --tokenFile /cutom/token/file',

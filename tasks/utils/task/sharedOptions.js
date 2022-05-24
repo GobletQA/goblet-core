@@ -34,7 +34,7 @@ const dynamicOpts = {
       description: `Build keg-herkin in local mode. Same as '--mode local' option`,
     },
     vnc: {
-      example: `${type} ${action} --local --vnc`,
+      example: `${type} ${action} --vnc`,
       description: `Build keg-herkin in vnc mode. Same as '--mode vnc' option`,
     },
   }),
