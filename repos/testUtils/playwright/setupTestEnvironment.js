@@ -1,4 +1,4 @@
-const { metadata } = require('HerkinSCPlaywright/helpers/metadata')
+const { getMetadata } = require('HerkinSCPlaywright/server/server')
 const { newBrowser } = require('HerkinSCPlaywright/browser/newBrowser')
 
 /**
@@ -15,7 +15,7 @@ const initialize = async () => {
   const { HERKIN_BROWSER='chromium' } = process.env
   
   try {
-    const { type, launchOptions } = await metadata.read(HERKIN_BROWSER)
+    const { type, launchOptions } = await getMetadata(HERKIN_BROWSER)
 
     // TODO: Should update to check if in docker container
     // Then pass false based on that

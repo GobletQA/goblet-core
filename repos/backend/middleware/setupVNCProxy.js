@@ -35,16 +35,15 @@ const setupVNCProxy = app => {
 
   if(!host) throw new Error(`VNC Proxy host is required!`)
 
-  // TODO: This works for now because the websocket server runs locally
-  // But will need to update in future
   const url = port ? `${host}:${port}` : host
+  const target = `${protocol}://${url}`
 
   const wsProxy = createProxyMiddleware(path, {
+    ...options,
+    target,
     ws: true,
     changeOrigin: true,
-    ...options,
     // onError: onProxyError(app),
-    target: `${protocol}://${url}`,
   })
 
   app.use(wsProxy)
