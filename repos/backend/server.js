@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const { initSockr } = require('./libs/sockr')
 const { getApp } = require('HerkinSharedApp')
 const apiEndpoints = require('HerkinBackEndpoints')
+const { initSockr } = require('HerkinBackSockr/sockr')
 const { isDeployedEnv } = require('HerkinSharedUtils/isDeployedEnv')
 const {
   setReqRepo,

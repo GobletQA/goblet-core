@@ -24,6 +24,7 @@
   "HerkinBackConstants": "constants/backend",
   "HerkinBackLibs": "repos/backend/libs",
   "HerkinBackUtils": "repos/backend/utils",
+  "HerkinBackSockr": "repos/backend/sockr",
   "HerkinBackEndpoints": "repos/backend/endpoints",
   "HerkinBackMiddleware": "repos/backend/middleware",
   "HerkinBack": "repos/backend",
