@@ -90,6 +90,7 @@ const loadConfigFromFolder = baseDir => {
  * @return {Object?} - the herkin config if the config exists at $(cwd)/herkin.config.js, else null
  */
 const getConfigAtPath = pathToCheck => {
+
   const validNames = [
     '.herkinrc',
     `.herkinrc.json`,
@@ -109,9 +110,14 @@ const getConfigAtPath = pathToCheck => {
     // This ensure we get a fresh file every time
     // Otherwise changed files would not get reloaded
     delete require.cache[loc]
-
-    const config = tryRequireSync(loc)
-    if (config) return loadConfigByType(config)
+    try {
+      const config = fs.existsSync(loc) ? require(loc) : null
+      if (config) return loadConfigByType(config)
+    }
+    catch(err){
+      console.log(`Error loading repo config...`)
+      console.error(err.stack)
+    }
   }
 
   return null
@@ -193,7 +199,7 @@ const loadCustomConfig = (runtimeConfigPath, search = true) => {
       ? require(path.resolve(configPath))
       : search && findConfig()
 
-    return loadConfigByType(customConfig)
+    return customConfig && loadConfigByType(customConfig)
   } catch (err) {
     if (configPath) throw err
 
@@ -210,9 +216,11 @@ const loadCustomConfig = (runtimeConfigPath, search = true) => {
  * @return {Object} - Loaded Herkin config
  */
 const getHerkinConfig = (argsConfig = noOpObj) => {
-  if (__HERKIN_CONFIG) return __HERKIN_CONFIG
 
-  const baseConfig = loadConfigFromBase(argsConfig.base)
+  // TODO: need a better way to handle this
+  if (!Boolean(process.env.JEST_WORKER_ID) && __HERKIN_CONFIG) return __HERKIN_CONFIG
+
+  const baseConfig = loadConfigFromBase(argsConfig.base)  
   const customConfig = loadCustomConfig(argsConfig.config)
 
   if (!customConfig && argsConfig.local && argsConfig.warn) {

@@ -11,7 +11,7 @@ const {
  *
  * @return {Object?} - the client's world object, or undefined if it does not exist
  */
-const getClientWorld = config => {
+const getClientWorld = (config) => {
   config = config || getHerkinConfig()
   const { repoRoot, supportDir, workDir } = config.paths
   const baseDir = workDir ? path.join(repoRoot, workDir) : repoRoot

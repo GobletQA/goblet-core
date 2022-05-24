@@ -87,7 +87,8 @@ RUN yarn global add npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
     sysctl -p; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
     mkdir -p $DOC_APP_PATH/logs; \
-    rm -rf /keg/gitfs
+    rm -rf /keg/gitfs; \
+    ln -s /keg/tap/node_modules $HOME/.node_modules
 
 # Expose container ports
 EXPOSE $KEG_PROXY_PORT
