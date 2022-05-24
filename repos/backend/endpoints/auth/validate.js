@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { Repo } = require('HerkinBackLibs/repo')
+const { Repo } = require('HerkinSharedRepo/repo')
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
 const { generateTokens } = require('HerkinBackUtils/generateTokens')
 

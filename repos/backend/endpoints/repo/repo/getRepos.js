@@ -1,4 +1,4 @@
-const { Repo } = require('HerkinBackLibs/repo')
+const { Repo } = require('HerkinSharedRepo/repo')
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
 
 /**

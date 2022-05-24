@@ -1,6 +1,6 @@
-const { Repo } = require('HerkinBackLibs/repo')
+const { Repo } = require('HerkinSharedRepo/repo')
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
-const { loadRepoContent } = require('../../../utils/loadRepoContent')
+const { loadRepoContent } = require('HerkinSharedRepo/loadRepoContent')
 
 /**
  * Could be used to get repos when unmounted and in vnc mode, but logged in

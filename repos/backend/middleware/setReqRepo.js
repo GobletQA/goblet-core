@@ -1,4 +1,4 @@
-const { Repo } = require('HerkinBackLibs/repo')
+const { Repo } = require('HerkinSharedRepo/repo')
 const { AppRouter } = require('HerkinSharedRouter')
 const { asyncWrap } = require('HerkinSharedExp')
 const { pickKeys, deepMerge } = require('@keg-hub/jsutils')

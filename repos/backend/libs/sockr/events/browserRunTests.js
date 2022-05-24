@@ -1,5 +1,5 @@
 // TODO: @lance-tipton - Move all socket.io setup and files to screencast folder
-const { Repo } = require('HerkinBackLibs/repo')
+const { Repo } = require('HerkinSharedRepo/repo')
 const { joinBrowserConf } = require('HerkinSharedUtils/joinBrowserConf')
 const {
   setPage,

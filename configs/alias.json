@@ -3,6 +3,7 @@
   "HerkinTasks": "tasks",
   "HerkinConfigs": "configs",
 
+  "HerkinSharedRepo": "repos/shared/repo",
   "HerkinSharedTemplate": "repos/shared/templates",
   "HerkinSharedFileSys": "repos/shared/libs/fileSys",
   "HerkinSharedFeatures": "repos/shared/libs/features",
