@@ -1,4 +1,4 @@
-const { buildFileModel } = require('../../utils/buildFileModel')
+const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
 const { resolveReportAst } = require('../../utils/resolveReportAst')
 const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
 

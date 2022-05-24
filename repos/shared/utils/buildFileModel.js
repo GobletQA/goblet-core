@@ -2,7 +2,7 @@ const path = require('path')
 const { getType } = require('mime')
 const { getFileType } = require('./getFileType')
 const { fileModel } = require('HerkinSharedModels')
-const { getLastModified } = require('../libs/fileSys/fileSys')
+const { getLastModified } = require('HerkinSharedLibs/fileSys/fileSys')
 
 /**
  * Builds a fileModel from the fileModel object and passed arguments

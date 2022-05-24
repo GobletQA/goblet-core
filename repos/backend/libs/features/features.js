@@ -4,7 +4,7 @@ const { fileSys } = require('@keg-hub/cli-utils')
 const { parkin } = require('HerkinParkin/instance')
 const { featuresParser } = require('./featuresParser')
 const { limbo, noPropArr } = require('@keg-hub/jsutils')
-const { buildFileModel } = require('../../utils/buildFileModel')
+const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
 const { getPathFromBase } = require('HerkinSharedUtils/getPathFromBase')
 
 /**

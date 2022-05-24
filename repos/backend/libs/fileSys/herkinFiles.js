@@ -3,7 +3,7 @@ const { loadReport } = require('../reports/reports')
 const { wordCaps, get } = require('@keg-hub/jsutils')
 const { loadFeature } = require('../features/features')
 const { loadTemplate } = require('../../templates/loadTemplate')
-const { buildFileModel } = require('../../utils/buildFileModel')
+const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
 const { resolveFileType } = require('../../utils/resolveFileType')
 const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
 

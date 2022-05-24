@@ -1,6 +1,6 @@
 const fs = require('fs')
 const { parkin } = require('HerkinParkin/instance')
-const { buildFileModel } = require('../../utils/buildFileModel')
+const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
 
 class DefinitionsParser {
   clear = () => {

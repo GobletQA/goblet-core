@@ -3,9 +3,9 @@
   "HerkinTasks": "tasks",
   "HerkinConfigs": "configs",
 
+  "HerkinSharedLibs": "repos/shared/libs",
   "HerkinSharedUtils": "repos/shared/utils",
   "HerkinSharedModels": "repos/shared/models",
-  
   "HerkinSharedExp": "repos/shared/express",
   "HerkinSharedApp": "repos/shared/express/app.js",
   "HerkinSharedPaths": "repos/shared/utils/paths.js",
