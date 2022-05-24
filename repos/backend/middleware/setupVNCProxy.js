@@ -32,12 +32,12 @@ const setupVNCProxy = app => {
     ...options
   } = get(config, `screencast.proxy`, {})
 
-  const hostLoc = host || get(config, 'server.host')
-  if(!hostLoc) throw new Error(`VNC Proxy host is required!`)
+
+  if(!host) throw new Error(`VNC Proxy host is required!`)
 
   // TODO: This works for now because the websocket server runs locally
   // But will need to update in future
-  const url = port ? `0.0.0.0:${port}` : hostLoc
+  const url = port ? `${host}:${port}` : host
 
   const wsProxy = createProxyMiddleware(path, {
     ws: true,

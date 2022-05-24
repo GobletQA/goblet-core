@@ -1,5 +1,4 @@
 const { toBool } = require('@keg-hub/jsutils')
-const { serverConfig } = require('./server.config.js')
 
 const {
   HERKIN_USE_VNC,
@@ -13,7 +12,6 @@ const {
   VNC_PROXY_HOST = SCREENCAST_PROXY_HOST,
 } = process.env
 
-const host = SCREENCAST_PROXY_HOST || serverConfig.host || `0.0.0.0`
 
 const screenDims = {
   width: parseInt(VNC_VIEW_WIDTH, 10) ?? 900,
@@ -27,19 +25,19 @@ const screencastConfig = {
   proxy: {
     path: '/novnc',
     port: NO_VNC_PORT,
-    host: VNC_PROXY_HOST || host,
+    host: VNC_PROXY_HOST,
   },
   // Uses to start separate screencast API
   server: {
-    host,
+    host: SCREENCAST_PROXY_HOST,
     port: SCREENCAST_API_PORT,
   },
   vnc: {
     display: DISPLAY,
+    host: VNC_PROXY_HOST,
     port: VNC_SERVER_PORT,
     width: VNC_VIEW_WIDTH,
     height: VNC_VIEW_HEIGHT,
-    host: VNC_PROXY_HOST || host,
   },
   // Default playwright context settings
   context: {

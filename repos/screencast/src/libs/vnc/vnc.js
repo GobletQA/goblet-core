@@ -50,20 +50,6 @@ const startVNC = async ({
   const config = getHerkinConfig()
   const { vnc } = config.screencast
 
-  console.log(
-    `Xtigervnc ${[
-      `-verbose`,
-      `-SecurityTypes`,
-      `None`,
-      '-geometry',
-      `${vnc.width}x${vnc.height}x24`,
-      `-rfbport`,
-      vnc.port,
-      `-alwaysshared`,
-      vnc.display,
-    ].join(' ')}`
-  )
-
   VNC_PROC = await childProc({
     log: true,
     cmd: 'Xtigervnc',

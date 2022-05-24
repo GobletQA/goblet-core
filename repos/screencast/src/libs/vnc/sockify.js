@@ -65,15 +65,6 @@ const startSockify = async ({
     ? [`--cert=${credentials.cert}`, `--key=${credentials.key}`]
     : []
 
-  // console.log(`websockify ${[
-  //   '-v',
-  //   ...wssArgs,
-  //   '--web',
-  //   '/usr/share/novnc',
-  //   `${proxy.host}:${proxy.port}`,
-  //   `${vnc.host}:${vnc.port}`,
-  // ]}`)
-
   Logger.log(`- Starting websockify server...`)
   SOCK_PROC = await childProc({
     cmd: 'websockify',
@@ -83,8 +74,8 @@ const startSockify = async ({
         ...wssArgs,
         '--web',
         '/usr/share/novnc',
-        `0.0.0.0:${proxy.port}`,
-        `0.0.0.0:${vnc.port}`,
+        `${proxy.host}:${proxy.port}`,
+        `${vnc.host}:${vnc.port}`,
       ],
       args
     ),
