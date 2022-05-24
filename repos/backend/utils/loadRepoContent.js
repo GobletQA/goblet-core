@@ -1,6 +1,6 @@
-const { loadFeatures } = require('HerkinBackLibs/features')
-const { loadDefinitions } = require('HerkinBackLibs/definitions')
+const { loadFeatures } = require('HerkinSharedFeatures/features')
 const { buildFileTree } = require('HerkinBackLibs/fileSys/fileTree')
+const { loadDefinitions } = require('HerkinSharedDefinitions/definitions')
 const { definitionsByType, fileModelArrayToObj } = require('HerkinShared/utils')
 
 /**

@@ -1,7 +1,7 @@
 const path = require('path')
 const { loadReport } = require('../reports/reports')
 const { wordCaps, get } = require('@keg-hub/jsutils')
-const { loadFeature } = require('../features/features')
+const { loadFeature } = require('HerkinSharedFeatures/features')
 const { loadTemplate } = require('../../templates/loadTemplate')
 const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
 const { resolveFileType } = require('../../utils/resolveFileType')

@@ -1,5 +1,5 @@
-const { loadDefinitions } = require('HerkinBackLibs/definitions')
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { loadDefinitions } = require('HerkinSharedDefinitions/definitions')
 const { definitionsByType, fileModelArrayToObj } = require('HerkinShared/utils')
 
 const getDefinitions = asyncWrap(async (req, res) => {

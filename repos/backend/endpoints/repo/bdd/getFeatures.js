@@ -1,5 +1,5 @@
-const { loadFeatures } = require('HerkinBackLibs/features')
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { loadFeatures } = require('HerkinSharedFeatures/features')
 
 const getFeatures = asyncWrap(async (req, res) => {
   const features = await loadFeatures(res.locals.repo)

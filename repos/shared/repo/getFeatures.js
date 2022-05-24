@@ -1,5 +1,4 @@
-// TODO: @lance-tipton - Move features and definitions libs in backend to shared
-const { loadFeatures } = require('HerkinBackLibs/features')
+const { loadFeatures } = require('HerkinSharedFeatures/features')
 const { getDefinitions } = require('HerkinShared/repo/getDefinitions')
 
 const getFeatures = async (repo, config) => {
