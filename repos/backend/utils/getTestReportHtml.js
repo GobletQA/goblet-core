@@ -1,7 +1,7 @@
 const path = require('path')
-const { getFileContent } = require('./getFileContent')
+const { getFileContent } = require('HerkinSharedUtils/getFileContent')
 const { getMountRootDir } = require('HerkinSharedUtils/getMountRootDir')
-const { reportHeight } = require(`HerkinBackTemplates/reportHeight.template`)
+const { reportHeight } = require(`HerkinSharedTemplate/reportHeight.template`)
 
 /**
  * Loads a report by it's name and fileType

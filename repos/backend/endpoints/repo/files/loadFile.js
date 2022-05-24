@@ -1,5 +1,5 @@
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
-const { getHerkinFile } = require('HerkinBackLibs/fileSys/herkinFiles')
+const { getHerkinFile } = require('HerkinSharedFileSys/herkinFiles')
 
 /**
  * Loads a file from within the docker mounted test root folder

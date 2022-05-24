@@ -1,7 +1,7 @@
 const path = require('path')
 const { treeNodeModel } = require('HerkinSharedModels')
 const { isDirectory, getFolderContent } = require('./fileSys')
-const { resolveFileType } = require('../../utils/resolveFileType')
+const { resolveFileType } = require('HerkinSharedUtils/resolveFileType')
 const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
 
 /**

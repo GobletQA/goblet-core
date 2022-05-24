@@ -1,4 +1,4 @@
-const { loadTemplate } = require(`HerkinBackTemplates/loadTemplate`)
+const { loadTemplate } = require(`HerkinSharedTemplate/loadTemplate`)
 
 const page404Data = {
   title: 'Keg-Herkin - 404 Page not found',

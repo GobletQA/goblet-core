@@ -1,6 +1,3 @@
-const path = require('path')
-const { singular } = require('@keg-hub/jsutils')
-const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
 
 /**
  * Loops over the fileTypes from the repo looking for a matching path with the filePath

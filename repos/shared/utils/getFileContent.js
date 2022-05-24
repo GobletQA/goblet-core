@@ -1,4 +1,4 @@
-const { pathExists, readFile } = require('../libs/fileSys/fileSys')
+const { pathExists, readFile } = require('HerkinSharedFileSys/fileSys')
 
 /**
  * Gets the text content of a file from the passed in location

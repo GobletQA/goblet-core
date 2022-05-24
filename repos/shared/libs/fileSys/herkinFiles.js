@@ -1,10 +1,10 @@
 const path = require('path')
-const { loadReport } = require('../reports/reports')
+const { loadReport } = require('HerkinBackLibs/reports/reports')
 const { wordCaps, get } = require('@keg-hub/jsutils')
 const { loadFeature } = require('HerkinSharedFeatures/features')
-const { loadTemplate } = require('../../templates/loadTemplate')
+const { loadTemplate } = require('HerkinSharedTemplate/loadTemplate')
 const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
-const { resolveFileType } = require('../../utils/resolveFileType')
+const { resolveFileType } = require('HerkinSharedUtils/resolveFileType')
 const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
 
 const {

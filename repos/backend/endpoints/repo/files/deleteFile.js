@@ -1,4 +1,4 @@
-const { deleteHerkinFile } = require('HerkinBackLibs/fileSys/herkinFiles')
+const { deleteHerkinFile } = require('HerkinSharedFileSys/herkinFiles')
 const { asyncWrap, apiRes } = require('HerkinSharedExp')
 
 /**

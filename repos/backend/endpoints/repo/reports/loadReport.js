@@ -1,7 +1,7 @@
 const { asyncWrap } = require('HerkinSharedExp')
 const { htmlRes, htmlErr } = require('HerkinBackEndpoints/handlers')
 const { getTestReportHtml } = require('HerkinBackUtils/getTestReportHtml')
-const { loadTemplate } = require(`HerkinBackTemplates/loadTemplate`)
+const { loadTemplate } = require(`HerkinSharedTemplate/loadTemplate`)
 
 /**
  * Loads reports from the passed in params

@@ -3,8 +3,11 @@
   "HerkinTasks": "tasks",
   "HerkinConfigs": "configs",
 
+  "HerkinSharedTemplate": "repos/shared/templates",
+  "HerkinSharedFileSys": "repos/shared/libs/fileSys",
   "HerkinSharedFeatures": "repos/shared/libs/features",
   "HerkinSharedDefinitions": "repos/shared/libs/definitions",
+  
   "HerkinSharedLibs": "repos/shared/libs",
   "HerkinSharedUtils": "repos/shared/utils",
   "HerkinSharedModels": "repos/shared/models",
@@ -21,7 +24,6 @@
   "HerkinBackLibs": "repos/backend/libs",
   "HerkinBackUtils": "repos/backend/utils",
   "HerkinBackEndpoints": "repos/backend/endpoints",
-  "HerkinBackTemplates": "repos/backend/templates",
   "HerkinBackMiddleware": "repos/backend/middleware",
   "HerkinBack": "repos/backend",
 
