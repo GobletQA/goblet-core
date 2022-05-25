@@ -27,7 +27,7 @@ const { CATEGORIES } = Values
   const activeFile = useActiveFile(screenId)
   const { pendingFiles = noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
   const fileModel = propsActiveFile || activeFile || noOpObj
-  
+
   const pendingFile = pendingFiles[fileModel.uuid]
 
   return useCallback(

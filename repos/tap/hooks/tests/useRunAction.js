@@ -39,7 +39,7 @@ export const useRunAction = props => {
   const testFile = propsActiveFile || activeFile || noOpObj
 
   const { commands = noOpObj } = useSockr()
-  const hasPending = usePendingCheck(checkPending, testFile.location)
+  const pendingContent = usePendingCheck(checkPending, testFile.uuid)
   const testCommand = useTestCommand(commands, testFile.fileType)
 
   return useCallback(
@@ -50,7 +50,7 @@ export const useRunAction = props => {
         event,
         testFile,
         testCommand,
-        hasPending,
+        pendingContent,
         runAllTests
       )
 
@@ -63,8 +63,8 @@ export const useRunAction = props => {
         })
 
       // Save the file first if it has pending changes
-      const canRun = hasPending
-        ? await savePendingContent(content, testFile, false)
+      const canRun = pendingContent
+        ? await savePendingContent(pendingContent, testFile, false)
         : true
 
       canRun
@@ -81,6 +81,6 @@ export const useRunAction = props => {
             message: `Can not run test on a file with pending changes!\n The file must be saved first!`,
           })
     },
-    [onRun, testFile, hasPending, runAllTests, testCommand, autoChangeScreen]
+    [onRun, testFile, pendingContent, runAllTests, testCommand, autoChangeScreen]
   )
 }

@@ -98,11 +98,11 @@ const useCreateNewBranch = () => {
   }
 }
 
-
-const branchNameStyle = {color: tapColors.primary, fontWeight: 'bold'}
+const branchNameStyle = {fontSize: 14, color: tapColors.primary, fontWeight: 'bold'}
+const textStyle = {fontSize: 14}
 const NewBranchText = ({ branch }) => {
   return (
-    <Text>
+    <Text style={textStyle} >
       {`Create new branch${branch ? ' from ' : ''}`}
       {branch && (<Text style={branchNameStyle}>"{branch}"</Text>)}
     </Text>

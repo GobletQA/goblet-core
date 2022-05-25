@@ -197,8 +197,8 @@ export const CodeEditor = props => {
   const tabActions = useEditorActions(activeFile, editorRef, setIsSaving)
 
   const showEditorTabs = Boolean(
-    activeFile.fileType === EDITOR_TYPES.FEATURE ||
-    activeFile.fileType === EDITOR_TYPES.WAYPOINT
+    activeFile.fileType === EDITOR_TYPES.FEATURE
+    // || activeFile.fileType === EDITOR_TYPES.WAYPOINT
   )
 
   return exists(activeFile.content) ? (

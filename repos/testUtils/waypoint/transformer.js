@@ -1,5 +1,6 @@
 const babelJest = require('babel-jest')
 const { createHash } = require('crypto')
+const { getWorld } = require('HerkinRepos/testUtils/support')
 
 /**
  * Custom jest transformer for wrapping waypoint scripts in a test method
@@ -17,6 +18,8 @@ const { createHash } = require('crypto')
   },
   process(src, filename, ...rest) {
     const name = filename.split('/').pop()
+    const world = JSON.stringify(getWorld())
+
     /**
      * Wrap the waypoint script in a single test
      * Ensure Jest doesn't throw or complain having no tests
@@ -30,6 +33,7 @@ const { createHash } = require('crypto')
       `     delete jest.resetModules`,
       `     delete jest.resolver`,
       `     delete jest.restoreAllMocks;`,
+      `     const $world = ${world};`,
       `    ${src}`,
       `  })`,
       `})`

@@ -1,5 +1,4 @@
 import { tapColors } from './tapColors'
-import { get } from '@keg-hub/jsutils'
 
 export const app = theme => ({
   main: {

@@ -17,7 +17,7 @@ export const usePendingCheck = (checkPending, location) => {
   const pendingContent = pendingFiles[location]
 
   return useMemo(
-    () => checkPending && Boolean(pendingContent),
+    () => checkPending && pendingContent,
     [checkPending, pendingContent]
   )
 }
