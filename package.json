@@ -97,9 +97,9 @@
     "winston": "3.6.0"
   },
   "resolutions": {
-    "@keg-hub/args-parse": "7.1.0",
+    "@keg-hub/args-parse": "8.0.0",
     "@keg-hub/ask-it": "^1.1.0",
-    "@keg-hub/cli-utils": "0.5.0",
+    "@keg-hub/cli-utils": "0.6.0",
     "@keg-hub/jsutils": "9.0.3",
     "@monaco-editor/react": "4.3.1"
   },
