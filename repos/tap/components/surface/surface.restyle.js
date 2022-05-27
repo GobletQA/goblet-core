@@ -10,12 +10,12 @@ export const SurfaceMain = reStyle(View)(theme => ({
   shO: 0.05,
   bS: 'solid',
   bgC: theme.tapColors.white,
-  shO: { width: 0, height: 0 },
+  shOff: { width: 0, height: 0 },
   bC: theme.colors.palette.gray01,
   shC: theme.tapColors.shadowColor,
   bTLR: theme.tapColors.borderRadius,
   bTRR: theme.tapColors.borderRadius,
-  bxS: `1px 1px 5px ${theme.colors.opacity._05}`,
+  bxS: `1px 1px 5px ${theme.colors.opacity._5}`,
 }))
 
 
