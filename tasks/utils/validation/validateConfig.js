@@ -64,7 +64,7 @@ const checkFilePaths = (paths, expectedPaths) => {
 
   if (workDir && !fs.existsSync(workDir)) fs.mkdir(workDir, noOp)
 
-  const baseDir = getRepoHerkinDir({ paths, __VALID_HERKIN_CONFIG: true })
+  const baseDir = getRepoHerkinDir({ paths, __VALID_GOBLET_CONFIG: true })
 
   Object.entries(relativePaths).map(([key, testPath]) => {
     const fullPath = path.join(baseDir, testPath)

@@ -7,18 +7,18 @@ const { initializeHerkin } = require('../../src/herkin/initializeHerkin')
 const { disconnectHerkin } = require('../../src/herkin/disconnectHerkin')
 
 const { readFile } = fileSys
-const { HERKIN_GIT_TOKEN } = process.env
+const { GOBLET_GIT_TOKEN } = process.env
 
 let gitToken
 const loadToken = async () => {
-  if (HERKIN_GIT_TOKEN) return (gitToken = HERKIN_GIT_TOKEN)
+  if (GOBLET_GIT_TOKEN) return (gitToken = GOBLET_GIT_TOKEN)
 
   const tokenFile = path.join(__dirname, `../../__mocks__/.token`)
   try {
     const [err, token] = await readFile(tokenFile)
     if (!token.trim()) throw new Error(`Missing token in ${tokenFile}`)
     gitToken = token
-    process.env.HERKIN_GIT_TOKEN = gitToken
+    process.env.GOBLET_GIT_TOKEN = gitToken
   } catch (err) {
     Logger.error(`Missing git provider token file`)
     Logger.pair(`Please create a file at`, tokenFile)

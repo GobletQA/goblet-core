@@ -5,8 +5,8 @@ services:
       - DISPLAY
       - GITHUB_CLIENT_ID
       - GITHUB_AUTH_USERS
-      - HERKIN_USE_VNC=true
-      - HERKIN_USE_AUTH=true
+      - GOBLET_USE_VNC=true
+      - GOBLET_USE_AUTH=true
       - NO_VNC_PORT
       - SCREENCAST_API_PORT
       - SCREENCAST_PROXY_HOST

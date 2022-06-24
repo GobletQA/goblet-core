@@ -71,8 +71,8 @@ const buildGitOpts = options => {
   if (!built.includes(`log=`)) built = `log=${MOUNT_LOG},${built}`
 
   // Ensure the git token is added if it exists
-  if (!built.includes(`password=`) && process.env.HERKIN_GIT_TOKEN)
-    built = `password=${process.env.HERKIN_GIT_TOKEN},${built}`
+  if (!built.includes(`password=`) && process.env.GOBLET_GIT_TOKEN)
+    built = `password=${process.env.GOBLET_GIT_TOKEN},${built}`
 
   return built
 }
@@ -97,9 +97,9 @@ const validateGitOpts = gitOpts => {
   })
 
   !gitOpts.token &&
-    !exists(process.env.HERKIN_GIT_TOKEN) &&
+    !exists(process.env.GOBLET_GIT_TOKEN) &&
     throwErr(
-      `GitFS requires a valid token property. Or set the HERKIN_GIT_TOKEN env`
+      `GitFS requires a valid token property. Or set the GOBLET_GIT_TOKEN env`
     )
 
   return {
@@ -108,7 +108,7 @@ const validateGitOpts = gitOpts => {
     branch: gitOpts.branch,
     username: gitOpts.username,
     commiter_name: gitOpts.name || gitOpts.username,
-    password: gitOpts.token || process.env.HERKIN_GIT_TOKEN,
+    password: gitOpts.token || process.env.GOBLET_GIT_TOKEN,
     commiter_email: gitOpts.email || `${gitOpts.username}@herkin.io`,
   }
 }

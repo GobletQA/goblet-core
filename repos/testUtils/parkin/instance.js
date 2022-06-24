@@ -1,5 +1,5 @@
 const { Parkin } = require('@ltipton/parkin')
-const { getWorld } = require('HerkinRepos/testUtils/support')
+const { getWorld } = require('HerkinSupport')
 
 let __ParkinInstance = new Parkin(getWorld())
 

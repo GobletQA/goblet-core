@@ -28,7 +28,7 @@ const run = async ({ params }) => {
       addFlag('it', !detach).replace('--', '-'),
       addParam(`p`, `${port}:80`).replace('--', '-'),
       addParam(`name`, name),
-      getEnvVal('HERKIN_DEPLOY_IMG', 'keg-herkin:prod'),
+      getEnvVal('GOBLET_DEPLOY_IMG', 'keg-herkin:prod'),
     ],
     { envFile, env }
   )

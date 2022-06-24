@@ -43,22 +43,22 @@ export const runTests = async (
     fileModel: activeFile,
   })
 
-  WSService.runCommand(testCmd, params)
+  // WSService.runCommand(testCmd, params)
   // TODO: Update to run tests with this instead
-  // const options = {
-  //   ref: 'page',
-  //   action: { 
-  //     props: [
-  //       {
-  //         params,
-  //         testCmd,
-  //         activeFile,
-  //       },
-  //       appUrl
-  //     ],
-  //     action: PLAY_ACTIONS.START
-  //   }
-  // }
+  const options = {
+    ref: 'page',
+    action: {
+      props: [
+        {
+          params,
+          testCmd,
+          activeFile,
+        },
+        appUrl
+      ],
+      action: PLAY_ACTIONS.START
+    }
+  }
 
-  // WSService.emit(SOCKR_MSG_TYPES.BROWSER_RUN_TESTS, options)
+  WSService.emit(SOCKR_MSG_TYPES.BROWSER_RUN_TESTS, options)
 }

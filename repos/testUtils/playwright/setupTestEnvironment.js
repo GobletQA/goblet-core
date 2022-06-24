@@ -11,11 +11,11 @@ const { newBrowser } = require('HerkinSCPlaywright/browser/newBrowser')
  */
 const initialize = async () => {
 
-  /** HERKIN_BROWSER is set by the task `keg herkin bdd run` */
-  const { HERKIN_BROWSER='chromium' } = process.env
+  /** GOBLET_BROWSER is set by the task `keg herkin bdd run` */
+  const { GOBLET_BROWSER='chromium' } = process.env
   
   try {
-    const { type, launchOptions } = await getMetadata(HERKIN_BROWSER)
+    const { type, launchOptions } = await getMetadata(GOBLET_BROWSER)
 
     // TODO: Should update to check if in docker container
     // Then pass false based on that

@@ -12,7 +12,7 @@ export const getBaseApiUrl = () => {
   // Use the hostname for the base on dev
   // Otherwise cookies will not be set, due to being served via http
   // If we start serving local dev via https, this this will not be needed
-  let apiBaseHost = process.env.HERKIN_SERVER_HOST || hostname
+  let apiBaseHost = process.env.GOBLET_SERVER_HOST || hostname
 
   // If the port exists, then add it to the apiBase host
   process.env.SERVER_PORT &&

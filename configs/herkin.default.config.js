@@ -11,17 +11,17 @@ const { sockrCmds } = require('./sockrCmds.config.js')
 const { screencastConfig } = require('./screencast.config.js')
 
 const {
-  HERKIN_ROOT,
-  HERKIN_ARTIFACTS_DIR,
-  HERKIN_REPORTS_DIR,
-  HERKIN_REPO_ROOT,
-  HERKIN_FEATURES_DIR,
-  HERKIN_STEPS_DIR,
-  HERKIN_SUPPORT_DIR,
-  HERKIN_UNIT_DIR,
-  HERKIN_WAYPOINT_DIR,
-  HERKIN_WORK_DIR,
-  HERKIN_PW_METADATA_DIR,
+  GOBLET_ROOT,
+  GOBLET_ARTIFACTS_DIR,
+  GOBLET_REPORTS_DIR,
+  GOBLET_REPO_ROOT,
+  GOBLET_FEATURES_DIR,
+  GOBLET_STEPS_DIR,
+  GOBLET_SUPPORT_DIR,
+  GOBLET_UNIT_DIR,
+  GOBLET_WAYPOINT_DIR,
+  GOBLET_WORK_DIR,
+  GOBLET_PW_METADATA_DIR,
   TEST_UTILS_PATH,
 } = require('../constants/backend')
 
@@ -52,12 +52,12 @@ module.exports = {
      * i.e. /keg/repos/<git-user-name>/current
      * @type {string} - Absolute Path
      */
-    repoRoot: HERKIN_REPO_ROOT,
+    repoRoot: GOBLET_REPO_ROOT,
     /**
      * Path to the herkin folder, **Relative to the repoRoot**
      * @type {string} - Relative Path
      */
-    workDir: HERKIN_WORK_DIR,
+    workDir: GOBLET_WORK_DIR,
 
   /**
    * **The below paths are all relative to "<repoRoot>/<workDir>/"**
@@ -73,7 +73,7 @@ module.exports = {
      * @type {string} - Relative Path
      * @example - "/reports"
      */
-    reportsDir: HERKIN_REPORTS_DIR,
+    reportsDir: GOBLET_REPORTS_DIR,
 
     /**
      * Path to the test artifacts folder
@@ -82,7 +82,7 @@ module.exports = {
      * @type {string} - Relative Path
      * @example - "/artifacts"
      */
-    artifactsDir: HERKIN_ARTIFACTS_DIR,
+    artifactsDir: GOBLET_ARTIFACTS_DIR,
 
     /**
      * Path to the Gherkin feature folder
@@ -91,7 +91,7 @@ module.exports = {
      * @type {string} - Relative Path
      * @example - "/bdd/features"
      */
-    featuresDir: HERKIN_FEATURES_DIR,
+    featuresDir: GOBLET_FEATURES_DIR,
     
     /**
      * Path to the feature step definitions
@@ -101,7 +101,7 @@ module.exports = {
      * @type {string} - Relative Path
      * @example - "/bdd/steps"
      */
-    stepsDir: HERKIN_STEPS_DIR,
+    stepsDir: GOBLET_STEPS_DIR,
 
     /**
      * Path to the Parkin / Features / Steps support files
@@ -110,7 +110,7 @@ module.exports = {
      * @type {string} - Relative Path
      * @example - "/bdd/support"
      */
-    supportDir: HERKIN_SUPPORT_DIR,
+    supportDir: GOBLET_SUPPORT_DIR,
 
     /**
      * Path to the Jest unit tests directory containing unit test files
@@ -120,7 +120,7 @@ module.exports = {
      * @type {string} - Relative Path
      * @example - "/unit"
      */
-    unitDir: HERKIN_UNIT_DIR,
+    unitDir: GOBLET_UNIT_DIR,
 
     /**
      * Path to the Jest unit tests directory containing unit test files
@@ -130,7 +130,7 @@ module.exports = {
      * @type {string} - Relative Path
      * @example - "/waypoint"
      */
-    waypointDir: HERKIN_WAYPOINT_DIR,
+    waypointDir: GOBLET_WAYPOINT_DIR,
   },
 
   /**
@@ -139,11 +139,11 @@ module.exports = {
    * These paths should always exist on the loaded herkin.config object
    */
   internalPaths: {
-    herkinRoot: HERKIN_ROOT,
+    herkinRoot: GOBLET_ROOT,
     testUtilsDir: TEST_UTILS_PATH,
-    pwMetaDataDir: HERKIN_PW_METADATA_DIR,
+    pwMetaDataDir: GOBLET_PW_METADATA_DIR,
   },
 
   /** Property to define a valid herkin config object */
-  __VALID_HERKIN_CONFIG: true,
+  __VALID_GOBLET_CONFIG: true,
 }

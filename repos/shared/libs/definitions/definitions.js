@@ -31,13 +31,13 @@ const loadDefinitionsFiles = stepsDir => {
  *
  * @returns {Array} - Loaded Definitions models
  */
-const parseDefinitions = (repo, definitionFiles) => {
+const parseDefinitions = async (repo, definitionFiles) => {
   return definitionFiles.reduce(async (toResolve, file) => {
     const loaded = await toResolve
     if (!file) return loaded
 
     const fileModel = await DefinitionsParser.getDefinitions(file, repo)
-    loaded.push(fileModel)
+    fileModel && loaded.push(fileModel)
 
     return loaded
   }, Promise.resolve([]))
@@ -52,7 +52,7 @@ const parseDefinitions = (repo, definitionFiles) => {
  */
 const loadDefinitions = async (repo, herkinConfig) => {
   // Clear out any steps that were already loaded
-  DefinitionsParser.clear()
+  DefinitionsParser.clear(repo)
   herkinConfig = herkinConfig || getDefaultHerkinConfig()
 
   const { stepsDir } = repo.paths
@@ -62,6 +62,10 @@ const loadDefinitions = async (repo, herkinConfig) => {
   const herkinDefinitionFiles = await loadDefinitionsFiles(
     `${herkinConfig.internalPaths.testUtilsDir}/steps`
   )
+
+  // The repo world may have been updated since the last time load definitions was called
+  // Call refreshWorld to ensure repo and parkin have an updated world
+  await repo.refreshWorld()
 
   const clientDefinitions =
     (await parseDefinitions(repo, definitionFiles)) || []

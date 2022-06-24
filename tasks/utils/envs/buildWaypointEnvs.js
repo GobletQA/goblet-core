@@ -17,11 +17,11 @@ const { buildJestTestEnvs } = require('../jest/buildJestTestEnvs')
 const buildWaypointEnvs = (browser, params, reportPath, type) => {
   const env = buildPWEnvs({}, browser, params)
 
-  // TODO: Update to use the HERKIN_APP_URL
-  // Normalize between HERKIN_APP_URL
-  addEnv(env, 'HERKIN_APP_URL', params.appUrl)
-  addEnv(env, 'HERKIN_CONFIG_BASE', params.base)
-  addEnv(env, 'HERKIN_BROWSER_LAUNCH_TYPE', params.launchType)
+  // TODO: Update to use the GOBLET_APP_URL
+  // Normalize between GOBLET_APP_URL
+  addEnv(env, 'GOBLET_APP_URL', params.appUrl)
+  addEnv(env, 'GOBLET_CONFIG_BASE', params.base)
+  addEnv(env, 'GOBLET_BROWSER_LAUNCH_TYPE', params.launchType)
 
   // Set up html test reporting ENV for jest
   buildJestTestEnvs(env, params.context, reportPath, type)

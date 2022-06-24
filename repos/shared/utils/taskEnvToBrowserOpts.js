@@ -3,8 +3,8 @@ const { getPathFromBase } = require('./getPathFromBase')
 const { parseJsonEnvArr } = require('./parseJsonEnvArr')
 
 /**
- * Builds a list of devices to used based on the HERKIN_BROWSER_DEVICES env
- * @param {string} envVal - Value of the HERKIN_BROWSER_DEVICES env
+ * Builds a list of devices to used based on the GOBLET_BROWSER_DEVICES env
+ * @param {string} envVal - Value of the GOBLET_BROWSER_DEVICES env
  *
  * @returns {Array<string>} - Group of formatted device names
  */
@@ -32,25 +32,25 @@ const buildDeviceList = (envVal) => {
  */
 const taskEnvToBrowserOpts = herkin => {
   const {
-    HERKIN_HEADLESS,
-    HERKIN_DEV_TOOLS,
-    HERKIN_BROWSER_DEVICES,
-    HERKIN_SLOW_MO = `500`,
-    HERKIN_BROWSER = 'chromium',
-    HERKIN_BROWSER_TIMEOUT = `3000`,
-    HERKIN_TRACES_DIR = getPathFromBase(herkin.paths.reportsDir, herkin),
-    HERKIN_DOWNLOADS_PATH = getPathFromBase(herkin.paths.artifactsDir, herkin),
+    GOBLET_HEADLESS,
+    GOBLET_DEV_TOOLS,
+    GOBLET_BROWSER_DEVICES,
+    GOBLET_SLOW_MO = `500`,
+    GOBLET_BROWSER = 'chromium',
+    GOBLET_BROWSER_TIMEOUT = `3000`,
+    GOBLET_TRACES_DIR = getPathFromBase(herkin.paths.reportsDir, herkin),
+    GOBLET_DOWNLOADS_PATH = getPathFromBase(herkin.paths.artifactsDir, herkin),
   } = process.env
 
   return {
-    type: HERKIN_BROWSER,
-    tracesDir: HERKIN_TRACES_DIR,
-    devtools: toBool(HERKIN_DEV_TOOLS),
-    headless: toBool(HERKIN_HEADLESS),
-    downloadsPath: HERKIN_DOWNLOADS_PATH,
-    slowMo: parseInt(HERKIN_SLOW_MO, 10),
-    timeout: parseInt(HERKIN_BROWSER_TIMEOUT, 10),
-    ...buildDeviceList(HERKIN_BROWSER_DEVICES),
+    type: GOBLET_BROWSER,
+    tracesDir: GOBLET_TRACES_DIR,
+    devtools: toBool(GOBLET_DEV_TOOLS),
+    headless: toBool(GOBLET_HEADLESS),
+    downloadsPath: GOBLET_DOWNLOADS_PATH,
+    slowMo: parseInt(GOBLET_SLOW_MO, 10),
+    timeout: parseInt(GOBLET_BROWSER_TIMEOUT, 10),
+    ...buildDeviceList(GOBLET_BROWSER_DEVICES),
   }
 }
 

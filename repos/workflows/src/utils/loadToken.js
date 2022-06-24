@@ -10,7 +10,7 @@ let gitToken
 
 /**
  * Loads a git token in development environments
- * If a token is found it will be loaded in to process.env.HERKIN_GIT_TOKEN
+ * If a token is found it will be loaded in to process.env.GOBLET_GIT_TOKEN
  * then returned
  *
  * @returns {string|boolean} Git Token, or false if an error is thrown
@@ -21,13 +21,13 @@ const loadToken = async ({ token }) => {
 
   // If gitToken is set, set the env and return
   if (gitToken) {
-    !process.env.HERKIN_GIT_TOKEN && (process.env.HERKIN_GIT_TOKEN = gitToken)
+    !process.env.GOBLET_GIT_TOKEN && (process.env.GOBLET_GIT_TOKEN = gitToken)
 
     return gitToken
   }
 
-  if (process.env.HERKIN_GIT_TOKEN)
-    return (gitToken = process.env.HERKIN_GIT_TOKEN)
+  if (process.env.GOBLET_GIT_TOKEN)
+    return (gitToken = process.env.GOBLET_GIT_TOKEN)
 
   if (!devEnvs.includes(NODE_ENV)) return
 
@@ -39,9 +39,9 @@ const loadToken = async ({ token }) => {
     const [err, token] = await readFile(tokenFile)
     if (!token.trim()) throw new Error(`Missing token in ${tokenFile}`)
     gitToken = token.trim()
-    process.env.HERKIN_GIT_TOKEN = gitToken
+    process.env.GOBLET_GIT_TOKEN = gitToken
 
-    return process.env.HERKIN_GIT_TOKEN
+    return process.env.GOBLET_GIT_TOKEN
   } catch (err) {
     Logger.error(`[ ERROR ] Could not load git token file`)
     Logger.log(err.message)

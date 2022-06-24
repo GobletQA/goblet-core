@@ -10,7 +10,7 @@ const deployedEnvs = ['st', 'staging', 'qa', 'prod', 'production']
  */
 const isDeployedEnv =
   deployedEnvs.includes(process.env.NODE_ENV) ||
-  exists(process.env.KEG_HERKIN_DEPLOYED)
+  exists(process.env.KEG_GOBLET_DEPLOYED)
 
 module.exports = {
   isDeployedEnv,

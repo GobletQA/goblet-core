@@ -74,7 +74,7 @@ module.exports = {
       inject: 'body',
     }),
     new webpack.DefinePlugin({
-      'process.env.HERKIN_URL': JSON.stringify(getKegHerkinUrl()),
+      'process.env.GOBLET_URL': JSON.stringify(getKegHerkinUrl()),
     }),
   ],
 }

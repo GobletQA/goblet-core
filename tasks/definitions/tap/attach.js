@@ -19,8 +19,8 @@ const attachHerkin = async args => {
 
   // TODO: Pull in the docker container information via inspect
   // Check the arguments used to run the contianer
-  // If it has the HERKIN_PW_SOCKET env, Run in local mode
-  // If it has the HERKIN_USE_VNC env, run in vnc mode
+  // If it has the GOBLET_PW_SOCKET env, Run in local mode
+  // If it has the GOBLET_USE_VNC env, run in vnc mode
   // Then pass that mode to the setHerkinMode and launchBrowsers methods
   // This ensures it's consistent with the original run
   // Or investigate adding it to the browser metadata?

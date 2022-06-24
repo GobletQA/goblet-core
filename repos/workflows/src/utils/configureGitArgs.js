@@ -38,7 +38,7 @@ const configureGitArgs = async args => {
     branch: repo.branch,
     username: user.gitUser,
     name: path.basename(repoPath),
-    token: token || repo.token || user.token || process.env.HERKIN_GIT_TOKEN,
+    token: token || repo.token || user.token || process.env.GOBLET_GIT_TOKEN,
   }
 }
 

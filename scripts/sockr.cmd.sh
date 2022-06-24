@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export HERKIN_RUN_FROM_UI=1
+export GOBLET_RUN_FROM_UI=1
 
 # Prints a message to the terminal through stderr
 printMessage(){

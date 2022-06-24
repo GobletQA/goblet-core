@@ -1,6 +1,11 @@
-const { parkin } = require('./instance')
+const { getParkinInstance } = require('./instance')
 
-const getHook = (parkin, hookName) => parkin.hooks[hookName].bind(parkin.hooks)
+const getHook = (hookName) => {
+  return (...args) => {
+    const parkin = getParkinInstance()
+    return parkin.hooks[hookName].apply(parkin.hooks, args)
+  }
+}
 
 /**
  * Cucumber-like hooks
@@ -10,8 +15,8 @@ const getHook = (parkin, hookName) => parkin.hooks[hookName].bind(parkin.hooks)
  * AfterAll(() => cleanupMyEnv())
  */
 module.exports = {
-  BeforeAll: getHook(parkin, 'beforeAll'),
-  AfterAll: getHook(parkin, 'afterAll'),
-  Before: getHook(parkin, 'beforeEach'),
-  After: getHook(parkin, 'afterEach'),
+  BeforeAll: getHook('beforeAll'),
+  AfterAll: getHook('afterAll'),
+  Before: getHook('beforeEach'),
+  After: getHook('afterEach'),
 }

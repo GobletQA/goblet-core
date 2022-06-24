@@ -31,7 +31,7 @@ const launchMethodMap = {
  */
 const getLaunchType = (launchType) => {
   launchType = launchType ||
-    process.env.HERKIN_BROWSER_LAUNCH_TYPE ||
+    process.env.GOBLET_BROWSER_LAUNCH_TYPE ||
     'launch'
 
   return launchType && launchMap[launchType.toLowerCase()] || launchMap.launch

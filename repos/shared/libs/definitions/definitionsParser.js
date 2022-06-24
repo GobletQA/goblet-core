@@ -1,10 +1,11 @@
 const fs = require('fs')
-const { parkin } = require('HerkinParkin/instance')
+const { Logger } = require('@keg-hub/cli-utils')
+const { definitionRequire } = require('./definitionRequire')
 const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
 
 class DefinitionsParser {
-  clear = () => {
-    parkin.steps.clear()
+  clear = (repo) => {
+    repo.parkin.steps.clear()
   }
 
   /**
@@ -16,47 +17,59 @@ class DefinitionsParser {
    * @returns {Array} - Loaded Definition file model
    */
   getDefinitions = async (filePath, repo) => {
-    const { fileModel } = await this.parseDefinition(filePath, repo)
+    try {
 
-    // The definitions get auto-loaded into the parkin instance
-    // from the require call in the parseDefinition method below
-    const definitions = parkin.steps.list()
+      const { fileModel } = await this.parseDefinition(filePath, repo)
 
-    definitions.map(def => {
-      // If the file model contains the step def
-      // And it's a valid match string
-      // Then add the def to the fileModels ast.definitions array
-      fileModel.content.includes(def.match.toString()) &&
-        this.validateMatch(def.match, def.type) &&
-        fileModel.ast.definitions.push({
-          ...def,
-          // Add a reference back to the parent
-          location: filePath,
-        })
-    })
+      // The definitions get auto-loaded into the parkin instance
+      // from the require call in the parseDefinition method below
+      const definitions = repo.parkin.steps.list()
 
-    return fileModel
+      definitions.map(def => {
+        // If the file model contains the step def
+        // And it's a valid match string
+        // Then add the def to the fileModels ast.definitions array
+        fileModel.content.includes(def.match.toString()) &&
+          this.validateMatch(def.match, def.type) &&
+          fileModel.ast.definitions.push({
+            ...def,
+            // Add a reference back to the parent
+            location: filePath,
+          })
+      })
+
+      return fileModel
+    }
+    catch(err){
+      // TODO: @lance-tipton - temporary fix to catch errors in definition parsing
+      // Should be a better way to handel these so we can notify the user of the issues
+      Logger.warn(`[Parse Definition Error] File path => ${filePath}`)
+      Logger.error(err)
+      return false
+    }
   }
 
   parseDefinition = (filePath, repo) => {
     return new Promise((res, rej) => {
-      // We still want to load the file content
-      // Even if the require call fails
-      // So wrap if in a try catch, and log the error if it happends
-      let response
+      let requireError
       try {
         // Always clear out the node require cache
         // This ensure we get a fresh file every time
         // Otherwise changed files would not get reloaded
         delete require.cache[filePath]
 
+        // TODO: update this to use the safe require
+        // Also ensure the correct parkin instance is resolved
+        // definitionRequire(filePath)
+
         // Require the file, to auto-load the definitions into parkin
         // Later we'll pull them from parkin
-        response = require(filePath)
-      } catch (err) {
-        console.log(`Could not load step definition file ${filePath}`)
-        console.log('')
-        console.error(err.message)
+        require(filePath)
+      }
+      catch (err) {
+        Logger.warn(`[Parse Definition Error] Could not load step definition => ${filePath}`)
+        Logger.error(err)
+        requireError = err.message 
       }
 
       // Read the file to get it's content and build the fileModel
@@ -66,6 +79,7 @@ class DefinitionsParser {
         const fileModel = await buildFileModel(
           {
             location: filePath,
+            error: requireError,
             content: content.toString(),
             fileType: 'definition',
             ast: { definitions: [] },

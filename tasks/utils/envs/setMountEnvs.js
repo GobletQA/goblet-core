@@ -1,7 +1,7 @@
 const { snakeCase, validate, isObj, get } = require('@keg-hub/jsutils')
 const { replaceTemplateVars } = require('./replaceTemplateVars')
 
-const getEnvName = env => `HERKIN_` + snakeCase(env).toUpperCase()
+const getEnvName = env => `GOBLET_` + snakeCase(env).toUpperCase()
 
 /**
  * Sets the env variables needed for

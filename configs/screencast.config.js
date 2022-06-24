@@ -1,7 +1,7 @@
 const { toBool } = require('@keg-hub/jsutils')
 
 const {
-  HERKIN_USE_VNC,
+  GOBLET_USE_VNC,
   DISPLAY = ':0.0',
   NO_VNC_PORT = 26369,
   SCREENCAST_PROXY_HOST,
@@ -20,7 +20,7 @@ const screenDims = {
 
 const screencastConfig = {
   // Set if the screencast is active or not
-  active: toBool(HERKIN_USE_VNC),
+  active: toBool(GOBLET_USE_VNC),
   // Proxy settings, for connecting the backend API to the noVNC server
   proxy: {
     path: '/novnc',

@@ -21,7 +21,7 @@ const { throwGitError, buildHeaders, buildAPIUrl } = require('./gitUtils')
 /**
  * TODO - Creates a new repo by calling github's API via axios
  */
-const createRepo = ({ remote, token, log }, repoName) => {
+const createRepo = async ({ remote, token, log }, repoName) => {
   const remoteUrl = buildAPIUrl(remote)
 
   const params = {

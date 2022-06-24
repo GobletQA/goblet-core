@@ -19,7 +19,6 @@ const fs = require('fs')
 const path = require('path')
 const { Logger } = require('@keg-hub/cli-utils')
 const { getFileTypes } = require('./getFileTypes')
-const { tryRequireSync } = require('@keg-hub/jsutils/src/node')
 const {
   isStr,
   exists,
@@ -40,7 +39,7 @@ const defaultConfig = require(path.join(
   'configs/herkin.default.config.js'
 ))
 
-let __HERKIN_CONFIG
+let __GOBLET_CONFIG
 
 /**
  * Checks if the passed in config is a function and calls it if it is
@@ -147,7 +146,13 @@ const findConfig = startDir => {
  * @return {Object?} - the herkin config if the config exists at $(cwd)/herkin.config.js, else null
  */
 const loadConfigFromBase = base => {
-  base = base || process.env.HERKIN_CONFIG_BASE
+  const {
+    GOBLET_CONFIG_BASE,
+    GOBLET_RUN_FROM_CI,
+  } = process.env
+  
+  base = base || GOBLET_CONFIG_BASE
+  
   if (!base) return null
 
   const cleanedDir = path.normalize(base)
@@ -167,8 +172,9 @@ const loadConfigFromBase = base => {
 
     return null
   }
-
-  const startDir = fs.lstatSync(cleanedDir).isDirectory()
+  
+  const stat = fs.lstatSync(cleanedDir)
+  const startDir = stat.isDirectory() || (GOBLET_RUN_FROM_CI && stat.isSymbolicLink())
     ? cleanedDir
     : path.dirname(cleanedDir)
 
@@ -187,7 +193,7 @@ const loadConfigFromBase = base => {
 const loadCustomConfig = (runtimeConfigPath, search = true) => {
   const configPath = isStr(runtimeConfigPath)
     ? runtimeConfigPath
-    : process.env.HERKIN_CONFIG_PATH
+    : process.env.GOBLET_CONFIG_PATH
 
   try {
     // Always clear out the node require cache
@@ -216,9 +222,8 @@ const loadCustomConfig = (runtimeConfigPath, search = true) => {
  * @return {Object} - Loaded Herkin config
  */
 const getHerkinConfig = (argsConfig = noOpObj) => {
-
   // TODO: need a better way to handle this
-  if (!Boolean(process.env.JEST_WORKER_ID) && __HERKIN_CONFIG) return __HERKIN_CONFIG
+  if (!Boolean(process.env.JEST_WORKER_ID) && __GOBLET_CONFIG) return __GOBLET_CONFIG
 
   const baseConfig = loadConfigFromBase(argsConfig.base)  
   const customConfig = loadCustomConfig(argsConfig.config)
@@ -239,7 +244,7 @@ const getHerkinConfig = (argsConfig = noOpObj) => {
     )
   }
 
-  __HERKIN_CONFIG = addConfigFileTypes(
+  __GOBLET_CONFIG = addConfigFileTypes(
     deepMerge(
       defaultConfig,
       // Base if a folder path, not a config file path
@@ -251,9 +256,9 @@ const getHerkinConfig = (argsConfig = noOpObj) => {
 
   // The default config.internalPaths should never be overwritten
   // So reset it here just in case it was
-  __HERKIN_CONFIG.internalPaths = defaultConfig.internalPaths
+  __GOBLET_CONFIG.internalPaths = defaultConfig.internalPaths
 
-  return __HERKIN_CONFIG
+  return __GOBLET_CONFIG
 }
 
 /**
@@ -262,7 +267,7 @@ const getHerkinConfig = (argsConfig = noOpObj) => {
  * @returns {void}
  */
 const resetHerkinConfig = () => {
-  __HERKIN_CONFIG = undefined
+  __GOBLET_CONFIG = undefined
 }
 
 /**

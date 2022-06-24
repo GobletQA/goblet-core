@@ -31,16 +31,16 @@ keg_herkin_serve_screencast(){
 }
 
 # Check if the vnc screen-cast servers should be started
-if [[ "$HERKIN_USE_VNC" == "true" ]]; then
+if [[ "$GOBLET_USE_VNC" == "true" ]]; then
   keg_start_screen_cast
 fi
 
 # Check if we should be running only the backend API
-if [[ "$HERKIN_API_TYPE" == "backend" ]]; then
+if [[ "$GOBLET_API_TYPE" == "backend" ]]; then
   keg_herkin_serve_backend
 
 # Check if we should be running only the screencast API
-elif [[ "$HERKIN_API_TYPE" == "screencast" ]]; then
+elif [[ "$GOBLET_API_TYPE" == "screencast" ]]; then
   keg_herkin_serve_screencast
 
 # Check the NODE_ENV, and use that to know which environment to start

@@ -1,5 +1,6 @@
-const { isObj, noOpObj, noPropArr, } = require('@keg-hub/jsutils')
+const { Parkin } = require('@ltipton/parkin')
 const { getWorld } = require('HerkinSupport/world')
+const { isObj, noOpObj, noPropArr, } = require('@keg-hub/jsutils')
 const { getFileTypes } = require('HerkinSharedUtils/getFileTypes')
 const {
   getUserRepos,
@@ -7,6 +8,7 @@ const {
   initializeHerkin,
   disconnectHerkin,
 } = require('HerkinWF')
+
 
 /**
  * Class variation of the a herkin config
@@ -125,8 +127,17 @@ class Repo {
    */
   git = undefined
 
+
+  /**
+   * Instance of the parkin class
+   * Holds the an instance relative to this repo only
+   * @memberOf Repo
+   * @type {Object}
+   */
+  parkin = undefined
+
   // Property to define a valid herkin config object
-  __VALID_HERKIN_CONFIG = true
+  __VALID_GOBLET_CONFIG = true
 
   constructor(config = noOpObj) {
     const { paths, git, name } = config
@@ -134,6 +145,7 @@ class Repo {
     this.name = name
     this.paths = paths
     this.world = getWorld(config)
+    this.parkin = new Parkin(this.world)
     this.fileTypes = getFileTypes(this.paths.repoRoot, this.paths)
   }
 
@@ -146,6 +158,7 @@ class Repo {
    */
   refreshWorld = async () => {
     this.world = getWorld(this)
+    this.parkin.world = this.world
 
     return this.world
   }

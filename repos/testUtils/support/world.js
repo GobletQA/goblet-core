@@ -8,7 +8,7 @@ const getWorld = config => {
   return deepMerge(
     {
       app: {
-        url: process.env.HERKIN_APP_URL,
+        url: process.env.GOBLET_APP_URL,
       },
     },
     getClientWorld(config)

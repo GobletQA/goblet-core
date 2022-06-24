@@ -10,7 +10,7 @@ const {
 } = require('@keg-hub/jsutils')
 
 /**
- * Parses the HERKIN_CONTEXT_GEO env into an object 
+ * Parses the GOBLET_CONTEXT_GEO env into an object 
  * @param {*} value - Value of the context options
  * 
  * @returns {Object} - Updated opts object with geolocation added if set
@@ -49,7 +49,7 @@ const addEnvToOpts = (opts, key, value) => {
 }
 
 /**
- * Parses the HERKIN_CONTEXT_RECORD env, and sets the height and width if true
+ * Parses the GOBLET_CONTEXT_RECORD env, and sets the height and width if true
  * @param {Object} opts - Context options being built
  * @param {boolean} value - True if recording should be turned on
  * @param {Object} screenDims - Screen dimensions of the browser
@@ -74,27 +74,27 @@ const parseRecord = (opts, value, screenDims) => {
  */
 const taskEnvToContextOpts = config => {
   const {
-    HERKIN_CONTEXT_TZ, // string
-    HERKIN_CONTEXT_RECORD, // boolean
-    HERKIN_CONTEXT_TOUCH, // boolean
-    HERKIN_CONTEXT_MOBILE, // boolean
-    HERKIN_CONTEXT_DOWNLOADS, // boolean
-    HERKIN_CONTEXT_GEO, // JSON array
-    HERKIN_CONTEXT_PERMISSIONS,  // JSON array
+    GOBLET_CONTEXT_TZ, // string
+    GOBLET_CONTEXT_RECORD, // boolean
+    GOBLET_CONTEXT_TOUCH, // boolean
+    GOBLET_CONTEXT_MOBILE, // boolean
+    GOBLET_CONTEXT_DOWNLOADS, // boolean
+    GOBLET_CONTEXT_GEO, // JSON array
+    GOBLET_CONTEXT_PERMISSIONS,  // JSON array
   } = process.env
 
   const opts = {
-    ...parseJsonEnvArr('permissions', HERKIN_CONTEXT_PERMISSIONS),
-    ...parseGeo(HERKIN_CONTEXT_GEO),
+    ...parseJsonEnvArr('permissions', GOBLET_CONTEXT_PERMISSIONS),
+    ...parseGeo(GOBLET_CONTEXT_GEO),
   }
 
-  addEnvToOpts(opts, 'timezoneId', HERKIN_CONTEXT_TZ)
-  addEnvToOpts(opts, 'hasTouch', toBool(HERKIN_CONTEXT_TOUCH))
-  addEnvToOpts(opts, 'isMobile', toBool(HERKIN_CONTEXT_MOBILE))
-  addEnvToOpts(opts, 'acceptDownloads', toBool(HERKIN_CONTEXT_DOWNLOADS))
+  addEnvToOpts(opts, 'timezoneId', GOBLET_CONTEXT_TZ)
+  addEnvToOpts(opts, 'hasTouch', toBool(GOBLET_CONTEXT_TOUCH))
+  addEnvToOpts(opts, 'isMobile', toBool(GOBLET_CONTEXT_MOBILE))
+  addEnvToOpts(opts, 'acceptDownloads', toBool(GOBLET_CONTEXT_DOWNLOADS))
 
   const screenDims = getScreenDims()
-  parseRecord(opts, toBool(HERKIN_CONTEXT_RECORD), screenDims)
+  parseRecord(opts, toBool(GOBLET_CONTEXT_RECORD), screenDims)
 
   if(screenDims.height || screenDims.width){
     addEnvToOpts(opts, 'viewport', screenDims)

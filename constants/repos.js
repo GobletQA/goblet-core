@@ -27,7 +27,7 @@ const getRepoPaths = () => {
       values[key] = path.join(reposPath, name)
       return values
     },
-    { HERKIN_ROOT: rootDir, REPOS_PATH: reposPath }
+    { GOBLET_ROOT: rootDir, REPOS_PATH: reposPath }
   )
 
   return __REPO_PATHS

@@ -1,6 +1,11 @@
-const { parkin } = require('./instance')
+const { getParkinInstance } = require('./instance')
 
-const getStepHandler = (parkin, name) => parkin[name].bind(parkin)
+const getStepHandler = (name) => {
+  return (...args) => {
+    const parkin = getParkinInstance()
+    return parkin[name].apply(parkin, args)
+  }
+}
 
 /**
  * Cucumber-like step functions
@@ -9,9 +14,9 @@ const getStepHandler = (parkin, name) => parkin[name].bind(parkin)
  * Given('<some matcher>', () => doSomething(p))
  */
 module.exports = {
-  Given: getStepHandler(parkin, 'Given'),
-  When: getStepHandler(parkin, 'When'),
-  Then: getStepHandler(parkin, 'Then'),
-  And: getStepHandler(parkin, 'And'),
-  But: getStepHandler(parkin, 'But'),
+  Given: getStepHandler('Given'),
+  When: getStepHandler('When'),
+  Then: getStepHandler('Then'),
+  And: getStepHandler('And'),
+  But: getStepHandler('But'),
 }

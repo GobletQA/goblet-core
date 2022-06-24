@@ -11,7 +11,7 @@ const { getHerkinConfig } = require('./getHerkinConfig')
  */
 const getRepoHerkinDir = config => {
   config =
-    config && config.__VALID_HERKIN_CONFIG ? config : getHerkinConfig(config)
+    config && config.__VALID_GOBLET_CONFIG ? config : getHerkinConfig(config)
   const { repoRoot, workDir } = config.paths
 
   return workDir ? path.join(repoRoot, workDir) : repoRoot

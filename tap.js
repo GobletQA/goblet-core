@@ -4,9 +4,9 @@ const config = getHerkinConfig()
 const { serviceAccount, ...firebaseConfig } = config.firebase
 const {
   NODE_ENV,
-  HERKIN_USE_AUTH,
-  HERKIN_USE_VNC,
-  HERKIN_PW_SOCKET,
+  GOBLET_USE_AUTH,
+  GOBLET_USE_VNC,
+  GOBLET_PW_SOCKET,
   GITHUB_CLIENT_ID,
   GITHUB_AUTH_USERS,
   VNC_VIEW_WIDTH=1440,
@@ -20,14 +20,14 @@ module.exports = {
   keg: {
     envs: {
       'process.env.NODE_ENV': NODE_ENV,
-      'process.env.HERKIN_USE_AUTH': HERKIN_USE_AUTH,
-      'process.env.HERKIN_USE_VNC': HERKIN_USE_VNC,
-      'process.env.HERKIN_PW_SOCKET': HERKIN_PW_SOCKET,
+      'process.env.GOBLET_USE_AUTH': GOBLET_USE_AUTH,
+      'process.env.GOBLET_USE_VNC': GOBLET_USE_VNC,
+      'process.env.GOBLET_PW_SOCKET': GOBLET_PW_SOCKET,
       'process.env.GITHUB_CLIENT_ID': GITHUB_CLIENT_ID,
       'process.env.GITHUB_AUTH_USERS': GITHUB_AUTH_USERS,
       'process.env.VNC_VIEW_WIDTH': `${VNC_VIEW_WIDTH}`,
       'process.env.VNC_VIEW_HEIGHT': `${VNC_VIEW_HEIGHT}`,
-      'process.env.HERKIN_SERVER_HOST': config.server.host,
+      'process.env.GOBLET_SERVER_HOST': config.server.host,
       'process.env.SERVER_PORT': `${config.server.port}`,
       'process.env.WS_SERVER_CONFIG': JSON.stringify(config.server.sockr),
       ...(firebaseConfig.ui && {

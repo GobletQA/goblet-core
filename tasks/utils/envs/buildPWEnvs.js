@@ -13,37 +13,37 @@ const { noOpObj } = require('@keg-hub/jsutils')
  * @returns {Object} - env object with the ENVs added
  */
 const buildPWEnvs = (env={}, browser, params=noOpObj) => {
-  const { HERKIN_RUN_FROM_UI } = process.env
+  const { GOBLET_RUN_FROM_UI } = process.env
 
   // Check if running form the UI and set the display as well as spec result logging
-  if(HERKIN_RUN_FROM_UI){
+  if(GOBLET_RUN_FROM_UI){
     addEnv(env, 'DISPLAY', ':0.0')
     addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
   }
 
   // Playwright browser ENVs
-  addEnv(env, 'HERKIN_BROWSER', browser)
-  addEnv(env, 'HERKIN_SLOW_MO', params.slowMo)
-  addEnv(env, 'HERKIN_HEADLESS', params.headless)
-  addEnv(env, 'HERKIN_BROWSER_TIMEOUT', params.browserTimeout)
-  addEnv(env, 'HERKIN_BROWSER_DEVICES', params.devices, JSON.stringify(params.devices))
+  addEnv(env, 'GOBLET_BROWSER', browser)
+  addEnv(env, 'GOBLET_SLOW_MO', params.slowMo)
+  addEnv(env, 'GOBLET_HEADLESS', params.headless)
+  addEnv(env, 'GOBLET_BROWSER_TIMEOUT', params.browserTimeout)
+  addEnv(env, 'GOBLET_BROWSER_DEVICES', params.devices, JSON.stringify(params.devices))
 
   // Playwright Context ENVs
-  addEnv(env, 'HERKIN_CONTEXT_TZ', params.timezone)
-  addEnv(env, 'HERKIN_CONTEXT_WIDTH', params.width)
-  addEnv(env, 'HERKIN_CONTEXT_HEIGHT', params.height)
-  addEnv(env, 'HERKIN_CONTEXT_RECORD', params.record)
-  addEnv(env, 'HERKIN_CONTEXT_TOUCH', params.hasTouch)
-  addEnv(env, 'HERKIN_CONTEXT_MOBILE', params.isMobile)
-  addEnv(env, 'HERKIN_CONTEXT_DOWNLOADS', params.downloads)
-  addEnv(env, 'HERKIN_CONTEXT_GEO', params.geolocation, JSON.stringify(params.geolocation))
-  addEnv(env, 'HERKIN_CONTEXT_PERMISSIONS', params.permissions, JSON.stringify(params.permissions))
+  addEnv(env, 'GOBLET_CONTEXT_TZ', params.timezone)
+  addEnv(env, 'GOBLET_CONTEXT_WIDTH', params.width)
+  addEnv(env, 'GOBLET_CONTEXT_HEIGHT', params.height)
+  addEnv(env, 'GOBLET_CONTEXT_RECORD', params.record)
+  addEnv(env, 'GOBLET_CONTEXT_TOUCH', params.hasTouch)
+  addEnv(env, 'GOBLET_CONTEXT_MOBILE', params.isMobile)
+  addEnv(env, 'GOBLET_CONTEXT_DOWNLOADS', params.downloads)
+  addEnv(env, 'GOBLET_CONTEXT_GEO', params.geolocation, JSON.stringify(params.geolocation))
+  addEnv(env, 'GOBLET_CONTEXT_PERMISSIONS', params.permissions, JSON.stringify(params.permissions))
 
   
   params.debug && addEnv(env, 'DEBUG', 'pw:api')
   params.debug &&
   params.devtools &&
-  addEnv(env, 'HERKIN_DEV_TOOLS', params.devtools)
+  addEnv(env, 'GOBLET_DEV_TOOLS', params.devtools)
   
   env.NODE_ENV = `test`
 

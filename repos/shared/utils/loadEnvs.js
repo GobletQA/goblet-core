@@ -7,7 +7,7 @@ const nodeEnv = process.env.NODE_ENV || `local`
 const testRemovePrefix = [
   'KEG_',
   'DOC_',
-  'HERKIN_JWT_',
+  'GOBLET_JWT_',
   'GITHUB_'
 ]
 

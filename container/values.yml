@@ -77,7 +77,7 @@ env:
   VNC_VIEW_WIDTH: 1440
 
   # How the FE connects to the BE
-  HERKIN_SERVER_HOST: 0.0.0.0
+  GOBLET_SERVER_HOST: 0.0.0.0
 
   # URL where the screencast is being displayed
   # This is the URL of the server the proxy connects to
@@ -104,26 +104,26 @@ env:
   GIT_APP_URL: https://github.com/KegHub/keg-herkin.git
   GIT_APP_BRANCH: master
 
-  HERKIN_MOUNT_ROOT: /keg/repos
-  HERKIN_LOCAL_MOUNT: herkin-local/current
+  GOBLET_MOUNT_ROOT: /keg/repos
+  GOBLET_LOCAL_MOUNT: herkin-local/current
 
   # Define the type of API server to run => all | backend | screencast
   # TODO: @lance-tipton - Add to tasks as an option
-  HERKIN_API_TYPE: 'all'
+  GOBLET_API_TYPE: 'all'
 
   # Disable using the trafik proxy, use tap-proxy instead
   KEG_USE_PROXY: true
 
   # Default to the backend api and host
   # But should be set when running as own server
-  # HERKIN_SOCKET_PORT: ${API_PORT}
-  # HERKIN_SOCKET_HOST:$ {HERKIN_SERVER_HOST}
+  # GOBLET_SOCKET_PORT: ${API_PORT}
+  # GOBLET_SOCKET_HOST:$ {GOBLET_SERVER_HOST}
 
-  HERKIN_JWT_EXP: 7200000
-  HERKIN_JWT_SECRET: k3G-H3rkiN-1234
-  HERKIN_JWT_CREDENTIALS: true
-  HERKIN_JWT_REFRESH_EXP: 7200000
-  HERKIN_JWT_REFRESH_SECRET: 4321-nIKR3h-g3K
+  GOBLET_JWT_EXP: 7200000
+  GOBLET_JWT_SECRET: k3G-H3rkiN-1234
+  GOBLET_JWT_CREDENTIALS: true
+  GOBLET_JWT_REFRESH_EXP: 7200000
+  GOBLET_JWT_REFRESH_SECRET: 4321-nIKR3h-g3K
   AZ_CONTAINER_REGISTRY: KegRegistryCentralUS
 
   # TODO: @lance-tipton - Make this more dynamic - value comes from firebase?
