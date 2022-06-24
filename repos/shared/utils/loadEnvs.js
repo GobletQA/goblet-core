@@ -2,7 +2,6 @@ const path = require('path')
 const { addToProcess } = require('@keg-hub/cli-utils')
 
 const appRoot = path.join(__dirname, '../../../')
-const nodeEnv = process.env.NODE_ENV || `local`
 
 const testRemovePrefix = [
   'KEG_',
@@ -31,6 +30,8 @@ let __LOADED_ENVS__
  * @returns {Object} - Loaded Envs object
  */
 const loadEnvs = (processAdd) => {
+  const nodeEnv = process.env.NODE_ENV || `local`
+
   if(process.env.JEST_WORKER_ID !== undefined){
     Object.entries(process.env)
       .map(([key, val ]) => {

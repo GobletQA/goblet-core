@@ -1,4 +1,5 @@
-const { jestAliases, registerAliases } = require('./aliases.config')
+const path = require('path')
+const { jestAliases, registerAliases, aliases } = require('./aliases.config')
 registerAliases()
 
 const { getHerkinConfig } = require('HerkinSharedConfig')
@@ -19,6 +20,8 @@ const { buildTestMatchFiles } = require('HerkinSharedUtils/buildTestMatchFiles')
  * @returns {Object} - Jest config object
  */
 const jestConfig = (herkin, opts=noOpObj) => {
+  const { GOBLET_MOUNT_ROOT, JEST_HTML_REPORTER_OUTPUT_PATH } = process.env
+
   herkin = herkin || getHerkinConfig()
   const { herkinRoot } = herkin.internalPaths
   const title = opts.title || opts.type
@@ -28,13 +31,13 @@ const jestConfig = (herkin, opts=noOpObj) => {
     : noPropArr
 
   const reporters = ['default']
-  process.env.JEST_HTML_REPORTER_OUTPUT_PATH &&
+  JEST_HTML_REPORTER_OUTPUT_PATH &&
     reporters.push([
       // Since the root is not keg-herkin, we have to define the full path to the reporter
       `${herkinRoot}/node_modules/jest-html-reporter`,
       {
         pageTitle: `${title ? capitalize(title) : ``} Test Results`.trim(),
-        outputPath: process.env.JEST_HTML_REPORTER_OUTPUT_PATH,
+        outputPath: JEST_HTML_REPORTER_OUTPUT_PATH,
       },
     ])
 
@@ -45,10 +48,14 @@ const jestConfig = (herkin, opts=noOpObj) => {
     // Jest no loading tests outside of the rootDir
     // So set the root to be the parent of keg-herkin and the repos dir
     // If no rootDir override is set
-    rootDir: opts.rootDir || '/keg',
+    rootDir: opts.rootDir ||
+      path.dirname(GOBLET_MOUNT_ROOT) ||
+      path.dirname(aliases.HerkinRoot) ||
+      '/keg',
   }
 }
 
 module.exports = {
   jestConfig
 }
+

@@ -64,7 +64,7 @@ module.exports = async () => {
   const { devices, ...browserOpts } = taskEnvToBrowserOpts(herkin)
 
   const { testUtilsDir } = herkin.internalPaths
-  
+
   return {
     ...jestConfig(herkin, {
       ext: 'feature',
