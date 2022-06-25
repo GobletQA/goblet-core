@@ -23,8 +23,6 @@ const getBrowsers = params => {
     browsers=noPropArr,
   } = params
 
-  const isMac = getOS() === 'mac'
-
   // get an array of browsers from the browsers string, comma or space delimited
   const browsersArr = eitherArr(browsers, isStr(browsers) ? browsers.split(/\s|,/gi) : noPropArr)
     .map(type => browserMap[type] || type)
@@ -35,7 +33,7 @@ const getBrowsers = params => {
       ...browsersArr,
       (allBrowsers || firefox) && 'firefox',
       (allBrowsers || chromium) && 'chromium',
-      isMac && (allBrowsers || webkit) && 'webkit',
+      (allBrowsers || webkit) && 'webkit',
     ])
   ).filter(Boolean)
 

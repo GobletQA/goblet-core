@@ -67,9 +67,15 @@ const taskOptions = {
     },
     bail: {
       description: 'Stops all tests once a single step fails',
-      example: '--bail',
       default: false,
+      example: '--bail',
     },
+    jestDebug: {
+      default: false,
+      example: '--jestDebug',
+      env: `GOBLET_JEST_DEBUG`,
+      description: 'Pass the --debug flag to the jest command',
+    }
   },
   docker: {
     container: {
@@ -167,20 +173,22 @@ const taskOptions = {
       example: `--webkit`,
     },
     headless: {
-      alias: ['hl'],
-      description: 'Launch the browser in headless mode',
       type: 'bool',
-      default: false,
+      alias: ['hl'],
+      env: `GOBLET_HEADLESS`,
       example: `--no-headless`,
+      description: 'Launch the browser in headless mode',
     },
     slowMo: {
+      type: 'number',
+      env: 'GOBLET_SLOW_MO',
+      example: '--slowMo 500',
       description:
         'Speed actions within the browser will be performed in milliseconds',
-      type: 'number',
-      example: '--slowMo 500',
     },
     browserTimeout: {
       type: 'number',
+      env: `GOBLET_BROWSER_TIMEOUT`,
       example: '--browserTimeout 10000', // 10 seconds
       description:
         'Amount of time until a browser request will timeout should be less the timeout option',
@@ -188,22 +196,26 @@ const taskOptions = {
     devices: {
       type: 'array',
       alias: ['device'],
+      env: `GOBLET_BROWSER_DEVICES`,
       example: '--devices Pixel-2,Galaxy-S5-landscape',
       description: 'Comma separated list of devices to emulate running a browser. Spaces in device names should use a "-" instead.  See https://github.com/microsoft/playwright/blob/5ba7903ba098586a13745e0d7ac894f1d55d47aa/packages/playwright-core/src/server/deviceDescriptorsSource.json for a list of devices.',
     },
     launchType: {
       default: 'launch',
+      env: `GOBLET_BROWSER_LAUNCH_TYPE`,
       example: `--launchType persistent`,
       allowed: ['launch', 'l', 'persistent', 'p', 'server', 's'],
       description: `Sets the playwright browser launch type method used to launch the browser`,
     },
     debug: {
+      env: 'DEBUG',
       description: 'Runs with playwright debug mode activated',
       example: 'keg herkin cr test --debug',
       default: false,
     },
     devtools: {
       example: '--devtools',
+      env: 'GOBLET_DEV_TOOLS',
       description:
         'Open devtools be automatically when the browser opens. The debug option must also be set true',
     }

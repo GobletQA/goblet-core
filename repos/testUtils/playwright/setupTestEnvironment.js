@@ -24,7 +24,7 @@ const initialize = async () => {
       {
         ...launchOptions,
         type,
-        ...global.herkinBrowserOpts,
+        ...global.gobletBrowserOpts,
       },
       false
     )

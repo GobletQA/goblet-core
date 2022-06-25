@@ -32,12 +32,13 @@ const runBdd = async args => {
   )
 
   const commands = browsers.map(
-    browser => () =>
-      dockerCmd(
+    browser => () => {
+      return dockerCmd(
         params.container,
         cmdArgs,
         buildBddEnvs(browser, params, reportPath, testTypes.feature),
       )
+    }
   )
 
   // Run each of the test command in sequence
@@ -76,6 +77,7 @@ module.exports = {
         'timeout',
         'browserTimeout',
         'debug',
+        `jestDebug`,
         'devtools',
         'container',
         'mode',
