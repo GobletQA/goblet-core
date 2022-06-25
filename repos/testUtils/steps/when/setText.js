@@ -1,7 +1,6 @@
 const { When } = require('HerkinParkin')
 const { get } = require('@keg-hub/jsutils')
 const { getBrowserContext } = require('HerkinTestEnv')
-const { buildScreenShotName } = require('../../support/buildScreenShotName')
 
 const { getPage } = getBrowserContext()
 
