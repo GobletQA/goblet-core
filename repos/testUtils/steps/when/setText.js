@@ -1,7 +1,9 @@
 const { When } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinTestEnv')
-const { getPage } = getBrowserContext()
 const { get } = require('@keg-hub/jsutils')
+const { getBrowserContext } = require('HerkinTestEnv')
+const { buildScreenShotName } = require('../../support/buildScreenShotName')
+
+const { getPage } = getBrowserContext()
 
 /**
  * Sets the input text of selector to data
@@ -11,7 +13,15 @@ const { get } = require('@keg-hub/jsutils')
  */
 const setText = async (selector, data, world) => {
   const page = await getPage()
-  await page.click(selector)
+  // Actionability checks (Auto-Waiting) seem to fail in headless mode
+  // So we use locator.waitFor to ensure the element exist on the dom
+  // Then pass {force: true} options to page.click because we know it exists
+  const element = await page.locator(selector)
+  await element.waitFor()
+  await page.click(selector, {
+    force: true
+  })
+
   //clear value before setting otherwise data is appended to end of existing value
   await page.fill(selector, '')
 

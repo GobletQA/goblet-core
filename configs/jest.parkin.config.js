@@ -86,6 +86,7 @@ module.exports = async () => {
     ],
     /** Pass on the browser options defined from the task that started the process */
     globals: {
+      paths: herkin.paths,
       gobletBrowserOpts: browserOpts,
     },
     /** Add all support and step files and ensure they are loaded before running the tests */

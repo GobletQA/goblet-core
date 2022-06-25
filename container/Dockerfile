@@ -8,6 +8,7 @@ WORKDIR /keg/tap
 
 # Copy in the package.json
 COPY package.json package.json
+COPY yarn.lock yarn.lock
 
 # Install node_modules in a cached directory
 # This allows the Docker cache to be based off the package.json file 

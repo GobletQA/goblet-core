@@ -16,8 +16,13 @@ const clickDescendent = async (selector, world) => {
     throw new Error(
       `Found no descendent of "${world.meta.ancestorSelector}", with selector: "${selector}"`
     )
-
-  return descendent.click()
+  // Actionability checks (Auto-Waiting) seem to fail in headless mode
+  // So we use locator.waitFor to ensure the element exist on the dom
+  // Then pass {force: true} options to page.click because we know it exists
+  await descendent.waitFor()
+  return descendent.click({
+    force: true
+  })
 }
 
 When('I click the descendent element {string}', clickDescendent, {

@@ -1,5 +1,5 @@
 const path = require('path')
-const { jestAliases, registerAliases, aliases } = require('./aliases.config')
+const { jestAliases, registerAliases } = require('./aliases.config')
 registerAliases()
 
 const { getHerkinConfig } = require('HerkinSharedConfig')
@@ -48,10 +48,7 @@ const jestConfig = (herkin, opts=noOpObj) => {
     // Jest no loading tests outside of the rootDir
     // So set the root to be the parent of keg-herkin and the repos dir
     // If no rootDir override is set
-    rootDir: opts.rootDir ||
-      path.dirname(GOBLET_MOUNT_ROOT) ||
-      path.dirname(aliases.HerkinRoot) ||
-      '/keg',
+    rootDir: opts.rootDir || path.dirname(GOBLET_MOUNT_ROOT) || '/keg',
   }
 }
 

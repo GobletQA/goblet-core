@@ -7,7 +7,7 @@ const { getPage } = getBrowserContext()
  */
 const getElement = async selector => {
   const page = await getPage()
-  const element = await page.$(selector)
+  const element = await page.locator(selector)
   if (!element) throw new Error(`No element found with selector "${selector}"`)
 
   return element

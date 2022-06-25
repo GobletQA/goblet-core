@@ -51,6 +51,14 @@
 
 
 ## UI Updates
+* **Editor**
+  * Allow multiple files open within an editor
+  * Show tab for each open file
+  * Clicking on tab switches to that file - Like a normal editor
+* **Terminal**
+  * Don't clear the terminal history 
+  * Keep the history of each run, allow referring back to it
+  * Allow text selection
 * **Fix Definition/Definitions editors**
   * Have the definition editor show based on the selected step ( maybe? )
   * Allow selecting different steps to edit
@@ -85,6 +93,7 @@
     * Slide-out menu 
       * Should allow vertical scrolling based on the content height
       * As items are opened/closed, the scroll height should adjust based on it's height
+
 
 
 ## Parkin

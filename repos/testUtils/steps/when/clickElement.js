@@ -9,7 +9,16 @@ const { getElement } = require('HerkinPlaywright')
  */
 const clickElement = async selector => {
   const page = await getPage()
-  return page.click(selector)
+  // Actionability checks (Auto-Waiting) seem to fail in headless mode
+  // So we use locator.waitFor to ensure the element exist on the dom
+  // Then pass {force: true} options to page.click because we know it exists
+  const element = await page.locator(selector)
+  await element.waitFor()
+  return page.click(selector, {
+    force: true
+  })
+
+
 }
 
 When('I click the element {string}', clickElement, {
