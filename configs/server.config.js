@@ -62,6 +62,7 @@ const generateOrigins = () => {
 
 const serverConfig = {
   port: API_PORT,
+  environment: nodeEnv,
   securePort: API_SECURE_PORT,
   path: GOBLET_SOCKR_PATH,
   host: GOBLET_SERVER_HOST,
