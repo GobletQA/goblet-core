@@ -1,5 +1,6 @@
 const path = require('path')
 const glob = require('glob')
+const { parkinOverride } = require('./parkinOverride')
 const { DefinitionsParser } = require('./definitionsParser')
 const { getDefaultHerkinConfig } = require('HerkinSharedConfig')
 const { getPathFromBase } = require('HerkinSharedUtils/getPathFromBase')
@@ -31,12 +32,12 @@ const loadDefinitionsFiles = stepsDir => {
  *
  * @returns {Array} - Loaded Definitions models
  */
-const parseDefinitions = async (repo, definitionFiles) => {
+const parseDefinitions = async (repo, overrideParkin, definitionFiles) => {
   return definitionFiles.reduce(async (toResolve, file) => {
     const loaded = await toResolve
     if (!file) return loaded
 
-    const fileModel = await DefinitionsParser.getDefinitions(file, repo)
+    const fileModel = await DefinitionsParser.getDefinitions(file, repo, overrideParkin)
     fileModel && loaded.push(fileModel)
 
     return loaded
@@ -66,11 +67,12 @@ const loadDefinitions = async (repo, herkinConfig) => {
   // The repo world may have been updated since the last time load definitions was called
   // Call refreshWorld to ensure repo and parkin have an updated world
   await repo.refreshWorld()
+  const overrideParkin = parkinOverride(repo)
 
   const clientDefinitions =
-    (await parseDefinitions(repo, definitionFiles)) || []
+    (await parseDefinitions(repo, overrideParkin, definitionFiles)) || []
   const herkinDefinitions =
-    (await parseDefinitions(repo, herkinDefinitionFiles)) || []
+    (await parseDefinitions(repo, overrideParkin, herkinDefinitionFiles)) || []
 
   // all the definition file models
   const defs = clientDefinitions.concat(herkinDefinitions)

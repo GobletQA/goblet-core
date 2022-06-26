@@ -1,6 +1,7 @@
 const fs = require('fs')
 const { Logger } = require('@keg-hub/cli-utils')
 const { definitionRequire } = require('./definitionRequire')
+const { requireOverride, parkinCheck } = require('./parkinOverride')
 const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
 
 class DefinitionsParser {
@@ -16,10 +17,10 @@ class DefinitionsParser {
    *
    * @returns {Array} - Loaded Definition file model
    */
-  getDefinitions = async (filePath, repo) => {
+  getDefinitions = async (filePath, repo, overrideParkin) => {
     try {
 
-      const { fileModel } = await this.parseDefinition(filePath, repo)
+      const { fileModel } = await this.parseDefinition(filePath, repo, overrideParkin)
 
       // The definitions get auto-loaded into the parkin instance
       // from the require call in the parseDefinition method below
@@ -49,9 +50,11 @@ class DefinitionsParser {
     }
   }
 
-  parseDefinition = (filePath, repo) => {
+  parseDefinition = (filePath, repo, overrideMethod) => {
     return new Promise((res, rej) => {
       let requireError
+      const requireReset = overrideMethod && requireOverride(parkinCheck, overrideMethod)
+
       try {
         // Always clear out the node require cache
         // This ensure we get a fresh file every time
@@ -70,6 +73,9 @@ class DefinitionsParser {
         Logger.warn(`[Parse Definition Error] Could not load step definition => ${filePath}`)
         Logger.error(err)
         requireError = err.message 
+      }
+      finally {
+        requireReset && requireReset()
       }
 
       // Read the file to get it's content and build the fileModel
