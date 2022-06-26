@@ -150,9 +150,9 @@ const loadConfigFromBase = base => {
     GOBLET_CONFIG_BASE,
     GOBLET_RUN_FROM_CI,
   } = process.env
-  
+
   base = base || GOBLET_CONFIG_BASE
-  
+
   if (!base) return null
 
   const cleanedDir = path.normalize(base)

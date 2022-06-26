@@ -62,15 +62,15 @@ module.exports = async () => {
   const herkin = getHerkinConfig()
   const baseDir = getRepoHerkinDir(herkin)
   const { devices, ...browserOpts } = taskEnvToBrowserOpts(herkin)
-
   const { testUtilsDir } = herkin.internalPaths
+  const defConf = jestConfig(herkin, {
+    ext: 'feature',
+    title: 'Parkin',
+    testDir: path.join(baseDir, herkin.paths.featuresDir),
+  })
 
   return {
-    ...jestConfig(herkin, {
-      ext: 'feature',
-      title: 'Parkin',
-      testDir: path.join(baseDir, herkin.paths.featuresDir),
-    }),
+    ...defConf,
     /**
      * Ensure only one test runs at a time
      * Allows the tests to run in sync

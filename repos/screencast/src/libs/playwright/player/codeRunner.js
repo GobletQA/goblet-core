@@ -12,7 +12,6 @@ const { getDefinitions } = require('HerkinSharedRepo/getDefinitions')
  * But it does not include a timeout / describe method
  * May need to replace, or extend it's functionality
  */
-const { Test } = require('tiny-jest')
 
 const setTestGlobals = (Runner) => {
   const file = Runner?.player?.options?.activeFile

@@ -1,3 +1,4 @@
+const os = require("os")
 const path = require('path')
 const { jestAliases, registerAliases } = require('./aliases.config')
 registerAliases()
@@ -20,7 +21,7 @@ const { buildTestMatchFiles } = require('HerkinSharedUtils/buildTestMatchFiles')
  * @returns {Object} - Jest config object
  */
 const jestConfig = (herkin, opts=noOpObj) => {
-  const { GOBLET_MOUNT_ROOT, JEST_HTML_REPORTER_OUTPUT_PATH } = process.env
+  const { GOBLET_CONFIG_BASE, GOBLET_MOUNT_ROOT, JEST_HTML_REPORTER_OUTPUT_PATH } = process.env
 
   herkin = herkin || getHerkinConfig()
   const { herkinRoot } = herkin.internalPaths
@@ -44,11 +45,19 @@ const jestConfig = (herkin, opts=noOpObj) => {
   return {
     reporters,
     testMatch,
+    // This seems to be needed based on how the github action is setup
+    // But it may be a better option then sym-linking the keg-herkin node_modules to ~/.node_modules
+    // Need to investigate it
+    modulePaths: [
+      path.join(GOBLET_CONFIG_BASE, `node_modules`),
+      path.join(herkinRoot, `node_modules`),
+      path.join(os.homedir(), `.node_modules`)
+    ],
     moduleNameMapper: jestAliases,
     // Jest no loading tests outside of the rootDir
     // So set the root to be the parent of keg-herkin and the repos dir
     // If no rootDir override is set
-    rootDir: opts.rootDir || path.dirname(GOBLET_MOUNT_ROOT) || '/keg',
+    rootDir: opts.rootDir || GOBLET_MOUNT_ROOT || '/keg',
   }
 }
 

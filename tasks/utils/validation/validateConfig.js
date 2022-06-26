@@ -68,14 +68,15 @@ const checkFilePaths = (paths, expectedPaths) => {
 
   Object.entries(relativePaths).map(([key, testPath]) => {
     const fullPath = path.join(baseDir, testPath)
+    expectedPaths.includes(key) &&
+      !fs.existsSync(fullPath) &&
+      fs.mkdir(fullPath, noOp)
+  })
 
-    if (!fs.existsSync(fullPath)) fs.mkdir(fullPath, noOp)
-
-    if (!expectedPaths.includes(key))
-      throw new HerkinConfigError(
-        `Keys in ".paths" must be one of [${expectedPaths.join(', ')}].
-          Found: key = ${key}, path = ${path}`
-      )
+  const relativePathKeys = Object.keys(relativePaths)
+  expectedPaths.map(key => {
+    if(key !== `repoRoot` && key !== `workDir` && !relativePathKeys.includes(key))
+      throw new HerkinConfigError(`Required Herkin-Config key "path.${key}" does not exist`)
   })
 }
 
