@@ -9,27 +9,19 @@ const { getPage } = getBrowserContext()
 const pageTitleIs = async title => {
   const page = await getPage()
   const actualTitle = await page.title()
-  if (title !== actualTitle)
-    throw new Error(
-      'Actual page title is "' +
-        actualTitle +
-        '" but is expected to be "' +
-        title +
-        '".'
-    )
+  expect(title).toBe(actualTitle)
 }
 
 Then('the page title is {string}', pageTitleIs, {
-  description: `Verifies page title matches the expected string.
-  
-Module : pageTitleIs`,
+  description: `Verifies page title matches the expected string.`,
   expressions: [
     {
       type: 'string',
       description: `String expected to match the page title.`,
-      example: 'Simpleville - Hotels',
+      example: 'Goblet Blog',
     },
   ],
+  module: `pageTitleIs`
 })
 
 module.exports = { pageTitleIs }

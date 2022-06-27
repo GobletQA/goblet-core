@@ -14,11 +14,12 @@ const { getDefinitions } = require('HerkinSharedRepo/getDefinitions')
  */
 
 const setTestGlobals = (Runner) => {
-  const file = Runner?.player?.options?.activeFile
-  console.log(`------- file -------`)
-  console.log(file)
+
   const PTE = new ParkinTest({
-    
+    specDone: Runner.onSpecDone,
+    suiteDone: Runner.onSuiteDone,
+    specStarted: Runner.onSpecStarted,
+    suiteStarted: Runner.onSuiteStarted,
   })
 
   global.it = PTE.it
@@ -42,8 +43,9 @@ const setupGlobals = (Runner) => {
 }
 
 const setupParkin = async (Runner) => {
-  const PK = new Parkin(Runner?.player?.repo?.world || getWorld())
-  setParkinInstance(PK)
+  PK = Runner?.player?.repo?.parkin
+  if(!PK) throw new Error(`Repo is missing a parkin instance`)
+
   await getDefinitions(Runner?.player?.repo)
   return PK
 }
@@ -60,10 +62,12 @@ class CodeRunner {
    * Player Class instance
    */
   player = undefined
+  
+  exec = undefined
 
   constructor(player) {
     this.player = player
-    this.tester = setupGlobals(this)
+    this.PTE = setupGlobals(this)
   }
   
   /**
@@ -71,17 +75,36 @@ class CodeRunner {
    */
   run = async (content) => {
     this.PK = await setupParkin(this)
-    await this.PK.run(content)
-    const results = await this.tester.run()
-    
-    console.log(`------- results -------`)
-    console.log(results)
 
+    await this.PK.run(content)
+    const results = await this.PTE.run()
 
     return results
   }
 
+  onSpecDone = (...args) => {
+    console.log(`------- onSpecDone -------`)
+    console.log(...args)
+    
+  }
   
+  onSuiteDone = (...args) => {
+    console.log(`------- onSuiteDone -------`)
+    console.log(...args)
+    
+  }
+  
+  onSpecStarted = (...args) => {
+    console.log(`------- onSpecStarted -------`)
+    console.log(...args)
+    
+  }
+  
+  onSuiteStarted = (...args) => {
+    console.log(`------- onSuiteStarted -------`)
+    console.log(...args)
+    
+  }
 
 }
 
