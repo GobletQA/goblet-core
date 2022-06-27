@@ -180,6 +180,7 @@ export const ConnectRepoModal = props => {
           repoUrl={repoUrl}
           onError={onError}
           disabled={disabled}
+          newBranch={branchName}
           onConnect={onLoadRepo}
           createBranch={createBranch}
           onConnecting={onConnecting}

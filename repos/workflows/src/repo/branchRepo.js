@@ -43,9 +43,9 @@ const getBranchHash = async ({ branch, remote, token, log }) => {
   )
 }
 
-const createNewBranch = async ({ branch, remote, token, log }, hash) => {
+const createNewBranch = async ({ branch, newBranch, remote, token, log }, hash) => {
   const remoteUrl = buildAPIUrl(remote, [`git/refs`])
-  const newBranch = `${branch}-herkin-${new Date().getTime()}`
+  newBranch = newBranch || `${branch}-${new Date().getTime()}`
 
   const params = {
     method: 'POST',

@@ -16,6 +16,7 @@ export const ConnectRepoButton = props => {
     onError,
     children,
     disabled,
+    newBranch,
     onConnecting,
     createBranch,
     onConnect: onConnectCb,
@@ -44,6 +45,7 @@ export const ConnectRepoButton = props => {
     const resp = await connectRepo({
       branch,
       repoUrl,
+      newBranch,
       createBranch,
       username: user.username,
     })
@@ -57,7 +59,16 @@ export const ConnectRepoButton = props => {
           new Error(`Failed to mount repo. Please try again later`),
           resp
         )
-  }, [user, branch, repoUrl, createBranch, onError, onConnectCb, onConnecting])
+  }, [
+    user,
+    branch,
+    repoUrl,
+    onError,
+    newBranch,
+    onConnectCb,
+    onConnecting,
+    createBranch,
+  ])
 
   return (
     <HerkinButton

@@ -7,7 +7,7 @@ const { loadRepoContent } = require('HerkinSharedRepo/loadRepoContent')
  */
 const connectRepo = asyncWrap(async (req, res) => {
   const { iat, exp, ...user } = req.user
-  
+
   // TODO: Add req.body / req.user validation before running
   const repo = await Repo.fromWorkflow({
     ...user,

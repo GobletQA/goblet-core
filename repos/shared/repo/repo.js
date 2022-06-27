@@ -76,7 +76,16 @@ class Repo {
    *
    * @returns {Object} - Response from the initializeHerkin workflow
    */
-  static fromWorkflow = async ({ repoUrl, branch, createBranch, username, token }) => {
+  static fromWorkflow = async (args) => {
+    const {
+      token,
+      branch,
+      repoUrl,
+      username,
+      newBranch,
+      createBranch,
+    } = args
+
     const url = new URL(repoUrl)
     const name = url.pathname.split('/').pop().replace('.git', '')
     const provider = url.host.split('.').slice(0).join('.')
@@ -87,6 +96,7 @@ class Repo {
         token,
         branch,
         provider,
+        newBranch,
         createBranch,
         url: repoUrl,
       },

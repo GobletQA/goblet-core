@@ -2,7 +2,7 @@ const path = require('path')
 const { throwErr } = require('./throwErr')
 const { ensurePath } = require('./ensurePath')
 const { getRepoPath } = require('./getRepoPath')
-const { isObj, exists } = require('@keg-hub/jsutils')
+const { isObj, exists, isStr } = require('@keg-hub/jsutils')
 
 /**
  * Builds the arguments required for syncing a git repo
@@ -38,6 +38,7 @@ const configureGitArgs = async args => {
     branch: repo.branch,
     username: user.gitUser,
     name: path.basename(repoPath),
+    newBranch: isStr(repo.newBranch) && repo.newBranch,
     token: token || repo.token || user.token || process.env.GOBLET_GIT_TOKEN,
   }
 }
