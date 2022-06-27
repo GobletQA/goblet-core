@@ -9,6 +9,22 @@ import { noOp, checkCall } from '@keg-hub/jsutils'
 import { getWorldVal } from 'HKUtils/repo/getWorldVal'
 
 
+const buildOptions = ({ params, testCmd, activeFile, appUrl }) => {
+  return {
+    ref: 'page',
+    action: {
+      props: [
+        {
+          params,
+          testCmd,
+          activeFile,
+        },
+        appUrl
+      ],
+      action: PLAY_ACTIONS.START
+    }
+  }
+}
 
 
 /**
@@ -43,22 +59,14 @@ export const runTests = async (
     fileModel: activeFile,
   })
 
-  WSService.runCommand(testCmd, params)
-  // TODO: Update to run tests with this instead
-  // const options = {
-  //   ref: 'page',
-  //   action: {
-  //     props: [
-  //       {
-  //         params,
-  //         testCmd,
-  //         activeFile,
-  //       },
-  //       appUrl
-  //     ],
-  //     action: PLAY_ACTIONS.START
-  //   }
-  // }
+  const options = buildOptions({
+    appUrl,
+    params,
+    testCmd,
+    activeFile,
+  })
 
-  // WSService.emit(SOCKR_MSG_TYPES.BROWSER_RUN_TESTS, options)
+  // WSService.runCommand(testCmd, params)
+
+  WSService.emit(SOCKR_MSG_TYPES.BROWSER_RUN_TESTS, options)
 }
