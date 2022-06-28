@@ -76,7 +76,7 @@ const isAncestorTo = async (
 
 // example: The element ".foo" is parent/ancestor to child/descendent
 // Given(
-//   'the element {string} is parent to {string}',
+//   'the element {string} is parent of {string}',
 //   (selector, childSelector, world) => isAncestorTo(selector, 'child', childSelector, world),
 //   {
 //     description: `Creates a parent child relationship between two elements.`,
@@ -94,9 +94,5 @@ const isAncestorTo = async (
 //     ]
 //   }
 // )
-// Given(
-//   'the element {string} is ancestor to {string}',
-//   (selector, descendentSelector, world) => isAncestorTo(selector, 'descendent', descendentSelector, world)
-// )
 
-//module.exports = { isAncestorTo }
+// module.exports = { isAncestorTo }

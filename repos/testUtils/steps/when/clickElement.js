@@ -1,7 +1,7 @@
 const { When } = require('HerkinParkin')
 const { getBrowserContext } = require('HerkinTestEnv')
 const { getPage } = getBrowserContext()
-const { getElement } = require('HerkinPlaywright')
+const { getLocator } = require('HerkinPlaywright')
 
 /**
  * Click the element matching `selector`
@@ -12,12 +12,10 @@ const clickElement = async selector => {
   // Actionability checks (Auto-Waiting) seem to fail in headless mode
   // So we use locator.waitFor to ensure the element exist on the dom
   // Then pass {force: true} options to page.click because we know it exists
-  const element = await page.locator(selector)
-  await element.waitFor()
+  await getLocator(selector)
   return page.click(selector, {
     force: true
   })
-
 
 }
 

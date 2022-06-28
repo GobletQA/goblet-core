@@ -1,5 +1,5 @@
 const { Then } = require('HerkinParkin')
-const { getElement } = require('HerkinPlaywright')
+const { getLocator } = require('HerkinPlaywright')
 
 const checkedStates = ['checked', 'unchecked']
 
@@ -12,7 +12,7 @@ const getCheckedState = async (selector, state) => {
   if (!checkedStates.includes(state))
     throw new Error('Invalid Check State: ' + state)
 
-  const box = await getElement(selector)
+  const box = await getLocator(selector)
   const checkedState = await box.isChecked() //boolean
   const stateConversion = state === 'checked' ? true : false
   if (stateConversion !== checkedState) {

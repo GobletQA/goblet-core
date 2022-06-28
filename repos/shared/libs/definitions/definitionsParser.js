@@ -71,7 +71,8 @@ class DefinitionsParser {
       }
       catch (err) {
         Logger.warn(`[Parse Definition Error] Could not load step definition => ${filePath}`)
-        Logger.error(err)
+        Logger.error(err.stack)
+        Logger.empty()
         requireError = err.message 
       }
       finally {

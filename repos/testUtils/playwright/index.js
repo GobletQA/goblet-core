@@ -4,4 +4,6 @@ module.exports = {
   ...require('./getElements'),
   ...require('./evalElement'),
   ...require('./evalAll'),
+  ...require('./getLocator'),
+  ...require('./getLocators'),
 }

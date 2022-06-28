@@ -1,5 +1,7 @@
 module.exports = {
   ...require('./openUrl'),
-  ...require('./setAncestor'),
   ...require('./isAncestorTo'),
+  ...require('./saveElementCount'),
+  ...require('./greaterThanLessThan'),
+  ...require('./saveElementFromSelector'),
 }

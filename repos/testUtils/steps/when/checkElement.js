@@ -1,5 +1,5 @@
 const { When } = require('HerkinParkin')
-const { getElement } = require('HerkinPlaywright')
+const { getLocator } = require('HerkinPlaywright')
 
 /**
  * Checks/unchecks the element matching the selector
@@ -7,7 +7,7 @@ const { getElement } = require('HerkinPlaywright')
  * @param {String} selector - playwright selector string
  */
 const checkElement = async (action, selector) => {
-  const box = await getElement(selector)
+  const box = await getLocator(selector)
   const boxAction = action === 'check' ? await box.check() : await box.uncheck()
 }
 

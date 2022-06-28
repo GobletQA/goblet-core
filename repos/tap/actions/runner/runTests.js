@@ -66,7 +66,7 @@ export const runTests = async (
     activeFile,
   })
 
-  // WSService.runCommand(testCmd, params)
+  WSService.runCommand(testCmd, params)
 
-  WSService.emit(SOCKR_MSG_TYPES.BROWSER_RUN_TESTS, options)
+  // WSService.emit(SOCKR_MSG_TYPES.BROWSER_RUN_TESTS, options)
 }

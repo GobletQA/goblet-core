@@ -1,5 +1,5 @@
 const { When } = require('HerkinParkin')
-const { getElement } = require('HerkinPlaywright')
+const { getLocator } = require('HerkinPlaywright')
 const { checkForAncestor } = require('HerkinSupport/validate')
 
 /**
@@ -9,17 +9,10 @@ const { checkForAncestor } = require('HerkinSupport/validate')
  */
 const clickDescendent = async (selector, world) => {
   checkForAncestor(world)
-  const descendent = await getElement(
+  const descendent = await getLocator(
     `${world.meta.ancestorSelector} ${selector}`
   )
-  if (!descendent)
-    throw new Error(
-      `Found no descendent of "${world.meta.ancestorSelector}", with selector: "${selector}"`
-    )
-  // Actionability checks (Auto-Waiting) seem to fail in headless mode
-  // So we use locator.waitFor to ensure the element exist on the dom
-  // Then pass {force: true} options to page.click because we know it exists
-  await descendent.waitFor()
+
   return descendent.click({
     force: true
   })
