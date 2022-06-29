@@ -19,10 +19,13 @@ const clickElement = async selector => {
 
 }
 
-When('I click the element {string}', clickElement, {
-  description: `Locates an element by selector and clicks it.
-
-Module : clickElement`,
+const meta = {
+  module: `clickElement`,
+  examples: [
+    `When I click "button[name='unique_name']"`,
+    `When I click the element "button[name='unique_name']"`,
+  ],
+  description: `Locates an element by selector and clicks it.`,
   expressions: [
     {
       type: 'string',
@@ -30,7 +33,10 @@ Module : clickElement`,
       example: "button[name='unique_name']",
     },
   ],
-})
+}
+
+When('I click {string}', clickElement, meta)
+When('I click the element {string}', clickElement, meta)
 
 module.exports = {
   clickElement,

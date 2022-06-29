@@ -31,22 +31,27 @@ const setText = async (selector, data, world) => {
   await page.type(selector, rtnData)
 }
 
-When('I set the element {string} text to {string}', setText, {
-  description: `Locates input element by selector and replaces existing value, if any, to the desired text.
-
-Module : setText`,
+const meta = {
+  module: `setText`,
+  examples: [
+    `When I set the element "input[name=email]" text to "my.name@company.com"`
+  ],
+  description: `Locates input element by selector and replaces existing value, if any, to the desired text.`,
   expressions: [
     {
       type: 'string',
-      description: `The selector for the input element.  Selector must be specific enough to locate only one element.`,
+      description: `The selector for a single input element.`,
       example: '#search',
     },
     {
       type: 'string',
-      description: `Desired text of the element.\n\nExample : I set the element "input[name=email]" text to "my.name@company.com"`,
+      description: `Desired text of the element.`,
       example: 'I desire to type this text.',
     },
   ],
-})
+}
+
+When('I set {string} to {string}', setText, meta)
+When('I set the element {string} text to {string}', setText, meta)
 
 module.exports = { setText }

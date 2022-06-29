@@ -149,3 +149,11 @@
   * On the right side of the screencast, show list of tests
     * Use the parsed cmd output to highlight which test is currently running
     * Update it as it runs to be pass / fail / error etc...
+
+
+## Step config options
+* Add ability to configure options on a per-step basis
+### Examples
+* waitFor
+  * state - One of attached, detached, visible, hidden
+  * timeout - in seconds, defaults to 30 seconds

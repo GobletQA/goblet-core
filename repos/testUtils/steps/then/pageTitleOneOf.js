@@ -10,7 +10,7 @@ const pageTitleOneOf = async titleOpts => {
   const page = await getPage()
   const pageTitle = await page.title()
   const opts = (titleOpts || ``).split(`,`)
-  const found =opts.reduce((matched, opt) => matched || opt.trim() === pageTitle.trim(), false)
+  const found = opts.reduce((matched, opt) => matched || opt.trim() === pageTitle.trim(), false)
 
   expect(found).toBe(true)
 }

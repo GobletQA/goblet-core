@@ -1,9 +1,9 @@
 const path = require('path')
 const glob = require('glob')
-const { parkinOverride } = require('./parkinOverride')
 const { DefinitionsParser } = require('./definitionsParser')
 const { getDefaultHerkinConfig } = require('HerkinSharedConfig')
 const { getPathFromBase } = require('HerkinSharedUtils/getPathFromBase')
+const { parkinOverride } = require('HerkinSharedLibs/overrides/parkinOverride')
 
 /**
  * Searches the step definition directory for step definitions
@@ -32,7 +32,7 @@ const loadDefinitionsFiles = stepsDir => {
  *
  * @returns {Array} - Loaded Definitions models
  */
-const parseDefinitions = async (repo, overrideParkin, definitionFiles) => {
+const parseDefinitions = async (repo, definitionFiles, overrideParkin) => {
   return definitionFiles.reduce(async (toResolve, file) => {
     const loaded = await toResolve
     if (!file) return loaded
@@ -70,9 +70,9 @@ const loadDefinitions = async (repo, herkinConfig) => {
   const overrideParkin = parkinOverride(repo)
 
   const clientDefinitions =
-    (await parseDefinitions(repo, overrideParkin, definitionFiles)) || []
+    (await parseDefinitions(repo, definitionFiles, overrideParkin)) || []
   const herkinDefinitions =
-    (await parseDefinitions(repo, overrideParkin, herkinDefinitionFiles)) || []
+    (await parseDefinitions(repo, herkinDefinitionFiles, overrideParkin)) || []
 
   // all the definition file models
   const defs = clientDefinitions.concat(herkinDefinitions)

@@ -1,10 +1,16 @@
 const fs = require('fs')
 const { Logger } = require('@keg-hub/cli-utils')
-const { definitionRequire } = require('./definitionRequire')
-const { requireOverride, parkinCheck } = require('./parkinOverride')
+const { checkCall } = require('@keg-hub/jsutils')
 const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
+const { parkinCheck } = require('HerkinSharedLibs/overrides/parkinOverride')
+const { requireOverride } = require('HerkinSharedLibs/overrides/requireOverride')
 
 class DefinitionsParser {
+
+  /**
+   * Clears out any previously loaded step definitions from the repo.parkin instance
+   * @param {Object} repo - Repo Class instance for the currently active repo
+   */
   clear = (repo) => {
     repo.parkin.steps.clear()
   }
@@ -44,8 +50,9 @@ class DefinitionsParser {
     catch(err){
       // TODO: @lance-tipton - temporary fix to catch errors in definition parsing
       // Should be a better way to handel these so we can notify the user of the issues
-      Logger.warn(`[Parse Definition Error] File path => ${filePath}`)
+      Logger.warn(`[Error Definition] Parse File Path => ${filePath}`)
       Logger.error(err)
+      Logger.empty()
       return false
     }
   }
@@ -53,7 +60,12 @@ class DefinitionsParser {
   parseDefinition = (filePath, repo, overrideMethod) => {
     return new Promise((res, rej) => {
       let requireError
-      const requireReset = overrideMethod && requireOverride(parkinCheck, overrideMethod)
+      const requireReset = overrideMethod &&
+        requireOverride(
+          repo,
+          parkinCheck,
+          overrideMethod
+        )
 
       try {
         // Always clear out the node require cache
@@ -61,22 +73,19 @@ class DefinitionsParser {
         // Otherwise changed files would not get reloaded
         delete require.cache[filePath]
 
-        // TODO: update this to use the safe require
-        // Also ensure the correct parkin instance is resolved
-        // definitionRequire(filePath)
-
         // Require the file, to auto-load the definitions into parkin
-        // Later we'll pull them from parkin
+        // Later we'll pull them from parkin)
         require(filePath)
       }
       catch (err) {
-        Logger.warn(`[Parse Definition Error] Could not load step definition => ${filePath}`)
+        Logger.warn(`[Error Definition] Require File Path => ${filePath}`)
         Logger.error(err.stack)
         Logger.empty()
-        requireError = err.message 
+        requireError = err.message
       }
+      // Use finally to ensure the requireReset is always called even on error
       finally {
-        requireReset && requireReset()
+        checkCall(requireReset)
       }
 
       // Read the file to get it's content and build the fileModel
