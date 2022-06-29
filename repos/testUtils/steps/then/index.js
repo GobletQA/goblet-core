@@ -4,6 +4,8 @@ module.exports = {
   ...require('./pageTitleIsNot'),
   ...require('./containsText'),
   ...require('./exactText'),
+  ...require('./compareSavedElement'),
+  ...require('./compareSavedElementCount'),
   ...require('./getCheckedState'),
   ...require('./descendentContainsText'),
   ...require('./descendentExactText'),

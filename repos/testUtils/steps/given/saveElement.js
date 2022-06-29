@@ -9,7 +9,7 @@ const { cleanWorldPath } = require('HerkinSupport/helpers')
  * @param {string} data - if mapped alias exists then this is the on-screen text of the selector.  if no mapped alias exists then this is the selector + on-screen text of the element
  * @param {Object} world
  */
-const saveElementFromSelector = async (selector, worldPath, world) => {
+const saveElement = async (selector, worldPath, world) => {
   const element = getLocator(selector)
   const cleaned = cleanWorldPath(worldPath)
 
@@ -18,9 +18,9 @@ const saveElementFromSelector = async (selector, worldPath, world) => {
   return element
 }
 
-Given('{string} is saved as {string}', saveElementFromSelector, {
+const meta = {
   description: `Locates and saves an element for use in subsequent steps.`,
-  module: `findElAsAncestor`,
+  module: `saveElement`,
   examples: [
     `Given ".item[data-test-id='the-goblet-pub'])" is saved as "page.elements.parent"`
   ],
@@ -32,12 +32,23 @@ Given('{string} is saved as {string}', saveElementFromSelector, {
         'li.hotel-items',
       ],
     },
-    {
-      type: 'string',
-      description: `Path on the world where the element should be saved`,
-      example: 'page.elements.parent',
-    },
   ],
-})
+}
 
-module.exports = { saveElementFromSelector }
+const metaExp = {
+  ...meta,
+  expressions: meta.expressions.concat([{
+    type: 'string',
+    description: `Path on the world where the element should be saved`,
+    example: 'page.elements.parent',
+  }])
+}
+
+Given('{string} is saved', (selector, world) => saveElement(selector, `__meta.savedElement`, world), meta)
+
+
+Given('{string} is saved as {string}', saveElement, metaExp)
+Given('I save {string} as {string}', saveElement, metaExp)
+Given('I save the element {string} as {string}', saveElement, metaExp)
+
+module.exports = { saveElement }

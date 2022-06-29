@@ -1,3 +1,5 @@
+const { get } = require('@keg-hub/jsutils')
+const { getLocator } = require('HerkinPlaywright')
 
 const checkTypes = {
   less: {
@@ -37,6 +39,11 @@ const checkTypes = {
   }
 }
 
+const compareTypes = [
+  `contains`,
+  `matches`
+] 
+
 /**
  * Expects the number of dom elements matching `selector` to match `count` based on the comparison screen
  * @param {string} selector - valid playwright selector
@@ -73,8 +80,61 @@ const cleanWorldPath = (worldPath) => {
 }
 
 
+/**
+ * Gets the data from the passed in world path and world object 
+ * @param {string} worldPath - Path on the world object
+ * @param {object} world - Global world object
+ * @param {*} fallback - Value to use if world value does not exit
+ *
+ * @return {*} - Data that exist on the world object at the passed in worldPath
+ */
+const getWorldData = (worldPath, world, fallback) => {
+  const cleaned = cleanWorldPath(worldPath)
+  if(!cleaned) throw new Error(`World Path "$world.${worldPath}" is invalid.`)
+
+  const saved = get(world, cleaned, fallback)
+  if(saved === undefined) throw new Error(`Saved value "$world.${worldPath}" does not exist.`)
+
+  return saved
+}
+
+/**
+ * Compares the content of two values, either contains or exact matching 
+ * @param {*} val1 - First value to compare
+ * @param {*} val2 - Value to compare against
+ * @param {string} type - Type of comparison to do
+ *
+ * @return {void}
+ */
+const compareValues = (val1, val2, type) => {
+  if(!compareTypes.includes(type))
+    throw new Error(`Compare type "${type}" is invalid. Must be one of "${compareTypes.join(', ')}".`)
+
+  type === `contains`
+    ? expect(val1).toEqual(expect.stringContaining(val2))
+    : expect(val1).toEqual(val2)
+}
+
+/**
+ * Finds the locator by selecotr
+ * @param {*} val1 - First value to compare
+ * @param {*} val2 - Value to compare against
+ * @param {string} type - Type of comparison to do
+ *
+ * @return {void}
+ */
+const getElementProp = async (selector, prop) => {
+  const element = await getLocator(selector)
+  if(!element[prop]) throw new Error(`Selected Element property "${prop}" does not exist.`)
+
+  return await element[prop]()
+}
+
 
 module.exports = {
+  getWorldData,
+  compareValues,
+  getElementProp,
   cleanWorldPath,
-  greaterLessEqual
+  greaterLessEqual,
 }
