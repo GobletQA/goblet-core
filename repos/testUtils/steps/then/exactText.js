@@ -13,7 +13,7 @@ const exactText = async (selector, data) => {
   //get element tagName
   const getElTagName = await page.$eval(selector, el => el.tagName)
 
-  //if tagName is (input or textarea) use value else use textContent
+  // If tagName is (input or textarea) use value else use textContent
   const content =
     getElTagName === 'INPUT' || getElTagName === 'TEXTAREA'
       ? await page.$eval(selector, el => el.value)
@@ -23,14 +23,16 @@ const exactText = async (selector, data) => {
   expect(content).toEqual(data)
 }
 
-Then('the element {string} text is {string}', exactText, {
-  description: `Locates an element by selector and verifies element text matches exactly.
-  
-Module : exactText`,
+const meta = {
+  module: `exactText`,
+  description: `Locates an element by selector and verifies element text matches exactly.`,
+  examples: [
+    `Then the element "div.name" text is "Mr. Goblet"`
+  ],
   expressions: [
     {
       type: 'string',
-      description: `The selector for the element.  Selector must be specific enough to locate only one element.`,
+      description: `The selector for a single element.`,
       example: '#search',
     },
     {
@@ -39,6 +41,9 @@ Module : exactText`,
       example: 'cucumber',
     },
   ],
-})
+}
+
+Then('{string} text is {string}', exactText, meta)
+Then('the element {string} text is {string}', exactText, meta)
 
 module.exports = { exactText }

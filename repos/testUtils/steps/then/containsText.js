@@ -17,22 +17,24 @@ const containsText = async (selector, data) => {
     textContent: el.textContent,
   }))
 
-  //if tagName is (input or textarea) use value else use textContent
+  // If tagName is (input or textarea) use value else use textContent
   const content =
     tagName === 'INPUT' || tagName === 'TEXTAREA' ? value : textContent
 
-  //assert element text contains expected text
+  // Assert element text contains expected text
   expect(content).toEqual(expect.stringContaining(data))
 }
 
-Then('the element {string} contains the text {string}', containsText, {
-  description: `Locates an element by selector and verifies element contains text.
-  
-Module : containsText`,
+const meta = {
+  module: `containsText`,
+  description: `Locates an element by selector and verifies element contains text.`,
+  examples: [
+    `Then the element "div.temp" contains the text "85°"`,
+  ],
   expressions: [
     {
       type: 'string',
-      description: `The selector for the element.  Selector must be specific enough to locate a single element.`,
+      description: `The selector for a single element.`,
       example: 'div.weather-container >> div.temp',
     },
     {
@@ -41,6 +43,10 @@ Module : containsText`,
       example: '85°',
     },
   ],
-})
+}
+
+Then('{string} contains {string}', containsText, meta)
+Then('{string} contains the text {string}', containsText, meta)
+Then('the element {string} contains the text {string}', containsText, meta)
 
 module.exports = { containsText }

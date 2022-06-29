@@ -46,6 +46,10 @@ const multiMeta = {
 
 
 When('I wait for {string}', selector => waitForSelectorState(selector, 'attached'), meta)
+When('I wait for {string} to hide', selector => waitForSelectorState(selector, 'hidden'), meta)
+When('I wait for {string} to show', selector => waitForSelectorState(selector, 'visible'), meta)
+When('I wait for {string} to detach', selector => waitForSelectorState(selector, 'detached'), meta)
+When('I wait for {string} to attach', selector => waitForSelectorState(selector, 'attached'), meta)
 When('I wait for {string} to be {string}', waitForSelectorState, multiMeta)
 When('I wait for element {string} to be {string}', waitForSelectorState, multiMeta)
 
