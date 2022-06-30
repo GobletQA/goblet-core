@@ -1,6 +1,5 @@
 const { Then } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinTestEnv')
-const { getPage } = getBrowserContext()
+const { getLocatorContent } = require('HerkinSupport/helpers')
 
 /**
  * Checks that element, matching `selector`, value (input & textarea elements) or textContent, contains `data`
@@ -8,20 +7,7 @@ const { getPage } = getBrowserContext()
  * @param {string} data - text to compare to selector value/textContent
  */
 const containsText = async (selector, data) => {
-  const page = await getPage()
-
-  const locator = await page.locator(selector)
-  const { tagName, textContent, value } = await locator.evaluate(el => ({
-    value: el.value,
-    tagName: el.tagName,
-    textContent: el.textContent,
-  }))
-
-  // If tagName is (input or textarea) use value else use textContent
-  const content =
-    tagName === 'INPUT' || tagName === 'TEXTAREA' ? value : textContent
-
-  // Assert element text contains expected text
+  const content = await getLocatorContent(selector)
   expect(content).toEqual(expect.stringContaining(data))
 }
 

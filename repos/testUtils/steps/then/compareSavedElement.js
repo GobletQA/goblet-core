@@ -1,6 +1,6 @@
 const { Then } = require('HerkinParkin')
 const { deepMerge } = require('@keg-hub/jsutils')
-const { compareValues, getElementProp, getWorldData } = require('HerkinSupport/helpers')
+const { compareValues, getLocatorAttribute, getWorldData } = require('HerkinSupport/helpers')
 
 /**
  * Compares an elements property with a saved elements property
@@ -16,7 +16,7 @@ const compareElements = async (selector, prop, typeJoin, worldPath, worldProp, w
   if(!saved[worldProp]) throw new Error(`Saved Element property "${worldProp}" does not exist.`)
 
   const savedVal = await saved[worldProp]()
-  const elementVal = await getElementProp(selector, prop)
+  const elementVal = await getLocatorAttribute(selector, prop)
 
   const [type, order] = typeJoin.split('-')
   order === 'world'
@@ -34,7 +34,7 @@ const compareElements = async (selector, prop, typeJoin, worldPath, worldProp, w
  */
 const compareToWorldValue = async (selector, prop, typeJoin, worldPath, world) => {
   const savedVal = getWorldData(worldPath, world)
-  const elementVal = await getElementProp(selector, prop)
+  const elementVal = await getLocatorAttribute(selector, prop)
 
   const [type, order] = typeJoin.split('-')
 

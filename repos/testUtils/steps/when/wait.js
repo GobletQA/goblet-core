@@ -11,19 +11,20 @@ const wait = async num => {
   return await page.waitForTimeout(num * 1000)
 }
 
-When('I wait {int} second(s)', wait, {
-  description: `Wait for given amount of time, in seconds, before proceeding to the next step.\nCannot exceed 5 seconds.
-
-Module : wait`,
+const meta = {
+  module: `wait`,
+  description: `Wait for given amount of time, in seconds, before proceeding to the next step.\nCannot exceed 5 seconds.`,
+  examples: [
+    `When I wait 5 seconds`
+  ],
   expressions: [
     {
       example: 5,
       type: 'int',
-      description: `Amount of time to wait in seconds.
-
-Example : When I wait 5 seconds`,
+      description: `Amount of time to wait in seconds.`,
     },
   ],
-})
+}
+When('I wait {int} second(s)', wait, meta)
 
 module.exports = { wait }

@@ -1,6 +1,6 @@
 const { Then } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinTestEnv')
-const { getPage } = getBrowserContext()
+const { getLocatorContent } = require('HerkinSupport/helpers')
+
 
 /**
  * Checks that element, matching `selector`, value (input & textarea elements) or textContent, is equal to `data`
@@ -8,18 +8,7 @@ const { getPage } = getBrowserContext()
  * @param {string} data - text to compare to selector value/textContent
  */
 const exactText = async (selector, data) => {
-  const page = await getPage()
-
-  //get element tagName
-  const getElTagName = await page.$eval(selector, el => el.tagName)
-
-  // If tagName is (input or textarea) use value else use textContent
-  const content =
-    getElTagName === 'INPUT' || getElTagName === 'TEXTAREA'
-      ? await page.$eval(selector, el => el.value)
-      : await page.$eval(selector, el => el.textContent)
-
-  //assert element text contains expected text
+  const content = await getLocatorContent(selector)
   expect(content).toEqual(data)
 }
 

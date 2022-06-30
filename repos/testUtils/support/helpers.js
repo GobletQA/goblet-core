@@ -123,18 +123,56 @@ const compareValues = (val1, val2, type) => {
  *
  * @return {void}
  */
-const getElementProp = async (selector, prop) => {
-  const element = await getLocator(selector)
-  if(!element[prop]) throw new Error(`Selected Element property "${prop}" does not exist.`)
+const callLocatorMethod = async (selector, prop, locator) => {
+  const element = locator || await getLocator(selector)
+  if(!element[prop])
+    throw new Error(`Selected Element ${selector} missing prop method "${prop}".`)
 
   return await element[prop]()
+}
+
+const getLocatorAttribute = async (selector, attr, locator) => {
+  const element = locator || await getLocator(selector)
+
+
+  return await element.getAttribute(attr)
+}
+
+const getLocatorProps = async (selector, locator) => {
+  const element = locator || await getLocator(selector)
+
+  // TODO: Add more properties to the returned object
+  return await element.evaluate(el => ({
+    value: el.value,
+    tagName: el.tagName,
+    className: el.className,
+    textContent: el.textContent,
+  }))
+}
+
+const getLocatorTagName = async (selector, locator) => {
+  const element = locator || await getLocator(selector)
+  return await element.evaluate(el => el.tagName)
+}
+
+const getLocatorContent = async (selector, locator) => {
+  const element = locator || await getLocator(selector)
+  const tagName = await getLocatorTagName(selector, element)
+
+  return tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT'
+    ? await element.inputValue()
+    : await element.textContent()
 }
 
 
 module.exports = {
   getWorldData,
   compareValues,
-  getElementProp,
+  callLocatorMethod,
+  getLocatorAttribute,
   cleanWorldPath,
   greaterLessEqual,
+  getLocatorProps,
+  getLocatorTagName,
+  getLocatorContent,
 }
