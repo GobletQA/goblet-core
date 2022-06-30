@@ -21,7 +21,8 @@ const buildPWEnvs = (env={}, browser, params=noOpObj) => {
     addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
   }
   else if(GOBLET_RUN_FROM_CI){
-    addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
+    // TODO: add this back at another time
+    // addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
   }
 
   // Playwright browser ENVs
