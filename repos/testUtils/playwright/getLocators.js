@@ -63,7 +63,8 @@ const getLocators = async (selector) => {
   const elements = await page.locator(selector)
   if (!elements) throw new Error(`The element with selector "${selector}" could not be found.`)
 
-  return addIterators(elements)
+  return elements
+  // return addIterators(elements)
   // return elements
 }
 

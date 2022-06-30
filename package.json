@@ -93,7 +93,7 @@
     "mime": "3.0.0",
     "module-alias": "2.2.2",
     "nodemon": "2.0.13",
-    "playwright": "1.22.2",
+    "playwright": "1.23.0",
     "tiny-jest": "1.2.1",
     "vm2": "3.9.9",
     "winston": "3.6.0"

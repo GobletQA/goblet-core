@@ -1,6 +1,6 @@
 
 # Define ARGS before anything else, to use them in the FROM directives
-ARG KEG_BASE_IMAGE=mcr.microsoft.com/playwright:next-focal
+ARG KEG_BASE_IMAGE=mcr.microsoft.com/playwright:v1.23.0-focal
 
 FROM $KEG_BASE_IMAGE as keg-builder
 
@@ -77,19 +77,20 @@ RUN yarn global add npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
     libgit2-dev \
     python3-pip \
     python3-dev \
-    python3.8-venv; \
-    mkdir -p /var/lib/gitfs; \
-    python3 -m pip install /keg/gitfs/dist/gitfs-0.5.2-py3-none-any.whl; \
+    python3.8-venv && \
+    mkdir -p /var/lib/gitfs && \
+    python3 -m pip install /keg/gitfs/dist/gitfs-0.5.2-py3-none-any.whl && \
     apt-get clean && \
-    apt-get autoclean; \
-    apt-get autoremove; \
+    apt-get autoclean && \
+    apt-get autoremove && \
     rm -rf /var/cache/apk/*; \
     echo fs.inotify.max_user_watches=1048576 | tee -a /etc/sysctl.conf; \
     sysctl -p; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
-    mkdir -p $DOC_APP_PATH/logs; \
-    rm -rf /keg/gitfs; \
-    ln -s /keg/tap/node_modules $HOME/.node_modules
+    mkdir -p $DOC_APP_PATH/logs && \
+    rm -rf /keg/gitfs && \
+    ln -s /keg/tap/node_modules $HOME/.node_modules && \
+    ln -s /keg/tap/node_modules /keg/node_modules
 
 # Expose container ports
 EXPOSE $KEG_PROXY_PORT
