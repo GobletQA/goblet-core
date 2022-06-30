@@ -1,4 +1,5 @@
 const { parkin } = require('./instance')
+const { toInt, exists } = require('@keg-hub/jsutils')
 
 /**
  * Global helper to allow re-using the same parking instance for each test
@@ -25,3 +26,17 @@ global.getParkinOptions = () => {
     ...(GOBLET_FEATURE_TAGS && { tags: GOBLET_FEATURE_TAGS }),
   }
 }
+
+const configureEnvironment = () => {
+  const { GOBLET_TEST_RETRY } = process.env
+  
+  // This is set for all tests that are run
+  // Todo it on a per-step basis it would need to be added to Parkin in some capacity
+  exists(GOBLET_TEST_RETRY) && jest.retryTimes(toInt(GOBLET_TEST_RETRY) || 1)
+
+
+
+}
+
+
+configureEnvironment()

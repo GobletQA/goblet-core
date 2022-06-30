@@ -75,6 +75,11 @@ const taskOptions = {
       example: '--jestDebug',
       env: `GOBLET_JEST_DEBUG`,
       description: 'Pass the --debug flag to the jest command',
+    },
+    retry: {
+      example: '--retry 3',
+      env: `GOBLET_TEST_RETRY`,
+      description: 'Pass the --debug flag to the jest command',
     }
   },
   docker: {
@@ -189,7 +194,7 @@ const taskOptions = {
     browserTimeout: {
       type: 'number',
       env: `GOBLET_BROWSER_TIMEOUT`,
-      example: '--browserTimeout 10000', // 10 seconds
+      example: '--browserTimeout 15000', // 15 seconds
       description:
         'Amount of time until a browser request will timeout should be less the timeout option',
     },
@@ -218,6 +223,16 @@ const taskOptions = {
       env: 'GOBLET_DEV_TOOLS',
       description:
         'Open devtools be automatically when the browser opens. The debug option must also be set true',
+    },
+    tracing: {
+      example: '--tracing',
+      env: 'GOBLET_TEST_TRACING',
+      description: 'Activates playwrights tracing functionality for all executed tests',
+    },
+    screenshot: {
+      example: '--screenshot',
+      env: 'GOBLET_TEST_SCREENSHOT',
+      description: 'Activates playwrights tracing functionality for all executed tests',
     }
   },
   pwContext: {
@@ -260,7 +275,8 @@ const taskOptions = {
       description: 'A list of permissions to grant to all browser pages, seperated by comma'
     },
     record: {
-      example: '--record ',
+      example: '--record',
+      env: `GOBLET_TEST_VIDEO_RECORD`,
       description: 'Records a video of all browser page interactions, and saves to herkin.config#downloads directory'
     },
     // TOODO: Need to investigate this further

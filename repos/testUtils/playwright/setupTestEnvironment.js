@@ -1,5 +1,7 @@
+const { noOpObj } = require('@keg-hub/jsutils')
 const { getMetadata } = require('HerkinSCPlaywright/server/server')
 const { newBrowser } = require('HerkinSCPlaywright/browser/newBrowser')
+const { startTracing, stopTracingChunk, startTracingChunk } = require('./tracing')
 
 /**
  * Initializes tests by connecting to the browser loaded at the websocket
@@ -13,6 +15,7 @@ const initialize = async () => {
 
   /** GOBLET_BROWSER is set by the task `keg herkin bdd run` */
   const { GOBLET_BROWSER='chromium' } = process.env
+  const { gobletBrowserOpts=noOpObj } = global
   
   try {
     const { type, launchOptions } = await getMetadata(GOBLET_BROWSER)
@@ -24,7 +27,7 @@ const initialize = async () => {
       {
         ...launchOptions,
         type,
-        ...global.gobletBrowserOpts,
+        ...gobletBrowserOpts,
       },
       false
     )
@@ -36,15 +39,20 @@ const initialize = async () => {
 
     global.browser = browser
     global.context = await browser.newContext()
-  } catch (err) {
+    await startTracing(global.context)
+  }
+  catch (err) {
     console.error(err.message)
     // exit 2 seconds later to ensure error
     // has time to be written to stdout
     setTimeout(() => process.exit(1), 2000)
-  } finally {
+  }
+  finally {
+    await startTracingChunk(global.context)
     return global.context && global.browser
   }
 }
+
 
 /**
  * Cleans up for testing tear down by releasing all resources, including
@@ -55,8 +63,11 @@ const initialize = async () => {
  */
 const cleanup = async () => {
   if (!global.browser) return false
+  
   // TODO: Update to use playwright video record end
-  await browser.close()
+  await stopTracingChunk(global.context)
+  await global.context.close()
+  await global.browser.close()
   delete global.browser
   delete global.context
   delete global.page
@@ -73,9 +84,9 @@ const cleanup = async () => {
 const getPage = async (num = 0) => {
   if (!global.context) throw new Error('No browser context initialized')
 
-  const pages = context.pages() || []
+  const pages = global.context.pages() || []
 
-  return pages.length ? pages[num] : await context.newPage()
+  return pages.length ? pages[num] : await global.context.newPage()
 }
 
 /**
@@ -83,7 +94,7 @@ const getPage = async (num = 0) => {
  *
  * @return {Object} - Contains the getPage method
  */
-const getBrowserContext = () => ({ getPage })
+const getBrowserContext = () => ({ getPage, context: global.context })
 
 /**
  * Helper that calls the jest beforeAll and afterAll

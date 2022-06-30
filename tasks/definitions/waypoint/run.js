@@ -76,6 +76,7 @@ module.exports = {
         'hasTouch',
         'isMobile',
         'permissions',
+        `tracing`,
         'record',
         'storageState',
         'timezone',

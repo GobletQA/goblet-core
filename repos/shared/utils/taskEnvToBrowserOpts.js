@@ -37,16 +37,16 @@ const taskEnvToBrowserOpts = herkin => {
     GOBLET_BROWSER_DEVICES,
     GOBLET_SLOW_MO = `500`,
     GOBLET_BROWSER = 'chromium',
-    GOBLET_BROWSER_TIMEOUT = `3000`,
-    GOBLET_TRACES_DIR = getPathFromBase(herkin.paths.reportsDir, herkin),
-    GOBLET_DOWNLOADS_PATH = getPathFromBase(herkin.paths.artifactsDir, herkin),
+    GOBLET_BROWSER_TIMEOUT = `15000`, // 15 seconds
+    GOBLET_TRACES_DIR = getPathFromBase(path.join(herkin.paths.reportsDir, `traces/`), herkin),
+    GOBLET_DOWNLOADS_PATH = getPathFromBase(path.join(herkin.paths.artifactsDir, `downloads/`), herkin),
   } = process.env
 
   return {
     type: GOBLET_BROWSER,
     tracesDir: GOBLET_TRACES_DIR,
-    devtools: toBool(GOBLET_DEV_TOOLS),
     headless: toBool(GOBLET_HEADLESS),
+    devtools: toBool(GOBLET_DEV_TOOLS),
     downloadsPath: GOBLET_DOWNLOADS_PATH,
     slowMo: parseInt(GOBLET_SLOW_MO, 10),
     timeout: parseInt(GOBLET_BROWSER_TIMEOUT, 10),

@@ -1,4 +1,6 @@
+const path = require('path')
 const { getScreenDims } = require('./getScreenDims')
+const { getPathFromBase } = require('./getPathFromBase')
 const { parseJsonEnvArr } = require('./parseJsonEnvArr')
 const {
   toBool,
@@ -49,18 +51,26 @@ const addEnvToOpts = (opts, key, value) => {
 }
 
 /**
- * Parses the GOBLET_CONTEXT_RECORD env, and sets the height and width if true
+ * Parses the GOBLET_TEST_VIDEO_RECORD env, and sets the height and width if true
+ * @param {Object} config - Herkin global config
  * @param {Object} opts - Context options being built
- * @param {boolean} value - True if recording should be turned on
  * @param {Object} screenDims - Screen dimensions of the browser
+ * @param {boolean} value - True if recording should be turned on
+ * @param {boolean} fullScreen - True if recording should be the full dimension
  * 
  * @returns {Object} - Updated opts object with recording settings
  */
-const parseRecord = (opts, value, screenDims) => {
-  exists(value) &&
-    value &&
-    isObj(screenDims) &&
-    (opts.recordVideo = {screenDims})
+const parseRecord = (config, opts, screenDims, value, fullScreen) => {
+  if(!exists(value)) return opts
+
+  opts.recordVideo = opts.recordVideo || {}
+  opts.recordVideo.size = isObj(screenDims)
+    ? !fullScreen
+      ? {height: screenDims.height / 2, width: screenDims.width / 2}
+      : screenDims
+    : {}
+
+  opts.recordVideo.dir = getPathFromBase(path.join(config.paths.artifactsDir, `videos/`), config)
 
   return opts
 }
@@ -75,12 +85,13 @@ const parseRecord = (opts, value, screenDims) => {
 const taskEnvToContextOpts = config => {
   const {
     GOBLET_CONTEXT_TZ, // string
-    GOBLET_CONTEXT_RECORD, // boolean
+    GOBLET_CONTEXT_GEO, // JSON array
     GOBLET_CONTEXT_TOUCH, // boolean
     GOBLET_CONTEXT_MOBILE, // boolean
     GOBLET_CONTEXT_DOWNLOADS, // boolean
-    GOBLET_CONTEXT_GEO, // JSON array
     GOBLET_CONTEXT_PERMISSIONS,  // JSON array
+    GOBLET_FULL_SCREEN_VIDEO, // boolean
+    GOBLET_TEST_VIDEO_RECORD, // boolean
   } = process.env
 
   const opts = {
@@ -94,7 +105,13 @@ const taskEnvToContextOpts = config => {
   addEnvToOpts(opts, 'acceptDownloads', toBool(GOBLET_CONTEXT_DOWNLOADS))
 
   const screenDims = getScreenDims()
-  parseRecord(opts, toBool(GOBLET_CONTEXT_RECORD), screenDims)
+  parseRecord(
+    config,
+    opts,
+    screenDims,
+    toBool(GOBLET_TEST_VIDEO_RECORD),
+    toBool(GOBLET_FULL_SCREEN_VIDEO)
+  )
 
   if(screenDims.height || screenDims.width){
     addEnvToOpts(opts, 'viewport', screenDims)

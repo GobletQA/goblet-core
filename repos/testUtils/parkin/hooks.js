@@ -17,6 +17,8 @@ const getHook = (hookName) => {
 module.exports = {
   BeforeAll: getHook('beforeAll'),
   AfterAll: getHook('afterAll'),
+  BeforeEach: getHook('beforeEach'),
+  AfterEach: getHook('afterEach'),
   Before: getHook('beforeEach'),
   After: getHook('afterEach'),
 }

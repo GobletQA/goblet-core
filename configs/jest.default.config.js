@@ -8,6 +8,32 @@ const { noOpObj, noPropArr, capitalize } = require('@keg-hub/jsutils')
 const { buildTestMatchFiles } = require('HerkinSharedUtils/buildTestMatchFiles')
 
 /**
+ * Builds the test reports, currently only jest-html-reporter
+ * TODO: allow reporters to be more customizable
+ * @param {Object} opts - Custom options for the tests being run
+ * @param {Object} herkin - Global Herkin config
+ *
+ * @returns {Array} - Built reporters array
+ */
+const buildReporters = (opts=noOpObj, herkinRoot) => {
+  const { JEST_HTML_REPORTER_OUTPUT_PATH } = process.env
+  const title = opts.title || opts.type
+
+  const reporters = ['default']
+  JEST_HTML_REPORTER_OUTPUT_PATH &&
+    reporters.push([
+      // Since the root is not keg-herkin, we have to define the full path to the reporter
+      `${herkinRoot}/node_modules/jest-html-reporter`,
+      {
+        pageTitle: `${title ? capitalize(title) : ``} Test Results`.trim(),
+        outputPath: JEST_HTML_REPORTER_OUTPUT_PATH,
+      },
+    ])
+  
+  return reporters
+}
+
+/**
  * Default config that other jest configs can use to set common config properties
  * @param {Object} herkin - Global Herkin config
  * @param {Object} opts - Custom options for the tests being run
@@ -21,30 +47,18 @@ const { buildTestMatchFiles } = require('HerkinSharedUtils/buildTestMatchFiles')
  * @returns {Object} - Jest config object
  */
 const jestConfig = (herkin, opts=noOpObj) => {
-  const { GOBLET_CONFIG_BASE, GOBLET_MOUNT_ROOT, JEST_HTML_REPORTER_OUTPUT_PATH } = process.env
+  const { GOBLET_CONFIG_BASE, GOBLET_MOUNT_ROOT } = process.env
 
   herkin = herkin || getHerkinConfig()
   const { herkinRoot } = herkin.internalPaths
-  const title = opts.title || opts.type
 
   const testMatch = opts.testDir && (opts.type || opts.shortcut || opts.ext)
     ? buildTestMatchFiles(opts.testDir, opts)
     : noPropArr
 
-  const reporters = ['default']
-  JEST_HTML_REPORTER_OUTPUT_PATH &&
-    reporters.push([
-      // Since the root is not keg-herkin, we have to define the full path to the reporter
-      `${herkinRoot}/node_modules/jest-html-reporter`,
-      {
-        pageTitle: `${title ? capitalize(title) : ``} Test Results`.trim(),
-        outputPath: JEST_HTML_REPORTER_OUTPUT_PATH,
-      },
-    ])
-
   return {
-    reporters,
     testMatch,
+    reporters: buildReporters(opts, herkinRoot),
     // This seems to be needed based on how the github action is setup
     // But it may be a better option then sym-linking the keg-herkin node_modules to ~/.node_modules
     // Need to investigate it

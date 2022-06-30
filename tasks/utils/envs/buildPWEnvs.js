@@ -13,11 +13,14 @@ const { noOpObj } = require('@keg-hub/jsutils')
  * @returns {Object} - env object with the ENVs added
  */
 const buildPWEnvs = (env={}, browser, params=noOpObj) => {
-  const { GOBLET_RUN_FROM_UI } = process.env
+  const { GOBLET_RUN_FROM_UI, GOBLET_RUN_FROM_CI } = process.env
 
   // Check if running form the UI and set the display as well as spec result logging
   if(GOBLET_RUN_FROM_UI){
     addEnv(env, 'DISPLAY', ':0.0')
+    addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
+  }
+  else if(GOBLET_RUN_FROM_CI){
     addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
   }
 
@@ -32,14 +35,16 @@ const buildPWEnvs = (env={}, browser, params=noOpObj) => {
   addEnv(env, 'GOBLET_CONTEXT_TZ', params.timezone)
   addEnv(env, 'GOBLET_CONTEXT_WIDTH', params.width)
   addEnv(env, 'GOBLET_CONTEXT_HEIGHT', params.height)
-  addEnv(env, 'GOBLET_CONTEXT_RECORD', params.record)
   addEnv(env, 'GOBLET_CONTEXT_TOUCH', params.hasTouch)
   addEnv(env, 'GOBLET_CONTEXT_MOBILE', params.isMobile)
   addEnv(env, 'GOBLET_CONTEXT_DOWNLOADS', params.downloads)
   addEnv(env, 'GOBLET_CONTEXT_GEO', params.geolocation, JSON.stringify(params.geolocation))
   addEnv(env, 'GOBLET_CONTEXT_PERMISSIONS', params.permissions, JSON.stringify(params.permissions))
 
-  
+  addEnv(env, 'GOBLET_TEST_TRACING', params.tracing)
+  addEnv(env, 'GOBLET_TEST_VIDEO_RECORD', params.record)
+  addEnv(env, 'GOBLET_TEST_SCREENSHOT', params.screenshot)
+
   params.debug && addEnv(env, 'DEBUG', 'pw:api')
   params.debug &&
   params.devtools &&

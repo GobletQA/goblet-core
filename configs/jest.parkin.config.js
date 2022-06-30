@@ -2,10 +2,12 @@ const { jestConfig } = require('./jest.default.config')
 
 const path = require('path')
 const glob = require('glob')
-const { uniqArr } = require('@keg-hub/jsutils')
+const { uniqArr, toBool } = require('@keg-hub/jsutils')
 const { getHerkinConfig } = require('HerkinSharedConfig')
 const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
+const { buildJestGobletOpts } = require('HerkinSharedUtils/buildJestGobletOpts')
 const { taskEnvToBrowserOpts } = require('HerkinSharedUtils/taskEnvToBrowserOpts')
+
 
 /**
  * Finds all step definition files in client's step directory and
@@ -86,8 +88,9 @@ module.exports = async () => {
     ],
     /** Pass on the browser options defined from the task that started the process */
     globals: {
-      paths: herkin.paths,
+      gpbletPaths: herkin.paths,
       gobletBrowserOpts: browserOpts,
+      gobletOptions: buildJestGobletOpts(herkin, browserOpts)
     },
     /** Add all support and step files and ensure they are loaded before running the tests */
     setupFilesAfterEnv: [
