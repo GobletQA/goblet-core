@@ -1,6 +1,7 @@
-const { toBool, isStr, noOpObj } = require('@keg-hub/jsutils')
+const path = require('path')
 const { getPathFromBase } = require('./getPathFromBase')
 const { parseJsonEnvArr } = require('./parseJsonEnvArr')
+const { toBool, isStr, noOpObj } = require('@keg-hub/jsutils')
 
 /**
  * Builds a list of devices to used based on the GOBLET_BROWSER_DEVICES env
