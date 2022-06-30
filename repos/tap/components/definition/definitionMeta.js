@@ -77,7 +77,7 @@ const MetaDescription = React.memo(({ meta, styles }) => {
  *
  * @returns {Component}
  */
-const MetaExpression = React.memo(({ meta, expression, styles = noOpObj }) => {
+const MetaExpression = React.memo(({ expression, styles = noOpObj }) => {
   const start = '{'
   const end = '}'
   return (
@@ -90,6 +90,48 @@ const MetaExpression = React.memo(({ meta, expression, styles = noOpObj }) => {
     </View>
   )
 })
+
+const MetaExpressions = (props) => {
+  const {styles, meta = noOpObj } = props
+  return (
+    <View className={'def-meta-expressions'} style={styles.expressions}>
+      {meta?.expressions ? (
+        <MetaLabel
+          className={'def-meta-expressions-label'}
+          style={{ marginTop: 10 }}
+        >
+          Expressions
+        </MetaLabel>
+      ) : null}
+
+      {meta?.expressions ?
+        meta?.expressions?.map((expression, idx) => {
+          return (
+            <MetaExpression
+              expression={expression}
+              styles={styles.expression}
+              key={`${idx}-${expression.key}-${expression.description}`}
+            />
+          )
+        }) : null}
+    </View>
+  )
+}
+
+const MetaExamples = ({ meta, styles }) => {
+  return (meta && meta?.examples && (
+    <View className='def-meta-examples' style={styles.expressions}>
+      <MetaLabel className={'def-meta-example-label'} style={{ marginTop: 10 }}>
+        Examples
+      </MetaLabel>
+      {meta.examples.map(example => (
+        <Text key={example} className={'def-meta-example'} style={styles.description}>
+          {example}
+        </Text>
+      ))}
+    </View>
+  )) || null
+}
 
 /**
  * DefinitionMeta - Displays the meta-data of a Step Definition
@@ -116,28 +158,13 @@ export const DefinitionMeta = React.memo(props => {
       styles={drawerStyles}
       toggled={toggled}
     >
-      <MetaDescription meta={meta} styles={drawerStyles} />
-      <View className={'def-meta-expressions'} style={drawerStyles.expressions}>
-        {meta.expressions ? (
-          <MetaLabel
-            className={'def-meta-expressions-label'}
-            style={{ marginTop: 10 }}
-          >
-            Expressions
-          </MetaLabel>
-        ) : null}
-        {meta.expressions &&
-          meta.expressions.map(expression => {
-            return (
-              <MetaExpression
-                meta={meta}
-                expression={expression}
-                styles={drawerStyles.expression}
-                key={`${expression.key}-${expression.description}`}
-              />
-            )
-          })}
-      </View>
+    {meta && (
+      <>
+        <MetaDescription meta={meta} styles={drawerStyles} />
+        <MetaExpressions meta={meta} styles={drawerStyles} />
+        <MetaExamples meta={meta} styles={drawerStyles} />
+      </>
+    )}
     </Drawer>
   )
 })

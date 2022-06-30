@@ -44,6 +44,7 @@ const compareToWorldValue = async (selector, prop, typeJoin, worldPath, world) =
 }
 
 
+// Default metadata used for building the definitions meta-data
 const metaBase = {
   examples: [],
   module : `compareSavedElement`,
@@ -51,41 +52,49 @@ const metaBase = {
   expressions: [
     {
       type: 'string',
-      description: `The selector for the elements.`,
+      description: `The selector for the element.`,
       example: 'input#amount',
     },
     {
-      type: 'string',
+      type: 'word',
       description: `The property of the selected element to compare`,
       example: 'textContent',
     },
   ],
 }
 
-const elToWorldMeta = deepMerge(metaBase, {
+// Compares a selected elements prop against a saved value
+const elToVal = {
+  description: `Compares a selected elements prop against a saved value`,
   examples: [
     `Then "input#amount" value matches "3"`,
     `Then "input#amount" value matches "app.saved.amount"`,
     `Then "input#amount" value contains "app.saved.amount"`,
   ],
-})
-
-/**
- * Compares a selected elements property against a saved value
- */
+  expressions: [
+    ...metaBase.expressions,
+    {
+      type: 'string',
+      example: 'context.selected',
+      description: `An inline value or a path on the world where the saved data exists`,
+    }
+  ]
+}
 Then(
   '{string} {word} matches {string}',
-  (sel, prop, type, wPath, world) => compareToWorldValue(sel, prop, `matches-world`, wPath, world),
-  elToWorldMeta
+  (sel, prop, wPath, world) => compareToWorldValue(sel, prop, `matches-world`, wPath, world),
+  elToVal
 )
 Then(
   '{string} {word} contains {string}',
-  (sel, prop, type, wPath, world) => compareToWorldValue(sel, prop, `contains-world`, wPath, world),
-  elToWorldMeta
+  (sel, prop, wPath, world) => compareToWorldValue(sel, prop, `contains-world`, wPath, world),
+  elToVal
 )
 
-const worldToElMeta = deepMerge(metaBase, {
-  ...metaBase,
+
+// Compares a value or world path value against a selected elements property
+const valToElMeta = {
+  description: `Compares a value or world path value against a selected elements property.`,
   examples: [
     `Then "3" matches "input#amount" value`,
     `Then "app.saved.amount" matches "input#amount" value`,
@@ -95,41 +104,68 @@ const worldToElMeta = deepMerge(metaBase, {
     {
       type: 'string',
       example: 'context.selected',
-      description: `Path on the world where the saved data exists`,
+      description: `An inline value or a path on the world where the saved data exists`,
     },
     ...metaBase.expressions
   ]
-})
-
-/**
- * Compares a saved value against a selected elements property
- */
+}
 Then(
-  '{string} matches {string} {word}',
+  '{string} matches element {string} {word}',
   (wPath, type, sel, prop, world) => compareToWorldValue(sel, prop, `matches-el`, wPath, world),
-  worldToElMeta
+  valToElMeta
 )
 Then(
-  '{string} contains {string} {word}',
+  '{string} contains element {string} {word}',
   (wPath, type, sel, prop, world) => compareToWorldValue(sel, prop, `contains-el`, wPath, world),
-  worldToElMeta
+  valToElMeta
 )
 
-/**
- * Compares a selected elements property against a saved elements property
- */
 
-const elementMeta = deepMerge(metaBase, {
+// Compares a selected elements property against a saved elements property
+const elToSaved = deepMerge(metaBase, {
+  description: `Compares a selected elements prop against a saved elements prop.`,
   examples: [
     `Then "input#amount" value contains saved`,
     `Then "input#amount" value matches saved`
   ]
 })
+Then(
+  '{string} {word} matches saved',
+  (sel, prop, world) => compareElements(sel, prop, `matches-world`, `__meta.savedElement`, prop, world),
+  elToSaved
+)
+Then(
+  '{string} {word} contains saved',
+  (sel, prop, world) => compareElements(sel, prop, `contains-world`, `__meta.savedElement`, prop, world),
+  elToSaved
+)
 
-const elementMetaNoProp = deepMerge(metaBase, {
+// Compare with prop world saved element to selected element
+const savedToEl = deepMerge(metaBase, {
+  description: `Compares a saved elements prop against a selected elements prop.`,
   examples: [
-    `Then "input#amount" value contains "context.selected"`,
-    `Then "input#amount" value matches "context.selected"`,
+    `Then saved contains "input#amount" value`,
+    `Then saved matches "input#amount" value`,
+  ],
+})
+Then(
+  'saved matches {string} {word}',
+  (sel, prop, world) => compareElements(sel, prop, `matches-el`, `__meta.savedElement`, prop, world),
+  savedToEl
+)
+Then(
+  'saved contains {string} {word}',
+  (sel, prop, world) => compareElements(sel, prop, `contains-el`, `__meta.savedElement`, prop, world),
+  savedToEl
+)
+
+
+// Compare with prop selected element to world path element
+const elToWorldNoProp = deepMerge(metaBase, {
+  description: `Compares an element prop located by a selector with a previously saved element prop.`,
+  examples: [
+    `Then element "input#amount" value contains "context.selected"`,
+    `Then element "input#amount" value matches "context.selected"`,
   ],
   expressions: [{
     type: 'string',
@@ -138,10 +174,86 @@ const elementMetaNoProp = deepMerge(metaBase, {
   }]
 })
 
-const elementMetaProp = deepMerge(metaBase, {
+Then(
+  'element {string} {word} matches {string}',
+  (sel, prop, wPath, world) =>  compareElements(sel, prop, `matches-world`, wPath, prop, world),
+  elToWorldNoProp
+)
+Then(
+  'element {string} {word} contains {string}',
+  (sel, prop, wPath, world) =>  compareElements(sel, prop, `contains-world`, wPath, prop, world),
+  elToWorldNoProp
+)
+
+
+// Compares a previously saved element prop with an element prop located by a selector.
+const worldToElNoProp = {
+  description: `Compares a previously saved element prop with an element prop located by a selector.`,
+  examples: [
+    `Then "context.selected" contains "input#amount" value`,
+    `Then "context.selected" matches "input#amount" value`,
+  ],
+  expressions: [
+    {
+      type: 'string',
+      description: `Path on the world where the saved element exists`,
+      example: 'context.selected',
+    },
+    ...metaBase.expressions
+  ]
+}
+Then(
+  '{string} matches {string} {word}',
+  (wPath, sel, prop, world) =>  compareElements(sel, prop, `matches-el`, wPath, prop, world),
+  worldToElNoProp
+)
+Then(
+  '{string} contains {string} {word}',
+  (wPath, sel, prop, world) =>  compareElements(sel, prop, `contains-el`, wPath, prop, world),
+  worldToElNoProp
+)
+
+
+// Compares an element prop located by a selector with a previously saved element prop.
+const elToWorldWProps = {
+  description: `Compares an element prop located by a selector with a previously saved element prop.`,
   examples: [
     `Then "input#amount" value contains "context.selected" value`,
     `Then "input#amount" value matches "context.selected" value`,
+  ],
+  expressions: [
+    ...metaBase.expressions,
+    {
+      type: 'string',
+      description: `Path on the world where the saved element exists`,
+      example: 'context.selected',
+    },
+    {
+      type: 'word',
+      description: `The property of the saved element to compare`,
+      example: 'value',
+    },
+  ]
+}
+
+Then(
+  '{string} {word} matches {string} {word}',
+  (sel, prop, ...args) =>  compareElements(sel, prop, `matches-world`, ...args),
+  elToWorldWProps
+)
+Then(
+  '{string} {word} contains {string} {word}',
+  (sel, prop, ...args) =>  compareElements(sel, prop, `contains-world`, ...args),
+  elToWorldWProps
+)
+
+
+// Compares a previously saved element prop with an element prop located by a selector.
+const worldToElWProps = {
+  description: `Compares a previously saved element prop with an element prop located by a selector.`,
+  examples: [
+    `Then "context.selected" value matches element "input#amount" value`,
+    `Then "context.selected" value contains element "input#amount" value`,
   ],
   expressions: [
     {
@@ -150,85 +262,24 @@ const elementMetaProp = deepMerge(metaBase, {
       example: 'context.selected',
     },
     {
-      type: 'string',
+      type: 'word',
       description: `The property of the saved element to compare`,
       example: 'value',
-    }
+    },
+    ...metaBase.expressions,
   ]
-})
+}
 
-// Compare with prop selected element to world saved element
-Then(
-  '{string} {word} matches saved',
-  (sel, prop, world) => compareElements(sel, prop, `matches-world`, `__meta.savedElement`, prop, world),
-  elementMeta
-)
-Then(
-  '{string} {word} contains saved',
-  (sel, prop, world) => compareElements(sel, prop, `contains-world`, `__meta.savedElement`, prop, world),
-  elementMeta
-)
-
-// Compare with prop world saved element to selected element
-Then(
-  'saved matches {string} {word}',
-  (sel, prop, world) => compareElements(sel, prop, `matches-el`, `__meta.savedElement`, prop, world),
-  elementMeta
-)
-Then(
-  'saved contains {string} {word}',
-  (sel, prop, world) => compareElements(sel, prop, `contains-el`, `__meta.savedElement`, prop, world),
-  elementMeta
-)
-
-
-// Compare with prop selected element to world path element
-Then(
-  '{string} {word} matches {string}',
-  (sel, prop, wPath, world) =>  compareElements(sel, prop, `matches-world`, wPath, prop, world),
-  elementMetaNoProp
-)
-Then(
-  '{string} {word} contains {string}',
-  (sel, prop, wPath, world) =>  compareElements(sel, prop, `contains-world`, wPath, prop, world),
-  elementMetaNoProp
-)
-Then(
-  '{string} {word} matches {string} {word}',
-  (sel, prop, ...args) =>  compareElements(sel, prop, `matches-world`, ...args),
-  elementMetaProp
-)
-Then(
-  '{string} {word} contains {string} {word}',
-  (sel, prop, ...args) =>  compareElements(sel, prop, `contains-world`, ...args),
-  elementMetaProp
-)
-
-
-// Compare with prop world path element to selected element
-Then(
-  '{string} matches {string} {word}',
-  (wPath, sel, prop, world) =>  compareElements(sel, prop, `matches-world`, wPath, prop, world),
-  elementMetaNoProp
-)
-Then(
-  '{string} contains {string} {word}',
-  (wPath, sel, prop, world) =>  compareElements(sel, prop, `contains-world`, wPath, prop, world),
-  elementMetaNoProp
-)
 Then(
   '{string} {word} matches element {string} {word}',
   (wPath, wProp, sel, prop, world) =>  compareElements(sel, prop, `matches-el`, wPath, wProp, world),
-  compareElements,
-  elementMetaProp
+  worldToElWProps
 )
 Then(
   '{string} {word} contains element {string} {word}',
   (wPath, wProp, sel, prop, world) =>  compareElements(sel, prop, `contains-el`, wPath, wProp, world),
-  compareElements,
-  elementMetaProp
+  worldToElWProps
 )
-
 
 
 module.exports = {

@@ -10,8 +10,8 @@ import { reduceObj, deepClone } from '@keg-hub/jsutils'
  */
 const defaultGroups = {
   lookup: {},
-  all: { type: 'all', group: 'All Steps', toggled: true, items: [] },
-  given: { type: 'given', group: 'Given Steps', toggled: false, items: [] },
+  all: { type: 'all', group: 'All Steps', toggled: false, items: [] },
+  given: { type: 'given', group: 'Given Steps', toggled: true, items: [] },
   when: { type: 'when', group: 'When Steps', toggled: false, items: [] },
   then: { type: 'then', group: 'Then Steps', toggled: false, items: [] },
 }

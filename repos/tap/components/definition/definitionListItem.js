@@ -90,14 +90,14 @@ export const DefinitionListItem = React.memo(props => {
           styles={itemStyles.actions}
         />
       </View>
-      {hasMetaData && (
+      {hasMetaData && meta?.expressions && (
         <DefinitionMeta
           meta={meta}
           group={group}
           title={title}
+          toggled={metaToggled}
           styles={itemStyles.meta}
           metaStyles={metaStyles.meta}
-          toggled={metaToggled}
           setMetaToggled={setMetaToggled}
         />
       )}
