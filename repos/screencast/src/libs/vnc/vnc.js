@@ -71,7 +71,7 @@ const startVNC = async ({
       {
         detached: true,
         // stdio: 'ignore',
-        cwd: cwd || config.internalPaths.herkinRoot,
+        cwd: cwd || config.internalPaths.gobletRoot,
         env: {
           ...process.env,
           DISPLAY: vnc.display,

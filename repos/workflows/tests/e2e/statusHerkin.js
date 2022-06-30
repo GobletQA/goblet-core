@@ -3,7 +3,7 @@ const { Logger } = require('@keg-hub/cli-utils')
 const { statusHerkin } = require('../../src/herkin/statusHerkin')
 
 const localMount = path.join(__dirname, '../../../../herkin')
-const herkinRoot = path.join(__dirname, '../../../../')
+const gobletRoot = path.join(__dirname, '../../../../')
 
 const defConf = {
   sockr: {},
@@ -59,7 +59,7 @@ module.exports = (async () => {
     ...defConf,
     // Use the herkin root that does not have the herkin empty file
     // This simulates a mounted repo
-    paths: { repoRoot: herkinRoot },
+    paths: { repoRoot: gobletRoot },
   })
   checkMountKeys(localStatus.withMount, withLocalMount)
   Logger.info(` - With local mount status check passed`)
@@ -80,7 +80,7 @@ module.exports = (async () => {
     screencast: { active: true },
     // Use the herkin root that does not have the herkin empty file
     // This simulates a mounted repo
-    paths: { repoRoot: herkinRoot },
+    paths: { repoRoot: gobletRoot },
   })
   checkMountKeys(vncStatus.withMount, withVNCMount)
   Logger.info(` - With VNC mount status check passed`)

@@ -139,7 +139,7 @@ module.exports = {
    * These paths should always exist on the loaded herkin.config object
    */
   internalPaths: {
-    herkinRoot: GOBLET_ROOT,
+    gobletRoot: GOBLET_ROOT,
     testUtilsDir: TEST_UTILS_PATH,
     pwMetaDataDir: GOBLET_PW_METADATA_DIR,
   },

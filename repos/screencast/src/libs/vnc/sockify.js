@@ -83,7 +83,7 @@ const startSockify = async ({
       {
         detached: true,
         // stdio: 'ignore',
-        cwd: cwd || config.internalPaths.herkinRoot,
+        cwd: cwd || config.internalPaths.gobletRoot,
         env: { ...process.env },
       },
       options,

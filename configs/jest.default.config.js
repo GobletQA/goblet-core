@@ -15,7 +15,7 @@ const { buildTestMatchFiles } = require('HerkinSharedUtils/buildTestMatchFiles')
  *
  * @returns {Array} - Built reporters array
  */
-const buildReporters = (opts=noOpObj, herkinRoot) => {
+const buildReporters = (opts=noOpObj, gobletRoot) => {
   const { JEST_HTML_REPORTER_OUTPUT_PATH } = process.env
   const title = opts.title || opts.type
 
@@ -23,7 +23,7 @@ const buildReporters = (opts=noOpObj, herkinRoot) => {
   JEST_HTML_REPORTER_OUTPUT_PATH &&
     reporters.push([
       // Since the root is not keg-herkin, we have to define the full path to the reporter
-      `${herkinRoot}/node_modules/jest-html-reporter`,
+      `${gobletRoot}/node_modules/jest-html-reporter`,
       {
         pageTitle: `${title ? capitalize(title) : ``} Test Results`.trim(),
         outputPath: JEST_HTML_REPORTER_OUTPUT_PATH,
@@ -50,7 +50,7 @@ const jestConfig = (herkin, opts=noOpObj) => {
   const { GOBLET_CONFIG_BASE, GOBLET_MOUNT_ROOT } = process.env
 
   herkin = herkin || getHerkinConfig()
-  const { herkinRoot } = herkin.internalPaths
+  const { gobletRoot } = herkin.internalPaths
 
   const testMatch = opts.testDir && (opts.type || opts.shortcut || opts.ext)
     ? buildTestMatchFiles(opts.testDir, opts)
@@ -58,13 +58,13 @@ const jestConfig = (herkin, opts=noOpObj) => {
 
   return {
     testMatch,
-    reporters: buildReporters(opts, herkinRoot),
+    reporters: buildReporters(opts, gobletRoot),
     // This seems to be needed based on how the github action is setup
     // But it may be a better option then sym-linking the keg-herkin node_modules to ~/.node_modules
     // Need to investigate it
     modulePaths: [
       path.join(GOBLET_CONFIG_BASE, `node_modules`),
-      path.join(herkinRoot, `node_modules`),
+      path.join(gobletRoot, `node_modules`),
       path.join(os.homedir(), `.node_modules`)
     ],
     moduleNameMapper: jestAliases,

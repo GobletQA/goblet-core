@@ -27,7 +27,7 @@ const runBdd = async args => {
   const cmdArgs = buildJestArgs(
     params,
     jestConfig,
-    // Force run the tests in sequence
+    // TODO: turn into options sync argument Force run the tests in sequence
     ['--runInBand']
   )
 

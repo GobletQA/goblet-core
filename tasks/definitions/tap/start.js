@@ -13,7 +13,7 @@ const {
  * @returns {String} path without config file
  */
 const getRootPath = config =>
-  nodePath.resolve(get(config, ['internalPaths', 'herkinRoot']))
+  nodePath.resolve(get(config, ['internalPaths', 'gobletRoot']))
 
 /**
  * Starts all the Keg-Herkin services needed to run tests

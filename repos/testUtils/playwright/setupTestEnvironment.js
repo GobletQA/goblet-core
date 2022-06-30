@@ -15,7 +15,7 @@ const initialize = async () => {
 
   /** GOBLET_BROWSER is set by the task `keg herkin bdd run` */
   const { GOBLET_BROWSER='chromium' } = process.env
-  const { gobletBrowserOpts=noOpObj } = global
+  const { gobletBrowserOpts=noOpObj, gobletContextOpts=noOpObj } = global
   
   try {
     const { type, launchOptions } = await getMetadata(GOBLET_BROWSER)
@@ -38,7 +38,8 @@ const initialize = async () => {
       )
 
     global.browser = browser
-    global.context = await browser.newContext()
+    // TODO: Add check for loading a previously saved context state
+    global.context = await browser.newContext(gobletContextOpts)
     await startTracing(global.context)
   }
   catch (err) {
@@ -66,14 +67,36 @@ const cleanup = async () => {
   
   // TODO: Update to use playwright video record end
   await stopTracingChunk(global.context)
-  await global.context.close()
+  // await global.context.close()
   await global.browser.close()
-  delete global.browser
-  delete global.context
-  delete global.page
 
-  return true
+  return new Promise((res) => {
+    setTimeout(() => {
+      delete global.browser
+      delete global.context
+      delete global.page
+      res(true)
+    }, 500)
+  })
 }
+
+/**
+ * Gets the browser page instance, or else creates a new one
+ * @param {number} num - The page number to get if multiple exist
+ *
+ * @return {Object} - Playwright browser page object
+ */
+const getContext = async (contextOpts, newContext) => {
+  if(!global.browser) throw new Error('Browser type not initialized')
+  if(!global.context) global.context = await browser.newContext(contextOpts)
+
+  // TODO: investigate creating a new context pased on passed params 
+  // global.context && await global.context.close()
+  // global.context = await browser.newContext(contextOpts)
+
+  return global.context
+}
+
 
 /**
  * Gets the browser page instance, or else creates a new one
@@ -94,7 +117,7 @@ const getPage = async (num = 0) => {
  *
  * @return {Object} - Contains the getPage method
  */
-const getBrowserContext = () => ({ getPage, context: global.context })
+const getBrowserContext = () => ({ getPage, getContext })
 
 /**
  * Helper that calls the jest beforeAll and afterAll

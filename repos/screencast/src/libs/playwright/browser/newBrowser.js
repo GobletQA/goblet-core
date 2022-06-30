@@ -108,7 +108,7 @@ const newBrowser = async (browserConf = noOpObj, checkStatus) => {
     return { browser }
   }
   catch(err){
-    // Ensure creatingBrowser gets set to falue
+    // Ensure creatingBrowser gets set to false
     newBrowser.creatingBrowser = false
     throw err
   }

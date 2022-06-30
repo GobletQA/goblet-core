@@ -18,14 +18,14 @@ const { mkDir, readFile, writeFile, pathExists, removeFile, pathExistsSync } =
  */
 const getMetaDataPaths = () => {
   const config = getHerkinConfig()
-  const { herkinRoot, pwMetaDataDir } = config.internalPaths
+  const { gobletRoot, pwMetaDataDir } = config.internalPaths
 
   const metadataDir =
     exists(pwMetaDataDir) && pathExistsSync(pwMetaDataDir)
       ? pwMetaDataDir
       : checkVncEnv().vncActive
       ? path.resolve(os.tmpdir(), 'keg-herkin')
-      : herkinRoot
+      : gobletRoot
 
   const metadataPath = path.resolve(metadataDir, 'browser-meta.json')
 

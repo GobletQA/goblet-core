@@ -1,13 +1,11 @@
-const { jestConfig } = require('./jest.default.config')
-
 const path = require('path')
-const glob = require('glob')
-const { uniqArr, toBool } = require('@keg-hub/jsutils')
+const { uniqArr, noOpObj } = require('@keg-hub/jsutils')
+const { jestConfig } = require('./jest.default.config')
 const { getHerkinConfig } = require('HerkinSharedConfig')
 const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
 const { buildJestGobletOpts } = require('HerkinSharedUtils/buildJestGobletOpts')
 const { taskEnvToBrowserOpts } = require('HerkinSharedUtils/taskEnvToBrowserOpts')
-
+const { getContextOpts } = require('HerkinSC')
 
 /**
  * Finds all step definition files in client's step directory and
@@ -64,6 +62,8 @@ module.exports = async () => {
   const herkin = getHerkinConfig()
   const baseDir = getRepoHerkinDir(herkin)
   const { devices, ...browserOpts } = taskEnvToBrowserOpts(herkin)
+  const contextOpts = getContextOpts(noOpObj, herkin)
+
   const { testUtilsDir } = herkin.internalPaths
   const defConf = jestConfig(herkin, {
     ext: 'feature',
@@ -77,7 +77,10 @@ module.exports = async () => {
      * Ensure only one test runs at a time
      * Allows the tests to run in sync
     */
-    maxWorkers: 1,
+    // maxWorkers: 1,
+    // TODO: figure out the best options for this
+    // Maybe look up how many cores a machine has, or make it configurable
+    maxWorkers: '50%',
     /** Add feature as an extension that can be loaded */
     moduleFileExtensions: [
       'feature',
@@ -88,8 +91,9 @@ module.exports = async () => {
     ],
     /** Pass on the browser options defined from the task that started the process */
     globals: {
-      gpbletPaths: herkin.paths,
+      gobletPaths: herkin.paths,
       gobletBrowserOpts: browserOpts,
+      gobletContextOpts: contextOpts,
       gobletOptions: buildJestGobletOpts(herkin, browserOpts)
     },
     /** Add all support and step files and ensure they are loaded before running the tests */
