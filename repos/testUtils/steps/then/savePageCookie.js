@@ -1,6 +1,6 @@
 const { Then } = require('HerkinParkin')
 const { getBrowserContext } = require('HerkinTestEnv')
-const { defaultCookieFile, saveBrowserCookie } = require('HerkinPlaywright/contextCookie')
+const { defaultCookieFile, saveBrowserCookie } = require('HerkinPlaywright/browserContext')
 
 /**
  * Checks that the page title is `title`

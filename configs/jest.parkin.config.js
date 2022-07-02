@@ -1,11 +1,12 @@
-const path = require('path')
-const { uniqArr, noOpObj } = require('@keg-hub/jsutils')
 const { jestConfig } = require('./jest.default.config')
+const path = require('path')
+const glob = require('glob')
+const { getContextOpts } = require('HerkinSC')
+const { uniqArr, noOpObj } = require('@keg-hub/jsutils')
 const { getHerkinConfig } = require('HerkinSharedConfig')
 const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
 const { buildJestGobletOpts } = require('HerkinSharedUtils/buildJestGobletOpts')
 const { taskEnvToBrowserOpts } = require('HerkinSharedUtils/taskEnvToBrowserOpts')
-const { getContextOpts } = require('HerkinSC')
 
 /**
  * Finds all step definition files in client's step directory and
@@ -37,7 +38,7 @@ const getParkinSupport = herkin => {
   const { testUtilsDir } = herkin.internalPaths
   const { repoRoot, workDir, supportDir } = herkin.paths
 
-  const parkinEnvironment = `${testUtilsDir}/parkin/setupTestEnvironment.js`
+  const parkinEnvironment = `${testUtilsDir}/parkin/parkinTestEnv.js`
   const herkinHooks = `${testUtilsDir}/support/hooks`
 
   // Don't include the world here because it gets loaded in herkin/support/world.js
@@ -47,7 +48,7 @@ const getParkinSupport = herkin => {
 
   // Add the default herkin hooks for setting up the tests
   // This adds a beforeAll and afterAll hook to the test execution
-  // Within the beforeAll hook is a call to testUtils/playwright/setupTestEnvironment.js
+  // Within the beforeAll hook is a call to testUtils/playwright/playwrightTestEnv.js
   // This is where the browser for the test execution is created / connected to
   matches.push(herkinHooks)
 

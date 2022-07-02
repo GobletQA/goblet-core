@@ -1,6 +1,6 @@
 /**
  * Custom jest transformer for parsing feature files
- * Uses a consistent Parkin instance setup in the testUtils/parkin/setupTestEnvironment.js
+ * Uses a consistent Parkin instance setup in the testUtils/parkin/parkinTestEnv.js
  *
  * @return {Object} - Jest custom transformer model object
  */

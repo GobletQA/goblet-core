@@ -1,8 +1,8 @@
 const {
-  setupTestEnvironment,
-} = require('HerkinRepos/testUtils/playwright/setupTestEnvironment')
+  playwrightTestEnv,
+} = require('HerkinRepos/testUtils/playwright/playwrightTestEnv')
 
-setupTestEnvironment()
+playwrightTestEnv()
 
 test('foo', async () => {
   const page = await context.newPage()

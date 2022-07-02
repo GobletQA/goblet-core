@@ -1,6 +1,6 @@
-const { setupTestEnvironment } = require('HerkinTestEnv')
+const { playwrightTestEnv } = require('HerkinTestEnv')
 
-setupTestEnvironment()
+playwrightTestEnv()
 
 describe('${name}', () => {
   test('It should', () => {

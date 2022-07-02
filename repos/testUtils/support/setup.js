@@ -1,4 +1,4 @@
-const { getBrowserContext } = require('../playwright/setupTestEnvironment')
+const { getBrowserContext } = require('../playwright/playwrightTestEnv')
 
 module.exports = {
   getBrowserContext,

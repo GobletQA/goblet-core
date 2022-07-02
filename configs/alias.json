@@ -30,7 +30,7 @@
   "HerkinBack": "repos/backend",
 
   "HerkinParkin": "repos/testUtils/parkin",
-  "HerkinTestEnv": "repos/testUtils/playwright/setupTestEnvironment",
+  "HerkinTestEnv": "repos/testUtils/playwright/playwrightTestEnv",
   "HerkinPlaywright": "repos/testUtils/playwright",
   "HerkinSteps": "repos/testUtils/steps",
   "HerkinSupport": "repos/testUtils/support",

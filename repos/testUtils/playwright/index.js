@@ -1,5 +1,5 @@
 module.exports = {
-  ...require('./setupTestEnvironment'),
+  ...require('./playwrightTestEnv'),
   ...require('./getElement'),
   ...require('./getElements'),
   ...require('./evalElement'),
