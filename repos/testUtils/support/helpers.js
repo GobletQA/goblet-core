@@ -1,5 +1,3 @@
-const os = require('os')
-const path = require('path')
 const { get } = require('@keg-hub/jsutils')
 const { getLocator } = require('HerkinPlaywright')
 
@@ -45,24 +43,6 @@ const compareTypes = [
   `contains`,
   `matches`
 ] 
-
-/**
- * Gets the storage location from the temp-directory
- */
-const contextStateLoc = (saveLocation) => {
-  const tempDir = os.tmpdir()
-  const location = `${saveLocation.split(`.json`).shift()}.json`
-
-  return path.join(tempDir, location)
-}
-
-/**
- * Save storage state into the file.
- */
-const saveContextState = async (context, location) => {
-  return await context.storageState({ path: contextStateLoc(location) })
-}
-
 
 /**
  * Expects the number of dom elements matching `selector` to match `count` based on the comparison screen
@@ -186,8 +166,6 @@ const getLocatorContent = async (selector, locator) => {
 
 
 module.exports = {
-  saveContextState,
-  contextStateLoc,
   getWorldData,
   compareValues,
   callLocatorMethod,

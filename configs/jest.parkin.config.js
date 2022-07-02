@@ -46,7 +46,7 @@ const getParkinSupport = herkin => {
   const matches = glob.sync(pattern)
 
   // Add the default herkin hooks for setting up the tests
-  // This add a beforeAll and afterAll hook to the test execution
+  // This adds a beforeAll and afterAll hook to the test execution
   // Within the beforeAll hook is a call to testUtils/playwright/setupTestEnvironment.js
   // This is where the browser for the test execution is created / connected to
   matches.push(herkinHooks)

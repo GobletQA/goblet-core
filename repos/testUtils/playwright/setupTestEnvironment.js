@@ -1,4 +1,5 @@
 const { noOpObj } = require('@keg-hub/jsutils')
+const { getContext } = require('HerkinPlaywright/browserContext')
 const { getMetadata } = require('HerkinSCPlaywright/server/server')
 const { newBrowser } = require('HerkinSCPlaywright/browser/newBrowser')
 const { startTracing, stopTracingChunk, startTracingChunk } = require('./tracing')
@@ -38,8 +39,7 @@ const initialize = async () => {
       )
 
     global.browser = browser
-    // TODO: Add check for loading a previously saved context state
-    global.context = await browser.newContext(gobletContextOpts)
+    global.context = await getContext(gobletContextOpts)
     await startTracing(global.context)
   }
   catch (err) {
@@ -53,7 +53,6 @@ const initialize = async () => {
     return global.context && global.browser
   }
 }
-
 
 /**
  * Cleans up for testing tear down by releasing all resources, including
@@ -79,24 +78,6 @@ const cleanup = async () => {
     }, 500)
   })
 }
-
-/**
- * Gets the browser page instance, or else creates a new one
- * @param {number} num - The page number to get if multiple exist
- *
- * @return {Object} - Playwright browser page object
- */
-const getContext = async (contextOpts, newContext) => {
-  if(!global.browser) throw new Error('Browser type not initialized')
-  if(!global.context) global.context = await browser.newContext(contextOpts)
-
-  // TODO: investigate creating a new context pased on passed params 
-  // global.context && await global.context.close()
-  // global.context = await browser.newContext(contextOpts)
-
-  return global.context
-}
-
 
 /**
  * Gets the browser page instance, or else creates a new one
