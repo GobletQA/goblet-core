@@ -6,7 +6,7 @@ const { defaultStateFile, saveContextState } = require('HerkinPlaywright/browser
  * Checks that the page title is `title`
  * @param {*} title - text to compare to page title
  */
-const savePageState = async (name, world) => {
+const savePageState = async (name) => {
   const { getContext } = getBrowserContext()
   const context = await getContext()
 

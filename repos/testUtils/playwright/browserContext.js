@@ -18,19 +18,26 @@ const browserCookieLoc = (saveLocation) => {
 /**
  * Save storage state into the file.
  */
-const saveBrowserCookie = async (context, location) => {
+const saveContextCookie = async (context, location) => {
   const cookies = await context.cookies()
   const cookieJson = JSON.stringify(cookies)
-  await promises.writeFile(browserCookieLoc(location), cookieJson)
+  const saveLoc = browserCookieLoc(location)
+  await promises.writeFile(saveLoc, cookieJson)
+
+  // console.log(`[Goblet] Browser cookie saved to ${saveLoc}`)
 
   return true
 }
 
-const addBrowserCookie = async () => {
-  const cookies = fs.readFileSync('cookies.json', 'utf8')
+const setContextCookie = async (context, location) => {
+  const loadLoc = browserCookieLoc(location)
+  const cookie = await promises.readFile(loadLoc, 'utf8')
+  await context.addCookies(JSON.parse(cookie))
 
-  const deserializedCookies = JSON.parse(cookies)
-  await context.addCookies(deserializedCookies)
+  // console.log(`[Goblet] Browser cookie loaded from ${loadLoc}`)
+  context.__goblet.cookie = loadLoc
+
+  return true  
 }
 
 /**
@@ -59,25 +66,35 @@ const saveContextState = async (context, location) => {
 const getContext = async (contextOpts, location) => {
   if(!global.browser) throw new Error('Browser type not initialized')
   if(!global.context){
-    // TODO: figure out how to pull the saved context state 
-    global.context = await browser.newContext({
-      ...contextOpts,
-      // TODO: figure out if this fails when the path does not exist
-      storageState: contextStateLoc(location)
-    })
-    // global.context = await global.browser.newContext(contextOpts)
+    try {
+      // TODO: figure out how to pull the saved context state 
+      global.context = await browser.newContext({
+        ...contextOpts,
+        // TODO: Need to add this dynamically based on some env or tag?
+        // storageState: contextStateLoc(location)
+      })
+    }
+    catch(err){
+      if(err.code === `ENOENT` && err.message.includes(`Error reading storage state`))
+        console.warn(`[Goblet] Saved Context State ${location} does not exist.`)
+      else global.context = await global.browser.newContext(contextOpts)      
+    }
   }
-
+  // Goblet options that are context specific
+  // Not great, and there's better way to store this,
+  // because we don't own the context object, but this works now
+  global.context.__goblet = global.context.__goblet || {}
   return global.context
 }
 
 
 module.exports = {
   getContext,
+  setContextCookie,
   contextStateLoc,
   saveContextState,
   defaultStateFile,
   browserCookieLoc,
-  saveBrowserCookie,
+  saveContextCookie,
   defaultCookieFile,
 }

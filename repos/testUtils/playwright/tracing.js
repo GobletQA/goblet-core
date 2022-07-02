@@ -35,10 +35,10 @@ const startTracing = async (context) => {
  * @returns {Void}
  */
 const startTracingChunk = async (context) => {
-  if(!context || context.__gobletIsTracing || tracingDisabled()) return
+  if(!context || context.__goblet.tracing || tracingDisabled()) return
 
   await context.tracing.startChunk()
-  context.__gobletIsTracing = true
+  context.__goblet.tracing = true
 
   return true
 }
@@ -50,18 +50,19 @@ const startTracingChunk = async (context) => {
  * @returns {Void}
  */
 const stopTracingChunk = async (context) => {
-  if(!context || !context.__gobletIsTracing || tracingDisabled()) return
+  if(!context || !context.__goblet.tracing || tracingDisabled()) return
 
   const { gobletBrowserOpts=noOpObj } = global
   const { tracesDir } = gobletBrowserOpts
   
+  const timestamp = new Date().getTime()
   // TODO: see if theres a better way to get the test name from the jasmine api
   // Get the name of the file being tested and set it here
-  const name = (global.jasmine.testPath || new Date().getTime()).split(`/`).pop()
-  const traceLoc = path.join(tracesDir, `${name}/trace.zip`)
+  const name = global.jasmine.testPath.split(`/`).pop()
+  const traceLoc = path.join(tracesDir, `${name}/${timestamp}/trace.zip`)
 
   await context.tracing.stopChunk({ path: traceLoc })
-  context.__gobletIsTracing = false
+  context.__goblet.tracing = false
   
   return true
 }

@@ -21,7 +21,7 @@ const meta = {
   expressions: [],
 }
 
-Given('I use the saved page state', () => usePageState(false, world), meta)
+Given('I use the saved page state', (world) => usePageState(false, world), meta)
 Given('I use the saved {string} page state', usePageState, {
   ...meta,
   expressions: [

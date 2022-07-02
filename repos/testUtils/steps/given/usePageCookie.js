@@ -1,14 +1,13 @@
 const { Given } = require('HerkinParkin')
-const { defaultCookieFile, browserCookieLoc } = require('HerkinPlaywright/browserContext')
+const { defaultCookieFile, getContext, setContextCookie } = require('HerkinPlaywright/browserContext')
 
 /**
  * Checks that the page title is `title`
  * @param {*} title - text to compare to page title
  */
-const usePageCookie = async (name, world) => {
-  const contextState = browserCookieLoc(name)
-  
-
+const usePageCookie = async (name) => {
+  const context = await getContext()
+  await setContextCookie(context, name)
 }
 
 const meta = {
@@ -21,7 +20,7 @@ const meta = {
   expressions: [],
 }
 
-Given('I use the saved page cookie', () => usePageCookie(false, world), meta)
+Given('I use the saved page cookie', (world) => usePageCookie(false, world), meta)
 Given('I use the saved {string} page cookie', usePageCookie, {
   ...meta,
   expressions: [

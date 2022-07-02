@@ -8,7 +8,8 @@ const { getPage } = getBrowserContext()
  */
 const wait = async num => {
   const page = await getPage()
-  return await page.waitForTimeout(num * 1000)
+  const seconds = num * 1000
+  await page.waitForTimeout(seconds)
 }
 
 const meta = {

@@ -1,7 +1,8 @@
 const { Given } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinTestEnv')
-const { getPage } = getBrowserContext()
 const { get, isStr } = require('@keg-hub/jsutils')
+const { getBrowserContext } = require('HerkinTestEnv')
+
+const { getPage } = getBrowserContext()
 
 /**
  * Parses the url, replacing any dynamic variables

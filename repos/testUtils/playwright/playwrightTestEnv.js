@@ -24,19 +24,14 @@ const initialize = async () => {
     // TODO: Should update to check if in docker container
     // Then pass false based on that
     // Pass false to bypass checking the browser status
-    const { browser } = await newBrowser(
-      {
-        ...launchOptions,
-        type,
-        ...gobletBrowserOpts,
-      },
-      false
-    )
+    const { browser } = await newBrowser({
+      ...launchOptions,
+      type,
+      ...gobletBrowserOpts,
+    }, false)
 
     if (!browser)
-      throw new Error(
-        `Could not create browser. Please ensure the browser server is running.`
-      )
+      throw new Error(`Could not create browser. Please ensure the browser server is running.`)
 
     global.browser = browser
     global.context = await getContext(gobletContextOpts)
@@ -88,9 +83,8 @@ const cleanup = async () => {
 const getPage = async (num = 0) => {
   if (!global.context) throw new Error('No browser context initialized')
 
-  const pages = global.context.pages() || []
-
-  return pages.length ? pages[num] : await global.context.newPage()
+  const pages = global.context.pages() || []  
+   return pages.length ? pages[num] : await global.context.newPage()
 }
 
 /**
