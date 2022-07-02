@@ -61,7 +61,7 @@ const addEnvToOpts = (opts, key, value) => {
  * @returns {Object} - Updated opts object with recording settings
  */
 const parseRecord = (config, opts, screenDims, value, fullScreen) => {
-  if(!exists(value)) return opts
+  if(!value) return opts
 
   opts.recordVideo = opts.recordVideo || {}
   opts.recordVideo.size = isObj(screenDims)
