@@ -8,6 +8,8 @@ const { getWorld } = require('HerkinSupport')
 
 let __ParkinInstance = new Parkin(getWorld())
 
+// Sets a new instance of the Parkin Class to the __ParkinInstance variable
+// Currently not called anywhere
 const setParkinInstance = (instance) => {
   if(instance && instance !== __ParkinInstance) __ParkinInstance = instance
 

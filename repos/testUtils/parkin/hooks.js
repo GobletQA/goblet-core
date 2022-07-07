@@ -1,8 +1,13 @@
-const { getParkinInstance } = require('./instance')
+/**
+ * Sets up the environment for running parkin with Jest
+ * Loaded via the jest config options `setupFilesAfterEnv`
+ * Is loaded after `parkinTestEnv.js` to ensure the parkin instance is already configured
+ * Which adds the `getParkinInstance` method to the global object, which is called here
+ */
 
 const getHook = (hookName) => {
   return (...args) => {
-    const parkin = getParkinInstance()
+    const parkin = global.getParkinInstance()
     return parkin.hooks[hookName].apply(parkin.hooks, args)
   }
 }

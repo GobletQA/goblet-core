@@ -41,6 +41,8 @@ const getParkinSupport = herkin => {
   const { repoRoot, workDir, supportDir } = herkin.paths
 
   const parkinEnvironment = `${testUtilsDir}/parkin/parkinTestEnv.js`
+
+  // **IMPORTANT** - Must be loaded after the parkinEnvironment 
   const herkinHooks = `${testUtilsDir}/support/hooks`
 
   // Don't include the world here because it gets loaded in herkin/support/world.js
@@ -54,8 +56,8 @@ const getParkinSupport = herkin => {
   // This is where the browser for the test execution is created / connected to
   matches.push(herkinHooks)
 
-  // Add the parkin environment setup first
-  // This ensures we can get access to the Parkin instance
+  // MUST BE LOADED FIRST - Add the parkin environment setup before all other setup files
+  // This ensures we can get access to the Parkin instance on the global object
   matches.unshift(parkinEnvironment)
 
   return matches

@@ -1,15 +1,22 @@
-const { parkin } = require('./instance')
+/**
+ * Sets up the environment for running parkin with Jest
+ * Loaded via the jest config options `setupFilesAfterEnv`
+ * Allows setting up parkin after Jest has been configured
+ */
+
+const { getParkinInstance } = require('./instance')
 const { toInt, exists } = require('@keg-hub/jsutils')
 
 /**
  * Global helper to allow re-using the same parking instance for each test
  */
-global.getParkinInstance = () => parkin
+global.getParkinInstance = getParkinInstance
 
 /**
  * Gets the options to be passed on to parkin
  * Currently set using envs, but would be better to define a config object
  * TODO: investigate loading in the herkin.config in this content
+ * Have access to the global object, so could use that for loading Parkin config options
  */
 global.getParkinOptions = () => {
   // Load the both herkin and parkin version
