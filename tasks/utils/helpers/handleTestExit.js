@@ -2,18 +2,18 @@ const { noPropArr } = require('@keg-hub/jsutils')
 
 /**
  * Exits the process, once the tests are complete
- * @exits
  * @param {Array<string|number>} exitCodes - exit code of each test in container
+ * 
+ * @returns the exit code sum of the executed test commands
  */
 const handleTestExit = (exitCodes = noPropArr, reportPath) => {
   const { GOBLET_RUN_FROM_UI, GOBLET_RUN_FROM_CI } = process.env
-  
   const codeSum = exitCodes.reduce((sum, code) => sum + parseInt(code, 10), 0)
 
   /**
-   * The GOBLET_RUN_FROM_UI env should only be set on the sockr.cmd.sh script
-   * This way we know if it's coming from the herkin frontend
-   * If not running from the UI, then print the view reports message
+   * The GOBLET_RUN_FROM_UI || GOBLET_RUN_FROM_CI env should only be set in those contexts
+   * This way we know if it's coming an external context and not being run locally
+   * If run locally then print the view reports as needed
    */
   !GOBLET_RUN_FROM_UI &&
     !GOBLET_RUN_FROM_CI &&
@@ -29,7 +29,7 @@ const handleTestExit = (exitCodes = noPropArr, reportPath) => {
       console.log('\n=====================================================')
     })
 
-  process.exit(codeSum)
+  return codeSum
 }
 
 module.exports = {

@@ -1,13 +1,12 @@
 const { getBrowsers } = require('HerkinSC')
 const { testTypes } = require('../../constants')
-const { sharedOptions, dockerCmd } = require('@keg-hub/cli-utils')
+const { sharedOptions } = require('@keg-hub/cli-utils')
+const { runTestCmd } = require('HerkinTasks/utils/helpers/runTestCmd')
 const { buildBddEnvs } = require('HerkinTasks/utils/envs/buildBddEnvs')
-const { runCommands } = require('HerkinTasks/utils/helpers/runCommands')
 const { buildReportPath } = require('HerkinTest/reports/buildReportPath')
 const { buildJestArgs } = require('HerkinTasks/utils/jest/buildJestArgs')
 const { getJestConfig } = require('HerkinTasks/utils/jest/getJestConfig')
 const { filterTaskEnvs } = require('HerkinTasks/utils/envs/filterTaskEnvs')
-const { handleTestExit } = require('HerkinTasks/utils/helpers/handleTestExit')
 
 /**
  * Run parkin tests in container
@@ -20,32 +19,18 @@ const { handleTestExit } = require('HerkinTasks/utils/helpers/handleTestExit')
 const runBdd = async args => {
   filterTaskEnvs()
   const { params, herkin } = args
-
-  const browsers = getBrowsers(params)
   const jestConfig = await getJestConfig(params, testTypes.feature)
-  const reportPath = buildReportPath(testTypes.feature, params.context, herkin)
-  const cmdArgs = buildJestArgs(
+
+  // Run the test command for defined browsers
+  const exitCode = await runTestCmd({
     params,
-    jestConfig,
-    // TODO: turn into options sync argument Force run the tests in sequence
-    ['--runInBand']
-  )
+    cmdArgs: buildJestArgs(params, jestConfig),
+    reportPath: buildReportPath(testTypes.feature, params.context, herkin),
+    envsHelper: browser => buildBddEnvs(browser, params, reportPath, testTypes.feature)
+  })
+  
+  process.exit(exitCode)
 
-  const commands = browsers.map(
-    browser => () => {
-      return dockerCmd(
-        params.container,
-        cmdArgs,
-        buildBddEnvs(browser, params, reportPath, testTypes.feature),
-      )
-    }
-  )
-
-  // Run each of the test command in sequence
-  const codes = await runCommands(commands, params)
-
-  // Calculate the exit codes so we know if all runs were successful
-  return handleTestExit(codes, reportPath)
 }
 
 module.exports = {

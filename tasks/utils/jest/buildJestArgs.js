@@ -9,7 +9,7 @@ const { uniqArr, noPropArr } = require('@keg-hub/jsutils')
  * @param {string} jestConfig - Path the a jest config file to load
  */
 const buildJestArgs = (params, jestConfig, extraArgs=noPropArr) => {
-  const { timeout, bail, context, noTests, jestDebug } = params
+  const { sync, timeout, bail, context, noTests, jestDebug } = params
 
   const cmdArgs = [
     path.join(appRoot, `node_modules/.bin/jest`),
@@ -22,6 +22,7 @@ const buildJestArgs = (params, jestConfig, extraArgs=noPropArr) => {
   ]
 
   cmdArgs.push(addFlag('bail', bail))
+  cmdArgs.push(addFlag('sync', sync))
   cmdArgs.push(addFlag('debug', jestDebug))
   cmdArgs.push(addFlag('passWithNoTests', noTests))
   cmdArgs.push(addFlag(`config=${jestConfig}`, jestConfig))
