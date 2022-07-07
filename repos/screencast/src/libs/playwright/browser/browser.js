@@ -1,5 +1,5 @@
 const { Logger } = require('@keg-hub/cli-utils')
-const { isStr, isFunc, get, set } = require('@keg-hub/jsutils')
+const { isFunc, get, set } = require('@keg-hub/jsutils')
 const { defaultBrowser } = require('HerkinSCConstants')
 
 /**

@@ -25,12 +25,12 @@ const getReportName = (type, name) => {
  *
  * @returns {string} - Path where the report should be created
  */
-const buildReportPath = (type, name, herkin) => {
+const buildReportPath = (type, { context, testReport }, herkin) => {
   if (!type)
     throw new Error(`Test type is required to build the test report path!`)
 
   const reportsDir = getPathFromBase(herkin.paths.reportsDir, herkin)
-  const report = getReportName(type, name)
+  const report = getReportName(type, testReport || context)
 
   // Example: herkin/reports/features/my-tests/my-tests-12345.html
   return path.join(reportsDir, `${type}/${report}/${report}-${Date.now()}.html`)

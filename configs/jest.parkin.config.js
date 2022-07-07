@@ -1,4 +1,6 @@
+// Must load this first because it loads the alias
 const { jestConfig } = require('./jest.default.config')
+
 const path = require('path')
 const glob = require('glob')
 const { getContextOpts } = require('HerkinSC')
@@ -74,14 +76,6 @@ module.exports = async () => {
 
   return {
     ...defConf,
-    /**
-     * Ensure only one test runs at a time
-     * Allows the tests to run in sync
-    */
-    // maxWorkers: 1,
-    // TODO: figure out the best options for this
-    // Maybe look up how many cores a machine has, or make it configurable
-    maxWorkers: '50%',
     /** Add feature as an extension that can be loaded */
     moduleFileExtensions: [
       'feature',

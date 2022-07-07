@@ -14,8 +14,8 @@ const { jestConfigMap } = require('../../constants')
  * 
  * @returns {string} - Path to the found jest config
  */
-const getJestConfig = async ({ jestConfig, base }, type) => {
-  const configLoc = jestConfig ? path.join(base, jestConfig) : jestConfigMap[type]
+const getJestConfig = async ({ testConfig, base }, type) => {
+  const configLoc = testConfig ? path.join(base, testConfig) : jestConfigMap[type]
 
   // Check if the config path exists, if not throw
   const [existsErr, fileExists] = await fileSys.pathExists(configLoc)

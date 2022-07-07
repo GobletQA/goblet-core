@@ -2,7 +2,6 @@ import {
   deepMerge,
   checkCall,
   noPropArr,
-  noOpObj,
   exists,
   get,
 } from '@keg-hub/jsutils'
@@ -31,7 +30,7 @@ const resolveFromSettings = args => {
 
   return [
     conditionalAdd(`slowMo`, mergedSettings?.browser?.slowMo),
-    conditionalAdd(`timeout`, mergedSettings?.tests?.timeout),
+    conditionalAdd(`testTimeout`, mergedSettings?.tests?.timeout),
     // TODO: Add other customizable settings here
   ]
 }

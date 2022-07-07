@@ -42,44 +42,85 @@ const dynamicOpts = {
 
 const taskOptions = {
   jest: {
-    jestConfig: {
-      enforced: true,
-      example: `--jestConfig relative/path/to/config`,
-      description: 'Absolute path to a jest config relative to the root directory',
-    },
-    sync: {
-      description: 'Run all tests sequentially',
-      alias: ['runInBand'],
-      example: `--sync`,
-      default: true,
-    },
-    timeout: {
-      description:
-        'Test timeout in seconds. Defaults to 90 seconds, so async tests have sufficient time to complete.',
-      example: `--timeout 60`,
-      type: 'number',
-      default: 90, // 90 seconds || 1.5 min
-    },
     noTests: {
       description: 'The test runner will not fail when no tests exit',
       example: '--noTests',
       default: false,
     },
-    bail: {
+    testSync: {
+      default: true,
+      alias: ['runInBand'],
+      example: `--no-testSync`,
+      description: 'Run all tests sequentially',
+    },
+    testBail: {
       description: 'Stops all tests once a single step fails',
       default: false,
-      example: '--bail',
+      example: '--testBail',
     },
-    jestDebug: {
+    testConfig: {
+      enforced: true,
+      example: `--jestConfig relative/path/to/config`,
+      description: 'Absolute path to a jest config relative to the root directory',
+    },
+    testTimeout: {
+      type: 'number',
+      default: 60000, // 1min
+      env: `GOBLET_TEST_TIMEOUT`,
+      example: `--timeout 15000`,
+      description: 'Test timeout in seconds. Defaults to 60000 milliseconds (1min).',
+    },
+    testDebug: {
       default: false,
-      example: '--jestDebug',
+      example: '--testDebug',
       env: `GOBLET_JEST_DEBUG`,
       description: 'Pass the --debug flag to the jest command',
     },
-    retry: {
-      example: '--retry 3',
+    testRetry: {
+      example: '--testRetry 3',
       env: `GOBLET_TEST_RETRY`,
-      description: 'Pass the --debug flag to the jest command',
+      description: 'Amount of times to retry the test if it fails',
+    },
+    testReport: {
+      example: '--testReport',
+      env: `GOBLET_TEST_REPORT_NAME`,
+      description: 'Name of the generated HTML test report file',
+    },
+    testCache: {
+      default: true,
+      example: '--cache',
+      env: `GOBLET_TEST_CACHE`,
+      description: 'Use internal test cache when executing test',
+    },
+    testColors: {
+      default: true,
+      example: '--colors',
+      env: `GOBLET_TEST_COLORS`,
+      description: 'Force use of colors even when not a TTY',
+    },
+    testWorkers: {
+      default: `50%`,
+      example: '--testWorkers',
+      env: `GOBLET_TEST_WORKERS`,
+      description: 'Number of workers to use when running tests',
+    },
+    testVerbose: {
+      default: false,
+      example: '--testVerbose',
+      env: `GOBLET_TEST_VERBOSE`,
+      description: 'Output verbose test results as the tests run',
+    },
+    testOpenHandles: {
+      default: false,
+      example: '--testOpenHandles',
+      env: `GOBLET_TEST_OPEN_HANDLES`,
+      description: 'Detect handles left open when tests run. Forces tests to run in sync.',
+    },
+    testCI: {
+      default: false,
+      example: '--testCI',
+      env: `GOBLET_RUN_FROM_CI`,
+      description: 'Run the tests in CI mode when running in a CI environment',
     }
   },
   docker: {
@@ -144,11 +185,13 @@ const taskOptions = {
       default: false,
       alias: ['async'],
       example: '--concurrent' ,
+      env: `GOBLET_BROWSER_CONCURRENT`,
       description: 'Run the defined browsers concurrently',
     },
     browsers: {
       type: 'array',
       alias: ['browser'],
+      env: `GOBLET_BROWSERS`,
       example: '--browsers chrome,wk' ,
       description: 'Launch a specific browser by name. Seperate by comma to launch multiple',
       allowed: ['chromium', 'chrome', 'ch', 'firefox', 'ff', 'webkit', 'wk', 'safari', 'sa'],
@@ -185,18 +228,18 @@ const taskOptions = {
       description: 'Launch the browser in headless mode',
     },
     slowMo: {
-      type: 'number',
-      env: 'GOBLET_SLOW_MO',
-      example: '--slowMo 500',
-      description:
-        'Speed actions within the browser will be performed in milliseconds',
+      default: 100,
+      type: `number`,
+      example: `--slowMo 500`,
+      env: `GOBLET_BROWSER_SLOW_MO`,
+      description: `Speed actions within the browser will be performed in milliseconds`,
     },
     browserTimeout: {
       type: 'number',
+      default: 45000, // 45 secconds
       env: `GOBLET_BROWSER_TIMEOUT`,
       example: '--browserTimeout 15000', // 15 seconds
-      description:
-        'Amount of time until a browser request will timeout should be less the timeout option',
+      description: 'Amount of time until a browser request will timeout should be less the timeout option',
     },
     devices: {
       type: 'array',

@@ -16,10 +16,10 @@ const buildBddEnvs = (browser, params, reportPath, type='feature') => {
   const env = buildPWEnvs({}, browser, params)
 
   // Add feature file specific envs
+  addEnv(env, 'GOBLET_CONFIG_BASE', params.base)
   addEnv(env, 'GOBLET_FEATURE_TAGS', params.tags)
   addEnv(env, 'GOBLET_FEATURE_NAME', params.filter)
-  addEnv(env, 'GOBLET_CONFIG_BASE', params.base)
-  addEnv(env, 'GOBLET_TEST_RETRY', params.retry)
+  addEnv(env, 'GOBLET_TEST_RETRY', params.testRetry)
   
 
   // Set up html test reporting ENV for jest

@@ -16,12 +16,13 @@ const runWp = async args => {
   filterTaskEnvs()
   const { params, herkin } = args
   const jestConfig = await getJestConfig(params, testTypes.waypoint)
+  const reportPath = buildReportPath(testTypes.waypoint, params, herkin)
   
   // Run the test command for defined browsers
   const exitCode = await runTestCmd({
     params,
+    reportPath,
     cmdArgs: buildJestArgs(params, jestConfig),
-    reportPath: buildReportPath(testTypes.waypoint, params.context, herkin),
     envsHelper: browser => buildWaypointEnvs(browser, params, reportPath, testTypes.waypoint)
   })
 
@@ -54,7 +55,7 @@ module.exports = {
         'mode',
         'base',
         'repo',
-        'sync',
+        `testSync`,
         'container',
         'device',
         'width',
@@ -69,6 +70,15 @@ module.exports = {
         'record',
         'storageState',
         'timezone',
+        `testCI`,
+        `testDebug`
+        `testCache`,
+        `testReport`,
+        `testColors`,
+        'testTimeout',
+        `testVerbose`,
+        `testWorkers`,
+        `testOpenHandles`,
       ]
     ),
   },

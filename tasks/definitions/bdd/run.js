@@ -20,12 +20,12 @@ const runBdd = async args => {
   filterTaskEnvs()
   const { params, herkin } = args
   const jestConfig = await getJestConfig(params, testTypes.feature)
-
+  const reportPath = buildReportPath(testTypes.feature, params, herkin)
   // Run the test command for defined browsers
   const exitCode = await runTestCmd({
     params,
+    reportPath,
     cmdArgs: buildJestArgs(params, jestConfig),
-    reportPath: buildReportPath(testTypes.feature, params.context, herkin),
     envsHelper: browser => buildBddEnvs(browser, params, reportPath, testTypes.feature)
   })
   
@@ -56,20 +56,27 @@ module.exports = {
         'bddConfig',
         'concurrent',
         'log',
-        'bail',
         'noTests',
         'slowMo',
-        'timeout',
         'browserTimeout',
         'debug',
-        `jestDebug`,
+        `testCI`,
+        'testBail',
+        `testSync`,
+        `testDebug`,
+        'testRetry',
+        `testCache`,
+        `testReport`,
+        `testColors`,
+        'testTimeout',
+        `testVerbose`,
+        `testWorkers`,
+        `testOpenHandles`,
         `parkinDebug`,
         'devtools',
         'container',
         'mode',
-        'sync',
         'repo',
-        'retry',
         `tracing`,
         `screenshot`,
         'base',

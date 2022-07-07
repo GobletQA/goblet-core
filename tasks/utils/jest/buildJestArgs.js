@@ -9,25 +9,47 @@ const { uniqArr, noPropArr } = require('@keg-hub/jsutils')
  * @param {string} jestConfig - Path the a jest config file to load
  */
 const buildJestArgs = (params, jestConfig, extraArgs=noPropArr) => {
-  const { sync, timeout, bail, context, noTests, jestDebug } = params
+  const {
+    context,
+    noTests,
+    testCI,
+    testBail,
+    testSync,
+    testDebug,
+    testCache,
+    testColors,
+    testVerbose,
+    testWorkers,
+    testTimeout,
+    testOpenHandles,
+  } = params
 
   const cmdArgs = [
     path.join(appRoot, `node_modules/.bin/jest`),
     ...extraArgs,
-    `--detectOpenHandles`,
-    `--no-cache`,
     `--env=node`,
     // Convert to milliseconds
-    `--testTimeout=${(timeout || 90) * 1000}`,
+    `--testTimeout=${(parseInt(testTimeout, 10) || 60000)}`,
   ]
 
-  cmdArgs.push(addFlag('bail', bail))
-  cmdArgs.push(addFlag('sync', sync))
-  cmdArgs.push(addFlag('debug', jestDebug))
+  
+  cmdArgs.push(addFlag(`ci`, testCI))
+  cmdArgs.push(addFlag(`colors`, testColors))
+  cmdArgs.push(addFlag(`verbose`, testVerbose))
+  cmdArgs.push(addFlag(`maxWorkers`, testWorkers))
+  // Use the inverse of because testCache default to true
+  cmdArgs.push(addFlag(`no-cache`, !testCache))
+  cmdArgs.push(addFlag(`detectOpenHandles`, !testOpenHandles))
+
+  cmdArgs.push(addFlag('bail', testBail))
+  cmdArgs.push(addFlag('debug', testDebug))
+  cmdArgs.push(addFlag('runInBand', testSync))
   cmdArgs.push(addFlag('passWithNoTests', noTests))
   cmdArgs.push(addFlag(`config=${jestConfig}`, jestConfig))
 
   // If context is set use that as the only file to run
+  // Uses Jest pattern matching functionality to find the correct test to run
+  // See https://jestjs.io/docs/cli#jest-regexfortestfiles for more info
   context && cmdArgs.push(context)
 
   return uniqArr(cmdArgs.filter(arg => arg))
