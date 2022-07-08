@@ -16,9 +16,8 @@ const runCommands = async (commands, params) => {
         if(!exitCode) return exitCode
 
         Logger.error(`[Goblet] Browser ${capitalize(cmd.browser)} Error`)
-        log && Logger.pair(`CMD Args: `, cmd.cmdArgs.join(' '))
-        log && Logger.log(`CMD Opts: `, cmd.cmdOpts)
-
+        // log && Logger.pair(`CMD Args: `, cmd.cmdArgs.join(' '))
+        // log && Logger.log(`CMD Opts: `, cmd.cmdOpts)
         return exitCode
       })) 
 }
