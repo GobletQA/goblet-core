@@ -1,6 +1,6 @@
 const fs = require('fs')
 const { Logger } = require('@keg-hub/cli-utils')
-const { getHerkinConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('GobletSharedConfig')
 const { findProc, killProc } = require('GobletSCLibs/proc')
 const { create: childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
 const {
@@ -37,7 +37,7 @@ const startSockify = async ({
   options = noOpObj,
   env = noOpObj,
 }) => {
-  const config = getHerkinConfig()
+  const config = getGobletConfig()
   const { proxy, vnc } = config.screencast
 
   if (SOCK_PROC) return SOCK_PROC

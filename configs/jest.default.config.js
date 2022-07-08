@@ -3,7 +3,7 @@ const path = require('path')
 const { jestAliases, registerAliases } = require('./aliases.config')
 registerAliases()
 
-const { getHerkinConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('GobletSharedConfig')
 const { noOpObj, noPropArr, capitalize } = require('@keg-hub/jsutils')
 const { buildTestMatchFiles } = require('GobletSharedUtils/buildTestMatchFiles')
 
@@ -49,7 +49,7 @@ const buildReporters = (opts=noOpObj, gobletRoot) => {
 const jestConfig = (herkin, opts=noOpObj) => {
   const { GOBLET_CONFIG_BASE, GOBLET_MOUNT_ROOT } = process.env
 
-  herkin = herkin || getHerkinConfig()
+  herkin = herkin || getGobletConfig()
   const { gobletRoot } = herkin.internalPaths
 
   const testMatch = opts.testDir && (opts.type || opts.shortcut || opts.ext)

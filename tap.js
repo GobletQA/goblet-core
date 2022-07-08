@@ -1,6 +1,6 @@
 require('./configs/aliases.config').registerAliases()
-const { getHerkinConfig } = require('./repos/shared/utils/getHerkinConfig')
-const config = getHerkinConfig()
+const { getGobletConfig } = require('./repos/shared/utils/getGobletConfig')
+const config = getGobletConfig()
 const { serviceAccount, ...firebaseConfig } = config.firebase
 const {
   NODE_ENV,

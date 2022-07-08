@@ -1,10 +1,10 @@
 const express = require('express')
-const { getHerkinConfig, resetHerkinConfig } = require('GobletSharedConfig')
+const { getGobletConfig, resetHerkinConfig } = require('GobletSharedConfig')
 
 let _APP
 
 /**
- * Reloads the herkin config be deleting the current config and calling getHerkinConfig
+ * Reloads the herkin config be deleting the current config and calling getGobletConfig
  * Does not reset the _CONFIG_TYPE, so the same type is loaded every time
  * @function
  * @public
@@ -30,7 +30,7 @@ const reloadHerkinConfig = type => {
  * @returns {Object} - Express App Object
  */
 const setupApp = type => {
-  !_APP.locals.config && (_APP.locals.config = getHerkinConfig())
+  !_APP.locals.config && (_APP.locals.config = getGobletConfig())
 
   return _APP
 }

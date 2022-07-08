@@ -5,8 +5,8 @@
  * After the configs are loaded, it merges them together based on specificity
  * The latter override the former
  *  1. default herkin.config.js
- *  2. --base /custom/folder/containing/<herkin.config>
- *  3. --config /custom/full/path/to/<herkin.config>
+ *  2. --base /custom/folder/containing/<goblet.config>
+ *  3. --config /custom/full/path/to/<goblet.config>
  *
  * At some point this should extracted out into it's own module
  * And probably added to keg-cli or in cli-utils
@@ -221,7 +221,7 @@ const loadCustomConfig = (runtimeConfigPath, search = true) => {
  *
  * @return {Object} - Loaded Herkin config
  */
-const getHerkinConfig = (argsConfig = noOpObj) => {
+const getGobletConfig = (argsConfig = noOpObj) => {
   // TODO: need a better way to handle this
   if (!Boolean(process.env.JEST_WORKER_ID) && __GOBLET_CONFIG) return __GOBLET_CONFIG
 
@@ -284,7 +284,7 @@ const getDefaultHerkinConfig = () => {
 module.exports = {
   findConfig,
   getConfigAtPath,
-  getHerkinConfig,
+  getGobletConfig,
   loadCustomConfig,
   getDefaultHerkinConfig,
   loadConfigFromFolder,

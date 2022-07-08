@@ -1,6 +1,6 @@
 const { noOpObj, deepMerge } = require('@keg-hub/jsutils')
 const { checkVncEnv } = require('../../utils/vncActiveEnv')
-const { getHerkinConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('GobletSharedConfig')
 
 /**
  * Default options for a browser context
@@ -18,7 +18,7 @@ const options = {
  * @returns {Object} - Built page config
  */
 const getPageOpts = (pageConf = noOpObj) => {
-  const herkin = getHerkinConfig()
+  const herkin = getGobletConfig()
 
   return deepMerge(
     herkin?.screencast?.page,

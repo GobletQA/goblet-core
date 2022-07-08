@@ -5,7 +5,7 @@ const path = require('path')
 const glob = require('glob')
 const { getContextOpts } = require('GobletSC')
 const { uniqArr, noOpObj } = require('@keg-hub/jsutils')
-const { getHerkinConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('GobletSharedConfig')
 const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
 const { buildJestGobletOpts } = require('GobletSharedUtils/buildJestGobletOpts')
 const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts')
@@ -64,7 +64,7 @@ const getParkinSupport = config => {
 }
 
 module.exports = async () => {
-  const herkin = getHerkinConfig()
+  const herkin = getGobletConfig()
   const baseDir = getRepoHerkinDir(herkin)
   const { devices, ...browserOpts } = taskEnvToBrowserOpts(herkin)
   const contextOpts = getContextOpts(noOpObj, herkin)

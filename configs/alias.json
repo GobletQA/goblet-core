@@ -20,7 +20,7 @@
   "GobletSharedPaths": "repos/shared/utils/paths.js",
   "GobletSharedMiddleware": "repos/shared/middleware",
   "GobletSharedRouter": "repos/shared/express/appRouter.js",
-  "GobletSharedConfig": "repos/shared/utils/getHerkinConfig.js",
+  "GobletSharedConfig": "repos/shared/utils/getGobletConfig.js",
   "GobletSharedAsyncWrap": "repos/shared/express/asyncWrap.js",
 
   "GobletBackConstants": "constants/backend",

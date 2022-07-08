@@ -1,4 +1,4 @@
-const { getHerkinConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('GobletSharedConfig')
 const { noOpObj, deepMerge } = require('@keg-hub/jsutils')
 const { taskEnvToContextOpts } = require('GobletSharedUtils/taskEnvToContextOpts')
 
@@ -10,7 +10,7 @@ const { taskEnvToContextOpts } = require('GobletSharedUtils/taskEnvToContextOpts
  * @returns {Object} - Built context config
  */
 const getContextOpts = (contextOpts=noOpObj, herkin) => {
-  herkin = herkin || getHerkinConfig()
+  herkin = herkin || getGobletConfig()
   return deepMerge(
     /**
      * The default config options from the global herkin.config.js

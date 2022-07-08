@@ -3,7 +3,7 @@ const { jestConfig } = require('./jest.default.config')
 const path = require('path')
 const { noOpObj } = require('@keg-hub/jsutils')
 const { inDocker } = require('@keg-hub/cli-utils')
-const { getHerkinConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('GobletSharedConfig')
 const { getLaunchType } = require('GobletSharedUtils/getLaunchType')
 const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
 const { buildTestMatchFiles } = require('GobletSharedUtils/buildTestMatchFiles')
@@ -60,7 +60,7 @@ const buildLaunchOpts = async (herkin, taskOpts) => {
 // It's recommend to use a separate Jest configuration jest.e2e.config.js for jest-playwright
 // to gain speed improvements and by that to only use Playwright in the end-to-end tests
 module.exports = async () => {
-  const herkin = getHerkinConfig()
+  const herkin = getGobletConfig()
   const baseDir = getRepoHerkinDir(herkin)
   const taskOpts = taskEnvToBrowserOpts(herkin)
   const launchOpts = await buildLaunchOpts(herkin, taskOpts)

@@ -1,5 +1,5 @@
 const path = require('path')
-const { getHerkinConfig } = require('./getHerkinConfig')
+const { getGobletConfig } = require('./getGobletConfig')
 
 /**
  * Helper to find the base directory all the other repo paths are relative to
@@ -11,7 +11,7 @@ const { getHerkinConfig } = require('./getHerkinConfig')
  */
 const getRepoHerkinDir = config => {
   config =
-    config && config.__VALID_GOBLET_CONFIG ? config : getHerkinConfig(config)
+    config && config.__VALID_GOBLET_CONFIG ? config : getGobletConfig(config)
   const { repoRoot, workDir } = config.paths
 
   return workDir ? path.join(repoRoot, workDir) : repoRoot

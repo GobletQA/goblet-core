@@ -1,6 +1,6 @@
 const path = require('path')
 const glob = require('glob')
-const { getHerkinConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('GobletSharedConfig')
 const {
   tryRequireSync,
   deepMerge,
@@ -12,7 +12,7 @@ const {
  * @return {Object?} - the client's world object, or undefined if it does not exist
  */
 const getClientWorld = (config) => {
-  config = config || getHerkinConfig()
+  config = config || getGobletConfig()
   const { repoRoot, supportDir, workDir } = config.paths
   const baseDir = workDir ? path.join(repoRoot, workDir) : repoRoot
   const worldPattern = path.join(baseDir, supportDir, '**/world.js')

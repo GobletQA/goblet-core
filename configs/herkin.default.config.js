@@ -1,7 +1,7 @@
 /**
  * --- **IMPORTANT** ---
  * This file should never be imported directly
- * Use the getHerkinConfig to load the herkin.config file
+ * Use the getGobletConfig to load the herkin.config file
  * --- **IMPORTANT** ---
  */
 

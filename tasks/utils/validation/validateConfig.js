@@ -7,8 +7,8 @@ const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
  * **IMPORTANT**
  * This is the one exception to the never load the default herkin.config file
  * Because it does validation to ensure a custom config is valid
- * Only this file and the getHerkinConfig file should load the default herkin.config
- * All others should use getHerkinConfig
+ * Only this file and the getGobletConfig file should load the default herkin.config
+ * All others should use getGobletConfig
  * **IMPORTANT**
  */
 const defaultConfig = require('GobletConfigs/herkin.default.config.js')

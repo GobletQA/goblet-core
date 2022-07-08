@@ -1,5 +1,5 @@
 const path = require('path')
-const { getHerkinConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('GobletSharedConfig')
 const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
 const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts')
 const { checkVncEnv } = require('../../utils/vncActiveEnv')
@@ -57,7 +57,7 @@ const options = {
   },
 }
 
-const getHerkinConfigOpts = herkin => {
+const getGobletConfigOpts = herkin => {
   const { reportsDir = 'reports', artifactsDir = 'artifacts' } = herkin.paths
 
   const baseDir = getRepoHerkinDir(herkin)
@@ -92,7 +92,7 @@ const getBrowserOpts = (browserConf=noOpObj, herkin) => {
     ...argumentOpts
   } = browserConf
 
-  herkin = herkin || getHerkinConfig()
+  herkin = herkin || getGobletConfig()
   const { args: herkinModeArgs, ...herkinModeOpts } = checkVncEnv().vncActive
     ? options.vnc
     : options.host
@@ -101,7 +101,7 @@ const getBrowserOpts = (browserConf=noOpObj, herkin) => {
     /**
      * Gets the default config options from the global herkin.config.js
      */
-    getHerkinConfigOpts(herkin),
+    getGobletConfigOpts(herkin),
     /**
      * Default options set based on the herkin mode i.e. local || vnc
      */

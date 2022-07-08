@@ -1,5 +1,5 @@
 const { Logger } = require('@keg-hub/cli-utils')
-const { getHerkinConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('GobletSharedConfig')
 const { findProc, killProc } = require('GobletSCLibs/proc')
 const { create: childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
 const {
@@ -47,7 +47,7 @@ const startVNC = async ({
   }
 
   Logger.log(`- Starting tigervnc server...`)
-  const config = getHerkinConfig()
+  const config = getGobletConfig()
   const { vnc } = config.screencast
 
   VNC_PROC = await childProc({
