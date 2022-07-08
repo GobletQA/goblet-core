@@ -92,14 +92,14 @@ const statusForVnc = async (config, metadata = noOpObj) => {
   if (!username && !branch && !remote && !local) return unknownStatus
 
   /*
-   * Use local to find the herkin.config
+   * Use local to find the goblet.config
    * Load the herkin config and build the repo
    * respond with status and loaded repo
    */
   const isMounted = await isRepoMounted(null, local)
   if (!isMounted) return unknownStatus
 
-  Logger.log(`Loading herkin.config...`)
+  Logger.log(`Loading goblet.config...`)
   const herkinConfig = await loadHerkinConfig(local)
 
   return !herkinConfig

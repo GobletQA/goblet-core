@@ -27,11 +27,11 @@ const buildDeviceList = (envVal) => {
 /**
  * Gets the browser opts set as envs when a task is run
  * This allows passing values into the test environment
- * @param {Object} herkin - Herkin global config
+ * @param {Object} config - Goblet global config
  *
  * @return {Object} browser options
  */
-const taskEnvToBrowserOpts = herkin => {
+const taskEnvToBrowserOpts = config => {
   const {
     GOBLET_HEADLESS,
     GOBLET_DEV_TOOLS,
@@ -39,8 +39,8 @@ const taskEnvToBrowserOpts = herkin => {
     GOBLET_BROWSER = 'chromium',
     GOBLET_BROWSER_SLOW_MO = `500`,
     GOBLET_BROWSER_TIMEOUT = `60000`, // 15 seconds
-    GOBLET_TRACES_DIR = getPathFromBase(path.join(herkin.paths.reportsDir, `traces/`), herkin),
-    GOBLET_DOWNLOADS_PATH = getPathFromBase(path.join(herkin.paths.artifactsDir, `downloads/`), herkin),
+    GOBLET_TRACES_DIR = getPathFromBase(path.join(config.paths.reportsDir, `traces/`), config),
+    GOBLET_DOWNLOADS_PATH = getPathFromBase(path.join(config.paths.artifactsDir, `downloads/`), config),
   } = process.env
 
   return {

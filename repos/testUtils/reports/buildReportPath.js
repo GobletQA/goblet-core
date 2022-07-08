@@ -21,18 +21,18 @@ const getReportName = (type, name) => {
  * Adds a date timestamp to the report file name
  * @param {string} type - Type of tests for the report
  * @param {string} [name=type] - Name of the test related to the report
- * @param {Object} herkin - Keg-Herkin global config object
+ * @param {Object} goblet - Keg-Herkin global config object
  *
  * @returns {string} - Path where the report should be created
  */
-const buildReportPath = (type, { context, testReport }, herkin) => {
+const buildReportPath = (type, { context, testReport }, goblet) => {
   if (!type)
     throw new Error(`Test type is required to build the test report path!`)
 
-  const reportsDir = getPathFromBase(herkin.paths.reportsDir, herkin)
+  const reportsDir = getPathFromBase(goblet.paths.reportsDir, goblet)
   const report = getReportName(type, testReport || context)
 
-  // Example: herkin/reports/features/my-tests/my-tests-12345.html
+  // Example: goblet/reports/features/my-tests/my-tests-12345.html
   return path.join(reportsDir, `${type}/${report}/${report}-${Date.now()}.html`)
 }
 

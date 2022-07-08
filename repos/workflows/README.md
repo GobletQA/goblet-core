@@ -45,7 +45,7 @@
 * This first happens when Keg-Herkin is started by Herkin-Admin
 * Herkin-Admin passed the metadata of the repo to Keg-Herkin
 * Keg-Herkin then uses that metadata to build the required Keg-Herkin configuration
-  * `repository-root/herkin.config.js` - Keg-Herkin configuration file
+  * `repository-root/goblet.config.js` - Keg-Herkin configuration file
     * If this file already exists, the **entire workflow** will be stopped
       * Otherwise it could over wright previous created folderpaths
   * `/automation` or `/tests` folder in the root directory with the following structure
@@ -86,7 +86,7 @@
   * Changes made via Keg-Herkin Application will have a commit message based on the change file
     * `feat(test): Updates to user-sign-in.feature`
 * The committed changes are **always scoped** with one exception
-  * Only files within the `keg-herkin root folder` or the `herkin.config.js` file will be committed
+  * Only files within the `keg-herkin root folder` or the `goblet.config.js` file will be committed
   * Any other file changes will be ignored
   * The only exception to this is during the initial setup of Keg-Herkin within the repo
 

@@ -7,7 +7,7 @@ const { getCurrentRepoPath } = require('./getCurrentRepoPath')
 
 /**
  * Copies the herkin template files into the mounted repo
- * First checks if a herkin.config exists
+ * First checks if a goblet.config exists
  * If it does, the template copy is bypassed
  *
  * @param {string} local - The local path to the mounted git repo

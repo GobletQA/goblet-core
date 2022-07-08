@@ -12,12 +12,12 @@ const { metadata, checkVncEnv, getBrowserOpts, getContextOpts } = require('Goble
 
 /**
  * Builds the launch / browser options for the jest-playwright-config
- * @param {Object} herkin - Global Herkin config
+ * @param {Object} config - Global Herkin config
  * @param {Object} taskOpts - Playwright browser options set by the task starting the process
  * 
  * @returns {Object} - Built browser options
  */
-const buildLaunchOpts = async (herkin, taskOpts) => {
+const buildLaunchOpts = async (config, taskOpts) => {
   const { vncActive, socketActive } = checkVncEnv()
   const { endpoint, launchOptions } = await metadata.read(taskOpts.type)
 
@@ -40,7 +40,7 @@ const buildLaunchOpts = async (herkin, taskOpts) => {
    */
   const browserKey = vncActive ? 'launchOptions' : 'connectOptions'
 
-  const opts = {[browserKey]: getBrowserOpts(launchOptions, herkin)}
+  const opts = {[browserKey]: getBrowserOpts(launchOptions, config)}
 
   // If VNC is not active, then set the websocket endpoint
   if(!vncActive) opts[browserKey].wsEndpoint = wsEndpoint
@@ -60,20 +60,20 @@ const buildLaunchOpts = async (herkin, taskOpts) => {
 // It's recommend to use a separate Jest configuration jest.e2e.config.js for jest-playwright
 // to gain speed improvements and by that to only use Playwright in the end-to-end tests
 module.exports = async () => {
-  const herkin = getGobletConfig()
-  const baseDir = getRepoHerkinDir(herkin)
-  const taskOpts = taskEnvToBrowserOpts(herkin)
-  const launchOpts = await buildLaunchOpts(herkin, taskOpts)
+  const config = getGobletConfig()
+  const baseDir = getRepoHerkinDir(config)
+  const taskOpts = taskEnvToBrowserOpts(config)
+  const launchOpts = await buildLaunchOpts(config, taskOpts)
   
-  const { testUtilsDir } = herkin.internalPaths
+  const { testUtilsDir } = config.internalPaths
 
   return {
     preset: `jest-playwright-preset`,
     /** Build the default jest config for waypoint files */
-    ...jestConfig(herkin, {
+    ...jestConfig(config, {
       shortcut: 'wp',
       type: 'waypoint',
-      testDir: path.join(baseDir, herkin.paths.waypointDir),
+      testDir: path.join(baseDir, config.paths.waypointDir),
     }),
     /**
      * Set the test env for the jest-playwright plugin
@@ -83,7 +83,7 @@ module.exports = async () => {
       'jest-playwright': {
         ...launchOpts,
         launchType: getLaunchType(),
-        contextOptions: getContextOpts(noOpObj, herkin),
+        contextOptions: getContextOpts(noOpObj, config),
       },
     },
     setupFilesAfterEnv: [

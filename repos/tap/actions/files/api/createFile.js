@@ -22,7 +22,7 @@ const ensureExtension = (fileType, fileName) => {
   const typeMeta = fileTypes[fileType]
   if(!typeMeta || !typeMeta.ext)
     return {error: [
-      `File type "${fileType}" is misconfigured in the repos "herkin.config.js".`,
+      `File type "${fileType}" is misconfigured in the repos "goblet.config.js".`,
       `Please fix configuration for this file type to resolve the issue.`
     ].join(`\n`)}
 

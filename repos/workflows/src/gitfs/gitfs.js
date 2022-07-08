@@ -109,7 +109,7 @@ const validateGitOpts = gitOpts => {
     username: gitOpts.username,
     commiter_name: gitOpts.name || gitOpts.username,
     password: gitOpts.token || process.env.GOBLET_GIT_TOKEN,
-    commiter_email: gitOpts.email || `${gitOpts.username}@herkin.io`,
+    commiter_email: gitOpts.email || `${gitOpts.username}@goblet.io`,
   }
 }
 

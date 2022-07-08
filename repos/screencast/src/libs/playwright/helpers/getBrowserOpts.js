@@ -57,12 +57,12 @@ const options = {
   },
 }
 
-const getGobletConfigOpts = herkin => {
-  const { reportsDir = 'reports', artifactsDir = 'artifacts' } = herkin.paths
+const getGobletConfigOpts = config => {
+  const { reportsDir = 'reports', artifactsDir = 'artifacts' } = config.paths
 
-  const baseDir = getRepoHerkinDir(herkin)
+  const baseDir = getRepoHerkinDir(config)
   return {
-    ...herkin?.screencast?.browser,
+    ...config?.screencast?.browser,
     tracesDir: path.join(baseDir, reportsDir),
     downloadsPath: path.join(baseDir, artifactsDir),
   }
@@ -73,11 +73,11 @@ const getGobletConfigOpts = herkin => {
  * @function
  * @public
  * @param {Object} browserConf - Options to define how the browser starts
- * @param {Object} herkin - Global herkin config object
+ * @param {Object} config - Global config config object
  *
  * @return {Object} - Config object to pass to playwright when starting a browser
  */
-const getBrowserOpts = (browserConf=noOpObj, herkin) => {
+const getBrowserOpts = (browserConf=noOpObj, config) => {
   const {
     channel,
     restart,
@@ -92,26 +92,26 @@ const getBrowserOpts = (browserConf=noOpObj, herkin) => {
     ...argumentOpts
   } = browserConf
 
-  herkin = herkin || getGobletConfig()
-  const { args: herkinModeArgs, ...herkinModeOpts } = checkVncEnv().vncActive
+  config = config || getGobletConfig()
+  const { args: configModeArgs, ...configModeOpts } = checkVncEnv().vncActive
     ? options.vnc
     : options.host
 
   return deepMerge(
     /**
-     * Gets the default config options from the global herkin.config.js
+     * Gets the default config options from the global goblet.config.js
      */
-    getGobletConfigOpts(herkin),
+    getGobletConfigOpts(config),
     /**
-     * Default options set based on the herkin mode i.e. local || vnc
+     * Default options set based on the config mode i.e. local || vnc
      */
-    herkinModeOpts,
+    configModeOpts,
     /**
      * Generated options passed on passed in arguments
      * Allows only setting properties if they actually exist
      */
     {
-      args: flatUnion(herkinModeArgs, args),
+      args: flatUnion(configModeArgs, args),
       ...(exists(headless) && { headless }),
       ...(exists(channel) && { channel }),
     },
@@ -126,7 +126,7 @@ const getBrowserOpts = (browserConf=noOpObj, herkin) => {
      * This ensures those options gets set
      * Also, excludes the devices list from the returned Object
      */
-     omitKeys(taskEnvToBrowserOpts(herkin), ['devices']),
+     omitKeys(taskEnvToBrowserOpts(config), ['devices']),
   )
 }
 

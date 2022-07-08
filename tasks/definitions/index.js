@@ -2,7 +2,7 @@ const { isObj, isFunc, mapObj } = require('@keg-hub/jsutils')
 const { getGobletConfig } = require('GobletSharedConfig')
 
 /**
- * Injects the herkin.config into a tasks arguments
+ * Injects the goblet.config into a tasks arguments
  * @param {function} taskAction - Function called when a task is run
  *
  * @return {function} - Function to inject the herkin config
@@ -16,10 +16,10 @@ const injectHerkinConfig = taskAction => {
 }
 
 /**
- * Loops the herkin custom tasks, and injects the herkin.config as an argument
- * @param {Object} tasks - Task definitions to inject the herkin.config into
+ * Loops the herkin custom tasks, and injects the goblet.config as an argument
+ * @param {Object} tasks - Task definitions to inject the goblet.config into
  *
- * @return {Object} - tasks with the herkin.config injected
+ * @return {Object} - tasks with the goblet.config injected
  */
 const initialize = tasks => {
   mapObj(tasks, (key, task) => {

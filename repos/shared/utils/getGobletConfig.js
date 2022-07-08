@@ -1,10 +1,10 @@
 /**
- * Helper to load the herkin.config for a repo
- * Loads the default herkin.config.js
+ * Helper to load the goblet.config for a repo
+ * Loads the default goblet.config.js
  * Then tries to find configs relative to a config path or base directory
  * After the configs are loaded, it merges them together based on specificity
  * The latter override the former
- *  1. default herkin.config.js
+ *  1. default goblet.config.js
  *  2. --base /custom/folder/containing/<goblet.config>
  *  3. --config /custom/full/path/to/<goblet.config>
  *
@@ -30,13 +30,13 @@ const { aliases } = require('GobletConfigs/aliases.config')
 
 /**
  * **IMPORTANT**
- * Loads the default herkin.config
+ * Loads the default goblet.config
  * No other file should import the default herkin config
  * **IMPORTANT**
  */
 const defaultConfig = require(path.join(
   aliases.GobletRoot,
-  'configs/herkin.default.config.js'
+  'configs/goblet.default.config.js'
 ))
 
 let __GOBLET_CONFIG
@@ -73,7 +73,7 @@ const addConfigFileTypes = config => {
  * Until it finds a config
  * @param {string} baseDir - Base directory to search from
  *
- * @return {Object} - The herkin config if the config exists at baseDir/<folder>/herkin.config.js, else null
+ * @return {Object} - The herkin config if the config exists at baseDir/<folder>/goblet.config.js, else null
  */
 const loadConfigFromFolder = baseDir => {
   return ['', './config', './configs', './herkin', './test', './tests'].reduce(
@@ -83,10 +83,10 @@ const loadConfigFromFolder = baseDir => {
 }
 
 /**
- * Tries to find the herkin.config.js(on) file at `cwd`
+ * Tries to find the goblet.config.js(on) file at `cwd`
  * @param {string} pathToCheck - directory path to check
  *
- * @return {Object?} - the herkin config if the config exists at $(cwd)/herkin.config.js, else null
+ * @return {Object?} - the herkin config if the config exists at $(cwd)/goblet.config.js, else null
  */
 const getConfigAtPath = pathToCheck => {
 
@@ -97,9 +97,9 @@ const getConfigAtPath = pathToCheck => {
     `.herkinrc.yml`,
     `.herkinrc.js`,
     `.herkinrc.cjs`,
-    `herkin.config.json`,
-    `herkin.config.js`,
-    `herkin.config.cjs`,
+    `goblet.config.json`,
+    `goblet.config.js`,
+    `goblet.config.cjs`,
   ]
 
   const paths = validNames.map(name => path.join(pathToCheck, name))
@@ -140,10 +140,10 @@ const findConfig = startDir => {
 }
 
 /**
- * Loads a herkin.config from a folder path recursively
+ * Loads a goblet.config from a folder path recursively
  * @param {string} base - Folder to start the search from
  *
- * @return {Object?} - the herkin config if the config exists at $(cwd)/herkin.config.js, else null
+ * @return {Object?} - the herkin config if the config exists at $(cwd)/goblet.config.js, else null
  */
 const loadConfigFromBase = base => {
   const {
@@ -230,11 +230,11 @@ const getGobletConfig = (argsConfig = noOpObj) => {
 
   if (!customConfig && argsConfig.local && argsConfig.warn) {
     Logger.warn(
-      `\n[ WARNING ] ${Logger.colors.red("Can't find a herkin.config file")}\n`
+      `\n[ WARNING ] ${Logger.colors.red("Can't find a goblet.config file")}\n`
     )
     Logger.pair(
       `  * Defaulting to`,
-      `"keg-herkin/configs/herkin.default.config.js"`
+      `"keg-herkin/configs/goblet.default.config.js"`
     )
     Logger.warn(`        * Work will not be saved`)
     Logger.log(`  * To use your own config, either:`)

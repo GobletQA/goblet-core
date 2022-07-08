@@ -179,7 +179,7 @@ const taskOptions = {
     base: {
       alias: ['baseDir', 'rootDir', 'root'],
       example: ['--base /my/test/repo/directory'],
-      description: `The root or base directory containing a herkin.config outside of Keg-Herkin root directory`,
+      description: `The root or base directory containing a goblet.config outside of Keg-Herkin root directory`,
     },
     repo: {
       alias: [ 'cwd', 'workdir', 'repoDir'],
@@ -334,7 +334,7 @@ const taskOptions = {
       default: false,
       example: '--record',
       env: `GOBLET_TEST_VIDEO_RECORD`,
-      description: 'Records a video of all browser page interactions, and saves to herkin.config#downloads directory'
+      description: 'Records a video of all browser page interactions, and saves to goblet.config#downloads directory'
     },
     // TOODO: Need to investigate this further
     // storageState: {},

@@ -35,7 +35,7 @@ const setupHerkin = async (args, gitArgs, mounted) => {
       `Herkin template could not be created for repo ${gitArgs.remote}`
     )
 
-  Logger.log(`Loading herkin.config...`)
+  Logger.log(`Loading goblet.config...`)
   const herkinConfig = await loadHerkinConfig(gitArgs.local)
 
   return herkinConfig
@@ -52,7 +52,7 @@ const setupHerkin = async (args, gitArgs, mounted) => {
       )
     : failResp(
         { setup: false },
-        `Could not load herkin.config for mounted repo`
+        `Could not load goblet.config for mounted repo`
       )
 }
 

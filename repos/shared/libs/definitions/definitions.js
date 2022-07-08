@@ -47,7 +47,7 @@ const parseDefinitions = async (repo, definitionFiles, overrideParkin) => {
 /**
  * Loads the definitions file from the passed in repo instance
  * @param {Object} repo - Repo Class instance for the currently active repo
- * @param {Object} [herkinConfig] - The global herkin.config
+ * @param {Object} [herkinConfig] - The global goblet.config
  *
  * @returns {Array} - Loaded Definitions models
  */

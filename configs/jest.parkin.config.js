@@ -12,8 +12,8 @@ const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts
 
 /**
  * Finds all step definition files in client's step directory and
- * also in the herkin testUtilsDir repo
- * @param {Object} herkin - Global Herkin config
+ * also in the config testUtilsDir repo
+ * @param {Object} config - Global Herkin config
  *
  * @return {Array<string>} file paths
  */
@@ -32,7 +32,7 @@ const getStepDefinitions = config => {
 
 /**
  * Gets all file paths for bdd support files
- * @param {Object} herkin - Global Herkin config
+ * @param {Object} config - Global Herkin config
  *
  * @return {Array<string>} file paths
  */
@@ -64,16 +64,16 @@ const getParkinSupport = config => {
 }
 
 module.exports = async () => {
-  const herkin = getGobletConfig()
-  const baseDir = getRepoHerkinDir(herkin)
-  const { devices, ...browserOpts } = taskEnvToBrowserOpts(herkin)
-  const contextOpts = getContextOpts(noOpObj, herkin)
+  const config = getGobletConfig()
+  const baseDir = getRepoHerkinDir(config)
+  const { devices, ...browserOpts } = taskEnvToBrowserOpts(config)
+  const contextOpts = getContextOpts(noOpObj, config)
 
-  const { testUtilsDir } = herkin.internalPaths
-  const defConf = jestConfig(herkin, {
+  const { testUtilsDir } = config.internalPaths
+  const defConf = jestConfig(config, {
     ext: 'feature',
     title: 'Parkin',
-    testDir: path.join(baseDir, herkin.paths.featuresDir),
+    testDir: path.join(baseDir, config.paths.featuresDir),
   })
 
   return {
@@ -88,15 +88,15 @@ module.exports = async () => {
     ],
     /** Pass on the browser options defined from the task that started the process */
     globals: {
-      gobletPaths: herkin.paths,
+      gobletPaths: config.paths,
       gobletBrowserOpts: browserOpts,
       gobletContextOpts: contextOpts,
-      gobletOptions: buildJestGobletOpts(herkin, browserOpts)
+      gobletOptions: buildJestGobletOpts(config, browserOpts)
     },
     /** Add all support and step files and ensure they are loaded before running the tests */
     setupFilesAfterEnv: [
-      ...getParkinSupport(herkin),
-      ...getStepDefinitions(herkin),
+      ...getParkinSupport(config),
+      ...getStepDefinitions(config),
     ],
     /** Add the custom Parkin transformer for all found .feature files */
     transform: {

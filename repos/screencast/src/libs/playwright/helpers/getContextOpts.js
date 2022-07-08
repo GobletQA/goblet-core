@@ -13,7 +13,7 @@ const getContextOpts = (contextOpts=noOpObj, herkin) => {
   herkin = herkin || getGobletConfig()
   return deepMerge(
     /**
-     * The default config options from the global herkin.config.js
+     * The default config options from the global goblet.config.js
      */
     herkin?.screencast?.context,
     /**

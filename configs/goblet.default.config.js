@@ -1,7 +1,7 @@
 /**
  * --- **IMPORTANT** ---
  * This file should never be imported directly
- * Use the getGobletConfig to load the herkin.config file
+ * Use the getGobletConfig to load the goblet.config file
  * --- **IMPORTANT** ---
  */
 
@@ -136,7 +136,7 @@ module.exports = {
   /**
    * This section **OVERRIDES** all other config settings
    * Should **NOT** be defined in a repos herkin config file
-   * These paths should always exist on the loaded herkin.config object
+   * These paths should always exist on the loaded goblet.config object
    */
   internalPaths: {
     gobletRoot: GOBLET_ROOT,
