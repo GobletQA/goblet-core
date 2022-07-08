@@ -49,14 +49,16 @@ const taskOptions = {
     },
     testSync: {
       default: true,
+      type: `boolean`,
       alias: ['runInBand'],
       example: `--no-testSync`,
       description: 'Run all tests sequentially',
     },
     testBail: {
-      description: 'Stops all tests once a single step fails',
       default: false,
+      type: `boolean`,
       example: '--testBail',
+      description: 'Stops all tests once a single step fails',
     },
     testConfig: {
       enforced: true,
@@ -65,18 +67,20 @@ const taskOptions = {
     },
     testTimeout: {
       type: 'number',
-      default: 60000, // 1min
+      default: 30000, // 30 seconds
       env: `GOBLET_TEST_TIMEOUT`,
       example: `--timeout 15000`,
       description: 'Test timeout in seconds. Defaults to 60000 milliseconds (1min).',
     },
     testDebug: {
       default: false,
+      type: `boolean`,
       example: '--testDebug',
       env: `GOBLET_JEST_DEBUG`,
       description: 'Pass the --debug flag to the jest command',
     },
     testRetry: {
+      type: `number`,
       example: '--testRetry 3',
       env: `GOBLET_TEST_RETRY`,
       description: 'Amount of times to retry the test if it fails',
@@ -88,36 +92,40 @@ const taskOptions = {
     },
     testCache: {
       default: true,
-      example: '--cache',
+      type: `boolean`,
+      example: '--testCache',
       env: `GOBLET_TEST_CACHE`,
       description: 'Use internal test cache when executing test',
     },
     testColors: {
       default: true,
-      example: '--colors',
+      type: `boolean`,
+      example: '--testColors',
       env: `GOBLET_TEST_COLORS`,
       description: 'Force use of colors even when not a TTY',
     },
     testWorkers: {
-      default: `50%`,
       example: '--testWorkers',
       env: `GOBLET_TEST_WORKERS`,
       description: 'Number of workers to use when running tests',
     },
     testVerbose: {
       default: false,
+      type: `boolean`,
       example: '--testVerbose',
       env: `GOBLET_TEST_VERBOSE`,
       description: 'Output verbose test results as the tests run',
     },
     testOpenHandles: {
       default: false,
+      type: `boolean`,
       example: '--testOpenHandles',
       env: `GOBLET_TEST_OPEN_HANDLES`,
       description: 'Detect handles left open when tests run. Forces tests to run in sync.',
     },
     testCI: {
       default: false,
+      type: `boolean`,
       example: '--testCI',
       env: `GOBLET_RUN_FROM_CI`,
       description: 'Run the tests in CI mode when running in a CI environment',
@@ -236,7 +244,7 @@ const taskOptions = {
     },
     browserTimeout: {
       type: 'number',
-      default: 45000, // 45 secconds
+      default: 15000, // 15 seconds
       env: `GOBLET_BROWSER_TIMEOUT`,
       example: '--browserTimeout 15000', // 15 seconds
       description: 'Amount of time until a browser request will timeout should be less the timeout option',

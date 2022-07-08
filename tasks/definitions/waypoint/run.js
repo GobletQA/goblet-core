@@ -71,7 +71,7 @@ module.exports = {
         'storageState',
         'timezone',
         `testCI`,
-        `testDebug`
+        `testDebug`,
         `testCache`,
         `testReport`,
         `testColors`,

@@ -29,23 +29,26 @@ const buildJestArgs = (params, jestConfig, extraArgs=noPropArr) => {
     ...extraArgs,
     `--env=node`,
     // Convert to milliseconds
-    `--testTimeout=${(parseInt(testTimeout, 10) || 60000)}`,
+    `--testTimeout=${(parseInt(testTimeout, 10) || 30000)}`,
   ]
 
-  
   cmdArgs.push(addFlag(`ci`, testCI))
   cmdArgs.push(addFlag(`colors`, testColors))
   cmdArgs.push(addFlag(`verbose`, testVerbose))
-  cmdArgs.push(addFlag(`maxWorkers`, testWorkers))
+  cmdArgs.push(addFlag(`maxWorkers=${testWorkers}`, testWorkers))
   // Use the inverse of because testCache default to true
   cmdArgs.push(addFlag(`no-cache`, !testCache))
-  cmdArgs.push(addFlag(`detectOpenHandles`, !testOpenHandles))
+  cmdArgs.push(addFlag(`detectOpenHandles`, testOpenHandles))
 
   cmdArgs.push(addFlag('bail', testBail))
   cmdArgs.push(addFlag('debug', testDebug))
-  cmdArgs.push(addFlag('runInBand', testSync))
   cmdArgs.push(addFlag('passWithNoTests', noTests))
   cmdArgs.push(addFlag(`config=${jestConfig}`, jestConfig))
+
+  // Only set runInBand if testWorkers not set.
+  // They can not both be passed, and runInBand has a default
+  // So if workers is set, then it will override runInBand and its default
+  !testWorkers && cmdArgs.push(addFlag('runInBand', testSync))
 
   // If context is set use that as the only file to run
   // Uses Jest pattern matching functionality to find the correct test to run

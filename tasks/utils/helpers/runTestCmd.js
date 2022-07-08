@@ -19,14 +19,17 @@ const runTestCmd = async (args) => {
     reportPath,
     envsHelper,
   } = args
-  
+
   const commands = getBrowsers(params).map(
-    browser => () => {
-      return dockerCmd(
-        params.container,
-        cmdArgs,
-        envsHelper(browser)
-      )
+    browser => {
+      const cmdOpts = envsHelper(browser)
+      const browserCmd = () => dockerCmd(params.container, [...cmdArgs], cmdOpts)
+
+      browserCmd.browser = browser
+      browserCmd.cmdArgs = cmdArgs
+      browserCmd.cmdOpts = cmdOpts
+
+      return browserCmd
     }
   )
 

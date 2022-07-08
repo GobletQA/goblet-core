@@ -19,6 +19,7 @@ const { filterTaskEnvs } = require('HerkinTasks/utils/envs/filterTaskEnvs')
 const runBdd = async args => {
   filterTaskEnvs()
   const { params, herkin } = args
+
   const jestConfig = await getJestConfig(params, testTypes.feature)
   const reportPath = buildReportPath(testTypes.feature, params, herkin)
   // Run the test command for defined browsers
@@ -28,9 +29,8 @@ const runBdd = async args => {
     cmdArgs: buildJestArgs(params, jestConfig),
     envsHelper: browser => buildBddEnvs(browser, params, reportPath, testTypes.feature)
   })
-  
-  process.exit(exitCode)
 
+  process.exit(exitCode)
 }
 
 module.exports = {
