@@ -1,8 +1,8 @@
 const { limbo } = require('@keg-hub/jsutils')
-const { statusServer, startServer } = require('HerkinSC')
+const { statusServer, startServer } = require('GobletSC')
 const {
   ensureBrowserType,
-} = require('HerkinTasks/utils/helpers/ensureBrowserType')
+} = require('GobletTasks/utils/helpers/ensureBrowserType')
 
 /**
  * Starts the browser servers is they are not already running

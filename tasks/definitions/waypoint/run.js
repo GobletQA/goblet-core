@@ -1,12 +1,12 @@
-const { getBrowsers } = require('HerkinSC')
+const { getBrowsers } = require('GobletSC')
 const { testTypes } = require('../../constants')
 const { sharedOptions } = require('@keg-hub/cli-utils')
-const { runTestCmd } = require('HerkinTasks/utils/helpers/runTestCmd')
-const { buildJestArgs } = require('HerkinTasks/utils/jest/buildJestArgs')
-const { getJestConfig } = require('HerkinTasks/utils/jest/getJestConfig')
-const { buildReportPath } = require('HerkinTest/reports/buildReportPath')
-const { filterTaskEnvs } = require('HerkinTasks/utils/envs/filterTaskEnvs')
-const { buildWaypointEnvs } = require('HerkinTasks/utils/envs/buildWaypointEnvs')
+const { runTestCmd } = require('GobletTasks/utils/helpers/runTestCmd')
+const { buildJestArgs } = require('GobletTasks/utils/jest/buildJestArgs')
+const { getJestConfig } = require('GobletTasks/utils/jest/getJestConfig')
+const { buildReportPath } = require('GobletTest/reports/buildReportPath')
+const { filterTaskEnvs } = require('GobletTasks/utils/envs/filterTaskEnvs')
+const { buildWaypointEnvs } = require('GobletTasks/utils/envs/buildWaypointEnvs')
 
 /**
  * Run task for waypoint scripts

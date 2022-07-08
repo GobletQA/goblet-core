@@ -1,7 +1,7 @@
-const { getBrowsers } = require('HerkinSC')
+const { getBrowsers } = require('GobletSC')
 const { dockerCmd } = require('@keg-hub/cli-utils')
-const { runCommands } = require('HerkinTasks/utils/helpers/runCommands')
-const { handleTestExit } = require('HerkinTasks/utils/helpers/handleTestExit')
+const { runCommands } = require('GobletTasks/utils/helpers/runCommands')
+const { handleTestExit } = require('GobletTasks/utils/helpers/handleTestExit')
 
 /**
  * Helper to run the command to execute tests

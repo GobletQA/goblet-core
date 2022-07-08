@@ -1,5 +1,5 @@
 const { addEnv } = require('../envs/addEnv')
-const { buildReportTitle } = require('HerkinTest/reports/buildReportTitle')
+const { buildReportTitle } = require('GobletTest/reports/buildReportTitle')
 
 /**
  * Builds the envs set in the command that runs a test

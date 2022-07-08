@@ -1,5 +1,5 @@
 const path = require('path')
-const { setVncENV } = require('HerkinSC')
+const { setVncENV } = require('GobletSC')
 const { exists } = require('@keg-hub/jsutils')
 const { containerDir } = require('../../paths')
 const { addToProcess } = require('@keg-hub/cli-utils')

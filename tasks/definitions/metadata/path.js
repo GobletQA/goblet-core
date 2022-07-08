@@ -1,4 +1,4 @@
-const { metadata } = require('HerkinSC')
+const { metadata } = require('GobletSC')
 const { Logger } = require('@keg-hub/cli-utils')
 
 /**

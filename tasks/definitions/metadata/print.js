@@ -1,4 +1,4 @@
-const { metadata } = require('HerkinSC')
+const { metadata } = require('GobletSC')
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
 const { pathExistsSync, readFile } = fileSys
 

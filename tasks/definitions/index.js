@@ -1,5 +1,5 @@
 const { isObj, isFunc, mapObj } = require('@keg-hub/jsutils')
-const { getHerkinConfig } = require('HerkinSharedConfig')
+const { getHerkinConfig } = require('GobletSharedConfig')
 
 /**
  * Injects the herkin.config into a tasks arguments

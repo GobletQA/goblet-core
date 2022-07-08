@@ -1,12 +1,12 @@
 const nodePath = require('path')
 const { get } = require('@keg-hub/jsutils')
 const { sharedOptions } = require('@keg-hub/cli-utils')
-const { validateConfig } = require('HerkinTasks/utils/validation')
-const { setMountEnvs } = require('HerkinTasks/utils/envs/setMountEnvs')
-const { setHerkinMode } = require('HerkinTasks/utils/helpers/setHerkinMode')
+const { validateConfig } = require('GobletTasks/utils/validation')
+const { setMountEnvs } = require('GobletTasks/utils/envs/setMountEnvs')
+const { setHerkinMode } = require('GobletTasks/utils/helpers/setHerkinMode')
 const {
   launchBrowsers,
-} = require('HerkinTasks/utils/playwright/launchBrowsers')
+} = require('GobletTasks/utils/playwright/launchBrowsers')
 
 /**
  * @param {String} configPath - path to herkin config file

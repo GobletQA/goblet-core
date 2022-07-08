@@ -1,5 +1,5 @@
 const { dockerCmd } = require('@keg-hub/cli-utils')
-const { launchBrowser } = require('HerkinTasks/utils/playwright/launchBrowser')
+const { launchBrowser } = require('GobletTasks/utils/playwright/launchBrowser')
 const { timedRun } = require('@keg-hub/jsutils')
 
 /**

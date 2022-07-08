@@ -1,8 +1,8 @@
 const { sharedOptions } = require('@keg-hub/cli-utils')
-const { setHerkinMode } = require('HerkinTasks/utils/helpers/setHerkinMode')
+const { setHerkinMode } = require('GobletTasks/utils/helpers/setHerkinMode')
 const {
   launchBrowsers,
-} = require('HerkinTasks/utils/playwright/launchBrowsers')
+} = require('GobletTasks/utils/playwright/launchBrowsers')
 
 /**
  * Attach to the running keg-tap container

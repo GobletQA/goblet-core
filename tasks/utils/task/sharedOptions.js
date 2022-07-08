@@ -1,4 +1,4 @@
-const { herkinMountDir } = require('HerkinTasks/paths')
+const { gobletMountDir } = require('GobletTasks/paths')
 const { setSharedOptions } = require('@keg-hub/cli-utils')
 
 const dynamicOpts = {
@@ -185,7 +185,7 @@ const taskOptions = {
       alias: [ 'cwd', 'workdir', 'repoDir'],
       description: 'Root directory to run the command from',
       example: '--repo /path/to/repo/root',
-      default: herkinMountDir,
+      default: gobletMountDir,
     },
   },
   playwright: {

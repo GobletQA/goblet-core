@@ -12,7 +12,7 @@ const {
   newServer,
   newBrowserWS,
   getBrowserType,
-} = require('HerkinSC')
+} = require('GobletSC')
 
 /**
  * Logs a highlighted message

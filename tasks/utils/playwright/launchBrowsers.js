@@ -1,4 +1,4 @@
-const { getBrowsers } = require('HerkinSC')
+const { getBrowsers } = require('GobletSC')
 const { launchBrowser } = require('./launchBrowser')
 const { runSeq, noOpObj } = require('@keg-hub/jsutils')
 
