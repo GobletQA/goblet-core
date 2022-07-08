@@ -33,9 +33,9 @@ export const getBaseApiUrl = () => {
   __BASE_API_URL = `${proto}://${noProtoHost}`
 
   // TODO: Remove this once it's working properly
-  if(!isDev && __BASE_API_URL !== `https://herkin.backend.herkin.app`){
+  if(!isDev && __BASE_API_URL !== `https://goblet.backend.gobletqa.app`){
     console.log(`In non local env, but base api was set to:`, __BASE_API_URL)
-    __BASE_API_URL = `https://herkin.backend.herkin.app`
+    __BASE_API_URL = `https://goblet.backend.gobletqa.app`
   }
 
   return __BASE_API_URL

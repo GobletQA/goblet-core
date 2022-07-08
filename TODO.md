@@ -65,7 +65,7 @@
   * Allow showing side-by-side or separately
 * **Dialog Core step / integration**
   * [See playwrite docs here](https://playwright.dev/docs/api/class-dialog/)
-  * Update herkin itself to set a `dialog` event listener
+  * Update goblet itself to set a `dialog` event listener
     * Handles browser window pop-ups
     * Must be called prior to tests being run
     * When the event is triggered by a dialog opening, save the dialog value to the world object

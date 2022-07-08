@@ -32,7 +32,7 @@ const {
   GOBLET_COOKIE_KEY = `goblet-cookie-7979`,
   GOBLET_COOKIE_MAX_AGE = 12 * 60 * 60 * 1000,
   GOBLET_COOKIE_EXP = new Date(new Date().getTime() + 86400000),
-  GOBLET_SERVER_ORIGINS = 'localhost,dev.herkin.app,hekin.dev.app,herkin-develop.local.keghub.io',
+  GOBLET_SERVER_ORIGINS = 'localhost,dev.gobletqa.app,gobletqa-develop.local.keghub.io',
 } = process.env
 
 // TODO: @lance-tipton - extract to shared utility methods
