@@ -33,9 +33,9 @@ module.exports = {
       },
       container: {
         description: 'Name of container within which to run create command',
-        example: '--container keg-herkin',
+        example: '--container goblet',
         required: true,
-        default: 'keg-herkin',
+        default: 'goblet',
       },
       device: {
         description:

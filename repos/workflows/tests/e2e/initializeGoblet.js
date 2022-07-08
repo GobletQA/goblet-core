@@ -3,8 +3,8 @@ const { wait } = require('@keg-hub/jsutils')
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
 const { parkinRepo, adminUser } = require('../../__mocks__')
 const { isRepoMounted } = require('../../src/gitfs/isRepoMounted')
-const { initializeHerkin } = require('../../src/herkin/initializeHerkin')
-const { disconnectHerkin } = require('../../src/herkin/disconnectHerkin')
+const { initializeGoblet } = require('../../src/goblet/initializeGoblet')
+const { disconnectGoblet } = require('../../src/goblet/disconnectGoblet')
 
 const { readFile } = fileSys
 const { GOBLET_GIT_TOKEN } = process.env
@@ -38,8 +38,8 @@ module.exports = (async () => {
     token: gitToken,
   }
 
-  /** Run the initialize herkin repo */
-  await initializeHerkin(args)
+  /** Run the initialize goblet repo */
+  await initializeGoblet(args)
 
   // Wait 5 seconds
   Logger.log(`Waiting 5 seconds to unmount...`)
@@ -60,8 +60,8 @@ module.exports = (async () => {
     process.exit(1)
   }
 
-  /** Run the disconnect herkin repo */
-  await disconnectHerkin(args)
+  /** Run the disconnect goblet repo */
+  await disconnectGoblet(args)
 
   Logger.log(`Waiting 3 seconds to disconnect...`)
   await wait(3000)
@@ -71,7 +71,7 @@ module.exports = (async () => {
 
   if (!after)
     return Logger.success(
-      `\ninitializeHerkin and disconnectHerkin E2E test successful\n`
+      `\ninitializeGoblet and disconnectGoblet E2E test successful\n`
     )
 
   Logger.error(`[ ERROR ] Repo could not be unmounted`)

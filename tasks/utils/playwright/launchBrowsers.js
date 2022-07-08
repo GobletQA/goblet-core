@@ -10,8 +10,8 @@ const { runSeq, noOpObj } = require('@keg-hub/jsutils')
  *   browsers: the browsers that were launched
  * }
  */
-const launchBrowsers = (launchParams, herkinMode) => {
-  if (herkinMode === 'vnc') return noOpObj
+const launchBrowsers = (launchParams, gobletMode) => {
+  if (gobletMode === 'vnc') return noOpObj
 
   const { headless, log, ...browserParams } = launchParams
   const browsers = getBrowsers(browserParams)

@@ -9,12 +9,12 @@ const { getCurrentRepoPath } = require('./getCurrentRepoPath')
  *
  * @return {Object} - The loaded goblet.config object
  */
-const loadHerkinConfig = async local => {
+const loadGobletConfig = async local => {
   const repoLoc = await getCurrentRepoPath(local)
 
   return getConfigAtPath(repoLoc)
 }
 
 module.exports = {
-  loadHerkinConfig,
+  loadGobletConfig,
 }

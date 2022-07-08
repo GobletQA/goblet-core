@@ -19,7 +19,7 @@
       npx playwright install chrome
       npx playwright install firefox
     ```
-  * Install node_modules from keg-herkin root directory
+  * Install node_modules from goblet root directory
     ```sh
       yarn install
     ```

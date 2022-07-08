@@ -32,8 +32,8 @@ const runWorkflow = async name => {
 }
 
 ;(async () => {
-  await runWorkflow('initializeHerkin')
-  await runWorkflow('statusHerkin')
+  await runWorkflow('initializeGoblet')
+  await runWorkflow('statusGoblet')
 
   // Always reset the process.exit at the end
   process.exit = oldProcExit

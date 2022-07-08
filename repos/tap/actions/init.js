@@ -52,7 +52,7 @@ export const init = async () => {
   // First check the status of the mounted repo
   // TODO: If no locally mounted volume
   // Then setup a fake mounted repo at the default location
-  // Will allow using keg-herkin without persisting changes
+  // Will allow using goblet without persisting changes
   const status = await statusRepo()
   if (!status || !status.mounted) return
 

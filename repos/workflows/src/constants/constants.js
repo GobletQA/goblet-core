@@ -16,5 +16,5 @@ module.exports = deepFreeze({
   MOUNT_ROOT: mountRootDir,
   LOCAL_MOUNT: path.join(mountRootDir, GOBLET_LOCAL_MOUNT),
   MOUNT_LOG: path.join(`/var/log/gitfs.log`),
-  EMPTY_VOL_MOUNT: `.herkin-empty-status.js`,
+  EMPTY_VOL_MOUNT: `.goblet-empty-status.js`,
 })

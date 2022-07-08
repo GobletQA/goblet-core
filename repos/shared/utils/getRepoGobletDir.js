@@ -9,7 +9,7 @@ const { getGobletConfig } = require('./getGobletConfig')
  *
  * @returns {string} - Path to the herkin directory in a repo
  */
-const getRepoHerkinDir = config => {
+const getRepoGobletDir = config => {
   config =
     config && config.__VALID_GOBLET_CONFIG ? config : getGobletConfig(config)
   const { repoRoot, workDir } = config.paths
@@ -18,5 +18,5 @@ const getRepoHerkinDir = config => {
 }
 
 module.exports = {
-  getRepoHerkinDir,
+  getRepoGobletDir,
 }

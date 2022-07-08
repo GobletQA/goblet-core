@@ -76,7 +76,7 @@ const addConfigFileTypes = config => {
  * @return {Object} - The herkin config if the config exists at baseDir/<folder>/goblet.config.js, else null
  */
 const loadConfigFromFolder = baseDir => {
-  return ['', './config', './configs', './herkin', './test', './tests'].reduce(
+  return ['', './config', './configs', './goblet', './test', './tests'].reduce(
     (found, loc) => found || getConfigAtPath(path.join(baseDir, loc)),
     false
   )
@@ -234,7 +234,7 @@ const getGobletConfig = (argsConfig = noOpObj) => {
     )
     Logger.pair(
       `  * Defaulting to`,
-      `"keg-herkin/configs/goblet.default.config.js"`
+      `"goblet/configs/goblet.default.config.js"`
     )
     Logger.warn(`        * Work will not be saved`)
     Logger.log(`  * To use your own config, either:`)
@@ -266,7 +266,7 @@ const getGobletConfig = (argsConfig = noOpObj) => {
  *
  * @returns {void}
  */
-const resetHerkinConfig = () => {
+const resetGobletConfig = () => {
   __GOBLET_CONFIG = undefined
 }
 
@@ -288,5 +288,5 @@ module.exports = {
   loadCustomConfig,
   getDefaultHerkinConfig,
   loadConfigFromFolder,
-  resetHerkinConfig,
+  resetGobletConfig,
 }

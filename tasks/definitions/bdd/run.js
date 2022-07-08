@@ -12,7 +12,7 @@ const { filterTaskEnvs } = require('GobletTasks/utils/envs/filterTaskEnvs')
  * Run parkin tests in container
  * @param {Object} args
  * @param {Object} args.task - Test definition object
- * @param {Object} args.herkin - Keg-Herkin global config
+ * @param {Object} args.herkin - Goblet global config
  * @param {Object} args.params - Options arguments parsed into an object
  * @param {Array} args.options - Options passed to the task from the command line
  */

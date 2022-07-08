@@ -1,4 +1,4 @@
-const { deleteHerkinFile } = require('GobletSharedFileSys/herkinFiles')
+const { deleteHerkinFile } = require('GobletSharedFileSys/gobletFiles')
 const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 /**

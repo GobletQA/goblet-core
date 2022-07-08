@@ -1,5 +1,5 @@
 /**
- * Default bable config for Keg-Herkin loaded from the root babel.config.js file
+ * Default bable config for Goblet loaded from the root babel.config.js file
  */
 module.exports = {
   presets: [

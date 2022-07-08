@@ -5,7 +5,7 @@ const { loadConfigs } = require('@keg-hub/parse-config')
 const { docker, toBuildArgsArr, buildTags } = require('../docker')
 
 /**
- * Builds the Keg-Herkin Screencast docker image
+ * Builds the Goblet Screencast docker image
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Root task name
  * @param {Object} args.tasks - All registered tasks of the CLI

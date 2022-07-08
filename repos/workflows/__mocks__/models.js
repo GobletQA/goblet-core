@@ -25,7 +25,7 @@ const parkinRepo = {
     artifacts: '/artifacts',
     features: '/bdd/features',
     reports: '/reports',
-    root: '/herkin',
+    root: '/goblet',
     steps: '/bdd/steps',
     units: '/units',
     waypoints: '/waypoints',

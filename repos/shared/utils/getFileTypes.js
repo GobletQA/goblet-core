@@ -40,7 +40,7 @@ const normalizePaths = paths => {
 }
 
 /**
- * Builds the test types allowed when working with keg-herkin
+ * Builds the test types allowed when working with goblet
  * @param {string} repoRoot - Location to the tests directory
  * @param {Object} pathEnvs - Locations test directories within the repoRoot
  *

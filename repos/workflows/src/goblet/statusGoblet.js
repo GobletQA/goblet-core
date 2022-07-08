@@ -4,7 +4,7 @@ const { Logger } = require('@keg-hub/cli-utils')
 const { LOCAL_MOUNT } = require('../constants')
 const { getRepoName } = require('../utils/getRepoName')
 const { isRepoMounted } = require('../gitfs/isRepoMounted')
-const { loadHerkinConfig } = require('../utils/loadHerkinConfig')
+const { loadGobletConfig } = require('../utils/loadGobletConfig')
 
 const { fileSys } = require('@keg-hub/cli-utils')
 
@@ -14,7 +14,7 @@ const { pathExists } = fileSys
  * @typedef {Object} RepoStatus
  * @property {boolean} mounted - If a repo is mounted
  * @property {string} status - Mounted status as a string
- * @property {string} mode - Current mode of Keg-Herkin, determines a repo folder location
+ * @property {string} mode - Current mode of Goblet, determines a repo folder location
  * @property {string} [message] - Message about the status
  * @property {string} [location] - Locations where the repo should exist
  *
@@ -30,7 +30,7 @@ const validatePath = async location => {
 /**
  * Checks the status of a mounted repo for local mode
  * In local mode the folder path is always the same
- * The local mounted folder contains a `.herkin-empty-status.json` file
+ * The local mounted folder contains a `.goblet-empty-status.json` file
  * If this file exists, then no mount exists
  * If it does not exist, then the folder was overwritten with the mount
  * So we know a mount exists
@@ -45,7 +45,7 @@ const statusForLocal = async (config, metadata) => {
 
   // Check if the local mount folder exists
   // If not then it's empty
-  const herkinConfig = isValidPath && (await loadHerkinConfig(LOCAL_MOUNT))
+  const herkinConfig = isValidPath && (await loadGobletConfig(LOCAL_MOUNT))
 
   return !isValidPath || !herkinConfig
     ? {
@@ -100,7 +100,7 @@ const statusForVnc = async (config, metadata = noOpObj) => {
   if (!isMounted) return unknownStatus
 
   Logger.log(`Loading goblet.config...`)
-  const herkinConfig = await loadHerkinConfig(local)
+  const herkinConfig = await loadGobletConfig(local)
 
   return !herkinConfig
     ? unknownStatus
@@ -117,7 +117,7 @@ const statusForVnc = async (config, metadata = noOpObj) => {
 }
 
 /**
- * Default implementation for running Keg-Herkin locally
+ * Default implementation for running Goblet locally
  * This is expected to be overwritten by External Services
  * Builds a Repo Model Object based on the local metadata
  *
@@ -126,11 +126,11 @@ const statusForVnc = async (config, metadata = noOpObj) => {
  *
  * @return {RepoStatus} - Status object for the checked repo
  */
-const statusHerkin = async (config, metadata, log=true) => {
+const statusGoblet = async (config, metadata, log=true) => {
   log && Logger.subHeader(`Running Status Herkin Workflow`)
 
   if (!config)
-    throw new Error(`The statusHerkin workflow requires a herkin config object`)
+    throw new Error(`The statusGoblet workflow requires a herkin config object`)
 
   return config?.screencast?.active
     ? await statusForVnc(config, metadata)
@@ -138,5 +138,5 @@ const statusHerkin = async (config, metadata, log=true) => {
 }
 
 module.exports = {
-  statusHerkin,
+  statusGoblet,
 }

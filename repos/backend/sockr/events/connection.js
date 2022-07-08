@@ -3,7 +3,7 @@ const connection = app => {
 
     // Todo Update to be the group / room name for the connected user
     const cache = Manager.cache[socket.id]
-    cache.groupId = 'keg-herkin'
+    cache.groupId = 'goblet'
 
   }
 }

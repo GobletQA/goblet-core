@@ -6,7 +6,7 @@ module.exports = {
   },
   paths: {
     repoRoot: path.join(__dirname),
-    workDir: 'herkin',
+    workDir: 'goblet',
     reportsDir: 'reports',
     featuresDir: 'bdd/features',
     supportDir: 'bdd/support',

@@ -10,7 +10,7 @@ const { mkDir, readFile, writeFile, pathExists, removeFile, pathExistsSync } =
 
 /**
  * Finds the path to metadata folder and browser-meta.json file
- * If using host browser, then use the keg-herkin root dir
+ * If using host browser, then use the goblet root dir
  * Else if Vnc is running, then use the os temp directory
  * @type {function}
  *
@@ -24,7 +24,7 @@ const getMetaDataPaths = () => {
     exists(pwMetaDataDir) && pathExistsSync(pwMetaDataDir)
       ? pwMetaDataDir
       : checkVncEnv().vncActive
-      ? path.resolve(os.tmpdir(), 'keg-herkin')
+      ? path.resolve(os.tmpdir(), 'goblet')
       : gobletRoot
 
   const metadataPath = path.resolve(metadataDir, 'browser-meta.json')

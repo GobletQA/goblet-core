@@ -2,7 +2,7 @@ const path = require('path')
 const { treeNodeModel } = require('GobletSharedModels')
 const { isDirectory, getFolderContent } = require('./fileSys')
 const { resolveFileType } = require('GobletSharedUtils/resolveFileType')
-const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
+const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
 
 /**
  * Recursively checks to find the parent node for a given item
@@ -101,12 +101,12 @@ const buildFileTree = async repo => {
       `.gitkeep`,
       `.keep`,
       `node_modules`,
-      `.herkin-empty-status.json`,
+      `.goblet-empty-status.json`,
     ],
   }
 
   // Get all the paths from the testRoot directory
-  const baseDir = getRepoHerkinDir(repo)
+  const baseDir = getRepoGobletDir(repo)
   const paths = await getFolderContent(baseDir, searchOpts)
   const nodes = await getPathNodes(paths, repo)
   const rootPaths = await getRootPaths(paths, baseDir)

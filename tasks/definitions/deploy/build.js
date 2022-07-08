@@ -28,7 +28,7 @@ const getBuildTypes = props => {
 }
 
 /**
- * Builds the Keg-Herkin docker image
+ * Builds the Goblet docker image
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Root task name
  * @param {Object} args.tasks - All registered tasks of the CLI
@@ -72,7 +72,7 @@ module.exports = {
     alias: ['bld'],
     action: buildHerkin,
     example: 'keg herkin deploy build <options>',
-    description: 'Build the Keg-Herkin production docker image',
+    description: 'Build the Goblet production docker image',
     options: {
       context: {
         type: 'array',
@@ -87,27 +87,27 @@ module.exports = {
         type: 'boolean',
         env: `GOBLET_DEPLOY_BUILD_FE`,
         example: 'keg herkin deploy build --frontend',
-        description: 'Build the Keg-Herkin frontend application',
+        description: 'Build the Goblet frontend application',
       },
       backend: {
         alias: ['be'],
         type: 'boolean',
         env: `GOBLET_DEPLOY_BUILD_BE`,
         example: 'keg herkin deploy build --backend',
-        description: 'Build the Keg-Herkin backend application',
+        description: 'Build the Goblet backend application',
       },
       screencast: {
         alias: ['sc'],
         type: 'boolean',
         env: `GOBLET_DEPLOY_BUILD_SC`,
         example: 'keg herkin deploy build --screencast',
-        description: 'Build the Keg-Herkin screencast application',
+        description: 'Build the Goblet screencast application',
       },
       all: {
         type: 'boolean',
         env: `GOBLET_DEPLOY_BUILD_ALL`,
         example: 'keg herkin deploy build --all',
-        description: 'Build all Keg-Herkin applications',
+        description: 'Build all Goblet applications',
       },
       envs: {
         type: 'array',

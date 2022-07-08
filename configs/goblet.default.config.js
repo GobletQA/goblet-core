@@ -96,7 +96,7 @@ module.exports = {
     /**
      * Path to the feature step definitions
      * Contains custom step definitions matching feature file steps
-     * Joined with the default Keg-Herkin Step Definitions
+     * Joined with the default Goblet Step Definitions
      * Relative to the `<repoRoot>/<workDir>/`
      * @type {string} - Relative Path
      * @example - "/bdd/steps"

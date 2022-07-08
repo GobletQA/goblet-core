@@ -19,7 +19,7 @@ const handleUnmounted = async (req, res, status) => {
 
 /**
  * Gets the status of a connected repo
- * Calls the statusHerkin workflow
+ * Calls the statusGoblet workflow
  */
 const statusRepo = asyncWrap(async (req, res) => {
   const { query } = req

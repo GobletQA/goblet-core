@@ -1,6 +1,6 @@
 const path = require('path')
 const { getGobletConfig } = require('GobletSharedConfig')
-const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
+const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
 const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts')
 const { checkVncEnv } = require('../../utils/vncActiveEnv')
 const {
@@ -60,7 +60,7 @@ const options = {
 const getGobletConfigOpts = config => {
   const { reportsDir = 'reports', artifactsDir = 'artifacts' } = config.paths
 
-  const baseDir = getRepoHerkinDir(config)
+  const baseDir = getRepoGobletDir(config)
   return {
     ...config?.screencast?.browser,
     tracesDir: path.join(baseDir, reportsDir),

@@ -26,7 +26,7 @@ module.exports = {
     inject: true,
     action: backendDeploy,
     example: 'keg herkin deploy backend <options>',
-    description: 'Run Keg-Herkin deploy backend tasks',
+    description: 'Run Goblet deploy backend tasks',
     options: {
       ...sharedOptions.deploy(`deploy`, `backend`),
       ...sharedOptions.version(`deploy`, `backend`),

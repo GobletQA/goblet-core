@@ -2,7 +2,7 @@ const { sharedOptions } = require('../../utils/task/sharedOptions')
 const { updateVersion } = require('../../utils/deploy/updateVersion')
 
 /**
- * Updates the version of keg-herkin
+ * Updates the version of goblet
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Root task name
  * @param {Object} args.tasks - All registered tasks of the CLI

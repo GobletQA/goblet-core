@@ -1,6 +1,6 @@
 /**
  *
- * **DO NOT DELETE** - This is used in the statusHerkin workflow
+ * **DO NOT DELETE** - This is used in the statusGoblet workflow
  * If this file exists, then a volume mount does not exist
  * Otherwise it would overwrite this file
  *

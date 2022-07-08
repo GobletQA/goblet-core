@@ -1,7 +1,7 @@
 const { loadTemplate } = require(`GobletSharedTemplate/loadTemplate`)
 
 const page404Data = {
-  title: 'Keg-Herkin - 404 Page not found',
+  title: 'Goblet - 404 Page not found',
   body: '<h4>Page not found!<h4>',
 }
 

@@ -21,7 +21,7 @@ const getReportName = (type, name) => {
  * Adds a date timestamp to the report file name
  * @param {string} type - Type of tests for the report
  * @param {string} [name=type] - Name of the test related to the report
- * @param {Object} goblet - Keg-Herkin global config object
+ * @param {Object} goblet - Goblet global config object
  *
  * @returns {string} - Path where the report should be created
  */

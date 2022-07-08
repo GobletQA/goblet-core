@@ -1,4 +1,4 @@
 module.exports = {
   ...require('./fileSys'),
-  ...require('./herkinFiles'),
+  ...require('./gobletFiles'),
 }

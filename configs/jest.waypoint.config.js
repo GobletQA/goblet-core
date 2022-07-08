@@ -5,7 +5,7 @@ const { noOpObj } = require('@keg-hub/jsutils')
 const { inDocker } = require('@keg-hub/cli-utils')
 const { getGobletConfig } = require('GobletSharedConfig')
 const { getLaunchType } = require('GobletSharedUtils/getLaunchType')
-const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
+const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
 const { buildTestMatchFiles } = require('GobletSharedUtils/buildTestMatchFiles')
 const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts')
 const { metadata, checkVncEnv, getBrowserOpts, getContextOpts } = require('GobletSC')
@@ -61,7 +61,7 @@ const buildLaunchOpts = async (config, taskOpts) => {
 // to gain speed improvements and by that to only use Playwright in the end-to-end tests
 module.exports = async () => {
   const config = getGobletConfig()
-  const baseDir = getRepoHerkinDir(config)
+  const baseDir = getRepoGobletDir(config)
   const taskOpts = taskEnvToBrowserOpts(config)
   const launchOpts = await buildLaunchOpts(config, taskOpts)
   

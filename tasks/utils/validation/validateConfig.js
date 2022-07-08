@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { isObj, noOp } = require('@keg-hub/jsutils')
-const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
+const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
 
 /**
  * **IMPORTANT**
@@ -14,8 +14,8 @@ const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
 const defaultConfig = require('GobletConfigs/goblet.default.config.js')
 
 /**
- * Error type specific to herkin config validation.
- * Just prefixes each message with a herkin label
+ * Error type specific to goblet config validation.
+ * Just prefixes each message with a goblet label
  */
 class HerkinConfigError extends Error {
   name = 'HerkinConfigError'
@@ -52,7 +52,7 @@ const missingFileError = (key, loc, relativeTo = null) => {
  * If a folder path is defined, and does not exist, then create it at that path, and use it
  */
 /**
- * Checks that the paths in herkinConfig.paths are valid
+ * Checks that the paths in gobletConfig.paths are valid
  * @param {Object} paths - paths object
  * @param {Array<string>} expectedPaths - expected keys
  */
@@ -64,7 +64,7 @@ const checkFilePaths = (paths, expectedPaths) => {
 
   if (workDir && !fs.existsSync(workDir)) fs.mkdir(workDir, noOp)
 
-  const baseDir = getRepoHerkinDir({ paths, __VALID_GOBLET_CONFIG: true })
+  const baseDir = getRepoGobletDir({ paths, __VALID_GOBLET_CONFIG: true })
 
   Object.entries(relativePaths).map(([key, testPath]) => {
     const fullPath = path.join(baseDir, testPath)
@@ -81,7 +81,7 @@ const checkFilePaths = (paths, expectedPaths) => {
 }
 
 /**
- * Validates the herkin config's path object
+ * Validates the goblet config's path object
  * @param {Object} paths
  * @throws error if any paths are invalid
  */

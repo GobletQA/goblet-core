@@ -4,7 +4,7 @@ const { appRoot, containerDir } = require('../../paths')
 const { docker, toBuildArgsArr, buildTags } = require('../docker')
 
 /**
- * Builds the Keg-Herkin Backend docker image
+ * Builds the Goblet Backend docker image
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Root task name
  * @param {Object} args.tasks - All registered tasks of the CLI

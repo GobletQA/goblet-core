@@ -3,7 +3,7 @@ const { asyncWrap, apiRes } = require('GobletSharedExp')
 const { loadRepoContent } = require('GobletSharedRepo/loadRepoContent')
 
 /**
- * Runs the initializeHerkin workflow to setup a new repository
+ * Runs the initializeGoblet workflow to setup a new repository
  */
 const connectRepo = asyncWrap(async (req, res) => {
   const { iat, exp, ...user } = req.user

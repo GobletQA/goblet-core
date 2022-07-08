@@ -33,19 +33,19 @@ module.exports = {
     inject: true,
     action: frontendDeploy,
     example: 'keg herkin deploy frontend <options>',
-    description: 'Run Keg-Herkin deploy frontend tasks',
+    description: 'Run Goblet deploy frontend tasks',
     options: {
       ...sharedOptions.version(`deploy`, `frontend`),
       mode: {
         allowed: ['vnc', 'local'],
         example: `keg herkin deploy --mode local`,
         default: 'vnc',
-        description: 'Mode to run keg-herkin in. In not set, uses launch option',
+        description: 'Mode to run goblet in. In not set, uses launch option',
       },
       vnc: {
         example: `keg herkin deploy --vnc`,
         default: true,
-        description: `Build keg-herkin in vnc mode. Same as '--mode vnc' option`,
+        description: `Build goblet in vnc mode. Same as '--mode vnc' option`,
       },
       log: {
         alias: ['lg'],

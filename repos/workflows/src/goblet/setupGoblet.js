@@ -5,18 +5,18 @@ const { failResp, successResp } = require('./response')
 const { getRepoName } = require('../utils/getRepoName')
 const { copyTemplate } = require('../utils/copyTemplate')
 const { isRepoMounted } = require('../gitfs/isRepoMounted')
-const { loadHerkinConfig } = require('../utils/loadHerkinConfig')
+const { loadGobletConfig } = require('../utils/loadGobletConfig')
 const { configureGitArgs } = require('../utils/configureGitArgs')
 
 /**
- * Workflow that creates the folder structure for keg-herkin (templates/repo/default-template)
+ * Workflow that creates the folder structure for goblet (templates/repo/default-template)
  * @function
  * @public
  * @throws
  * @param {Object} args - Data needed to execute the workflow
- * @param {Object} args.repo - Repo metadata for setting up keg-herkin
+ * @param {Object} args.repo - Repo metadata for setting up goblet
  */
-const setupHerkin = async (args, gitArgs, mounted) => {
+const setupGoblet = async (args, gitArgs, mounted) => {
   Logger.subHeader(`Running Setup Herkin Workflow`)
 
   const token = (gitArgs && gitArgs.token) || (await loadToken(args))
@@ -36,7 +36,7 @@ const setupHerkin = async (args, gitArgs, mounted) => {
     )
 
   Logger.log(`Loading goblet.config...`)
-  const herkinConfig = await loadHerkinConfig(gitArgs.local)
+  const herkinConfig = await loadGobletConfig(gitArgs.local)
 
   return herkinConfig
     ? successResp(
@@ -57,5 +57,5 @@ const setupHerkin = async (args, gitArgs, mounted) => {
 }
 
 module.exports = {
-  setupHerkin,
+  setupGoblet,
 }

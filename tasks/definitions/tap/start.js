@@ -3,7 +3,7 @@ const { get } = require('@keg-hub/jsutils')
 const { sharedOptions } = require('@keg-hub/cli-utils')
 const { validateConfig } = require('GobletTasks/utils/validation')
 const { setMountEnvs } = require('GobletTasks/utils/envs/setMountEnvs')
-const { setHerkinMode } = require('GobletTasks/utils/helpers/setHerkinMode')
+const { setGobletMode } = require('GobletTasks/utils/helpers/setGobletMode')
 const {
   launchBrowsers,
 } = require('GobletTasks/utils/playwright/launchBrowsers')
@@ -16,7 +16,7 @@ const getRootPath = config =>
   nodePath.resolve(get(config, ['internalPaths', 'gobletRoot']))
 
 /**
- * Starts all the Keg-Herkin services needed to run tests
+ * Starts all the Goblet services needed to run tests
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Root task name
  * @param {Object} args.tasks - All registered tasks of the CLI
@@ -38,11 +38,11 @@ const startHerkin = async args => {
     vnc,
     launch,
     config,
-    // All params not related to the keg-herkin start cmd
+    // All params not related to the goblet start cmd
     ...params
   } = args.params
 
-  const herkinMode = setHerkinMode(args.params)
+  const herkinMode = setGobletMode(args.params)
   herkinMode === 'local' && (await launchBrowsers(args.params, herkinMode))
 
   herkinMode !== 'vnc' &&
@@ -68,7 +68,7 @@ module.exports = {
       {
         config: {
           description:
-            'Path to the user goblet.config.js. If omitted, keg-herkin will look in your current working directory for a herkin config.',
+            'Path to the user goblet.config.js. If omitted, goblet will look in your current working directory for a herkin config.',
           example: 'keg herkin start --config my-repo/goblet.config.js',
         },
         warn: {
@@ -88,16 +88,16 @@ module.exports = {
           allowed: ['vnc', 'local'],
           example: 'start --mode local',
           description:
-            'Mode to run keg-herkin in. In not set, uses launch option',
+            'Mode to run goblet in. In not set, uses launch option',
         },
         local: {
           allowed: ['lc'],
           example: 'start --local',
-          description: `Run keg-herkin in local mode. Same as '--mode local' option`,
+          description: `Run goblet in local mode. Same as '--mode local' option`,
         },
         vnc: {
           example: 'start --vnc',
-          description: `Run keg-herkin in vnc mode. Same as '--mode vnc' option`,
+          description: `Run goblet in vnc mode. Same as '--mode vnc' option`,
         },
       },
       [

@@ -5,7 +5,7 @@ const { buildModel } = require('./buildModel')
  * @typedef FileModel
  * @property {string} name - Name of the file on disk
  * @property {string} location - Absolute path of the file on dist
- * @property {string} relative - Relative path to the root of keg-herkin
+ * @property {string} relative - Relative path to the root of goblet
  * @property {string} content - Text content of the file
  * @property {string} fileType - Type of test feature / jest / waypoint,
  * @property {string} mime - Mime file type relative to the file extension

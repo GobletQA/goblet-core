@@ -2,7 +2,7 @@ const path = require('path')
 const { noOpObj } = require('@keg-hub/jsutils')
 const { buildFileModel } = require('GobletSharedUtils/buildFileModel')
 const { getMountRootDir } = require('GobletSharedUtils/getMountRootDir')
-const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
+const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
 
 /**
  * Checks if a path is in the reports folder
@@ -37,7 +37,7 @@ const resolveReportAst = (repo, fullPath, baseDir) => {
  * @returns {Object} - fileModel for the file at the passed in location
  */
 const loadReport = async (repo, location, baseDir) => {
-  baseDir = baseDir || getRepoHerkinDir(repo)
+  baseDir = baseDir || getRepoGobletDir(repo)
   const reportContent = resolveReportAst(repo, location, baseDir)
 
   // Build the file model for the report file

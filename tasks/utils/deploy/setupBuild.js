@@ -6,9 +6,9 @@ const { formatParamEnvs }  = require('../envs/formatParamEnvs')
 
 /**
  * Loads all the meta data needed to run the build function
- * @param {function} - Build function for a part of the keg-herkin app ( frontend, backend, screencast )
+ * @param {function} - Build function for a part of the goblet app ( frontend, backend, screencast )
  * 
- * @returns {function} - Method to call when building a part of the keg-herkin app
+ * @returns {function} - Method to call when building a part of the goblet app
  */
 const setupBuild = (buildFunc) => {
   return async (args, buildType) => {

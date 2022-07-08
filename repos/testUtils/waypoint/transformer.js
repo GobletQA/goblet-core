@@ -13,7 +13,7 @@ const { getWorld } = require('GobletRepos/testUtils/support')
 
     return createHash('md5')
       .update(babelCacheKey)
-      .update('keg-herkin')
+      .update('goblet')
       .digest('hex')
   },
   process(src, filename, ...rest) {
@@ -26,7 +26,7 @@ const { getWorld } = require('GobletRepos/testUtils/support')
      * It also allows us to use the same jest-html-test reporter
      */
     const content = [
-      `describe('Keg-Herkin Waypoint', () => {`,
+      `describe('Goblet Waypoint', () => {`,
       `  test('Executing File: ${name}', async () => {`,
       `     delete jest.resetMocks`,
       `     delete jest.resetAllMocks`,

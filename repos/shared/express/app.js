@@ -1,5 +1,5 @@
 const express = require('express')
-const { getGobletConfig, resetHerkinConfig } = require('GobletSharedConfig')
+const { getGobletConfig, resetGobletConfig } = require('GobletSharedConfig')
 
 let _APP
 
@@ -12,9 +12,9 @@ let _APP
  *
  * @returns {void}
  */
-const reloadHerkinConfig = type => {
+const reloadGobletConfig = type => {
   // Remove the old config
-  resetHerkinConfig()
+  resetGobletConfig()
   delete _APP.locals.config
 
   // Reload the app with the config
@@ -50,5 +50,5 @@ const getApp = type => {
 
 module.exports = {
   getApp,
-  reloadHerkinConfig,
+  reloadGobletConfig,
 }

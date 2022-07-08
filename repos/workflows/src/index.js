@@ -1,4 +1,4 @@
 module.exports = {
-  ...require('./herkin'),
+  ...require('./goblet'),
   ...require('./repo/githubAPI'),
 }

@@ -4,9 +4,9 @@ const { isObj, noOpObj, noPropArr, } = require('@keg-hub/jsutils')
 const { getFileTypes } = require('GobletSharedUtils/getFileTypes')
 const {
   getUserRepos,
-  statusHerkin,
-  initializeHerkin,
-  disconnectHerkin,
+  statusGoblet,
+  initializeGoblet,
+  disconnectGoblet,
 } = require('GobletWF')
 
 
@@ -45,10 +45,10 @@ class Repo {
    * @param {Object} config - Herkin global App Config, NOT A REPO CONFIG
    * @param {Object} [repoData] - Past metadata stored about the repo on the frontend
    *
-   * @returns {Object} - Repo Model object built by the response of the statusHerkin workflow
+   * @returns {Object} - Repo Model object built by the response of the statusGoblet workflow
    */
   static status = async (config, repoData) => {
-    const { repo, ...status } = await statusHerkin(config, repoData, false)
+    const { repo, ...status } = await statusGoblet(config, repoData, false)
 
     return !repo || !status.mounted
       ? { status }
@@ -60,10 +60,10 @@ class Repo {
    * @param {Object} args - Arguments for disconnecting a repo
    * @param {string} args.username - Name of the user that mounted the repo
    *
-   * @returns {Object} - Response from the disconnectHerkin workflow
+   * @returns {Object} - Response from the disconnectGoblet workflow
    */
   static disconnect = async ({ username }) => {
-    return await disconnectHerkin({
+    return await disconnectGoblet({
       user: {
         gitUser: username,
       },
@@ -74,7 +74,7 @@ class Repo {
    * Creates a Repo Class instance by connecting to an external git repo
    * @param {Object} args - Arguments for connecting a repo
    *
-   * @returns {Object} - Response from the initializeHerkin workflow
+   * @returns {Object} - Response from the initializeGoblet workflow
    */
   static fromWorkflow = async (args) => {
     const {
@@ -90,7 +90,7 @@ class Repo {
     const name = url.pathname.split('/').pop().replace('.git', '')
     const provider = url.host.split('.').slice(0).join('.')
 
-    const resp = await initializeHerkin({
+    const resp = await initializeGoblet({
       repo: {
         name,
         token,

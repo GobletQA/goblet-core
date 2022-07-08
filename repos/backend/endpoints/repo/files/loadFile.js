@@ -1,5 +1,5 @@
 const { asyncWrap, apiRes } = require('GobletSharedExp')
-const { getHerkinFile } = require('GobletSharedFileSys/herkinFiles')
+const { getHerkinFile } = require('GobletSharedFileSys/gobletFiles')
 
 /**
  * Loads a file from within the docker mounted test root folder

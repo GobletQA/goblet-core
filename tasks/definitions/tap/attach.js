@@ -1,5 +1,5 @@
 const { sharedOptions } = require('@keg-hub/cli-utils')
-const { setHerkinMode } = require('GobletTasks/utils/helpers/setHerkinMode')
+const { setGobletMode } = require('GobletTasks/utils/helpers/setGobletMode')
 const {
   launchBrowsers,
 } = require('GobletTasks/utils/playwright/launchBrowsers')
@@ -21,11 +21,11 @@ const attachHerkin = async args => {
   // Check the arguments used to run the contianer
   // If it has the GOBLET_PW_SOCKET env, Run in local mode
   // If it has the GOBLET_USE_VNC env, run in vnc mode
-  // Then pass that mode to the setHerkinMode and launchBrowsers methods
+  // Then pass that mode to the setGobletMode and launchBrowsers methods
   // This ensures it's consistent with the original run
   // Or investigate adding it to the browser metadata?
 
-  // const herkinMode = setHerkinMode(params)
+  // const herkinMode = setGobletMode(params)
   // await launchBrowsers(params, herkinMode)
 
   return await args.task.cliTask(args)

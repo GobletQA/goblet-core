@@ -1,5 +1,5 @@
 const path = require('path')
-const { getRepoHerkinDir } = require('./getRepoHerkinDir')
+const { getRepoGobletDir } = require('./getRepoGobletDir')
 
 /**
  * First gets the baseDir
@@ -10,7 +10,7 @@ const { getRepoHerkinDir } = require('./getRepoHerkinDir')
  * @returns {string} - Path from the base directory
  */
 const getPathFromBase = (loc, config) => {
-  const baseDir = getRepoHerkinDir(config)
+  const baseDir = getRepoGobletDir(config)
 
   return path.join(baseDir, loc)
 }

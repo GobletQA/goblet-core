@@ -78,7 +78,7 @@ const createNewBranch = async ({ branch, newBranch, remote, token, log }, hash) 
  * @throws
  * See this gist for more info => https://gist.github.com/potherca/3964930
  * @param {Object} args - Data needed to execute the workflow
- * @param {Object} args.repo - Repo metadata for setting up keg-herkin
+ * @param {Object} args.repo - Repo metadata for setting up goblet
  *
  * @returns {string} - Name of the newly created branch
  */

@@ -6,7 +6,7 @@ const dynamicOpts = {
     version: {
       alias: ['ver'],
       example: `${type} ${action} --version minor`,
-      description: 'The new version of keg-herkin',
+      description: 'The new version of goblet',
     },
     confirm: {
       default: false,
@@ -26,16 +26,16 @@ const dynamicOpts = {
       allowed: ['vnc', 'local'],
       example: `${type} ${action} --mode local`,
       description:
-        'Mode to run keg-herkin in. In not set, uses launch option',
+        'Mode to run goblet in. In not set, uses launch option',
     },
     local: {
       allowed: ['lc'],
       example: `${type} ${action} --local`,
-      description: `Build keg-herkin in local mode. Same as '--mode local' option`,
+      description: `Build goblet in local mode. Same as '--mode local' option`,
     },
     vnc: {
       example: `${type} ${action} --vnc`,
-      description: `Build keg-herkin in vnc mode. Same as '--mode vnc' option`,
+      description: `Build goblet in vnc mode. Same as '--mode vnc' option`,
     },
   }),
 }
@@ -134,8 +134,8 @@ const taskOptions = {
   docker: {
     container: {
       description: 'Name of container within which to run create command',
-      example: '--container keg-herkin',
-      default: 'keg-herkin',
+      example: '--container goblet',
+      default: 'goblet',
     },
   },
   bdd: {
@@ -156,7 +156,7 @@ const taskOptions = {
       example: `--filter auth`,
     },
   },
-  herkin: {
+  goblet: {
     context: {
       alias: ['name'],
       description:
@@ -174,12 +174,12 @@ const taskOptions = {
     mode: {
       allowed: ['vnc', 'local'],
       example: `--mode local`,
-      description: 'Mode to run keg-herkin in. In not set, uses launch option',
+      description: 'Mode to run goblet in. In not set, uses launch option',
     },
     base: {
       alias: ['baseDir', 'rootDir', 'root'],
       example: ['--base /my/test/repo/directory'],
-      description: `The root or base directory containing a goblet.config outside of Keg-Herkin root directory`,
+      description: `The root or base directory containing a goblet.config outside of Goblet root directory`,
     },
     repo: {
       alias: [ 'cwd', 'workdir', 'repoDir'],
@@ -267,7 +267,7 @@ const taskOptions = {
       env: 'DEBUG',
       default: false,
       description: 'Runs with playwright debug mode activated',
-      example: 'keg herkin bdd test --debug',
+      example: 'keg goblet bdd test --debug',
     },
     devtools: {
       type: `boolean`,
@@ -355,7 +355,7 @@ const sharedOptions = {
 
 // TODO: Update to this when cli-utils convert-from-sv branch is merged
 // sharedOptions.unit = {
-//   ...sharedOptions.herkin,
+//   ...sharedOptions.goblet,
 //   ...sharedOptions.docker,
 //   ...sharedOptions.jest,
 // }
@@ -364,7 +364,7 @@ const sharedOptions = {
 setSharedOptions({
   ...taskOptions.jest,
   ...taskOptions.docker,
-  ...taskOptions.herkin,
+  ...taskOptions.goblet,
   ...taskOptions.playwright,
   ...taskOptions.pwContext,
 })

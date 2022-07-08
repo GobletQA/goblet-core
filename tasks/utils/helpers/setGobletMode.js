@@ -14,15 +14,15 @@ const mountEnvs = {
 }
 
 /**
- * Sets the mode that keg-herkin will be run in
+ * Sets the mode that goblet will be run in
  * Then calls methods to set the proper envs
  * @param {Object} params - Task options converted into an object
  * @param {Object} params.launch - Option to run the local browser
- * @param {Object} params.mode - Mode keg-herkin should be run in
+ * @param {Object} params.mode - Mode goblet should be run in
  *
  * @returns {string} - Mode that herkin is running in
  */
-const setHerkinMode = params => {
+const setGobletMode = params => {
   const { launch, local, vnc } = params
 
   const mode = params.mode || (vnc && 'vnc') || (local && 'local') || undefined
@@ -50,5 +50,5 @@ const setHerkinMode = params => {
 }
 
 module.exports = {
-  setHerkinMode,
+  setGobletMode,
 }

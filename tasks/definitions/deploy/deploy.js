@@ -3,7 +3,7 @@ module.exports = {
     name: 'deploy',
     alias: ['dpl'],
     example: 'keg herkin deploy <sub-task> <options>',
-    description: 'Run Keg-Herkin deploy tasks',
+    description: 'Run Goblet deploy tasks',
     tasks: {
       ...require('./backend'),
       ...require('./build'),

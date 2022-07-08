@@ -45,10 +45,10 @@ fi
 ## run the task (ex: bash scripts/sockr.cmd.sh bdd test)
 # 
 # Example feature file exec
-# bash scripts/sockr.cmd.sh bdd test context=repos/example/herkin/bdd/features/example.feature slowMo=5
-# bash scripts/sockr.cmd.sh bdd test context=/keg/repos/lancetipton/current/herkin/bdd/features/workflow-test.feature base=/keg/repos/lancetipton/current slowMo=5000
+# bash scripts/sockr.cmd.sh bdd test context=repos/example/goblet/bdd/features/example.feature slowMo=5
+# bash scripts/sockr.cmd.sh bdd test context=/keg/repos/lancetipton/current/goblet/bdd/features/workflow-test.feature base=/keg/repos/lancetipton/current slowMo=5000
 # 
 # Example Waypoint exec
-# bash scripts/sockr.cmd.sh waypoint run context=/keg/repos/lancetipton/current/herkin/waypoint/first.waypoint.js
+# bash scripts/sockr.cmd.sh waypoint run context=/keg/repos/lancetipton/current/goblet/waypoint/first.waypoint.js
 
 yarn task "$@"

@@ -1,5 +1,5 @@
 const { sharedOptions } = require('@keg-hub/cli-utils')
-const { setHerkinMode } = require('GobletTasks/utils/helpers/setHerkinMode')
+const { setGobletMode } = require('GobletTasks/utils/helpers/setGobletMode')
 const {
   launchBrowsers,
 } = require('GobletTasks/utils/playwright/launchBrowsers')
@@ -14,7 +14,7 @@ const {
  */
 const launchAction = async args => {
   const { params } = args
-  const herkinMode = setHerkinMode(params)
+  const herkinMode = setGobletMode(params)
   const websockets = await launchBrowsers(params, herkinMode)
 
   return {

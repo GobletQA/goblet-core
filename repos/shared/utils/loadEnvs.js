@@ -23,7 +23,7 @@ const testRemoveIncludes = [
 let __LOADED_ENVS__
 
 /**
- * Loads the keg-herkin envs from .env and yaml values files 
+ * Loads the goblet envs from .env and yaml values files 
  * @param {Object} options - Options for loading the env files
  * @param {boolean} [processAdd=true] - Should the envs be added to the current process
  * 

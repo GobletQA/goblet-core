@@ -2,7 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const webpack = require('webpack')
-const { getKegHerkinUrl } = require('../scripts/getKegHerkinUrl')
+const { getGobletUrl } = require('../scripts/getGobletUrl')
 
 module.exports = {
   entry: {
@@ -74,7 +74,7 @@ module.exports = {
       inject: 'body',
     }),
     new webpack.DefinePlugin({
-      'process.env.GOBLET_URL': JSON.stringify(getKegHerkinUrl()),
+      'process.env.GOBLET_URL': JSON.stringify(getGobletUrl()),
     }),
   ],
 }

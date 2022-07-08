@@ -5,7 +5,7 @@ const { loadFeature } = require('GobletSharedFeatures/features')
 const { loadTemplate } = require('GobletSharedTemplate/loadTemplate')
 const { buildFileModel } = require('GobletSharedUtils/buildFileModel')
 const { resolveFileType } = require('GobletSharedUtils/resolveFileType')
-const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
+const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
 
 const {
   readFile,
@@ -76,7 +76,7 @@ const deleteHerkinFile = async (repo, location) => {
  * @returns {Object} - fileModel for the file at the passed in location
  */
 const getHerkinFile = async (repo, location) => {
-  const baseDir = getRepoHerkinDir(repo)
+  const baseDir = getRepoGobletDir(repo)
 
   const fullPath = location.startsWith(baseDir)
   ? location

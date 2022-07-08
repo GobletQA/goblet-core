@@ -80,12 +80,12 @@ const mockRepos = [
     }
   },
   {
-    name: "keg-herkin",
-    url: "https://github.com/KegHub/keg-herkin",
+    name: "goblet",
+    url: "https://github.com/KegHub/goblet",
     refs: {
       nodes: [
         { name: 'main' },
-        { name: 'keg-herkin' },
+        { name: 'goblet' },
       ]
     }
   },

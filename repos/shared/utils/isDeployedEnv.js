@@ -1,12 +1,12 @@
 const { exists } = require('@keg-hub/jsutils')
 
 /**
- * Node Environments that Keg-Herkin can be deployed in
+ * Node Environments that Goblet can be deployed in
  */
 const deployedEnvs = ['st', 'staging', 'qa', 'prod', 'production']
 
 /**
- * Get the value for deployed Keg-Herkin environment
+ * Get the value for deployed Goblet environment
  */
 const isDeployedEnv =
   deployedEnvs.includes(process.env.NODE_ENV) ||
