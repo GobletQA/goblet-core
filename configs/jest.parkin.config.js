@@ -17,17 +17,17 @@ const { taskEnvToBrowserOpts } = require('HerkinSharedUtils/taskEnvToBrowserOpts
  *
  * @return {Array<string>} file paths
  */
-const getStepDefinitions = herkin => {
-  const { testUtilsDir } = herkin.internalPaths
-  const { repoRoot, workDir, stepsDir } = herkin.paths
+const getStepDefinitions = config => {
+  const { testUtilsDir } = config.internalPaths
+  const { repoRoot, workDir, stepsDir } = config.paths
   const baseDir = workDir ? path.join(repoRoot, workDir) : repoRoot
   const clientPattern = path.join(baseDir, stepsDir, '**/*.js')
   const clientMatches = glob.sync(clientPattern)
 
-  const herkinPattern = path.join(testUtilsDir, 'steps/**/*.js')
-  const herkinMatches = glob.sync(herkinPattern)
+  const configPattern = path.join(testUtilsDir, 'steps/**/*.js')
+  const configMatches = glob.sync(configPattern)
 
-  return uniqArr([...clientMatches, ...herkinMatches])
+  return uniqArr([...clientMatches, ...configMatches])
 }
 
 /**
@@ -36,25 +36,25 @@ const getStepDefinitions = herkin => {
  *
  * @return {Array<string>} file paths
  */
-const getParkinSupport = herkin => {
-  const { testUtilsDir } = herkin.internalPaths
-  const { repoRoot, workDir, supportDir } = herkin.paths
+const getParkinSupport = config => {
+  const { testUtilsDir } = config.internalPaths
+  const { repoRoot, workDir, supportDir } = config.paths
 
   const parkinEnvironment = `${testUtilsDir}/parkin/parkinTestEnv.js`
 
   // **IMPORTANT** - Must be loaded after the parkinEnvironment 
-  const herkinHooks = `${testUtilsDir}/support/hooks`
+  const configHooks = `${testUtilsDir}/support/hooks`
 
-  // Don't include the world here because it gets loaded in herkin/support/world.js
+  // Don't include the world here because it gets loaded in config/support/world.js
   const baseDir = workDir ? path.join(repoRoot, workDir) : repoRoot
-  const pattern = path.join(baseDir, supportDir, '**/+(hook.js|setup.js)')
+  const pattern = path.join(baseDir, supportDir, '**/+(hooks.js|hook.js|setup.js)')
   const matches = glob.sync(pattern)
 
-  // Add the default herkin hooks for setting up the tests
-  // This adds a beforeAll and afterAll hook to the test execution
-  // Within the beforeAll hook is a call to testUtils/playwright/playwrightTestEnv.js
+  // Add the default config hooks for setting up the tests
+  // This adds a BeforeAll and AfterAll hook to the test execution
+  // Were the `initialize` method from `playwrightTestEnv.js` is registered with the BeforeAll hook
   // This is where the browser for the test execution is created / connected to
-  matches.push(herkinHooks)
+  matches.unshift(configHooks)
 
   // MUST BE LOADED FIRST - Add the parkin environment setup before all other setup files
   // This ensures we can get access to the Parkin instance on the global object

@@ -34,7 +34,7 @@ global.getParkinOptions = () => {
   }
 }
 
-const configureEnvironment = () => {
+const parkinTestEnv = () => {
   const { GOBLET_TEST_RETRY } = process.env
 
   // This is set for all tests that are run
@@ -42,5 +42,4 @@ const configureEnvironment = () => {
   exists(GOBLET_TEST_RETRY) && jest.retryTimes(toInt(GOBLET_TEST_RETRY) || 1)
 }
 
-
-configureEnvironment()
+parkinTestEnv()

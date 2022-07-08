@@ -13,7 +13,6 @@ const { startTracing, stopTracingChunk, startTracingChunk } = require('./tracing
  * @return {boolean} - true if init was successful
  */
 const initialize = async () => {
-
   /** GOBLET_BROWSER is set by the task `keg herkin bdd run` */
   const { GOBLET_BROWSER='chromium' } = process.env
   const { gobletBrowserOpts=noOpObj, gobletContextOpts=noOpObj } = global
@@ -94,21 +93,8 @@ const getPage = async (num = 0) => {
  */
 const getBrowserContext = () => ({ getPage, getContext })
 
-/**
- * Helper that calls the jest beforeAll and afterAll
- * functions for setup and teardown. Called in the waypoint templates template.
- */
-const setupTestEnvironment = () => {
-  // TODO: Add helpers to pull beforeAll && afterAll from a global getter
-  //   * Similar to how Parkin does it for describe and test methods
-  //   * All polyfills to ensure they exist when called
-  //   * Typically they defined globally by a test framework like Jest
-  beforeAll(initialize)
-  afterAll(cleanup)
-}
 
 module.exports = {
-  setupTestEnvironment,
   getBrowserContext,
   initialize,
   cleanup,

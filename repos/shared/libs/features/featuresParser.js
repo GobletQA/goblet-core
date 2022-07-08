@@ -1,6 +1,6 @@
 const fs = require('fs')
-const { parkin } = require('HerkinParkin/instance')
 const { noOpObj } = require('@keg-hub/jsutils')
+const { getParkinInstance } = require('HerkinParkin/instance')
 
 /**
  * Parses the a feature file located at the passed in featureMeta.location
@@ -13,6 +13,7 @@ const { noOpObj } = require('@keg-hub/jsutils')
  */
 const featuresParser = (featureMeta = noOpObj) => {
   const { location } = featureMeta
+  const parkin = getParkinInstance()
 
   return new Promise((res, rej) => {
     fs.readFile(location, (err, data) => {

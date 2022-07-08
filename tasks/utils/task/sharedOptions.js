@@ -265,22 +265,27 @@ const taskOptions = {
     },
     debug: {
       env: 'DEBUG',
-      description: 'Runs with playwright debug mode activated',
-      example: 'keg herkin cr test --debug',
       default: false,
+      description: 'Runs with playwright debug mode activated',
+      example: 'keg herkin bdd test --debug',
     },
     devtools: {
+      type: `boolean`,
+      default: false,
       example: '--devtools',
       env: 'GOBLET_DEV_TOOLS',
-      description:
-        'Open devtools be automatically when the browser opens. The debug option must also be set true',
+      description: 'Open devtools automatically when the browser opens. The debug option must also be set true',
     },
     tracing: {
+      type: `boolean`,
+      default: false,
       example: '--tracing',
       env: 'GOBLET_TEST_TRACING',
       description: 'Activates playwrights tracing functionality for all executed tests',
     },
     screenshot: {
+      type: `boolean`,
+      default: false,
       example: '--screenshot',
       env: 'GOBLET_TEST_SCREENSHOT',
       description: 'Activates playwrights tracing functionality for all executed tests',
@@ -326,6 +331,7 @@ const taskOptions = {
       description: 'A list of permissions to grant to all browser pages, seperated by comma'
     },
     record: {
+      default: false,
       example: '--record',
       env: `GOBLET_TEST_VIDEO_RECORD`,
       description: 'Records a video of all browser page interactions, and saves to herkin.config#downloads directory'

@@ -2,21 +2,23 @@
 // This is needed when loading definitions from the backend API
 // The Repo instance holds an instance of Parkin that needs to be used here instead of creating one
 // Need to figure out a way to override the instance here, and use the Repos Parkin instance
-
 const { Parkin } = require('@ltipton/parkin')
 const { getWorld } = require('HerkinSupport')
 
-let __ParkinInstance = new Parkin(getWorld())
+let __ParkinInstance
 
 // Sets a new instance of the Parkin Class to the __ParkinInstance variable
 // Currently not called anywhere
 const setParkinInstance = (instance) => {
   if(instance && instance !== __ParkinInstance) __ParkinInstance = instance
 
+  __ParkinInstance = __ParkinInstance || new Parkin(getWorld())
+
   return __ParkinInstance
 }
 
 const getParkinInstance = () => {
+  __ParkinInstance = __ParkinInstance || new Parkin(getWorld())
   return __ParkinInstance
 }
 
@@ -28,7 +30,4 @@ const getParkinInstance = () => {
 module.exports = {
   getParkinInstance,
   setParkinInstance,
-  // TODO: Need to validate that the correct config gets loaded here
-  // Would be better to load the correct herkin config and pass it to getWorld
-  parkin: __ParkinInstance,
 }

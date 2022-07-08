@@ -77,7 +77,7 @@ const getContext = async (contextOpts, location) => {
     catch(err){
       if(err.code === `ENOENT` && err.message.includes(`Error reading storage state`))
         console.warn(`[Goblet] Saved Context State ${location} does not exist.`)
-      else global.context = await global.browser.newContext(contextOpts)      
+      else global.context = await global.browser.newContext(contextOpts)
     }
   }
   // Goblet options that are context specific

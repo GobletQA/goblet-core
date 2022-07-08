@@ -1,9 +1,9 @@
 const path = require('path')
 const glob = require('glob')
 const { fileSys } = require('@keg-hub/cli-utils')
-const { parkin } = require('HerkinParkin/instance')
 const { featuresParser } = require('./featuresParser')
 const { limbo, noPropArr } = require('@keg-hub/jsutils')
+const { getParkinInstance } = require('HerkinParkin/instance')
 const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
 const { getPathFromBase } = require('HerkinSharedUtils/getPathFromBase')
 
@@ -17,6 +17,8 @@ const { getPathFromBase } = require('HerkinSharedUtils/getPathFromBase')
  * @returns {Object} - FileModel of the feature file
  */
 const mapStepsToDefinitions = fileModel => {
+  const parkin = getParkinInstance()
+
   fileModel.ast && 
     fileModel.ast.map(feature => {
       feature.scenarios &&
@@ -62,7 +64,9 @@ const buildFeatureFileModel = async (repo, ast, content, location) => {
  * @returns {Object} - FileModel of the feature file
  */
 const loadFeature = async (repo, location) => {
+  const parkin = getParkinInstance()
   const [_, content] = await fileSys.readFile(location)
+
   return await buildFeatureFileModel(
     repo,
     parkin.parse.feature(content),
