@@ -32,7 +32,6 @@
   "GobletBack": "repos/backend",
 
   "GobletPlaywright": "repos/testUtils/playwright",
-  // Not being used currently
   "GobletSteps": "repos/testUtils/steps",
   "GobletSupport": "repos/testUtils/support",
   "GobletTest": "repos/testUtils",
