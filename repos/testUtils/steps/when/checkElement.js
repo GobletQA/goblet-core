@@ -11,10 +11,12 @@ const checkElement = async (action, selector) => {
   const boxAction = action === 'check' ? await box.check() : await box.uncheck()
 }
 
-When(`I {string} the element {string}`, checkElement, {
-  description: `Locates a checkbox or radio element by selector and either checks or unchecks it.
-
-Module : checkElement`,
+const meta = {
+  module: `checkElement`,
+  description: `Locates a checkbox or radio element by selector and either checks or unchecks it.`,
+  examples: [
+    `I "check" the element "input[name=\'unique_name\']"`,
+  ],
   expressions: [
     {
       type: 'string',
@@ -23,13 +25,13 @@ Module : checkElement`,
     },
     {
       type: 'string',
-      description: `The element selector.  Selector must be specific enough to locate a single element.  Valid for checkbox and radio inputs.
-      
-Example : I "check" the element "input[name=\'unique_name\']"`,
+      description: `The element selector.  Selector must be specific enough to locate a single element.  Valid for checkbox and radio inputs.`,
       example: "input[name='unique_name']",
     },
   ],
-})
+}
+
+When(`I {string} the element {string}`, checkElement, meta)
 
 module.exports = {
   checkElement,

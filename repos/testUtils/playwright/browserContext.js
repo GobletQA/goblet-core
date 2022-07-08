@@ -1,6 +1,7 @@
 const os = require('os')
 const path = require('path')
 const { promises } = require('fs')
+const { get, noOpObj } = require('@keg-hub/jsutils')
 
 const defaultStateFile = 'browser-context-state'
 const defaultCookieFile = 'browser-cookie-state'
@@ -20,11 +21,8 @@ const browserCookieLoc = (saveLocation) => {
  */
 const saveContextCookie = async (context, location) => {
   const cookies = await context.cookies()
-  const cookieJson = JSON.stringify(cookies)
   const saveLoc = browserCookieLoc(location)
-  await promises.writeFile(saveLoc, cookieJson)
-
-  // console.log(`[Goblet] Browser cookie saved to ${saveLoc}`)
+  await promises.writeFile(saveLoc, JSON.stringify(cookies))
 
   return true
 }
@@ -33,11 +31,9 @@ const setContextCookie = async (context, location) => {
   const loadLoc = browserCookieLoc(location)
   const cookie = await promises.readFile(loadLoc, 'utf8')
   await context.addCookies(JSON.parse(cookie))
-
-  // console.log(`[Goblet] Browser cookie loaded from ${loadLoc}`)
   context.__goblet.cookie = loadLoc
 
-  return true  
+  return true
 }
 
 /**
@@ -64,6 +60,8 @@ const saveContextState = async (context, location) => {
  * @return {Object} - Playwright browser page object
  */
 const getContext = async (contextOpts, location) => {
+  contextOpts = contextOpts || get(global, `__goblet.context.options`, noOpObj)
+
   if(!global.browser) throw new Error('Browser type not initialized')
   if(!global.context){
     try {

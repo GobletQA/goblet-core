@@ -1,4 +1,4 @@
-const { noOpObj } = require('@keg-hub/jsutils')
+const { noOpObj, get } = require('@keg-hub/jsutils')
 const { getContext } = require('GobletPlaywright/browserContext')
 const { getMetadata } = require('GobletSCPlaywright/server/server')
 const { newBrowser } = require('GobletSCPlaywright/browser/newBrowser')
@@ -15,7 +15,6 @@ const { startTracing, stopTracingChunk, startTracingChunk } = require('./tracing
 const initialize = async () => {
   /** GOBLET_BROWSER is set by the task `keg goblet bdd run` */
   const { GOBLET_BROWSER='chromium' } = process.env
-  const { gobletBrowserOpts=noOpObj, gobletContextOpts=noOpObj } = global
   
   try {
     const { type, launchOptions } = await getMetadata(GOBLET_BROWSER)
@@ -26,14 +25,14 @@ const initialize = async () => {
     const { browser } = await newBrowser({
       ...launchOptions,
       type,
-      ...gobletBrowserOpts,
+      ...get(global, `__gobletbrowser.options`, noOpObj),
     }, false)
 
     if (!browser)
       throw new Error(`Could not create browser. Please ensure the browser server is running.`)
 
     global.browser = browser
-    global.context = await getContext(gobletContextOpts)
+    global.context = await getContext(get(global, `__goblet.context.options`))
     await startTracing(global.context)
   }
   catch (err) {

@@ -1,5 +1,5 @@
 const path = require('path')
-const { noOpObj } = require('@keg-hub/jsutils')
+const { noOpObj, get, set } = require('@keg-hub/jsutils')
 
 /**
  * Helper to check is tracing is disabled
@@ -7,9 +7,7 @@ const { noOpObj } = require('@keg-hub/jsutils')
  * @returns boolean
  */
 const tracingDisabled = () => {
-  const { gobletOptions=noOpObj } = global
-  const { tracing } = gobletOptions
-
+  const tracing = get(global, `__goblet.options.tracing`)
   return Boolean(!tracing || (!tracing.screenshots && !tracing.snapshots))
 }
 
@@ -22,8 +20,8 @@ const tracingDisabled = () => {
 const startTracing = async (context) => {
   if(!context || tracingDisabled()) return
 
-  const { gobletOptions=noOpObj } = global
-  await context.tracing.start(gobletOptions.tracing)
+  const tracing = get(global, `__goblet.options.tracing`)
+  await context.tracing.start(tracing)
 
   return true
 }
@@ -51,10 +49,8 @@ const startTracingChunk = async (context) => {
  */
 const stopTracingChunk = async (context) => {
   if(!context || !context.__goblet.tracing || tracingDisabled()) return
+  const { tracesDir } = get(global, `__goblet.browser.options`, noOpObj)
 
-  const { gobletBrowserOpts=noOpObj } = global
-  const { tracesDir } = gobletBrowserOpts
-  
   const timestamp = new Date().getTime()
   // TODO: see if theres a better way to get the test name from the jasmine api
   // Get the name of the file being tested and set it here

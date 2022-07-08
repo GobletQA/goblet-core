@@ -88,10 +88,12 @@ module.exports = async () => {
     ],
     /** Pass on the browser options defined from the task that started the process */
     globals: {
-      gobletPaths: config.paths,
-      gobletBrowserOpts: browserOpts,
-      gobletContextOpts: contextOpts,
-      gobletOptions: buildJestGobletOpts(config, browserOpts)
+      __goblet: {
+        paths: config.paths,
+        browser: { options: browserOpts },
+        context: { options: contextOpts },
+        options: buildJestGobletOpts(config, browserOpts),
+      },
     },
     /** Add all support and step files and ensure they are loaded before running the tests */
     setupFilesAfterEnv: [
