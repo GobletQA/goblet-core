@@ -1,5 +1,5 @@
-const { loadDefinitions } = require('HerkinSharedDefinitions/definitions')
-const { definitionsByType } = require('HerkinSharedUtils/definitionsByType')
+const { loadDefinitions } = require('GobletSharedDefinitions/definitions')
+const { definitionsByType } = require('GobletSharedUtils/definitionsByType')
 
 const getDefinitions = async (repo, config) => {
   const definitions = await loadDefinitions(repo, config)

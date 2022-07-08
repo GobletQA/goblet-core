@@ -1,6 +1,6 @@
-const { When } = require('HerkinParkin')
+const { When } = require('GobletParkin')
 const { checkElement } = require('./checkElement')
-const { checkForAncestor } = require('HerkinSupport/validate')
+const { checkForAncestor } = require('GobletSupport/validate')
 
 /**
  * Checks/unchecks the element matching the selector, that is also a descendent of the registered ancestor.

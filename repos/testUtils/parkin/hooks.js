@@ -15,7 +15,7 @@ const getHook = (hookName) => {
 /**
  * Cucumber-like hooks
  * @example
- * import { BeforeAll, AfterAll } from 'HerkinParkin'
+ * import { BeforeAll, AfterAll } from 'GobletParkin'
  * BeforeAll(() => setupMyTestEnv())
  * AfterAll(() => cleanupMyEnv())
  */

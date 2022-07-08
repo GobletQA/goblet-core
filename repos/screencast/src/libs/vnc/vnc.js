@@ -1,6 +1,6 @@
 const { Logger } = require('@keg-hub/cli-utils')
-const { getHerkinConfig } = require('HerkinSharedConfig')
-const { findProc, killProc } = require('HerkinSCLibs/proc')
+const { getHerkinConfig } = require('GobletSharedConfig')
+const { findProc, killProc } = require('GobletSCLibs/proc')
 const { create: childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
 const {
   checkCall,

@@ -1,6 +1,6 @@
 const babelJest = require('babel-jest')
 const { createHash } = require('crypto')
-const { getWorld } = require('HerkinRepos/testUtils/support')
+const { getWorld } = require('GobletRepos/testUtils/support')
 
 /**
  * Custom jest transformer for wrapping waypoint scripts in a test method

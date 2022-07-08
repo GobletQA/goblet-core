@@ -1,6 +1,6 @@
 const { getOS } = require('../../utils/getOS')
 const {eitherArr, noPropArr, isStr} = require('@keg-hub/jsutils')
-const { browserNames, browserMap } = require('HerkinSCConstants')
+const { browserNames, browserMap } = require('GobletSCConstants')
 
 /**
  * Creates an array of browsers relative the passed params object properties

@@ -1,6 +1,6 @@
 const path = require('path')
 const glob = require('glob')
-const { getHerkinConfig } = require('HerkinSharedConfig')
+const { getHerkinConfig } = require('GobletSharedConfig')
 const {
   tryRequireSync,
   deepMerge,

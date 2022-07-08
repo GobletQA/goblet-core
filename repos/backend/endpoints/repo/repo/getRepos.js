@@ -1,5 +1,5 @@
-const { Repo } = require('HerkinSharedRepo/repo')
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { Repo } = require('GobletSharedRepo/repo')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 /**
  * Endpoint to get all repos from the authorized provider

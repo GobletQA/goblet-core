@@ -3,9 +3,9 @@ const path = require('path')
 const { jestAliases, registerAliases } = require('./aliases.config')
 registerAliases()
 
-const { getHerkinConfig } = require('HerkinSharedConfig')
+const { getHerkinConfig } = require('GobletSharedConfig')
 const { noOpObj, noPropArr, capitalize } = require('@keg-hub/jsutils')
-const { buildTestMatchFiles } = require('HerkinSharedUtils/buildTestMatchFiles')
+const { buildTestMatchFiles } = require('GobletSharedUtils/buildTestMatchFiles')
 
 /**
  * Builds the test reports, currently only jest-html-reporter

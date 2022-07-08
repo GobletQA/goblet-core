@@ -26,7 +26,7 @@ const {
   noOpObj,
   deepMerge,
 } = require('@keg-hub/jsutils')
-const { aliases } = require('HerkinConfigs/aliases.config')
+const { aliases } = require('GobletConfigs/aliases.config')
 
 /**
  * **IMPORTANT**
@@ -35,7 +35,7 @@ const { aliases } = require('HerkinConfigs/aliases.config')
  * **IMPORTANT**
  */
 const defaultConfig = require(path.join(
-  aliases.HerkinRoot,
+  aliases.GobletRoot,
   'configs/herkin.default.config.js'
 ))
 

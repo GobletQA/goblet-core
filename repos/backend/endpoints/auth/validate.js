@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
-const { Repo } = require('HerkinSharedRepo/repo')
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
-const { generateTokens } = require('HerkinBackUtils/generateTokens')
+const { Repo } = require('GobletSharedRepo/repo')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
+const { generateTokens } = require('GobletBackUtils/generateTokens')
 
 /**
  * Validates the required authentication information exists

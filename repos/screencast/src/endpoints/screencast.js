@@ -1,11 +1,11 @@
 const { parseJSON } = require('@keg-hub/jsutils')
-const { AppRouter } = require('HerkinSharedRouter')
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { AppRouter } = require('GobletSharedRouter')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
 const {
   stopScreencast,
   startScreencast,
   statusScreencast,
-} = require('HerkinSCScreencast')
+} = require('GobletSCScreencast')
 
 /**
  * Endpoint to get the current status  of the browser

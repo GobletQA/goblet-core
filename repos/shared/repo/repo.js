@@ -1,13 +1,13 @@
 const { Parkin } = require('@ltipton/parkin')
-const { getWorld } = require('HerkinSupport/world')
+const { getWorld } = require('GobletSupport/world')
 const { isObj, noOpObj, noPropArr, } = require('@keg-hub/jsutils')
-const { getFileTypes } = require('HerkinSharedUtils/getFileTypes')
+const { getFileTypes } = require('GobletSharedUtils/getFileTypes')
 const {
   getUserRepos,
   statusHerkin,
   initializeHerkin,
   disconnectHerkin,
-} = require('HerkinWF')
+} = require('GobletWF')
 
 
 /**

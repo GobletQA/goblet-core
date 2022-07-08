@@ -1,6 +1,6 @@
 const express = require('express')
-const { getApp } = require('HerkinSharedApp')
-const { AppRouter } = require('HerkinSharedRouter')
+const { getApp } = require('GobletSharedApp')
+const { AppRouter } = require('GobletSharedRouter')
 
 /**
  * Configures the express bodyParser and add the AppRouter to the express app

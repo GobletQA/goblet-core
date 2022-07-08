@@ -1,6 +1,6 @@
-const { When } = require('HerkinParkin')
-const { getLocator } = require('HerkinPlaywright')
-const { checkForAncestor } = require('HerkinSupport/validate')
+const { When } = require('GobletParkin')
+const { getLocator } = require('GobletPlaywright')
+const { checkForAncestor } = require('GobletSupport/validate')
 
 /**
  * Clicks the element `selector` that is a descendant of the registered ancestor.

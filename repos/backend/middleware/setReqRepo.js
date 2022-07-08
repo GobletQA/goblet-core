@@ -1,6 +1,6 @@
-const { Repo } = require('HerkinSharedRepo/repo')
-const { AppRouter } = require('HerkinSharedRouter')
-const { asyncWrap } = require('HerkinSharedExp')
+const { Repo } = require('GobletSharedRepo/repo')
+const { AppRouter } = require('GobletSharedRouter')
+const { asyncWrap } = require('GobletSharedExp')
 const { pickKeys, deepMerge } = require('@keg-hub/jsutils')
 
 /**

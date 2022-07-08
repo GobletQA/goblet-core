@@ -1,11 +1,11 @@
 // TODO: @lance-tipton - Move all socket.io setup and files to screencast folder
-const { Repo } = require('HerkinSharedRepo/repo')
-const { joinBrowserConf } = require('HerkinSharedUtils/joinBrowserConf')
+const { Repo } = require('GobletSharedRepo/repo')
+const { joinBrowserConf } = require('GobletSharedUtils/joinBrowserConf')
 const {
   setPage,
   stopBrowser,
   startPlaying,
-} = require('HerkinSCPlaywright')
+} = require('GobletSCPlaywright')
 
 const handleStartPlaying = async (data, repo, socket, Manager, app) => {
   const { token, ref, action, ...browser } = data

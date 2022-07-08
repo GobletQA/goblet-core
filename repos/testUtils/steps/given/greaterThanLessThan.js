@@ -1,6 +1,6 @@
-const { Given } = require('HerkinParkin')
-const { getLocators } = require('HerkinPlaywright')
-const { greaterLessEqual } = require('HerkinSupport/helpers')
+const { Given } = require('GobletParkin')
+const { getLocators } = require('GobletPlaywright')
+const { greaterLessEqual } = require('GobletSupport/helpers')
 
 /**
  * Expects the number of dom elements matching `selector` to match `count` based on the comparison screen

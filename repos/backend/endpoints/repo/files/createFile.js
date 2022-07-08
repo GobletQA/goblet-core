@@ -1,5 +1,5 @@
-const { createHerkinFile } = require('HerkinSharedFileSys/herkinFiles')
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { createHerkinFile } = require('GobletSharedFileSys/herkinFiles')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 /**
  * Creates new file based on file type within the docker mounted test root folder

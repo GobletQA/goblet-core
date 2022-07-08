@@ -1,5 +1,5 @@
-const { Given } = require('HerkinParkin')
-const { defaultStateFile, contextStateLoc } = require('HerkinPlaywright/browserContext')
+const { Given } = require('GobletParkin')
+const { defaultStateFile, contextStateLoc } = require('GobletPlaywright/browserContext')
 
 /**
  * Checks that the page title is `title`

@@ -1,6 +1,6 @@
-const { Then } = require('HerkinParkin')
+const { Then } = require('GobletParkin')
 const { containsText } = require('./containsText')
-const { getBrowserContext } = require('HerkinTestEnv')
+const { getBrowserContext } = require('GobletPWTestEnv')
 const { getPage } = getBrowserContext()
 
 /**

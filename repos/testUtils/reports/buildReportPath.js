@@ -1,5 +1,5 @@
 const path = require('path')
-const { getPathFromBase } = require('HerkinSharedUtils/getPathFromBase')
+const { getPathFromBase } = require('GobletSharedUtils/getPathFromBase')
 
 /**
  * Gets the name for the report based on the name of the test being run

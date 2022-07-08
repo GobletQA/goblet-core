@@ -1,5 +1,5 @@
-const { When } = require('HerkinParkin')
-const { getLocator } = require('HerkinPlaywright')
+const { When } = require('GobletParkin')
+const { getLocator } = require('GobletPlaywright')
 
 /**
  * Checks/unchecks the element matching the selector

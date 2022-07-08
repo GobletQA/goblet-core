@@ -1,8 +1,8 @@
 const path = require('path')
-const { treeNodeModel } = require('HerkinSharedModels')
+const { treeNodeModel } = require('GobletSharedModels')
 const { isDirectory, getFolderContent } = require('./fileSys')
-const { resolveFileType } = require('HerkinSharedUtils/resolveFileType')
-const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
+const { resolveFileType } = require('GobletSharedUtils/resolveFileType')
+const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
 
 /**
  * Recursively checks to find the parent node for a given item

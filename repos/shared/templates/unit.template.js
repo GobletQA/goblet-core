@@ -1,4 +1,4 @@
-const { playwrightTestEnv } = require('HerkinTestEnv')
+const { playwrightTestEnv } = require('GobletPWTestEnv')
 
 playwrightTestEnv()
 

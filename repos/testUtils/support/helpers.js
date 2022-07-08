@@ -1,5 +1,5 @@
 const { get } = require('@keg-hub/jsutils')
-const { getLocator } = require('HerkinPlaywright')
+const { getLocator } = require('GobletPlaywright')
 
 const checkTypes = {
   less: {

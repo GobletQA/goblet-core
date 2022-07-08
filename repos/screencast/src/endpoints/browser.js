@@ -1,14 +1,14 @@
-const { AppRouter } = require('HerkinSharedRouter')
+const { AppRouter } = require('GobletSharedRouter')
 const { noOpObj } = require('@keg-hub/jsutils')
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
-const { joinBrowserConf } = require('HerkinSharedUtils/joinBrowserConf')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
+const { joinBrowserConf } = require('GobletSharedUtils/joinBrowserConf')
 const {
   stopBrowser,
   startBrowser,
   actionBrowser,
   statusBrowser,
   restartBrowser,
-} = require('HerkinSCPlaywright')
+} = require('GobletSCPlaywright')
 
 /**
  * Starts a Playwright Browser using the passed in params as launch options

@@ -1,4 +1,4 @@
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 /**
  * Loads the Parkin World object and passes it to the frontend

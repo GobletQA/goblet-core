@@ -1,4 +1,4 @@
-const { getApp } = require('HerkinSharedApp')
+const { getApp } = require('GobletSharedApp')
 const { Logger } = require(`@keg-hub/cli-utils`)
 const { get, isNum } = require(`@keg-hub/jsutils`)
 

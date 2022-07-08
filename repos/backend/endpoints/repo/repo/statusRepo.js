@@ -1,6 +1,6 @@
-const { Repo } = require('HerkinSharedRepo/repo')
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
-const { loadRepoContent } = require('HerkinSharedRepo/loadRepoContent')
+const { Repo } = require('GobletSharedRepo/repo')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
+const { loadRepoContent } = require('GobletSharedRepo/loadRepoContent')
 
 /**
  * Could be used to get repos when unmounted and in vnc mode, but logged in

@@ -1,5 +1,5 @@
-const { When } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinTestEnv')
+const { When } = require('GobletParkin')
+const { getBrowserContext } = require('GobletPWTestEnv')
 const { getPage } = getBrowserContext()
 const keyboardMap = require('./keyboardMap')
 

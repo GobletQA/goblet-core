@@ -1,8 +1,8 @@
 const path = require('path')
 const { noOpObj } = require('@keg-hub/jsutils')
-const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
-const { getMountRootDir } = require('HerkinSharedUtils/getMountRootDir')
-const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
+const { buildFileModel } = require('GobletSharedUtils/buildFileModel')
+const { getMountRootDir } = require('GobletSharedUtils/getMountRootDir')
+const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
 
 /**
  * Checks if a path is in the reports folder

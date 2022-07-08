@@ -1,7 +1,7 @@
 const path = require('path')
-const { getFileContent } = require('HerkinSharedUtils/getFileContent')
-const { getMountRootDir } = require('HerkinSharedUtils/getMountRootDir')
-const { reportHeight } = require(`HerkinSharedTemplate/reportHeight.template`)
+const { getFileContent } = require('GobletSharedUtils/getFileContent')
+const { getMountRootDir } = require('GobletSharedUtils/getMountRootDir')
+const { reportHeight } = require(`GobletSharedTemplate/reportHeight.template`)
 
 /**
  * Loads a report by it's name and fileType

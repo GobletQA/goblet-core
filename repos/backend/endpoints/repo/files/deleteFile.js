@@ -1,5 +1,5 @@
-const { deleteHerkinFile } = require('HerkinSharedFileSys/herkinFiles')
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { deleteHerkinFile } = require('GobletSharedFileSys/herkinFiles')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 /**
  * Deletes an file located within the docker mounted test root folder

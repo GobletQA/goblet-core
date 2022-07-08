@@ -1,7 +1,7 @@
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
-const { loadDefinitions } = require('HerkinSharedDefinitions/definitions')
-const { definitionsByType } = require('HerkinSharedUtils/definitionsByType')
-const { fileModelArrayToObj } = require('HerkinSharedUtils/fileModelArrayToObj')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
+const { loadDefinitions } = require('GobletSharedDefinitions/definitions')
+const { definitionsByType } = require('GobletSharedUtils/definitionsByType')
+const { fileModelArrayToObj } = require('GobletSharedUtils/fileModelArrayToObj')
 
 const getDefinitions = asyncWrap(async (req, res) => {
   const definitions = await loadDefinitions(

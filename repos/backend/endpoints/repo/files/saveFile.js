@@ -1,5 +1,5 @@
-const { saveHerkinFile } = require('HerkinSharedFileSys/herkinFiles')
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { saveHerkinFile } = require('GobletSharedFileSys/herkinFiles')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 /**
  * Saves a file to a location within the docker mounted test root folder

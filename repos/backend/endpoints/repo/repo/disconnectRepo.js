@@ -1,5 +1,5 @@
-const { Repo } = require('HerkinSharedRepo/repo')
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { Repo } = require('GobletSharedRepo/repo')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 /**
  * Disconnects a connected repo ( VNC mode only )

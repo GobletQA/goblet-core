@@ -1,7 +1,7 @@
 const os = require('os')
 const path = require('path')
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
-const { getHerkinConfig } = require('HerkinSharedConfig')
+const { getHerkinConfig } = require('GobletSharedConfig')
 const { checkVncEnv } = require('../../utils/vncActiveEnv')
 const { isStr, isObj, exists, noOpObj, validate } = require('@keg-hub/jsutils')
 

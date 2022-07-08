@@ -1,4 +1,4 @@
-const { getApp } = require('HerkinSharedApp')
+const { getApp } = require('GobletSharedApp')
 const { get, noOpObj } = require('@keg-hub/jsutils')
 
 /**

@@ -1,8 +1,8 @@
-const { loadFeatures } = require('HerkinSharedFeatures/features')
-const { buildFileTree } = require('HerkinSharedFileSys/fileTree')
-const { loadDefinitions } = require('HerkinSharedDefinitions/definitions')
-const { definitionsByType } = require('HerkinSharedUtils/definitionsByType')
-const { fileModelArrayToObj } = require('HerkinSharedUtils/fileModelArrayToObj')
+const { loadFeatures } = require('GobletSharedFeatures/features')
+const { buildFileTree } = require('GobletSharedFileSys/fileTree')
+const { loadDefinitions } = require('GobletSharedDefinitions/definitions')
+const { definitionsByType } = require('GobletSharedUtils/definitionsByType')
+const { fileModelArrayToObj } = require('GobletSharedUtils/fileModelArrayToObj')
 
 /**
  * Loads all the needed content for a repo

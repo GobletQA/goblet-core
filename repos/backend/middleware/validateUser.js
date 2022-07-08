@@ -1,5 +1,5 @@
-const { AppRouter } = require('HerkinSharedRouter')
-const { asyncWrap, resError } = require('HerkinSharedExp')
+const { AppRouter } = require('GobletSharedRouter')
+const { asyncWrap, resError } = require('GobletSharedExp')
 
 /**
  * Checks if the user and their token exists in the session.

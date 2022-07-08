@@ -1,6 +1,6 @@
 const fs = require('fs')
 const { noOpObj } = require('@keg-hub/jsutils')
-const { getParkinInstance } = require('HerkinParkin/instance')
+const { getParkinInstance } = require('GobletParkin/instance')
 
 /**
  * Parses the a feature file located at the passed in featureMeta.location

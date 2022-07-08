@@ -1,5 +1,5 @@
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
-const { buildFileTree } = require('HerkinSharedFileSys/fileTree')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
+const { buildFileTree } = require('GobletSharedFileSys/fileTree')
 
 /**
  * Iterates through the docker mounted volume of the test root folder

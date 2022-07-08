@@ -1,5 +1,5 @@
-const { asyncWrap, apiRes, resError } = require('HerkinSharedExp')
-const { validateRefreshToken } = require('HerkinBackUtils/validateRefreshToken')
+const { asyncWrap, apiRes, resError } = require('GobletSharedExp')
+const { validateRefreshToken } = require('GobletBackUtils/validateRefreshToken')
 
 /**
  * Validates the required authentication information exists

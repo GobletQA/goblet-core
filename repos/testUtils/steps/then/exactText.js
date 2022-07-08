@@ -1,5 +1,5 @@
-const { Then } = require('HerkinParkin')
-const { getLocatorContent } = require('HerkinSupport/helpers')
+const { Then } = require('GobletParkin')
+const { getLocatorContent } = require('GobletSupport/helpers')
 
 
 /**

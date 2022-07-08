@@ -1,7 +1,7 @@
-const { When } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinTestEnv')
+const { When } = require('GobletParkin')
+const { getBrowserContext } = require('GobletPWTestEnv')
 const { getPage } = getBrowserContext()
-const { getLocator } = require('HerkinPlaywright')
+const { getLocator } = require('GobletPlaywright')
 
 /**
  * Click the element matching `selector`

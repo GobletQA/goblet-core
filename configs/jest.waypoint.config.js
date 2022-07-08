@@ -3,12 +3,12 @@ const { jestConfig } = require('./jest.default.config')
 const path = require('path')
 const { noOpObj } = require('@keg-hub/jsutils')
 const { inDocker } = require('@keg-hub/cli-utils')
-const { getHerkinConfig } = require('HerkinSharedConfig')
-const { getLaunchType } = require('HerkinSharedUtils/getLaunchType')
-const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
-const { buildTestMatchFiles } = require('HerkinSharedUtils/buildTestMatchFiles')
-const { taskEnvToBrowserOpts } = require('HerkinSharedUtils/taskEnvToBrowserOpts')
-const { metadata, checkVncEnv, getBrowserOpts, getContextOpts } = require('HerkinSC')
+const { getHerkinConfig } = require('GobletSharedConfig')
+const { getLaunchType } = require('GobletSharedUtils/getLaunchType')
+const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
+const { buildTestMatchFiles } = require('GobletSharedUtils/buildTestMatchFiles')
+const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts')
+const { metadata, checkVncEnv, getBrowserOpts, getContextOpts } = require('GobletSC')
 
 /**
  * Builds the launch / browser options for the jest-playwright-config

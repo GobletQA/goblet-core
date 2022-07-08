@@ -1,4 +1,4 @@
-const { Given } = require('HerkinParkin')
+const { Given } = require('GobletParkin')
 
 
 /**

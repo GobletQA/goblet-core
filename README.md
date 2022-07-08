@@ -1,4 +1,4 @@
-# Keg-Herkin
+# Goblet Monorepo
 * Provides **cross-platform** and **cross-browser** application testing.
 * Runs within an isolated environment (docker) to ensure dependable and predicable testing conditions.
 * Simplifies the testing process through functionality such:
@@ -17,7 +17,7 @@
 * [Playwright](https://playwright.dev/)
   * Automates the browser
   * Works on all browsers
-  * Provides the base docker container for Keg-Herkin
+  * Provides the base docker container for Goblet
 * [Jest](https://jestjs.io/)
   * Provides data assertion ([expect](https://jestjs.io/docs/en/expect))
   * Allows running tests in parallel
@@ -56,6 +56,6 @@
 
 
 ## Tasks
-* [Start](/docs/tasks/start.md) - Start the Keg-Herkin application
+* [Start](/docs/tasks/start.md) - Start the Goblet application
 
 

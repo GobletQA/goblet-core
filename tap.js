@@ -16,7 +16,7 @@ const {
 module.exports = {
   alias: 'herkin',
   name: 'keg-herkin',
-  displayName: 'Keg-Herkin',
+  displayName: 'Goblet',
   keg: {
     envs: {
       'process.env.NODE_ENV': NODE_ENV,

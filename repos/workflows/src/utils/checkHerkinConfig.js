@@ -1,5 +1,5 @@
 const path = require('path')
-const { loadConfigFromFolder } = require('HerkinSharedConfig')
+const { loadConfigFromFolder } = require('GobletSharedConfig')
 const { getCurrentRepoPath } = require('./getCurrentRepoPath')
 
 /**

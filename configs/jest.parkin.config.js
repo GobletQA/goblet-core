@@ -3,12 +3,12 @@ const { jestConfig } = require('./jest.default.config')
 
 const path = require('path')
 const glob = require('glob')
-const { getContextOpts } = require('HerkinSC')
+const { getContextOpts } = require('GobletSC')
 const { uniqArr, noOpObj } = require('@keg-hub/jsutils')
-const { getHerkinConfig } = require('HerkinSharedConfig')
-const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
-const { buildJestGobletOpts } = require('HerkinSharedUtils/buildJestGobletOpts')
-const { taskEnvToBrowserOpts } = require('HerkinSharedUtils/taskEnvToBrowserOpts')
+const { getHerkinConfig } = require('GobletSharedConfig')
+const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
+const { buildJestGobletOpts } = require('GobletSharedUtils/buildJestGobletOpts')
+const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts')
 
 /**
  * Finds all step definition files in client's step directory and

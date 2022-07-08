@@ -1,6 +1,6 @@
 const { newPage } = require('./newPage')
 const { noOpObj } = require('@keg-hub/jsutils')
-const { browserStatus } = require('HerkinSCConstants')
+const { browserStatus } = require('GobletSCConstants')
 const { buildStatus } = require('../helpers/buildStatus')
 const { getPage, getContext, getBrowser } = require('./browser')
 /**

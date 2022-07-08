@@ -1,7 +1,7 @@
-const { Then } = require('HerkinParkin')
+const { Then } = require('GobletParkin')
 const { get } = require('@keg-hub/jsutils')
-const { getLocators } = require('HerkinPlaywright')
-const { cleanWorldPath, greaterLessEqual } = require('HerkinSupport/helpers')
+const { getLocators } = require('GobletPlaywright')
+const { cleanWorldPath, greaterLessEqual } = require('GobletSupport/helpers')
 
 /**
  * Expects the number of dom elements matching `selector` to equal `count`

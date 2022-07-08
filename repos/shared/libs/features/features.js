@@ -3,9 +3,9 @@ const glob = require('glob')
 const { fileSys } = require('@keg-hub/cli-utils')
 const { featuresParser } = require('./featuresParser')
 const { limbo, noPropArr } = require('@keg-hub/jsutils')
-const { getParkinInstance } = require('HerkinParkin/instance')
-const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
-const { getPathFromBase } = require('HerkinSharedUtils/getPathFromBase')
+const { getParkinInstance } = require('GobletParkin/instance')
+const { buildFileModel } = require('GobletSharedUtils/buildFileModel')
+const { getPathFromBase } = require('GobletSharedUtils/getPathFromBase')
 
 /**
  * TODO: Move this to the Parkin Lib

@@ -1,7 +1,7 @@
-const { Given } = require('HerkinParkin')
+const { Given } = require('GobletParkin')
 const { set } = require('@keg-hub/jsutils')
-const { getLocator } = require('HerkinPlaywright')
-const { cleanWorldPath } = require('HerkinSupport/helpers')
+const { getLocator } = require('GobletPlaywright')
+const { cleanWorldPath } = require('GobletSupport/helpers')
 
 /**
  * Finds the element matching selector returned from selectorAlias, and registers it as the current ancestor

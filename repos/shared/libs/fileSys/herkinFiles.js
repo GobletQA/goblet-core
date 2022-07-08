@@ -1,11 +1,11 @@
 const path = require('path')
 const { wordCaps, get } = require('@keg-hub/jsutils')
-const { loadReport } = require('HerkinSharedUtils/loadReport')
-const { loadFeature } = require('HerkinSharedFeatures/features')
-const { loadTemplate } = require('HerkinSharedTemplate/loadTemplate')
-const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
-const { resolveFileType } = require('HerkinSharedUtils/resolveFileType')
-const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
+const { loadReport } = require('GobletSharedUtils/loadReport')
+const { loadFeature } = require('GobletSharedFeatures/features')
+const { loadTemplate } = require('GobletSharedTemplate/loadTemplate')
+const { buildFileModel } = require('GobletSharedUtils/buildFileModel')
+const { resolveFileType } = require('GobletSharedUtils/resolveFileType')
+const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
 
 const {
   readFile,

@@ -1,7 +1,7 @@
 const path = require('path')
-const { getHerkinConfig } = require('HerkinSharedConfig')
-const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
-const { taskEnvToBrowserOpts } = require('HerkinSharedUtils/taskEnvToBrowserOpts')
+const { getHerkinConfig } = require('GobletSharedConfig')
+const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
+const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts')
 const { checkVncEnv } = require('../../utils/vncActiveEnv')
 const {
   exists,

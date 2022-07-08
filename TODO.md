@@ -140,7 +140,7 @@
       * Might work with IE, but needs to be validated
 
 ## Admin
-* **Integrate Herkin-Admin**
+* **Integrate Goblet-Admin**
   * ...
 
 

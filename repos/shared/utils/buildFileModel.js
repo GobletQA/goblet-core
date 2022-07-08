@@ -1,8 +1,8 @@
 const path = require('path')
 const { getType } = require('mime')
 const { getFileType } = require('./getFileType')
-const { fileModel } = require('HerkinSharedModels')
-const { getLastModified } = require('HerkinSharedFileSys/fileSys')
+const { fileModel } = require('GobletSharedModels')
+const { getLastModified } = require('GobletSharedFileSys/fileSys')
 
 /**
  * Builds a fileModel from the fileModel object and passed arguments

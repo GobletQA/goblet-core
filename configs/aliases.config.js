@@ -3,16 +3,16 @@ const aliasList = require('./alias.json')
 const moduleAlias = require('module-alias')
 const { deepFreeze } = require('@keg-hub/jsutils')
 
-const HerkinRoot = path.join(__dirname, '../')
+const GobletRoot = path.join(__dirname, '../')
 
 // aliases shared by jest and module-alias
 const aliases = deepFreeze({
   // ---- General Alias ---- //
-  HerkinRoot,
+  GobletRoot,
 
   // Loop over each alias, and set the path relative to the root directory
   ...Object.entries(aliasList).reduce((acc, [key, location]) => {
-    acc[key] = path.join(HerkinRoot, location)
+    acc[key] = path.join(GobletRoot, location)
 
     return acc
   }, {}),

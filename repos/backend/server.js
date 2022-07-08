@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-const { getApp } = require('HerkinSharedApp')
-const apiEndpoints = require('HerkinBackEndpoints')
-const { initSockr } = require('HerkinBackSockr/sockr')
-const { isDeployedEnv } = require('HerkinSharedUtils/isDeployedEnv')
+const { getApp } = require('GobletSharedApp')
+const apiEndpoints = require('GobletBackEndpoints')
+const { initSockr } = require('GobletBackSockr/sockr')
+const { isDeployedEnv } = require('GobletSharedUtils/isDeployedEnv')
 const {
   setReqRepo,
   setupVNCProxy,
   validateUser,
   setupBlacklist,
   setupServerListen,
-} = require('HerkinBackMiddleware')
+} = require('GobletBackMiddleware')
 const {
   setupJWT,
   setupCors,
@@ -17,7 +17,7 @@ const {
   setupStatic,
   setupLoggerReq,
   setupLoggerErr,
-} = require('HerkinSharedMiddleware')
+} = require('GobletSharedMiddleware')
 
 /**
  * Starts a express API server, and connects the sockr Websocket

@@ -1,5 +1,5 @@
-const { Given } = require('HerkinParkin')
-const { defaultCookieFile, getContext, setContextCookie } = require('HerkinPlaywright/browserContext')
+const { Given } = require('GobletParkin')
+const { defaultCookieFile, getContext, setContextCookie } = require('GobletPlaywright/browserContext')
 
 /**
  * Checks that the page title is `title`

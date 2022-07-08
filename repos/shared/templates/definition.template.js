@@ -1,3 +1,3 @@
-const { Given, When, Then } = require('HerkinParkin')
+const { Given, When, Then } = require('GobletParkin')
 
 // Add custom step definitions here...

@@ -1,5 +1,5 @@
-const { Then } = require('HerkinParkin')
-const { getLocator } = require('HerkinPlaywright')
+const { Then } = require('GobletParkin')
+const { getLocator } = require('GobletPlaywright')
 
 const checkedStates = ['checked', 'unchecked']
 

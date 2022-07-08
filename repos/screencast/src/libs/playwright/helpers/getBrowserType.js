@@ -1,6 +1,6 @@
 const { exists, isEmpty } = require('@keg-hub/jsutils')
 const { Logger } = require('@keg-hub/cli-utils')
-const { browserMap, defaultBrowser } = require('HerkinSCConstants')
+const { browserMap, defaultBrowser } = require('GobletSCConstants')
 
 /**
  * Checks the passed in browserType to ensure it the correct name

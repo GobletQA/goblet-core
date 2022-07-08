@@ -1,4 +1,4 @@
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 /**
  * Responds with the parkin report html as string

@@ -1,5 +1,5 @@
-const { AppRouter } = require('HerkinSharedRouter')
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
+const { AppRouter } = require('GobletSharedRouter')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 const apiRoot = asyncWrap(async (req, res) => {
   const config = req.app.locals.config

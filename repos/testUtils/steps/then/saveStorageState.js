@@ -1,6 +1,6 @@
-const { Then } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinTestEnv')
-const { defaultStateFile, saveContextState } = require('HerkinPlaywright/browserContext')
+const { Then } = require('GobletParkin')
+const { getBrowserContext } = require('GobletPWTestEnv')
+const { defaultStateFile, saveContextState } = require('GobletPlaywright/browserContext')
 
 /**
  * Checks that the page title is `title`

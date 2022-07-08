@@ -2,13 +2,13 @@ require('../../../configs/aliases.config').registerAliases()
 
 const { Logger } = require('@keg-hub/cli-utils')
 const { noOpObj, exists, wait } = require('@keg-hub/jsutils')
-const { checkArgs } = require('HerkinSCLibs/utils/checkArgs')
-const { daemonize } = require('HerkinSCLibs/utils/daemonize')
+const { checkArgs } = require('GobletSCLibs/utils/checkArgs')
+const { daemonize } = require('GobletSCLibs/utils/daemonize')
 const {
   stopServer,
   statusServer,
   statusBrowser,
-} = require('HerkinSCPlaywright')
+} = require('GobletSCPlaywright')
 const {
   statusSockify,
   startSockify,
@@ -16,7 +16,7 @@ const {
   statusVNC,
   startVNC,
   stopVNC,
-} = require('HerkinSCLibs/vnc')
+} = require('GobletSCLibs/vnc')
 
 /**
  * Helper method to kill the running process

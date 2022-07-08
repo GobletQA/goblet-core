@@ -1,7 +1,7 @@
 const path = require('path')
 const { Logger } = require('@keg-hub/cli-utils')
 const { copyContent } = require('./copyContent')
-const { aliases } = require('HerkinConfigs/aliases.config')
+const { aliases } = require('GobletConfigs/aliases.config')
 const { checkHerkinConfig } = require('./checkHerkinConfig')
 const { getCurrentRepoPath } = require('./getCurrentRepoPath')
 
@@ -21,7 +21,7 @@ const copyTemplate = async (local, template) => {
   if (configLoc) return true
 
   Logger.info(`Creating herkin setup from template...`)
-  const src = template || path.join(aliases.HerkinWF, `src/templates/repo/*`)
+  const src = template || path.join(aliases.GobletWF, `src/templates/repo/*`)
   const dest = await getCurrentRepoPath(local)
 
   return await copyContent({ src, dest })

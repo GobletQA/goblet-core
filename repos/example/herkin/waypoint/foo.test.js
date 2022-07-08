@@ -1,6 +1,6 @@
 const {
   playwrightTestEnv,
-} = require('HerkinRepos/testUtils/playwright/playwrightTestEnv')
+} = require('GobletRepos/testUtils/playwright/playwrightTestEnv')
 
 playwrightTestEnv()
 

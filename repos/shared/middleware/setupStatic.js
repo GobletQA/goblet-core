@@ -1,7 +1,7 @@
 const path = require('path')
 const express = require('express')
-const { getApp } = require('HerkinSharedApp')
-const { HerkinRoot } = require('HerkinSharedPaths')
+const { getApp } = require('GobletSharedApp')
+const { GobletRoot } = require('GobletSharedPaths')
 const { isArr, isObj, exists, isStr } = require('@keg-hub/jsutils')
 
 /**
@@ -15,8 +15,8 @@ const { isArr, isObj, exists, isStr } = require('@keg-hub/jsutils')
  */
 const addStaticPath = (app, name, loc) => {
   loc
-    ? app.use(name, express.static(path.join(HerkinRoot, loc)))
-    : app.use(express.static(path.join(HerkinRoot, name)))
+    ? app.use(name, express.static(path.join(GobletRoot, loc)))
+    : app.use(express.static(path.join(GobletRoot, name)))
 }
 
 /**
@@ -39,7 +39,7 @@ const setupStatic = app => {
         addStaticPath(app, name, loc)
       )
     : exists(config.static)
-    ? app.use(express.static(HerkinRoot))
+    ? app.use(express.static(GobletRoot))
     : false
 
   // If nodeModules is explicitly set to true,
@@ -48,7 +48,7 @@ const setupStatic = app => {
     config.nodeModules === true &&
     app.use(
       '/node_modules',
-      express.static(path.join(HerkinRoot + './node_modules'))
+      express.static(path.join(GobletRoot + './node_modules'))
     )
 }
 

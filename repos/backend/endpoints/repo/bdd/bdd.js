@@ -1,4 +1,4 @@
-const { AppRouter } = require('HerkinSharedRouter')
+const { AppRouter } = require('GobletSharedRouter')
 
 module.exports = () => {
   AppRouter.get('/repo/:repo/bdd', require('./loadBddFiles').loadBddFiles)

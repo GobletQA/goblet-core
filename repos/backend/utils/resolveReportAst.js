@@ -1,6 +1,6 @@
 const path = require('path')
 const { noOpObj } = require('@keg-hub/jsutils')
-const { getMountRootDir } = require('HerkinSharedUtils/getMountRootDir')
+const { getMountRootDir } = require('GobletSharedUtils/getMountRootDir')
 /**
  * Checks if a path is in the reports folder
  * If it is, then build an ast object with the fileType

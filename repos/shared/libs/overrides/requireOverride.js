@@ -1,6 +1,6 @@
 const Module = require('module')
-const GobletSharedPaths = require('HerkinSharedPaths')
-const { HerkinRoot } = GobletSharedPaths
+const GobletSharedPaths = require('GobletSharedPaths')
+const { GobletRoot } = GobletSharedPaths
 
 /**
  * @type {Object} - List of allowed packages to be required
@@ -28,7 +28,7 @@ const validateRequest = (request, { repoRoot }) => {
   if(isAllowedModule) return
 
   const isRepoRoot = request.startsWith(repoRoot)
-  const isGobletRoot = request.startsWith(HerkinRoot)
+  const isGobletRoot = request.startsWith(GobletRoot)
 
   // Check if the root is the regular docker container or a github action path
   const isRootPathValid = request.startsWith('/keg') || request.startsWith('/home/runner')

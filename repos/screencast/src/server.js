@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 require('../../../configs/aliases.config').registerAliases()
 
-const { getApp } = require('HerkinSharedApp')
+const { getApp } = require('GobletSharedApp')
 const { validateUser } = require('./middleware')
 const { Logger } = require('@keg-hub/cli-utils')
-const apiEndpoints = require('HerkinSCEndpoints')
+const apiEndpoints = require('GobletSCEndpoints')
 const {
   setupCors,
   setupServer,
   setupLoggerReq,
   setupLoggerErr,
-} = require('HerkinSharedMiddleware')
+} = require('GobletSharedMiddleware')
 
 /**
  * Starts a express API server for screencast

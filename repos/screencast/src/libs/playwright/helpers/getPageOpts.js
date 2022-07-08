@@ -1,6 +1,6 @@
 const { noOpObj, deepMerge } = require('@keg-hub/jsutils')
 const { checkVncEnv } = require('../../utils/vncActiveEnv')
-const { getHerkinConfig } = require('HerkinSharedConfig')
+const { getHerkinConfig } = require('GobletSharedConfig')
 
 /**
  * Default options for a browser context

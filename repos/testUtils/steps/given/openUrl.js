@@ -1,6 +1,6 @@
-const { Given } = require('HerkinParkin')
+const { Given } = require('GobletParkin')
 const { get, isStr } = require('@keg-hub/jsutils')
-const { getBrowserContext } = require('HerkinTestEnv')
+const { getBrowserContext } = require('GobletPWTestEnv')
 
 const { getPage } = getBrowserContext()
 

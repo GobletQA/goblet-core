@@ -1,7 +1,7 @@
 const { noOpObj } = require('@keg-hub/jsutils')
-const { getContext } = require('HerkinPlaywright/browserContext')
-const { getMetadata } = require('HerkinSCPlaywright/server/server')
-const { newBrowser } = require('HerkinSCPlaywright/browser/newBrowser')
+const { getContext } = require('GobletPlaywright/browserContext')
+const { getMetadata } = require('GobletSCPlaywright/server/server')
+const { newBrowser } = require('GobletSCPlaywright/browser/newBrowser')
 const { startTracing, stopTracingChunk, startTracingChunk } = require('./tracing')
 
 /**

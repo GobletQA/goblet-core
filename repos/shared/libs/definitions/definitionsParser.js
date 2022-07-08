@@ -1,9 +1,9 @@
 const fs = require('fs')
 const { Logger } = require('@keg-hub/cli-utils')
 const { checkCall } = require('@keg-hub/jsutils')
-const { buildFileModel } = require('HerkinSharedUtils/buildFileModel')
-const { parkinCheck } = require('HerkinSharedLibs/overrides/parkinOverride')
-const { requireOverride } = require('HerkinSharedLibs/overrides/requireOverride')
+const { buildFileModel } = require('GobletSharedUtils/buildFileModel')
+const { parkinCheck } = require('GobletSharedLibs/overrides/parkinOverride')
+const { requireOverride } = require('GobletSharedLibs/overrides/requireOverride')
 
 class DefinitionsParser {
 

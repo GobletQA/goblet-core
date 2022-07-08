@@ -1,6 +1,6 @@
-const { Then } = require('HerkinParkin')
+const { Then } = require('GobletParkin')
 const { containsText } = require('./containsText')
-const { checkForAncestor } = require('HerkinSupport/validate')
+const { checkForAncestor } = require('GobletSupport/validate')
 
 /**
  * For the element matching `selector`, descendent of the registered ancestor, expects its text content to equal `data`

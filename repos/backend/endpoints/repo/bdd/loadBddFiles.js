@@ -1,6 +1,6 @@
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
-const { getFeatures } = require('HerkinSharedRepo/getFeatures')
-const { fileModelArrayToObj } = require('HerkinSharedUtils/fileModelArrayToObj')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
+const { getFeatures } = require('GobletSharedRepo/getFeatures')
+const { fileModelArrayToObj } = require('GobletSharedUtils/fileModelArrayToObj')
 
 const loadBddFiles = asyncWrap(async (req, res) => {
   const { definitionTypes, definitions, features } = await getFeatures(

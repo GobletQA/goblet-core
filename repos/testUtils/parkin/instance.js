@@ -3,7 +3,7 @@
 // The Repo instance holds an instance of Parkin that needs to be used here instead of creating one
 // Need to figure out a way to override the instance here, and use the Repos Parkin instance
 const { Parkin } = require('@ltipton/parkin')
-const { getWorld } = require('HerkinSupport')
+const { getWorld } = require('GobletSupport')
 
 let __ParkinInstance
 

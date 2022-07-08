@@ -1,6 +1,6 @@
-const { getHerkinConfig } = require('HerkinSharedConfig')
+const { getHerkinConfig } = require('GobletSharedConfig')
 const { noOpObj, deepMerge } = require('@keg-hub/jsutils')
-const { taskEnvToContextOpts } = require('HerkinSharedUtils/taskEnvToContextOpts')
+const { taskEnvToContextOpts } = require('GobletSharedUtils/taskEnvToContextOpts')
 
 /**
  * Builds the config for a Playwright browser context

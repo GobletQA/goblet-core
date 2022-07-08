@@ -1,9 +1,9 @@
 const path = require('path')
 const glob = require('glob')
 const { DefinitionsParser } = require('./definitionsParser')
-const { getDefaultHerkinConfig } = require('HerkinSharedConfig')
-const { getPathFromBase } = require('HerkinSharedUtils/getPathFromBase')
-const { parkinOverride } = require('HerkinSharedLibs/overrides/parkinOverride')
+const { getDefaultHerkinConfig } = require('GobletSharedConfig')
+const { getPathFromBase } = require('GobletSharedUtils/getPathFromBase')
+const { parkinOverride } = require('GobletSharedLibs/overrides/parkinOverride')
 
 /**
  * Searches the step definition directory for step definitions

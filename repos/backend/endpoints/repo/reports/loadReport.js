@@ -1,7 +1,7 @@
-const { asyncWrap } = require('HerkinSharedExp')
-const { htmlRes, htmlErr } = require('HerkinBackEndpoints/handlers')
-const { getTestReportHtml } = require('HerkinBackUtils/getTestReportHtml')
-const { loadTemplate } = require(`HerkinSharedTemplate/loadTemplate`)
+const { asyncWrap } = require('GobletSharedExp')
+const { htmlRes, htmlErr } = require('GobletBackEndpoints/handlers')
+const { getTestReportHtml } = require('GobletBackUtils/getTestReportHtml')
+const { loadTemplate } = require(`GobletSharedTemplate/loadTemplate`)
 
 /**
  * Loads reports from the passed in params

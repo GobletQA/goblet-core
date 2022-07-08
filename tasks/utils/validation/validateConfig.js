@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { isObj, noOp } = require('@keg-hub/jsutils')
-const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
+const { getRepoHerkinDir } = require('GobletSharedUtils/getRepoHerkinDir')
 
 /**
  * **IMPORTANT**
@@ -11,7 +11,7 @@ const { getRepoHerkinDir } = require('HerkinSharedUtils/getRepoHerkinDir')
  * All others should use getHerkinConfig
  * **IMPORTANT**
  */
-const defaultConfig = require('HerkinConfigs/herkin.default.config.js')
+const defaultConfig = require('GobletConfigs/herkin.default.config.js')
 
 /**
  * Error type specific to herkin config validation.

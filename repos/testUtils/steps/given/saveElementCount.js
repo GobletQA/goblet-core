@@ -1,7 +1,7 @@
-const { Given } = require('HerkinParkin')
+const { Given } = require('GobletParkin')
 const { set } = require('@keg-hub/jsutils')
-const { getLocators } = require('HerkinPlaywright')
-const { cleanWorldPath } = require('HerkinSupport/helpers')
+const { getLocators } = require('GobletPlaywright')
+const { cleanWorldPath } = require('GobletSupport/helpers')
 
 
 /**

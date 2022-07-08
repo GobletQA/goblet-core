@@ -1,5 +1,5 @@
-const { Given } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinTestEnv')
+const { Given } = require('GobletParkin')
+const { getBrowserContext } = require('GobletPWTestEnv')
 const { getPage } = getBrowserContext()
 
 /**

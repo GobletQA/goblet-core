@@ -1,10 +1,10 @@
 const fs = require('fs')
 const path = require('path')
 const { noOp } = require('@keg-hub/jsutils')
-const { getApp } = require('HerkinSharedApp')
+const { getApp } = require('GobletSharedApp')
 const blacklist = require('express-blacklist')
 const expressDefend = require('express-defend')
-const { aliases } = require('HerkinConfigs/aliases.config')
+const { aliases } = require('GobletConfigs/aliases.config')
 
 /**
  * Overwrite the default to allow passing a callback to fs.appendFile
@@ -13,7 +13,7 @@ const { aliases } = require('HerkinConfigs/aliases.config')
 expressDefend.fileAppender = (logFile, message) => fs.appendFile(logFile, message, noOp)
 
 /** Path to the logs directory */
-const logDir = aliases.HerkinServerLogs
+const logDir = aliases.GobletServerLogs
 
 /** Ensure the logs directory exists */
 !fs.existsSync(logDir) && fs.mkdirSync(logDir)

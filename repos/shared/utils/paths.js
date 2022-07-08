@@ -3,7 +3,7 @@
  * DO NOT LOAD IT ON THE FRONTEND
  */
 
-const { aliases } = require('HerkinConfigs/aliases.config')
+const { aliases } = require('GobletConfigs/aliases.config')
 
 module.exports = {
   ...aliases,

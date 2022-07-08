@@ -1,5 +1,5 @@
-const { asyncWrap, apiRes } = require('HerkinSharedExp')
-const { loadFeatures } = require('HerkinSharedFeatures/features')
+const { asyncWrap, apiRes } = require('GobletSharedExp')
+const { loadFeatures } = require('GobletSharedFeatures/features')
 
 const getFeatures = asyncWrap(async (req, res) => {
   const features = await loadFeatures(res.locals.repo)
