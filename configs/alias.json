@@ -11,7 +11,6 @@
   "GobletSharedFeatures": "repos/shared/libs/features",
   "GobletSharedDefinitions": "repos/shared/libs/definitions",
   
-  "GobletShared": "repos/shared",
   "GobletSharedLibs": "repos/shared/libs",
   "GobletSharedUtils": "repos/shared/utils",
   "GobletSharedExp": "repos/shared/express",
@@ -22,6 +21,7 @@
   "GobletSharedRouter": "repos/shared/express/appRouter.js",
   "GobletSharedConfig": "repos/shared/utils/getGobletConfig.js",
   "GobletSharedAsyncWrap": "repos/shared/express/asyncWrap.js",
+  "GobletShared": "repos/shared",
 
   "GobletBackConstants": "constants/backend",
   "GobletBackLibs": "repos/backend/libs",
