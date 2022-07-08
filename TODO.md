@@ -129,7 +129,7 @@
 
 ## Deployments
 * **CI/CD**
-  * Allows keg-herkin tests to be run in a CI/CD environment
+  * Allows Goblet tests to be run in a CI/CD environment
   * Is possiable when screencast is complete
     * Allows running the browsers in the docker image and headless
 * **Deploy as a docker image**

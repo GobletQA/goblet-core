@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  keg-herkin:
+  goblet:
     ipc: host
     privileged: true
     environment:

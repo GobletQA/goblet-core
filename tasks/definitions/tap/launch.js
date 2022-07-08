@@ -14,8 +14,8 @@ const {
  */
 const launchAction = async args => {
   const { params } = args
-  const herkinMode = setGobletMode(params)
-  const websockets = await launchBrowsers(params, herkinMode)
+  const gobletMode = setGobletMode(params)
+  const websockets = await launchBrowsers(params, gobletMode)
 
   return {
     websockets,

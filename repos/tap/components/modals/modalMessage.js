@@ -21,19 +21,19 @@ export const ModalMessage = props => {
   return (
     <>
       {error && (
-        <ReConnectError className='herkin-repo-connect-error' >
+        <ReConnectError className='goblet-repo-connect-error' >
           {renderFromType(ErrorIcon || (<ReErrorIcon />))}
           {error}
         </ReConnectError>
       )}
       {loading && (
-        <ReConnecting className='herkin-repo-connect-loading' >
+        <ReConnecting className='goblet-repo-connect-loading' >
           {renderFromType(LoadingIcon || (<ReLoading size='small' />))}
           {loading}
         </ReConnecting>
       )}
       {message && (
-        <ReConnecting className='herkin-repo-connect-message' >
+        <ReConnecting className='goblet-repo-connect-message' >
           {renderFromType(MessageIcon)}
           {message}
         </ReConnecting>

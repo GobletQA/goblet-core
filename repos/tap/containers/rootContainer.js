@@ -28,7 +28,7 @@ const ReMain = reStyle(View)({
   fl: 1,
 })
 
-export const RootContainer = withAppHeader('KeGherkin Editor', props => {
+export const RootContainer = withAppHeader('Goblet Editor', props => {
   const activeFile = useActiveFile()
   // Auto open the sidebar to allow selecting a file, if no file is already active
   const [sidebarToggled, setSidebarToggled] = useState(

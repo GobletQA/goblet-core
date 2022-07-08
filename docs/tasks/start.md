@@ -1,5 +1,5 @@
 ### Start
-1. Run Goblet start task ( `yarn task start` || `keg herkin start` )
+1. Run Goblet start task ( `yarn task start` || `keg goblet start` )
    1. Opens a browser on the host machine with Playwright
    2. Obtains a websocket endpoint from the browser
    3. Starts the `Goblet` docker container

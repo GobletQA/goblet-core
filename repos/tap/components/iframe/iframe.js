@@ -41,9 +41,9 @@ export const Iframe = React.forwardRef((props, ref) => {
   useEffect(() => {
     // Event listener handler for post message events from the child iframe
     const onMessage = event => {
-      event?.data?.herkinIframeClick
+      event?.data?.gobletIframeClick
         ? emitIframeClick()
-        : updateHeight(event?.data?.herkinIframeHeight, setFrameStyle)
+        : updateHeight(event?.data?.gobletIframeHeight, setFrameStyle)
     }
 
     // Add listener to the window

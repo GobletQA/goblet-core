@@ -27,13 +27,13 @@ const getGitBranchAt = path => {
 
 /**
  * @param {string} env - current keg environment (e.g. local, staging, etc.)
- * @param {Object} config - herkin config
+ * @param {Object} config - goblet config
  * @param {string} appPath - path to client app
  * @return {Object} object of template variable replacements
  */
-const getTemplateVars = (env, herkinConfig, appPath) => {
+const getTemplateVars = (env, config, appPath) => {
   // get testRoot path to determine the path for acquiring the git repo of the client app
-  const testRoot = herkinConfig.paths.repoRoot
+  const testRoot = config.paths.repoRoot
   const branch = getGitBranchAt(testRoot)
   if (!branch)
     throw new Error(`Project located at ${testRoot} is not a git repository`)
@@ -44,17 +44,17 @@ const getTemplateVars = (env, herkinConfig, appPath) => {
 }
 
 /**
- * Replaces the variables in `str`, if any, using options and the herkinConfig
+ * Replaces the variables in `str`, if any, using options and the config
  * @param {string} str - template string
- * @param {Object} herkinConfig - herkin config object
+ * @param {Object} config - goblet config object
  * @param {Object} options
  * @param {string} options.env - current keg environment (e.g. local, staging, etc.)
  * @param {string} options.path - client app path
  * @return {string} string with variables replaced
  */
-const replaceTemplateVars = (str, herkinConfig, options = {}) => {
+const replaceTemplateVars = (str, config, options = {}) => {
   return str.match(/\$\{.*\}/)
-    ? template(str, getTemplateVars(options.env, herkinConfig, options.path))
+    ? template(str, getTemplateVars(options.env, config, options.path))
     : str
 }
 

@@ -49,7 +49,7 @@ export const ResizeHandle = props => {
       style={handleStyle?.content}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
-      className="herkin-resize-handle"
+      className="goblet-resize-handle"
     >
       <ReContainer className='resize-handle-container'>
         <ReContent

@@ -150,7 +150,7 @@ export const Resize = props => {
     children,
     className,
     style=noOpObj,
-    prefix=`herkin`,
+    prefix=`goblet`,
     ...posProps
   } = props
 

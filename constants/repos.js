@@ -7,14 +7,14 @@ const rootDir = path.join(__dirname, '../')
 const reposPath = path.join(rootDir, 'repos')
 
 /**
- * Finds all sub-repo paths from the <herkin-root>/repos directory
+ * Finds all sub-repo paths from the <goblet-root>/repos directory
  *
  * @return {Object} - Found repo paths converted into snakeCase
  */
 const getRepoPaths = () => {
   if (__REPO_PATHS) return __REPO_PATHS
 
-  // list of the herkin repo names located at `<root>/repos`
+  // list of the goblet repo names located at `<root>/repos`
   const repos = execSync('ls', { cwd: reposPath })
     .toString()
     .split('\n')

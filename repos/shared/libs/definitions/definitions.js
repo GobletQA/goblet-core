@@ -47,21 +47,21 @@ const parseDefinitions = async (repo, definitionFiles, overrideParkin) => {
 /**
  * Loads the definitions file from the passed in repo instance
  * @param {Object} repo - Repo Class instance for the currently active repo
- * @param {Object} [herkinConfig] - The global goblet.config
+ * @param {Object} [gobletConfig] - The global goblet.config
  *
  * @returns {Array} - Loaded Definitions models
  */
-const loadDefinitions = async (repo, herkinConfig) => {
+const loadDefinitions = async (repo, gobletConfig) => {
   // Clear out any steps that were already loaded
   DefinitionsParser.clear(repo)
-  herkinConfig = herkinConfig || getDefaultHerkinConfig()
+  gobletConfig = gobletConfig || getDefaultHerkinConfig()
 
   const { stepsDir } = repo.paths
   const pathToSteps = getPathFromBase(stepsDir, repo)
   const definitionFiles = stepsDir && (await loadDefinitionsFiles(pathToSteps))
 
-  const herkinDefinitionFiles = await loadDefinitionsFiles(
-    `${herkinConfig.internalPaths.testUtilsDir}/steps`
+  const gobletDefinitionFiles = await loadDefinitionsFiles(
+    `${gobletConfig.internalPaths.testUtilsDir}/steps`
   )
 
   // The repo world may have been updated since the last time load definitions was called
@@ -71,11 +71,11 @@ const loadDefinitions = async (repo, herkinConfig) => {
 
   const clientDefinitions =
     (await parseDefinitions(repo, definitionFiles, overrideParkin)) || []
-  const herkinDefinitions =
-    (await parseDefinitions(repo, herkinDefinitionFiles, overrideParkin)) || []
+  const gobletDefinitions =
+    (await parseDefinitions(repo, gobletDefinitionFiles, overrideParkin)) || []
 
   // all the definition file models
-  const defs = clientDefinitions.concat(herkinDefinitions)
+  const defs = clientDefinitions.concat(gobletDefinitions)
 
   return defs
 }

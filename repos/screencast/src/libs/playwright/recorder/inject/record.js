@@ -200,7 +200,7 @@ const initGobletRecording = async () => {
    */
   actions.forEach((action) => window.addEventListener(
     action,
-    e => window.herkinRecordAction(buildEvent(e, disableClick))
+    e => window.gobletRecordAction(buildEvent(e, disableClick))
   ))
 }
 

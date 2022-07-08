@@ -5,18 +5,18 @@ const { getGobletConfig } = require('GobletSharedConfig')
  * Injects the goblet.config into a tasks arguments
  * @param {function} taskAction - Function called when a task is run
  *
- * @return {function} - Function to inject the herkin config
+ * @return {function} - Function to inject the goblet config
  */
 const injectHerkinConfig = taskAction => {
   return args =>
     taskAction({
       ...args,
-      herkin: getGobletConfig(args.params),
+      goblet: getGobletConfig(args.params),
     })
 }
 
 /**
- * Loops the herkin custom tasks, and injects the goblet.config as an argument
+ * Loops the goblet custom tasks, and injects the goblet.config as an argument
  * @param {Object} tasks - Task definitions to inject the goblet.config into
  *
  * @return {Object} - tasks with the goblet.config injected

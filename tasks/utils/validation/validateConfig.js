@@ -17,8 +17,8 @@ const defaultConfig = require('GobletConfigs/goblet.default.config.js')
  * Error type specific to goblet config validation.
  * Just prefixes each message with a goblet label
  */
-class HerkinConfigError extends Error {
-  name = 'HerkinConfigError'
+class GobletConfigError extends Error {
+  name = 'GobletConfigError'
 
   constructor(message) {
     super(message)
@@ -35,7 +35,7 @@ class HerkinConfigError extends Error {
 const missingFileError = (key, loc, relativeTo = null) => {
   const pathType = relativeTo ? 'Relative' : 'Absolute'
   const relativeMessage = relativeTo ? `relative to:` : ''
-  throw new HerkinConfigError(
+  throw new GobletConfigError(
     `${pathType} path "${key}"
       at "${loc}" 
       does not exist ${relativeMessage}
@@ -76,7 +76,7 @@ const checkFilePaths = (paths, expectedPaths) => {
   const relativePathKeys = Object.keys(relativePaths)
   expectedPaths.map(key => {
     if(key !== `repoRoot` && key !== `workDir` && !relativePathKeys.includes(key))
-      throw new HerkinConfigError(`Required Herkin-Config key "path.${key}" does not exist`)
+      throw new GobletConfigError(`Required Goblet-Config key "path.${key}" does not exist`)
   })
 }
 
@@ -87,7 +87,7 @@ const checkFilePaths = (paths, expectedPaths) => {
  */
 const checkValidPathConfig = paths => {
   if (!isObj(paths))
-    throw new HerkinConfigError(
+    throw new GobletConfigError(
       `Property "paths" must be an object. Found: ${paths}`
     )
 
@@ -98,7 +98,7 @@ const checkValidPathConfig = paths => {
 
 module.exports.validateConfig = config => {
   if (!isObj(config))
-    throw new HerkinConfigError(`Config must be an object. Found: ${config}`)
+    throw new GobletConfigError(`Config must be an object. Found: ${config}`)
 
   // validates the config.paths object
   checkValidPathConfig(config.paths)

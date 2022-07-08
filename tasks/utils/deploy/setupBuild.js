@@ -26,7 +26,7 @@ const setupBuild = (buildFunc) => {
     return await buildFunc({
       params,
       buildType,
-      tags: [...(isArr(tags) ? tags : []), `herkin-${buildType}:prod`],
+      tags: [...(isArr(tags) ? tags : []), `goblet-${buildType}:prod`],
       envs: {
         ...loadedEnvs,
         ...formatParamEnvs(envs),

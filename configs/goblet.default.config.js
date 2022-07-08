@@ -43,7 +43,7 @@ module.exports = {
   },
 
   /**
-   * Paths to a repos herkin specific files
+   * Paths to a repos goblet specific files
    * @type {Object}
    */
   paths: {
@@ -54,7 +54,7 @@ module.exports = {
      */
     repoRoot: GOBLET_REPO_ROOT,
     /**
-     * Path to the herkin folder, **Relative to the repoRoot**
+     * Path to the goblet folder, **Relative to the repoRoot**
      * @type {string} - Relative Path
      */
     workDir: GOBLET_WORK_DIR,
@@ -62,7 +62,7 @@ module.exports = {
   /**
    * **The below paths are all relative to "<repoRoot>/<workDir>/"**
    * repoRoot - Absolute path to the repo
-   * workDir - Relative path to the herkin folder of the repo
+   * workDir - Relative path to the goblet folder of the repo
    * All other paths - "<repoRoot>/<workDir>/<type>"
    */
 
@@ -135,7 +135,7 @@ module.exports = {
 
   /**
    * This section **OVERRIDES** all other config settings
-   * Should **NOT** be defined in a repos herkin config file
+   * Should **NOT** be defined in a repos goblet config file
    * These paths should always exist on the loaded goblet.config object
    */
   internalPaths: {
@@ -144,6 +144,6 @@ module.exports = {
     pwMetaDataDir: GOBLET_PW_METADATA_DIR,
   },
 
-  /** Property to define a valid herkin config object */
+  /** Property to define a valid goblet config object */
   __VALID_GOBLET_CONFIG: true,
 }

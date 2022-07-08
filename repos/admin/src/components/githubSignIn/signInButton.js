@@ -4,7 +4,7 @@ import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { useIconProps } from 'HKHooks/useIconProps'
 import { View, Button, Text } from '@keg-hub/keg-components'
 
-const defPrefix = 'herkin-github-button'
+const defPrefix = 'goblet-github-button'
 const defClasses = {
   main: 'main',
   button: 'button',

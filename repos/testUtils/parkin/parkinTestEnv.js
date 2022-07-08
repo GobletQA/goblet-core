@@ -19,7 +19,7 @@ global.getParkinInstance = getParkinInstance
  * Have access to the global object, so could use that for loading Parkin config options
  */
 global.getParkinOptions = () => {
-  // Load the both herkin and parkin version
+  // Load the both goblet and parkin version
   // Herkin version overrides parkin version
   const {
     PARKIN_FEATURE_NAME,

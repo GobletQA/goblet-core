@@ -8,7 +8,7 @@ const getEnvName = env => `GOBLET_` + snakeCase(env).toUpperCase()
  *  - mounting the test directories into the container.
  *  - client urls
  * @see `container/docker-compose.yml`, `volumes` group. It must be updated to work with these envs
- * @param {Object} config - herkin config object
+ * @param {Object} config - goblet config object
  * @param {Object} options - options
  * @param {string} options.env - current keg environment
  * @param {string} options.path - path to client project

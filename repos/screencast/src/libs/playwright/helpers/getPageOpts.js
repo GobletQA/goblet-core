@@ -18,10 +18,10 @@ const options = {
  * @returns {Object} - Built page config
  */
 const getPageOpts = (pageConf = noOpObj) => {
-  const herkin = getGobletConfig()
+  const goblet = getGobletConfig()
 
   return deepMerge(
-    herkin?.screencast?.page,
+    goblet?.screencast?.page,
     checkVncEnv().vncActive ? options.vnc : options.host,
     pageConf
   )

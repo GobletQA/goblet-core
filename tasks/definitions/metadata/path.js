@@ -23,7 +23,7 @@ module.exports = {
     name: 'path',
     alias: ['location', 'loc'],
     action: metaLocation,
-    example: 'keg herkin metadata path',
+    example: 'keg goblet metadata path',
     description: 'Print the path to the browser metadata',
   },
 }

@@ -17,6 +17,6 @@ window.getGobletRecordOption = (option) => {
   return recordingOptions[option]
 }
 
-window.herkinRecordAction = (event) => {
+window.gobletRecordAction = (event) => {
   console.log(event.target, event.element)
 }

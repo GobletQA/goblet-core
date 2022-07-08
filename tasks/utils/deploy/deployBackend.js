@@ -34,15 +34,15 @@ const tagImage = async ({ from, to, env, tag=env }) => {
   // Tag the docker image to be pushed to google
   return await runCmd(`docker`, [
     `tag`,
-    from || `ghcr.io/keg-hub/keg-herkin:${env}`,
-    `us-west4-docker.pkg.dev/herkin-dev/keg-herkin:${tag}`
+    from || `ghcr.io/gobletqa/goblet:${env}`,
+    `us-west4-docker.pkg.dev/gobletqa/goblet:${tag}`
   ], {})
 }
 
 const pushImage = async ({ env, tag=env }) => {
   return await runCmd(`docker`, [
     `push`,
-    `us-west4-docker.pkg.dev/herkin-dev/keg-herkin:${tag}`
+    `us-west4-docker.pkg.dev/gobletqa/goblet:${tag}`
   ])
 }
 

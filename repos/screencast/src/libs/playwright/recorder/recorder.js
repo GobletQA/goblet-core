@@ -157,7 +157,7 @@ class Recorder {
       })
 
       // Create a binding to receive actions from the page.
-      await this.page.exposeBinding('herkinRecordAction', this.onInjectedAction)
+      await this.page.exposeBinding('gobletRecordAction', this.onInjectedAction)
 
       //  Detect page loads.
       this.page.on('load', this.onPageLoad)

@@ -38,7 +38,7 @@ export const Modal = props => {
     <ReModal
       visible={visible}
       classPrefix={classPrefix}
-      className='herkin-modal-main'
+      className='goblet-modal-main'
       onBackdropTouch={clickBackdrop}
       {...main}
     >
@@ -49,14 +49,14 @@ export const Modal = props => {
           actionsLeft={headerLeft}
           classPrefix={classPrefix}
           actionsRight={headerRight}
-          className='herkin-modal-header'
+          className='goblet-modal-header'
           {...header}
         />
       )}
       {(children || text || footer) && (
         <ReForm
           classPrefix={classPrefix}
-          className='herkin-modal-form'
+          className='goblet-modal-form'
           {...content}
         >
           {children || text}
@@ -65,7 +65,7 @@ export const Modal = props => {
               actionsLeft={footerLeft}
               classPrefix={classPrefix}
               actionsRight={footerRight}
-              className='herkin-modal-footer'
+              className='goblet-modal-footer'
               {...footer}
             />
           )}

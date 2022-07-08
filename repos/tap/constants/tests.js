@@ -3,7 +3,7 @@ export const tests = {
   // Used for defining when all tests of a type should be run
   RUN_ALL_TESTS: {
     name: 'RUN_ALL_TESTS',
-    location: 'herkin',
+    location: 'goblet',
     relative: '',
     content: '',
     fileType: null,

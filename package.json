@@ -1,17 +1,17 @@
 {
-  "name": "@keg-hub/keg-herkin",
+  "name": "@gobletqa/goblet",
   "version": "1.3.3",
-  "description": "Web application testing framework built on the Keg Platform",
+  "description": "Web application testing framework",
   "main": "index.js",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
-    "url": "git+https://github.com/keg-hub/keg-herkin.git",
+    "url": "git+https://github.com/GobletQA/goblet.git",
     "type": "git"
   },
   "bugs": {
-    "url": "https://github.com/keg-hub/keg-herkin/issues"
+    "url": "https://github.com/GobletQA/goblet/issues"
   },
   "author": "Lance Tipton <lancetipton04@gmail.com>",
   "license": "MIT",

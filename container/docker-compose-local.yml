@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  keg-herkin:
+  goblet:
     environment:
       - GOBLET_PW_SOCKET=true
       - GOBLET_ARTIFACTS_DIR

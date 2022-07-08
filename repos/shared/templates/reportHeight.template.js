@@ -11,12 +11,12 @@ const injectScript = () => {
   if (window.parent === window) return
   // Message to set the correct IFrame height
   window.parent.postMessage(
-    { herkinIframeHeight: document.body.scrollHeight },
+    { gobletIframeHeight: document.body.scrollHeight },
     '*'
   )
   // Helper to let the parent know when the iframe was clicked
   window.addEventListener('click', evt => {
-    window.parent.postMessage({ herkinIframeClick: true }, '*')
+    window.parent.postMessage({ gobletIframeClick: true }, '*')
   })
 }
 

@@ -1,7 +1,7 @@
 const { Logger } = require('@keg-hub/cli-utils')
 
 /**
- * Successful herkin workflow response
+ * Successful goblet workflow response
  * @param {Object} resArgs - Response properties
  * @param {Object} extra - Extra properties to add to the response
  * @param {string} message - Success message
@@ -24,7 +24,7 @@ const successResp = (
 }
 
 /**
- * Failed herkin workflow response
+ * Failed goblet workflow response
  *
  * @param {Object} resArgs - Response properties
  * @param {string} message - Fail message

@@ -4,11 +4,11 @@ const { getGobletConfig, resetGobletConfig } = require('GobletSharedConfig')
 let _APP
 
 /**
- * Reloads the herkin config be deleting the current config and calling getGobletConfig
+ * Reloads the goblet config be deleting the current config and calling getGobletConfig
  * Does not reset the _CONFIG_TYPE, so the same type is loaded every time
  * @function
  * @public
- * @param {string} [type] - Property on the herkin config that contains the server config
+ * @param {string} [type] - Property on the goblet config that contains the server config
  *
  * @returns {void}
  */
@@ -22,10 +22,10 @@ const reloadGobletConfig = type => {
 }
 
 /**
- * Adds the herkin config to the app based on the type
+ * Adds the goblet config to the app based on the type
  * @function
  * @public
- * @param {string} [type] - Property on the herkin config that contains the server config
+ * @param {string} [type] - Property on the goblet config that contains the server config
  *
  * @returns {Object} - Express App Object
  */

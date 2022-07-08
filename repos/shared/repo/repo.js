@@ -11,7 +11,7 @@ const {
 
 
 /**
- * Class variation of the a herkin config
+ * Class variation of the a goblet config
  * Has the same properties as a Herkin Config object, but includes some helper methods
  */
 class Repo {
@@ -146,7 +146,7 @@ class Repo {
    */
   parkin = undefined
 
-  // Property to define a valid herkin config object
+  // Property to define a valid goblet config object
   __VALID_GOBLET_CONFIG = true
 
   constructor(config = noOpObj) {

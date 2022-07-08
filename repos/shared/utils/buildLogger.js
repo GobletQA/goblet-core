@@ -16,7 +16,7 @@ const buildLogger = (options=noOpObj, useDefault=true) => {
     pretty=true,
     exitOnError=false,
     handleExceptions=true,
-    label=`KEG-HERKIN`,
+    label=`Goblet`,
   } = options
   
   const winstonFormat = combine(

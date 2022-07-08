@@ -20,7 +20,7 @@ const EditorScreen = props => {
   return !activeFile?.fileType ? (
     <EmptyScreen message={'No file selected!'} />
   ) : (
-    <ReEditorMain className='herkin-editor-screen-main' >
+    <ReEditorMain className='goblet-editor-screen-main' >
       <CodeEditor activeFile={activeFile} screenId={props.id} />
       <AsideCmdOutput activeFile={activeFile} screenId={props.id} />
     </ReEditorMain>

@@ -25,8 +25,8 @@ const attachHerkin = async args => {
   // This ensures it's consistent with the original run
   // Or investigate adding it to the browser metadata?
 
-  // const herkinMode = setGobletMode(params)
-  // await launchBrowsers(params, herkinMode)
+  // const gobletMode = setGobletMode(params)
+  // await launchBrowsers(params, gobletMode)
 
   return await args.task.cliTask(args)
 }
@@ -36,7 +36,7 @@ module.exports = {
     name: 'attach',
     alias: ['att'],
     action: attachHerkin,
-    example: 'keg herkin attach',
+    example: 'keg goblet attach',
     description: 'Attach to the running tap container',
     // Merge the default task options with these custom task options
     mergeOptions: true,

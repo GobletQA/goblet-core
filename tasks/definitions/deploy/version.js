@@ -22,7 +22,7 @@ module.exports = {
     name: 'version',
     alias: ['ver'],
     action: version,
-    example: 'keg herkin deploy version <options>',
+    example: 'keg goblet deploy version <options>',
     description: 'Starts docker-docker db containers',
     options: {
       ...sharedOptions.version(`deploy`, `version`),

@@ -20,19 +20,19 @@ const mountEnvs = {
  * @param {Object} params.launch - Option to run the local browser
  * @param {Object} params.mode - Mode goblet should be run in
  *
- * @returns {string} - Mode that herkin is running in
+ * @returns {string} - Mode that goblet is running in
  */
 const setGobletMode = params => {
   const { launch, local, vnc } = params
 
   const mode = params.mode || (vnc && 'vnc') || (local && 'local') || undefined
-  // const herkinMode = exists(mode) ? mode : launch ? 'local' : 'vnc'
-  const herkinMode = exists(mode)
+  // const gobletMode = exists(mode) ? mode : launch ? 'local' : 'vnc'
+  const gobletMode = exists(mode)
     ? mode
     : !exists(launch) || launch
     ? 'local'
     : 'vnc'
-  const vncActive = herkinMode === 'vnc' ? true : false
+  const vncActive = gobletMode === 'vnc' ? true : false
 
   setVncENV(vncActive)
   addToProcess(
@@ -40,13 +40,13 @@ const setGobletMode = params => {
       ...(vncActive ? vncEnvs : mountEnvs),
       KEG_COMPOSE_HERKIN: path.join(
         containerDir,
-        `docker-compose-${herkinMode}.yml`
+        `docker-compose-${gobletMode}.yml`
       ),
     },
     { force: true }
   )
 
-  return herkinMode
+  return gobletMode
 }
 
 module.exports = {

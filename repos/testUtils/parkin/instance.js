@@ -24,7 +24,7 @@ const getParkinInstance = () => {
 
 /**
  * Parkin singleton instance, accepting the
- * herkin world: a merge of herkin defaults with
+ * goblet world: a merge of goblet defaults with
  * the client's world object
  */
 module.exports = {

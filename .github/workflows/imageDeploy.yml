@@ -18,8 +18,9 @@ jobs:
       id: tap-build-push
       uses: KegHub/tap-build-action@0.0.4
       with:
-        repository: KegHub/keg-herkin
+        repository: GobletQA/goblet
         token: ${{ secrets.KEG_ADMIN_TOKEN }}
         user: lancetipton
         tag: ${{ github.ref_name }}
         cli_git_branch: develop
+

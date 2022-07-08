@@ -6,20 +6,20 @@ env:
   RETHEME_PATH: "{{ cli.taps.retheme.path }}"
   JSUTILS_PATH: "{{ cli.taps.utils.path }}"
   PARKIN_PATH: "{{ cli.taps.parkin.path }}"
-  VALUES_PATH: "{{ cli.taps.herkin.path }}/container"
-  BACKEND_PATH: "{{ cli.taps.herkin.path }}/repos/backend"
-  SHARED_PATH: "{{ cli.taps.herkin.path }}/repos/shared"
-  REPOS_PATH: "{{ cli.taps.herkin.path }}/repos"
-  ROOT_PATH: "{{ cli.taps.herkin.path }}"
-  CONTAINER_PATH: "{{ cli.taps.herkin.path }}/container"
+  VALUES_PATH: "{{ cli.taps.goblet.path }}/container"
+  BACKEND_PATH: "{{ cli.taps.goblet.path }}/repos/backend"
+  SHARED_PATH: "{{ cli.taps.goblet.path }}/repos/shared"
+  REPOS_PATH: "{{ cli.taps.goblet.path }}/repos"
+  ROOT_PATH: "{{ cli.taps.goblet.path }}"
+  CONTAINER_PATH: "{{ cli.taps.goblet.path }}/container"
 
   # Set the paths to the linked external app
   # The app should be linked to the keg-cli with `kee`
   # Example command to link the app => `keg tap link kee`
-  KEG_DOCKER_FILE: "{{ cli.taps.herkin.path }}/container/Dockerfile"
-  KEG_VALUES_FILE: "{{ cli.taps.herkin.path }}/container/values.yml"
-  KEG_COMPOSE_DEFAULT: "{{ cli.taps.herkin.path }}/container/docker-compose.yml"
-  KEG_COMPOSE_STAGING: "{{ cli.taps.herkin.path }}/container/docker-compose.staging.yml"
+  KEG_DOCKER_FILE: "{{ cli.taps.goblet.path }}/container/Dockerfile"
+  KEG_VALUES_FILE: "{{ cli.taps.goblet.path }}/container/values.yml"
+  KEG_COMPOSE_DEFAULT: "{{ cli.taps.goblet.path }}/container/docker-compose.yml"
+  KEG_COMPOSE_STAGING: "{{ cli.taps.goblet.path }}/container/docker-compose.staging.yml"
   # --- IMPORTANT - Don't set this ENV --- #
   # Get's defined within the tasks
   # It will be overwritten, from within the tasks/*
@@ -27,20 +27,20 @@ env:
   # --- IMPORTANT - Don't set this ENV --- #
 
   # The KEG_CONTEXT_PATH env should be the location of the external app being run
-  KEG_CONTEXT_PATH: "{{ cli.taps.herkin.path }}"
+  KEG_CONTEXT_PATH: "{{ cli.taps.goblet.path }}"
 
   # This is a true base image from playwright - Alpine Linux are not supported
   # ref: https://playwright.dev/docs/docker/README/#using-on-ci
   # includes node v 14.15.3
-  # When building the keg-herkin image, this acts as the parent image
-  # Image to use when building herkin
+  # When building the goblet image, this acts as the parent image
+  # Image to use when building goblet
   # KEG_BASE_IMAGE: mcr.microsoft.com/playwright:bionic
   KEG_BASE_IMAGE: mcr.microsoft.com/playwright:v1.23.0-focal
 
-  # Image to use when running herkin
+  # Image to use when running goblet
   # Even if the dockerfile does not use this in the FROM directive
   # It should still be defined as the image used to run the Tap
-  KEG_IMAGE_FROM: ghcr.io/keg-hub/keg-herkin:develop
+  KEG_IMAGE_FROM: ghcr.io/gobletqa/goblet:develop
 
   # --- DOCKER ENV CONTEXT --- #
 
@@ -97,15 +97,15 @@ env:
 
   # Image/Container Build information
   # IMAGE and CONTAINER_NAME should be the same
-  IMAGE: keg-herkin
-  CONTAINER_NAME: keg-herkin
+  IMAGE: goblet
+  CONTAINER_NAME: goblet
 
   # Git tap url in github
-  GIT_APP_URL: https://github.com/KegHub/keg-herkin.git
+  GIT_APP_URL: https://github.com/gobletqa/goblet.git
   GIT_APP_BRANCH: master
 
   GOBLET_MOUNT_ROOT: /keg/repos
-  GOBLET_LOCAL_MOUNT: herkin-local/current
+  GOBLET_LOCAL_MOUNT: goblet-local/current
 
   # Define the type of API server to run => all | backend | screencast
   # TODO: @lance-tipton - Add to tasks as an option

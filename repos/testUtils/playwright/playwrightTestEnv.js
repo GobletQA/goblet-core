@@ -13,7 +13,7 @@ const { startTracing, stopTracingChunk, startTracingChunk } = require('./tracing
  * @return {boolean} - true if init was successful
  */
 const initialize = async () => {
-  /** GOBLET_BROWSER is set by the task `keg herkin bdd run` */
+  /** GOBLET_BROWSER is set by the task `keg goblet bdd run` */
   const { GOBLET_BROWSER='chromium' } = process.env
   const { gobletBrowserOpts=noOpObj, gobletContextOpts=noOpObj } = global
   

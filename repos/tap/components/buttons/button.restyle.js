@@ -17,7 +17,7 @@ export const HerkinButton = reStyle(props => {
     Icon,
     text,
     styles,
-    classPrefix = 'herkin',
+    classPrefix = 'goblet',
     classNames = defClasses,
     ...btnProps
   } = props

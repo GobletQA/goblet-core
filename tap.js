@@ -14,8 +14,8 @@ const {
 } = process.env
 
 module.exports = {
-  alias: 'herkin',
-  name: 'keg-herkin',
+  alias: 'goblet',
+  name: 'goblet',
   displayName: 'Goblet',
   keg: {
     envs: {
@@ -36,7 +36,7 @@ module.exports = {
     },
     cli: {
       publish: {
-        herkin: {
+        goblet: {
           tasks: {
             install: true,
             test: true,
@@ -45,10 +45,10 @@ module.exports = {
             commit: true,
           },
           tap: true,
-          name: 'herkin',
+          name: 'goblet',
           dependent: false,
           order: {
-            0: '@keg-hub/keg-herkin',
+            0: '@gobletqa/goblet',
           },
         },
       },
@@ -80,8 +80,8 @@ module.exports = {
     },
   },
   expo: {
-    name: 'keg-herkin',
-    slug: 'keg-herkin',
+    name: 'goblet',
+    slug: 'goblet',
     platforms: ['web'],
   },
 }

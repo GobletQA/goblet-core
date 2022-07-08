@@ -56,7 +56,7 @@ export const InputHoc = (Component, RootComponent=ReMain) => {
         <ReContainer style={styles?.container}>
           {!post && Aside && (
             <FormAside
-              className={`herkin-pre-input-aside`}
+              className={`goblet-pre-input-aside`}
               {...asideProps}
               Aside={Aside}
               style={asideStyles}
@@ -75,12 +75,12 @@ export const InputHoc = (Component, RootComponent=ReMain) => {
               Aside={Aside}
               {...asideProps}
               style={asideStyles}
-              className={`herkin-post-input-aside`}
+              className={`goblet-post-input-aside`}
             />
           )}
         </ReContainer>
         {helper && (
-          <ReHelperText children={helper} className='herkin-input-helper-text' />
+          <ReHelperText children={helper} className='goblet-input-helper-text' />
         )}
       </RootComponent>
     )

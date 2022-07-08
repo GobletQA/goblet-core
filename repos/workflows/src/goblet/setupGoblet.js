@@ -27,7 +27,7 @@ const setupGoblet = async (args, gitArgs, mounted) => {
   if (!isMounted)
     return failResp({ setup: false }, `Repo ${gitArgs.remote} is not connected`)
 
-  Logger.log(`Checking herkin configuration...`)
+  Logger.log(`Checking goblet configuration...`)
   const hasHerkin = await copyTemplate(gitArgs.local, args.repoTemplate)
   if (!hasHerkin)
     return failResp(
@@ -36,14 +36,14 @@ const setupGoblet = async (args, gitArgs, mounted) => {
     )
 
   Logger.log(`Loading goblet.config...`)
-  const herkinConfig = await loadGobletConfig(gitArgs.local)
+  const gobletConfig = await loadGobletConfig(gitArgs.local)
 
-  return herkinConfig
+  return gobletConfig
     ? successResp(
         { setup: true },
         {
           repo: {
-            ...herkinConfig,
+            ...gobletConfig,
             name: getRepoName(gitArgs.remote),
             git,
           },

@@ -15,7 +15,7 @@ module.exports = {
     name: 'run',
     alias: ['test'],
     action: runUnit,
-    example: 'keg herkin unit run',
+    example: 'keg goblet unit run',
     description: 'Runs unit feature tests',
     // TODO: Update to allow groupNames to be be array in cli-utils/tasks/sharedOptions
     options: sharedOptions(

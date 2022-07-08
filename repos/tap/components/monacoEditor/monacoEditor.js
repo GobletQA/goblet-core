@@ -109,7 +109,7 @@ export const MonacoEditor = props => {
       // If any of those values change, then the 175px value also has to change
       // Would be better if it was set automatically
       height: style.height || `calc( 100vh - 175px )`,
-      className: `herkin-monaco-editor editor-type-${mode}`,
+      className: `goblet-monaco-editor editor-type-${mode}`,
       options: {
         'semanticHighlighting.enabled': true,
         fontSize: 14,

@@ -12,16 +12,16 @@ const { filterTaskEnvs } = require('GobletTasks/utils/envs/filterTaskEnvs')
  * Run parkin tests in container
  * @param {Object} args
  * @param {Object} args.task - Test definition object
- * @param {Object} args.herkin - Goblet global config
+ * @param {Object} args.goblet - Goblet global config
  * @param {Object} args.params - Options arguments parsed into an object
  * @param {Array} args.options - Options passed to the task from the command line
  */
 const runBdd = async args => {
   filterTaskEnvs()
-  const { params, herkin } = args
+  const { params, goblet } = args
 
   const jestConfig = await getJestConfig(params, testTypes.feature)
-  const reportPath = buildReportPath(testTypes.feature, params, herkin)
+  const reportPath = buildReportPath(testTypes.feature, params, goblet)
   // Run the test command for defined browsers
   const exitCode = await runTestCmd({
     params,
@@ -37,7 +37,7 @@ module.exports = {
   run: {
     name: 'run',
     action: runBdd,
-    example: 'keg herkin bdd test',
+    example: 'keg goblet bdd test',
     description: 'Runs bdd feature tests',
     alias: ['bdd', 'test'],
     options: sharedOptions(

@@ -36,7 +36,7 @@ const getBuildTypes = props => {
  * @param {Array} args.options - arguments passed from the command line
  * @param {Object} args.globalConfig - Global config object for the keg-cli
  * @param {string} args.params - Passed in options, converted into an object
- * @param {Array} args.herkin - Local config, injected into the task args
+ * @param {Array} args.goblet - Local config, injected into the task args
  *
  * @returns {void}
  */
@@ -71,14 +71,14 @@ module.exports = {
     name: 'build',
     alias: ['bld'],
     action: buildHerkin,
-    example: 'keg herkin deploy build <options>',
+    example: 'keg goblet deploy build <options>',
     description: 'Build the Goblet production docker image',
     options: {
       context: {
         type: 'array',
         alias: ['type', 'name'],
         env: `GOBLET_DEPLOY_BUILD_CONTEXT`,
-        example: 'keg herkin deploy build --context frontend,backend',
+        example: 'keg goblet deploy build --context frontend,backend',
         allowed: ['all', 'frontend', 'fe', 'backend', 'be', 'screencast', 'sc'],
         description: `Context of the app to be built. Separate by a comma to build multiple`,
       },
@@ -86,41 +86,41 @@ module.exports = {
         alias: ['fe'],
         type: 'boolean',
         env: `GOBLET_DEPLOY_BUILD_FE`,
-        example: 'keg herkin deploy build --frontend',
+        example: 'keg goblet deploy build --frontend',
         description: 'Build the Goblet frontend application',
       },
       backend: {
         alias: ['be'],
         type: 'boolean',
         env: `GOBLET_DEPLOY_BUILD_BE`,
-        example: 'keg herkin deploy build --backend',
+        example: 'keg goblet deploy build --backend',
         description: 'Build the Goblet backend application',
       },
       screencast: {
         alias: ['sc'],
         type: 'boolean',
         env: `GOBLET_DEPLOY_BUILD_SC`,
-        example: 'keg herkin deploy build --screencast',
+        example: 'keg goblet deploy build --screencast',
         description: 'Build the Goblet screencast application',
       },
       all: {
         type: 'boolean',
         env: `GOBLET_DEPLOY_BUILD_ALL`,
-        example: 'keg herkin deploy build --all',
+        example: 'keg goblet deploy build --all',
         description: 'Build all Goblet applications',
       },
       envs: {
         type: 'array',
         alias: ['envs'],
         env: `GOBLET_DEPLOY_BUILD_ENVS`,
-        example: 'keg herkin deploy build --envs EXTRA=env-value,ANOTHER=env-value-2',
+        example: 'keg goblet deploy build --envs EXTRA=env-value,ANOTHER=env-value-2',
         description: 'Comma separated list of extra envs to app on to the build process',
       },
       tags: {
         type: 'array',
         alias: [`tag`, `tg`],
         env: `GOBLET_DEPLOY_BUILD_TAGS`,
-        example: 'keg herkin deploy build --tag backend-app',
+        example: 'keg goblet deploy build --tag backend-app',
         description: 'Custom tags for the built docker images',
       },
       ...sharedOptions.version(`deploy`, `build`),

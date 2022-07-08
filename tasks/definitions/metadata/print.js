@@ -32,7 +32,7 @@ module.exports = {
     name: 'print',
     alias: ['prt', `pr`],
     action: printMeta,
-    example: 'keg herkin metadata print',
+    example: 'keg goblet metadata print',
     description: 'Print the browser metadata if it exists',
   },
 }

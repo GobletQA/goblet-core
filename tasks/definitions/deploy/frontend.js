@@ -1,4 +1,4 @@
-// Command => `keg herkin deploy fe --env prod`
+// Command => `keg goblet deploy fe --env prod`
 
 const { Logger } = require('@keg-hub/cli-utils')
 const { sharedOptions } = require('../../utils/task/sharedOptions')
@@ -32,18 +32,18 @@ module.exports = {
     alias: ['fe'],
     inject: true,
     action: frontendDeploy,
-    example: 'keg herkin deploy frontend <options>',
+    example: 'keg goblet deploy frontend <options>',
     description: 'Run Goblet deploy frontend tasks',
     options: {
       ...sharedOptions.version(`deploy`, `frontend`),
       mode: {
         allowed: ['vnc', 'local'],
-        example: `keg herkin deploy --mode local`,
+        example: `keg goblet deploy --mode local`,
         default: 'vnc',
         description: 'Mode to run goblet in. In not set, uses launch option',
       },
       vnc: {
-        example: `keg herkin deploy --vnc`,
+        example: `keg goblet deploy --vnc`,
         default: true,
         description: `Build goblet in vnc mode. Same as '--mode vnc' option`,
       },
@@ -56,11 +56,11 @@ module.exports = {
       },
       tokenFile: {
         alias: ['tf'],
-        example: 'keg herkin deploy frontend --tokenFile /cutom/token/file',
+        example: 'keg goblet deploy frontend --tokenFile /cutom/token/file',
         description: 'Path to a file that contains a firebase token',
       },
       token: {
-        example: 'keg herkin deploy frontend --token <firebase deploy token>',
+        example: 'keg goblet deploy frontend --token <firebase deploy token>',
         description: 'Firebase deploy token',
       },
     },

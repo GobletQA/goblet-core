@@ -45,9 +45,9 @@ const statusForLocal = async (config, metadata) => {
 
   // Check if the local mount folder exists
   // If not then it's empty
-  const herkinConfig = isValidPath && (await loadGobletConfig(LOCAL_MOUNT))
+  const gobletConfig = isValidPath && (await loadGobletConfig(LOCAL_MOUNT))
 
-  return !isValidPath || !herkinConfig
+  return !isValidPath || !gobletConfig
     ? {
         repo: {
           git: { local: config.paths.repoRoot },
@@ -63,9 +63,9 @@ const statusForLocal = async (config, metadata) => {
         mounted: true,
         status: 'mounted',
         repo: {
-          git: { local: herkinConfig.paths.repoRoot },
-          name: path.basename(herkinConfig.paths.repoRoot),
-          ...herkinConfig,
+          git: { local: gobletConfig.paths.repoRoot },
+          name: path.basename(gobletConfig.paths.repoRoot),
+          ...gobletConfig,
         },
       }
 }
@@ -93,16 +93,16 @@ const statusForVnc = async (config, metadata = noOpObj) => {
 
   /*
    * Use local to find the goblet.config
-   * Load the herkin config and build the repo
+   * Load the goblet config and build the repo
    * respond with status and loaded repo
    */
   const isMounted = await isRepoMounted(null, local)
   if (!isMounted) return unknownStatus
 
   Logger.log(`Loading goblet.config...`)
-  const herkinConfig = await loadGobletConfig(local)
+  const gobletConfig = await loadGobletConfig(local)
 
-  return !herkinConfig
+  return !gobletConfig
     ? unknownStatus
     : {
         mode: 'vnc',
@@ -110,7 +110,7 @@ const statusForVnc = async (config, metadata = noOpObj) => {
         status: 'mounted',
         repo: {
           git: metadata,
-          ...herkinConfig,
+          ...gobletConfig,
           name: getRepoName(remote),
         },
       }
@@ -130,7 +130,7 @@ const statusGoblet = async (config, metadata, log=true) => {
   log && Logger.subHeader(`Running Status Herkin Workflow`)
 
   if (!config)
-    throw new Error(`The statusGoblet workflow requires a herkin config object`)
+    throw new Error(`The statusGoblet workflow requires a goblet config object`)
 
   return config?.screencast?.active
     ? await statusForVnc(config, metadata)

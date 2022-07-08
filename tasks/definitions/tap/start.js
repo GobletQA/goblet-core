@@ -9,7 +9,7 @@ const {
 } = require('GobletTasks/utils/playwright/launchBrowsers')
 
 /**
- * @param {String} configPath - path to herkin config file
+ * @param {String} configPath - path to goblet config file
  * @returns {String} path without config file
  */
 const getRootPath = config =>
@@ -24,13 +24,13 @@ const getRootPath = config =>
  * @param {Array} args.options - arguments passed from the command line
  * @param {Object} args.globalConfig - Global config object for the keg-cli
  * @param {string} args.params - Passed in options, converted into an object
- * @param {Array} args.herkin - Local config, injected into the task args
+ * @param {Array} args.goblet - Local config, injected into the task args
  *
  * @returns {void}
  */
 const startHerkin = async args => {
-  const { herkin } = args
-  validateConfig(herkin)
+  const { goblet } = args
+  validateConfig(goblet)
 
   const {
     mode,
@@ -42,12 +42,12 @@ const startHerkin = async args => {
     ...params
   } = args.params
 
-  const herkinMode = setGobletMode(args.params)
-  herkinMode === 'local' && (await launchBrowsers(args.params, herkinMode))
+  const gobletMode = setGobletMode(args.params)
+  gobletMode === 'local' && (await launchBrowsers(args.params, gobletMode))
 
-  herkinMode !== 'vnc' &&
-    setMountEnvs(herkin, {
-      path: getRootPath(herkin) || process.cwd(),
+  gobletMode !== 'vnc' &&
+    setMountEnvs(goblet, {
+      path: getRootPath(goblet) || process.cwd(),
       env: params.env,
     })
 
@@ -68,15 +68,15 @@ module.exports = {
       {
         config: {
           description:
-            'Path to the user goblet.config.js. If omitted, goblet will look in your current working directory for a herkin config.',
-          example: 'keg herkin start --config my-repo/goblet.config.js',
+            'Path to the user goblet.config.js. If omitted, goblet will look in your current working directory for a goblet config.',
+          example: 'keg goblet start --config my-repo/goblet.config.js',
         },
         warn: {
           alias: ['warn'],
           description:
-            'See additional warnings (like for a missing herkin config)',
+            'See additional warnings (like for a missing goblet config)',
           example:
-            'keg herkin start --config my-repo/goblet.config.js --no-warn',
+            'keg goblet start --config my-repo/goblet.config.js --no-warn',
           default: true,
         },
         launch: {

@@ -12,7 +12,7 @@ const { docker, toBuildArgsArr, buildTags } = require('../docker')
  * @param {Array} args.options - arguments passed from the command line
  * @param {Object} args.globalConfig - Global config object for the keg-cli
  * @param {string} args.params - Passed in options, converted into an object
- * @param {Array} args.herkin - Local config, injected into the task args
+ * @param {Array} args.goblet - Local config, injected into the task args
  *
  * @returns {void}
  */

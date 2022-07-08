@@ -1,6 +1,6 @@
 const path = require('path')
 const { appRoot } = require('../../paths')
-const herkinNodeMods = path.join(appRoot, 'node_modules')
+const gobletNodeMods = path.join(appRoot, 'node_modules')
 
 /**
  * Sets the NODE_PATH env to allow loading node_modules from a custom directory
@@ -10,7 +10,7 @@ const herkinNodeMods = path.join(appRoot, 'node_modules')
  * @param {string} location - Path that NODE_PATH should be set to
  * @param {boolean} overwrite - If NODE_PATH is already set, overwrite it with the location argument
  */
-const setNodePath = (env={}, overwrite, location=herkinNodeMods) => {
+const setNodePath = (env={}, overwrite, location=gobletNodeMods) => {
   env.NODE_PATH = overwrite ? location : process.env.NODE_PATH || location
 
   return env

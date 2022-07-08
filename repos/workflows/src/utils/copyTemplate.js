@@ -6,28 +6,28 @@ const { checkGobletConfig } = require('./checkGobletConfig')
 const { getCurrentRepoPath } = require('./getCurrentRepoPath')
 
 /**
- * Copies the herkin template files into the mounted repo
+ * Copies the goblet template files into the mounted repo
  * First checks if a goblet.config exists
  * If it does, the template copy is bypassed
  *
  * @param {string} local - The local path to the mounted git repo
- * @param {string} template - Path to a template folder for custom herkin configuration
+ * @param {string} template - Path to a template folder for custom goblet configuration
  *
- * @return {boolean} - True if herkin is configured or the template is copied
+ * @return {boolean} - True if goblet is configured or the template is copied
  */
 const copyTemplate = async (local, template) => {
-  Logger.info(`Searching for herkin config...`)
+  Logger.info(`Searching for goblet config...`)
   const configLoc = await checkGobletConfig(local)
   if (configLoc) return true
 
-  Logger.info(`Creating herkin setup from template...`)
+  Logger.info(`Creating goblet setup from template...`)
   const src = template || path.join(aliases.GobletWF, `src/templates/repo/*`)
   const dest = await getCurrentRepoPath(local)
 
   return await copyContent({ src, dest })
     .then(() => true)
     .catch(err => {
-      Logger.error(`Creating herkin from template failed`)
+      Logger.error(`Creating goblet from template failed`)
       Logger.log(err.stack)
       return false
     })

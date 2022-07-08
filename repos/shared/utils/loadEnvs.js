@@ -49,7 +49,7 @@ const loadEnvs = (processAdd) => {
 
   __LOADED_ENVS__ = __LOADED_ENVS__ || require('@keg-hub/parse-config').loadConfigs({
     env: nodeEnv,
-    name: 'herkin',
+    name: 'goblet',
     locations: [appRoot],
   })
 

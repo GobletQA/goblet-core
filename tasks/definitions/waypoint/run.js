@@ -14,9 +14,9 @@ const { buildWaypointEnvs } = require('GobletTasks/utils/envs/buildWaypointEnvs'
  */
 const runWp = async args => {
   filterTaskEnvs()
-  const { params, herkin } = args
+  const { params, goblet } = args
   const jestConfig = await getJestConfig(params, testTypes.waypoint)
-  const reportPath = buildReportPath(testTypes.waypoint, params, herkin)
+  const reportPath = buildReportPath(testTypes.waypoint, params, goblet)
   
   // Run the test command for defined browsers
   const exitCode = await runTestCmd({

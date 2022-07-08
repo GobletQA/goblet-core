@@ -7,7 +7,7 @@ import {
 } from './modal.restyle'
 
 export const ModalFooter = props => {
-  const { children, actionsLeft, actionsRight, classPrefix = 'herkin' } = props
+  const { children, actionsLeft, actionsRight, classPrefix = 'goblet' } = props
 
   return (
     <ReFooterMain className={`${classPrefix}-modal-footer-main`}>

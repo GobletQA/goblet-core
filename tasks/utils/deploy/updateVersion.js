@@ -62,7 +62,7 @@ const writePackageVersion = (package, version) => {
 }
 
 /**
- * Loads the package.json from the herkin-root directory
+ * Loads the package.json from the goblet-root directory
  * @function
  *
  * @returns {Object} - Loaded package.json file
