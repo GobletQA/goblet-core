@@ -12,6 +12,6 @@ module.exports.getGobletUrl = () => {
     branchName = 'master'
   }
 
-  return `http://herkin-${branchName}.${host}`
+  return `http://goblet-${branchName}.${host}`
 }
 

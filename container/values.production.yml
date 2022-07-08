@@ -1,5 +1,5 @@
 env:
-  GOBLET_SERVER_HOST: herkin.backend.herkin.app
+  GOBLET_SERVER_HOST: goblet.backend.gobletqa.app
   SCREENCAST_PROXY_HOST: 0.0.0.0
   VNC_PROXY_HOST: 0.0.0.0
   KEG_USE_PROXY: false

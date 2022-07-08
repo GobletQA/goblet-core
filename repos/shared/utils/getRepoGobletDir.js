@@ -5,9 +5,9 @@ const { getGobletConfig } = require('./getGobletConfig')
  * Helper to find the base directory all the other repo paths are relative to
  * Joins the repoRoot and workDir together is workDir exists
  * Otherwise returns repoRoot
- * @param {Object} config - A valid herkin config object or Repo Class instance
+ * @param {Object} config - A valid goblet config object or Repo Class instance
  *
- * @returns {string} - Path to the herkin directory in a repo
+ * @returns {string} - Path to the goblet directory in a repo
  */
 const getRepoGobletDir = config => {
   config =
