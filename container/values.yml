@@ -41,6 +41,9 @@ env:
   # Even if the dockerfile does not use this in the FROM directive
   # It should still be defined as the image used to run the Tap
   KEG_IMAGE_FROM: ghcr.io/gobletqa/goblet:develop
+  
+  # --- Goblet Core ENVs --- #
+  GB_BASE_IMAGE: ghcr.io/gobletqa/goblet-base:develop
 
   # --- DOCKER ENV CONTEXT --- #
 
@@ -128,6 +131,9 @@ env:
 
   # TODO: @lance-tipton - Make this more dynamic - value comes from firebase?
   GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com,nnorman15@gmail.com,lance.tipton@workboard.com,mpcarolin.dev@gmail.com
+
+  # Tag / Version of the gitfs docker image to use when building the goblet container
+  GB_GITFS_VER: 0.0.0
 
 actions:
   tap:

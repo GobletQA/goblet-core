@@ -12,17 +12,17 @@ const platformMap = {
  * Or uses the default `linux/amd64,linux/arm64`
  * If param.platform of container.envs.KEG_BUILD_PLATFORMS is set to false,
  * no platforms will be included
- * @param {Object} params - options passed to a task parsed into an object
- * @param {Object} params.platform - The platform to be used
+ * @param {Object} options - options for configuring the docker command
+ * @param {Object} options.platform - The platform to be used
  * @param {Object} contextData - Metadata for the current context
  * @param {Object} contextData.contextEnvs - Envs for the current context
  * 
  * @returns {Array} - Docker Platform options
  */
-const getPlatforms = (params, contextData=noOpObj) => {
-  const { platform } = params
+const getPlatforms = (options, contextData=noOpObj) => {
+  const { platform } = options
   const paramPlatform = platformMap[platform] || platform
-  const platformsEnv = get(contextData, `contextEnvs.KEG_BUILD_PLATFORMS`)
+  const platformsEnv = get(contextData, `envs.KEG_BUILD_PLATFORMS`)
 
   const platforms = exists(paramPlatform)
     ? paramPlatform

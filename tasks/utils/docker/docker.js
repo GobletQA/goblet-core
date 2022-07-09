@@ -1,9 +1,8 @@
 const { appRoot } = require('../../paths')
 const { loadEnvs } = require('../envs/loadEnvs')
 const { getPlatforms } = require('./getPlatforms')
-const { docker: dockerCmd, getKegGlobalConfig, Logger } = require('@keg-hub/cli-utils')
+const { docker: dockerCmd, Logger } = require('@keg-hub/cli-utils')
 const {
-  get,
   isStr,
   isObj,
   noOpObj,
@@ -13,20 +12,14 @@ const {
 
 
 /**
- * Check if buildX is being used, and if so, then add it to the command
+ * Sets up docker to use buildX build instead of build
  * Also check and add platforms, if the build is being pushed
  */
-const buildX = (cmd, callback, ...args) => {
-  const options = args[1] || noOpObj
-  const globalConfig = getKegGlobalConfig(false)
-  const buildX = options.buildX || get(globalConfig, `cli.settings.docker.buildX`)
-
-  if(!buildX) return callback(cmd, ...args)
-  
+const buildX = (cmd, callback, cmdArgs=noPropArr, options=noOpObj, params=noOpObj) => {
   // Add the build platform for the image
-  const platformOpts = args[0].includes(`--push`) 
-    ? getPlatforms(options,{ contextEnvs: { ...process.env, ...options.envs, ...options.env  }})
-    : [`--load`]
+  const platformOpts = !params.push
+    ? [ cmd, `--load`]
+    : [ cmd, `--push`, ...getPlatforms(options, {envs: {...process.env, ...options.envs}})]
 
   platformOpts.unshift(cmd)
 
@@ -34,8 +27,8 @@ const buildX = (cmd, callback, ...args) => {
   // Then spread the other args to match calling the docker command
   return callback(
     `buildx`,
-    platformOpts.concat(toArr(args.shift() || noPropArr)),
-    ...args
+    platformOpts.concat(toArr(cmdArgs)),
+    options
   )
 }
 
@@ -102,7 +95,7 @@ const dockerExec = async (cmd, preArgs, postArgs, opts) => {
   const cmdArgs = [...toArr(preArgs), cmd, ...toArr(postArgs)].filter(arg => arg)
 
   log && Logger.log(cmdArgs.join(' '))
-  
+
   return await dockerCmd(cmdArgs, options, cwd)
 }
 
@@ -117,7 +110,6 @@ const createContext = async (args, options=noOpObj, cwd=appRoot) => {
 const useContext = async (args, options=noOpObj, cwd=appRoot) => {
   return await dockerCmd([`context`, `use`, ...args], options, cwd)
 }
-
 
 const docker = (...args) => resolveArgs(dockerExec, ...args)
 docker.run = (...args) => docker('run', ...args)
