@@ -1,6 +1,8 @@
-const { ensureArr } = require('@keg-hub/jsutils')
-const { sharedOptions } = require('@keg-hub/cli-utils')
+// TODO: update goblet core image to be built with-out the keg-cli
 const { buildBase } = require('../../utils/docker/buildBase')
+const { ensureArr, capitalize, uniqArr } = require('@keg-hub/jsutils')
+const { sharedOptions, Logger } = require('@keg-hub/cli-utils')
+
 
 /**
  * Starts all the Goblet services needed to run tests
@@ -16,10 +18,14 @@ const { buildBase } = require('../../utils/docker/buildBase')
  * @returns {void}
  */
 const buildGoblet = async args => {
-  const { params } = args
-  const toBuild = !params.img || !params.img.length
-    ? [`base`, `core`]
-    : ensureArr(params.img)
+  const { img, log } = args.params
+  const toBuild = (!img || !img.length) ? [`base`, `core`] : uniqArr(ensureArr(img))
+
+  log &&
+    Logger.pair(
+      `Building docker images:`,
+      toBuild.map(name => `Goblet-${capitalize(name)}`).join(`, `)
+    )
 
   toBuild.includes(`base`) && await buildBase(args)
   toBuild.includes(`core`) && args.task.cliTask(args)
@@ -44,9 +50,7 @@ module.exports = {
           description: 'A comma separated list of images to build',
         },
       },
-      [
-        `log`
-      ]
+      [`log`]
     ),
   },
 }
