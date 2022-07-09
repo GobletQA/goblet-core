@@ -7,7 +7,7 @@ const { getGobletConfig } = require('GobletSharedConfig')
  *
  * @return {function} - Function to inject the goblet config
  */
-const injectHerkinConfig = taskAction => {
+const injectGobletConfig = taskAction => {
   return args =>
     taskAction({
       ...args,
@@ -23,7 +23,7 @@ const injectHerkinConfig = taskAction => {
  */
 const initialize = tasks => {
   mapObj(tasks, (key, task) => {
-    task.action = isFunc(task.action) && injectHerkinConfig(task.action)
+    task.action = isFunc(task.action) && injectGobletConfig(task.action)
     task.tasks = isObj(task.tasks) && initialize(task.tasks)
   })
 

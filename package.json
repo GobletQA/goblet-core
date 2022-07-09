@@ -64,12 +64,12 @@
   "dependencies": {
     "@babel/core": "7.16.7",
     "@babel/preset-env": "7.16.7",
-    "@keg-hub/args-parse": "8.0.0",
+    "@keg-hub/args-parse": "8.0.1",
     "@keg-hub/ask-it": "1.1.0",
     "@keg-hub/cli-utils": "0.6.0",
     "@keg-hub/jsutils": "9.0.3",
-    "@keg-hub/parse-config": "2.0.0",
-    "@keg-hub/spawn-cmd": "0.3.0",
+    "@keg-hub/parse-config": "2.0.1",
+    "@keg-hub/spawn-cmd": "0.3.1",
     "@ltipton/parkin": "1.4.0",
     "@ltipton/sockr": "0.3.0",
     "app-root-path": "3.0.0",
@@ -94,14 +94,13 @@
     "module-alias": "2.2.2",
     "nodemon": "2.0.13",
     "playwright": "1.23.0",
-    "tiny-jest": "1.2.1",
     "vm2": "3.9.9",
     "winston": "3.6.0"
   },
   "resolutions": {
-    "@keg-hub/args-parse": "8.0.0",
+    "@keg-hub/args-parse": "8.0.1",
     "@keg-hub/ask-it": "^1.1.0",
-    "@keg-hub/cli-utils": "0.6.0",
+    "@keg-hub/cli-utils": "0.6.1",
     "@keg-hub/jsutils": "9.0.3",
     "@monaco-editor/react": "4.3.1"
   },
