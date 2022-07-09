@@ -1,4 +1,3 @@
-const { Logger } = require('@keg-hub/cli-utils')
 const { sharedOptions } = require('../../utils/task/sharedOptions')
 const { deployBackend } = require('../../utils/deploy/deployBackend')
 

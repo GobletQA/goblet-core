@@ -1,40 +1,15 @@
-const { getGobletConfig } = require('GobletSharedConfig')
-const { isObj, isFunc, mapObj } = require('@keg-hub/jsutils')
+const { initialize } = require('../utils/helpers/initDefs')
+const { GOBLET_RUN_FROM_CI } = process.env
 
-/**
- * Injects the goblet.config into a tasks arguments
- * @param {function} taskAction - Function called when a task is run
- *
- * @return {function} - Function to inject the goblet config
- */
-const injectGobletConfig = taskAction => {
-  return args =>
-    taskAction({
-      ...args,
-      goblet: getGobletConfig(args.params),
-    })
-}
-
-/**
- * Loops the goblet custom tasks, and injects the goblet.config as an argument
- * @param {Object} tasks - Task definitions to inject the goblet.config into
- *
- * @return {Object} - tasks with the goblet.config injected
- */
-const initialize = tasks => {
-  mapObj(tasks, (key, task) => {
-    task.action = isFunc(task.action) && injectGobletConfig(task.action)
-    task.tasks = isObj(task.tasks) && initialize(task.tasks)
-  })
-
-  return tasks
-}
-
-module.exports = {
+const definitions = !GOBLET_RUN_FROM_CI && {
   ...initialize(require('./tap')),
   ...initialize(require('./deploy')),
   ...initialize(require('./metadata')),
-  ...initialize(require('./waypoint')),
-  ...initialize(require('./unit')),
+}
+
+module.exports = {
+  ...definitions,
   ...initialize(require('./bdd')),
+  ...initialize(require('./unit')),
+  ...initialize(require('./waypoint')),
 }
