@@ -1,4 +1,3 @@
-const { getBrowsers } = require('GobletSC')
 const { testTypes } = require('../../constants')
 const { sharedOptions } = require('@keg-hub/cli-utils')
 const { runTestCmd } = require('GobletTasks/utils/helpers/runTestCmd')

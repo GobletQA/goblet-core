@@ -1,6 +1,7 @@
-const { getBrowsers } = require('GobletSC')
+
 const { dockerCmd } = require('@keg-hub/cli-utils')
 const { runCommands } = require('GobletTasks/utils/helpers/runCommands')
+const { getBrowsers } = require('GobletSCPlaywright/helpers/getBrowsers')
 const { handleTestExit } = require('GobletTasks/utils/helpers/handleTestExit')
 
 /**

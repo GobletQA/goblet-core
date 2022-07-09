@@ -7,12 +7,11 @@
  */
 const { Logger, inDocker } = require('@keg-hub/cli-utils')
 const { noOpObj, exists, isEmpty, limbo } = require('@keg-hub/jsutils')
-const {
-  metadata,
-  newServer,
-  newBrowserWS,
-  getBrowserType,
-} = require('GobletSC')
+
+const { metadata } = require('GobletSCPlaywright/helpers/metadata')
+const { newServer } = require('GobletSCPlaywright/server/newServer')
+const { newBrowserWS } = require('GobletSCPlaywright/browser/newBrowser')
+const { getBrowserType } = require('GobletSCPlaywright/helpers/getBrowserType')
 
 /**
  * Logs a highlighted message

@@ -1,4 +1,3 @@
-const { getOS } = require('../../utils/getOS')
 const {eitherArr, noPropArr, isStr} = require('@keg-hub/jsutils')
 const { browserNames, browserMap } = require('GobletSCConstants')
 

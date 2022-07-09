@@ -1,8 +1,8 @@
 const path = require('path')
-const { setVncENV } = require('GobletSC')
 const { exists } = require('@keg-hub/jsutils')
 const { containerDir } = require('../../paths')
 const { addToProcess } = require('@keg-hub/cli-utils')
+const { setVncENV } = require('GobletSCLibs/utils/vncActiveEnv')
 
 // TODO: Setup custom ENVs to pull from the values files
 const vncEnvs = {

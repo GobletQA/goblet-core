@@ -1,6 +1,6 @@
-const { getBrowsers } = require('GobletSC')
 const { launchBrowser } = require('./launchBrowser')
 const { runSeq, noOpObj } = require('@keg-hub/jsutils')
+const { getBrowsers } = require('GobletSCPlaywright/helpers/getBrowsers')
 
 /**
  *
