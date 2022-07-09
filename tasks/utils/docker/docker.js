@@ -21,8 +21,6 @@ const buildX = (cmd, callback, cmdArgs=noPropArr, options=noOpObj, params=noOpOb
     ? [ cmd, `--load`]
     : [ cmd, `--push`, ...getPlatforms(options, {envs: {...process.env, ...options.envs}})]
 
-  platformOpts.unshift(cmd)
-
   // Call the callback, adding the platform args array with the first arg, which should be an array
   // Then spread the other args to match calling the docker command
   return callback(

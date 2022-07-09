@@ -1,3 +1,4 @@
+const { ensureArr } = require('@keg-hub/jsutils')
 const { sharedOptions } = require('@keg-hub/cli-utils')
 const { buildBase } = require('../../utils/docker/buildBase')
 
@@ -16,9 +17,12 @@ const { buildBase } = require('../../utils/docker/buildBase')
  */
 const buildGoblet = async args => {
   const { params } = args
-  params.buildBase && await buildBase(args)
+  const toBuild = !params.img || !params.img.length
+    ? [`base`, `core`]
+    : ensureArr(params.img)
 
-  return args.task.cliTask(args)
+  toBuild.includes(`base`) && await buildBase(args)
+  toBuild.includes(`core`) && args.task.cliTask(args)
 }
 
 module.exports = {
@@ -32,12 +36,12 @@ module.exports = {
     options: sharedOptions(
       'build',
       {
-        buildBase: {
-          default: true,
-          type: `boolean`,
-          alias: [`base`],
-          example: '--no-buildBase',
-          description: 'Build the docker base image first',
+        img: {
+          type: `array`,
+          example: '--img base',
+          default: [`base`, `core`],
+          alias: [`image`, `images`],
+          description: 'A comma separated list of images to build',
         },
       },
       [

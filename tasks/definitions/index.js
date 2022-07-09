@@ -1,5 +1,5 @@
-const { isObj, isFunc, mapObj } = require('@keg-hub/jsutils')
 const { getGobletConfig } = require('GobletSharedConfig')
+const { isObj, isFunc, mapObj } = require('@keg-hub/jsutils')
 
 /**
  * Injects the goblet.config into a tasks arguments

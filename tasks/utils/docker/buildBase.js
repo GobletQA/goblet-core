@@ -35,7 +35,7 @@ const buildBase = async args => {
 
   const formattedEnvs = formatParamEnvs(envs)
   const buildEnvs = {...loadedEnvs, ...formattedEnvs}
-  const buildArgs = [
+  const cmdArgs = [
     ...buildTags(tags),
     `-t`,
     loadedEnvs.GB_BASE_IMAGE,
@@ -45,7 +45,7 @@ const buildBase = async args => {
     appRoot
   ]
 
-  return await docker.build(buildArgs, {
+  return await docker.build(cmdArgs, {
     env,
     log,
     cwd: containerDir,

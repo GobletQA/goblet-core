@@ -225,7 +225,7 @@ const getGobletConfig = (argsConfig = noOpObj) => {
   // TODO: need a better way to handle this
   if (!Boolean(process.env.JEST_WORKER_ID) && __GOBLET_CONFIG) return __GOBLET_CONFIG
 
-  const baseConfig = loadConfigFromBase(argsConfig.base)  
+  const baseConfig = loadConfigFromBase(isStr(argsConfig.base) && argsConfig.base)
   const customConfig = loadCustomConfig(argsConfig.config)
 
   if (!customConfig && argsConfig.local && argsConfig.warn) {

@@ -56,4 +56,3 @@ RUN yarn global add npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
     mkdir -p $DOC_APP_PATH/logs && \
     rm -rf /keg/gitfs
-
