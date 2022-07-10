@@ -23,7 +23,7 @@ env:
   # --- IMPORTANT - Don't set this ENV --- #
   # Get's defined within the tasks
   # It will be overwritten, from within the tasks/*
-  # KEG_COMPOSE_HERKIN: "DO NOT UNCOMMENT ME"
+  # KEG_COMPOSE_GOBLET: "DO NOT UNCOMMENT ME"
   # --- IMPORTANT - Don't set this ENV --- #
 
   # The KEG_CONTEXT_PATH env should be the location of the external app being run

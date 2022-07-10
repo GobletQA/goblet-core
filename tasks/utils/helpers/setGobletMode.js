@@ -38,7 +38,7 @@ const setGobletMode = params => {
   addToProcess(
     {
       ...(vncActive ? vncEnvs : mountEnvs),
-      KEG_COMPOSE_HERKIN: path.join(
+      KEG_COMPOSE_GOBLET: path.join(
         containerDir,
         `docker-compose-${gobletMode}.yml`
       ),

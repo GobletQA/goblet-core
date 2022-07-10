@@ -9,6 +9,8 @@ import { loadApiFile } from 'HKUtils/api'
  * @returns {string} - Name without the file extention
  */
 const removeExt = name => {
+  if(!name) return ``
+
   const nameSplit = name.split('.')
   return nameSplit.slice(0, nameSplit.length - 1).join('.')
 }
@@ -23,6 +25,8 @@ const removeExt = name => {
  * @returns {string} - Generated path reference
  */
 const buildRef = (name, type) => {
+  if(!name) return ``
+
   const noExtName = removeExt(name)
   return `${type}/${noExtName}/${noExtName}-`
 }
@@ -36,7 +40,10 @@ const buildRef = (name, type) => {
  * @returns {Date} - Date parsed from the passed in name
  */
 const getDateNum = name => {
-  return new Date(parseInt(removeExt(name).split('-').pop(), 10))
+  const dateStr = name
+    ? parseInt(removeExt(name).split('-').pop(), 10)
+    : ``
+  return new Date(dateStr)
 }
 
 /**
@@ -49,6 +56,8 @@ const getDateNum = name => {
  * @returns {Object|null} - Most recent Report file or undefined
  */
 export const findRelatedReport = async (relativeFile, nodes) => {
+  if(!relativeFile || !nodes) return
+  
   const idRef = buildRef(relativeFile?.name, relativeFile?.fileType)
   const treeNode = nodes
     .filter(
