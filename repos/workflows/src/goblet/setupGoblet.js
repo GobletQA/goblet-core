@@ -17,7 +17,7 @@ const { configureGitArgs } = require('../utils/configureGitArgs')
  * @param {Object} args.repo - Repo metadata for setting up goblet
  */
 const setupGoblet = async (args, gitArgs, mounted) => {
-  Logger.subHeader(`Running Setup Herkin Workflow`)
+  Logger.subHeader(`Running Setup Goblet Workflow`)
 
   const token = (gitArgs && gitArgs.token) || (await loadToken(args))
   gitArgs = gitArgs || (await configureGitArgs({ ...args, token }))
@@ -28,11 +28,11 @@ const setupGoblet = async (args, gitArgs, mounted) => {
     return failResp({ setup: false }, `Repo ${gitArgs.remote} is not connected`)
 
   Logger.log(`Checking goblet configuration...`)
-  const hasHerkin = await copyTemplate(gitArgs.local, args.repoTemplate)
-  if (!hasHerkin)
+  const hasGoblet = await copyTemplate(gitArgs.local, args.repoTemplate)
+  if (!hasGoblet)
     return failResp(
       { setup: false },
-      `Herkin template could not be created for repo ${gitArgs.remote}`
+      `Goblet template could not be created for repo ${gitArgs.remote}`
     )
 
   Logger.log(`Loading goblet.config...`)
@@ -48,7 +48,7 @@ const setupGoblet = async (args, gitArgs, mounted) => {
             git,
           },
         },
-        `Finished running Setup Herkin Workflow`
+        `Finished running Setup Goblet Workflow`
       )
     : failResp(
         { setup: false },

@@ -17,7 +17,7 @@ const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts
 
 /**
  * Builds the launch / browser options for the jest-playwright-config
- * @param {Object} config - Global Herkin config
+ * @param {Object} config - Global Goblet config
  * @param {Object} taskOpts - Playwright browser options set by the task starting the process
  * 
  * @returns {Object} - Built browser options

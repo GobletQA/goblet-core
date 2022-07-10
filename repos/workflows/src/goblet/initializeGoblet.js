@@ -23,7 +23,7 @@ const { configureGitArgs } = require('../utils/configureGitArgs')
  * @param {Object} args.repo - Repo metadata for setting up goblet
  */
 const initializeGoblet = async args => {
-  Logger.subHeader(`Running Initialize Herkin Workflow`)
+  Logger.subHeader(`Running Initialize Goblet Workflow`)
   const token = await loadToken(args)
   const gitArgs = await configureGitArgs({ ...args, token })
 
@@ -56,9 +56,9 @@ const initializeGoblet = async args => {
   const setupResp = await setupGoblet(args, gitArgs)
 
   setupResp.mounted && setupResp.setup
-    ? Logger.success(`Finished running Initialize Herkin Workflow`)
+    ? Logger.success(`Finished running Initialize Goblet Workflow`)
     : Logger.error(
-        Logger.colors.red(`Failed Initialize Herkin Workflow\n`),
+        Logger.colors.red(`Failed Initialize Goblet Workflow\n`),
         Logger.colors.white(`\t- Repo Mount: ${setupResp.mounted}\n`),
         Logger.colors.white(`\t- Repo Setup: ${setupResp.setup}\n`)
       )

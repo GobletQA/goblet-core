@@ -28,7 +28,7 @@ export const signOutAuthUser = async () => {
   if (!authActive) return
 
   currentUser &&
-    console.info(`[Auth State Info] Logging out of of Herkin-Admin`)
+    console.info(`[Auth State Info] Logging out of of Goblet-Admin`)
 
   auth.signOut()
 

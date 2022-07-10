@@ -5,7 +5,7 @@ import { signOut } from 'HKActions/admin'
 import { Times } from 'HKAssets/icons/times'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { Touchable, P } from '@keg-hub/keg-components'
-import { HerkinButton } from 'HKComponents/buttons/button.restyle'
+import { GobletButton } from 'HKComponents/buttons/button.restyle'
 import { ExclamationCircle } from 'HKAssets/icons/exclamationCircle'
 import { setModalVisibility, setLocalModalState } from 'HKActions/modals'
 
@@ -33,7 +33,7 @@ export const NoLocalMountModal = props => {
     return {
       footer: {
         children: (
-          <HerkinButton
+          <GobletButton
             Icon={Times}
             text='Close'
             type='danger'

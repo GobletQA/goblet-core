@@ -11,7 +11,7 @@ const defClasses = {
   text: 'button-text',
 }
 
-export const HerkinButton = reStyle(props => {
+export const GobletButton = reStyle(props => {
   const {
     children,
     Icon,

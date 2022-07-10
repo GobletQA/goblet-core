@@ -8,7 +8,7 @@ import { P, Text } from '@keg-hub/keg-components'
 import { setActiveModal } from 'HKActions/modals'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { removeFile } from 'HKActions/files/api/removeFile'
-import { HerkinButton } from 'HKComponents/buttons/button.restyle'
+import { GobletButton } from 'HKComponents/buttons/button.restyle'
 import { ExclamationCircle } from 'HKAssets/icons/exclamationCircle'
 
 const { MODAL_TYPES } = Values
@@ -63,7 +63,7 @@ export const ConfirmRemoveFile = props => {
       Icon={ExclamationCircle}
       classPrefix='modal-remove'
       footerLeft={(
-        <HerkinButton
+        <GobletButton
           Icon={Times}
           text='Cancel'
           type='default'
@@ -71,7 +71,7 @@ export const ConfirmRemoveFile = props => {
         />
       )}
       footerRight={(
-        <HerkinButton
+        <GobletButton
           Icon={Trash}
           text='Confirm'
           type='danger'

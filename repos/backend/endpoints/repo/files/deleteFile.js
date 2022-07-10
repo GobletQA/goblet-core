@@ -1,4 +1,4 @@
-const { deleteHerkinFile } = require('GobletSharedFileSys/gobletFiles')
+const { deleteGobletFile } = require('GobletSharedFileSys/gobletFiles')
 const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 /**
@@ -8,7 +8,7 @@ const { asyncWrap, apiRes } = require('GobletSharedExp')
  */
 const deleteFile = asyncWrap(async (req, res) => {
   const { file } = req.query
-  const meta = await deleteHerkinFile(res.locals.repo, file)
+  const meta = await deleteGobletFile(res.locals.repo, file)
 
   return apiRes(req, res, meta || {}, 200)
 })

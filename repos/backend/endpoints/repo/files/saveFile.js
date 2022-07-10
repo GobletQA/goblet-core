@@ -1,4 +1,4 @@
-const { saveHerkinFile } = require('GobletSharedFileSys/gobletFiles')
+const { saveGobletFile } = require('GobletSharedFileSys/gobletFiles')
 const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 /**
@@ -10,7 +10,7 @@ const saveFile = asyncWrap(async (req, res) => {
   const {path:location, content, type} = req.body
   if (!location) throw new Error(`[Backend API] Save failed: location required`)
 
-  const meta = await saveHerkinFile(res.locals.repo, location, content, type)
+  const meta = await saveGobletFile(res.locals.repo, location, content, type)
 
   return apiRes(req, res, meta || {}, 200)
 })

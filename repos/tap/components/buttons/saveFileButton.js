@@ -1,6 +1,6 @@
 import React from 'react'
 import { Save } from 'HKAssets/icons/save'
-import { HerkinButton } from './button.restyle'
+import { GobletButton } from './button.restyle'
 import { useSaveActiveFile } from 'HKHooks/activeFile/useSaveActiveFile'
 
 /**
@@ -15,7 +15,7 @@ export const SaveFileButton = props => {
   const onSave = useSaveActiveFile(args)
 
   return (
-    <HerkinButton
+    <GobletButton
       {...args}
       Icon={Save}
       type='primary'
@@ -23,6 +23,6 @@ export const SaveFileButton = props => {
       classPrefix='save-file'
     >
       {children || text}
-    </HerkinButton>
+    </GobletButton>
   )
 }

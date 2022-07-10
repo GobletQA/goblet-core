@@ -34,7 +34,7 @@ const validatePath = async location => {
  * If this file exists, then no mount exists
  * If it does not exist, then the folder was overwritten with the mount
  * So we know a mount exists
- * @param {Object} config - Global Herkin config object
+ * @param {Object} config - Global Goblet config object
  *
  * @return {RepoStatus} - Status object for the checked repo
  */
@@ -73,7 +73,7 @@ const statusForLocal = async (config, metadata) => {
 /**
  * In VNC mode, if we have a user Id we can check if the repo is mounted
  * Otherwise we just return unknown status
- * @param {Object} config - Global Herkin config object
+ * @param {Object} config - Global Goblet config object
  * @param {Object} config.repo - Repo config || Repo class instance
  * @param {string} config.repo.url - Url of the repo to check
  * @param {string} config.url - Url of the repo to check if repo.url does not exist
@@ -121,13 +121,13 @@ const statusForVnc = async (config, metadata = noOpObj) => {
  * This is expected to be overwritten by External Services
  * Builds a Repo Model Object based on the local metadata
  *
- * @param {Object} config - Global Herkin config object
+ * @param {Object} config - Global Goblet config object
  * @param {Object} metadata - Git Metadata about the repo
  *
  * @return {RepoStatus} - Status object for the checked repo
  */
 const statusGoblet = async (config, metadata, log=true) => {
-  log && Logger.subHeader(`Running Status Herkin Workflow`)
+  log && Logger.subHeader(`Running Status Goblet Workflow`)
 
   if (!config)
     throw new Error(`The statusGoblet workflow requires a goblet config object`)

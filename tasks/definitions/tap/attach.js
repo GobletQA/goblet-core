@@ -14,7 +14,7 @@ const {
  *
  * @returns {void}
  */
-const attachHerkin = async args => {
+const attachGoblet = async args => {
   const { params } = args
 
   // TODO: Pull in the docker container information via inspect
@@ -35,7 +35,7 @@ module.exports = {
   attach: {
     name: 'attach',
     alias: ['att'],
-    action: attachHerkin,
+    action: attachGoblet,
     example: 'keg goblet attach',
     description: 'Attach to the running tap container',
     // Merge the default task options with these custom task options

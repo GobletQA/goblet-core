@@ -2,7 +2,7 @@
 /**
  * Loops over the fileTypes from the repo looking for a matching path with the filePath
  * If found uses the matching type
- * @param {Object} repo - Herkin repo config object
+ * @param {Object} repo - Goblet repo config object
  * @param {string} filePath - Path to a test file
  *
  * @returns {string|boolean} - Found test file type or false

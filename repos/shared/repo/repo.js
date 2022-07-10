@@ -12,7 +12,7 @@ const {
 
 /**
  * Class variation of the a goblet config
- * Has the same properties as a Herkin Config object, but includes some helper methods
+ * Has the same properties as a Goblet Config object, but includes some helper methods
  */
 class Repo {
 
@@ -42,7 +42,7 @@ class Repo {
 
   /**
    * Gathers metadata and creates a Repo Model object of a mounted / connected
-   * @param {Object} config - Herkin global App Config, NOT A REPO CONFIG
+   * @param {Object} config - Goblet global App Config, NOT A REPO CONFIG
    * @param {Object} [repoData] - Past metadata stored about the repo on the frontend
    *
    * @returns {Object} - Repo Model object built by the response of the statusGoblet workflow

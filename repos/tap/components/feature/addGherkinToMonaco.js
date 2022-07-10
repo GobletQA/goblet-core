@@ -13,7 +13,7 @@ import { noOp } from '@keg-hub/jsutils'
  *
  * @returns {Void}
  */
-const addGHerkinSyntax = (monaco, expressions) => {
+const addGherkinSyntax = (monaco, expressions) => {
   monaco.languages.registerDocumentSemanticTokensProvider('gherkin', {
     getLegend: () => ({
       tokenTypes: semanticTokenTypes,
@@ -128,7 +128,7 @@ export const addGherkinToMonaco = (monaco, index, expressions) => {
     aliases: [`Feature`, `feature`]
   })
 
-  addGHerkinSyntax(monaco, expressions)
+  addGherkinSyntax(monaco, expressions)
   addAutoComplete(monaco, index)
 
   return  editor => {

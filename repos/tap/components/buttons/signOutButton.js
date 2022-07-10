@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { SignOut } from 'HKAssets/icons/signOut'
-import { HerkinButton } from './button.restyle'
+import { GobletButton } from './button.restyle'
 import { gitAuthSignOut } from 'HKActions/admin'
 import { useDisconnectRepo } from 'HKHooks/repo/useDisconnectRepo'
 
@@ -16,7 +16,7 @@ export const SignOutButton = props => {
   const onClick = useDisconnectRepo(gitAuthSignOut)
 
   return (
-    <HerkinButton
+    <GobletButton
       type='danger'
       Icon={SignOut}
       classPrefix='sign-out'
@@ -24,6 +24,6 @@ export const SignOutButton = props => {
       onClick={onClick}
     >
       {children || text}
-    </HerkinButton>
+    </GobletButton>
   )
 }

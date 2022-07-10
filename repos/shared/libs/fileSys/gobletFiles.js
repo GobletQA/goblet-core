@@ -36,7 +36,7 @@ const checkPathExists = async location => {
  *
  * @returns {Object} - Contains boolean if delete was successful and its location
  */
-const deleteHerkinFile = async (repo, location) => {
+const deleteGobletFile = async (repo, location) => {
   await checkPathExists(location)
 
 
@@ -75,7 +75,7 @@ const deleteHerkinFile = async (repo, location) => {
  *
  * @returns {Object} - fileModel for the file at the passed in location
  */
-const getHerkinFile = async (repo, location) => {
+const getGobletFile = async (repo, location) => {
   const baseDir = getRepoGobletDir(repo)
 
   const fullPath = location.startsWith(baseDir)
@@ -133,7 +133,7 @@ const saveDefinitionToRepo = async (repo, location) => {
  *
  * @returns {Object} - Contains boolean if save was successful and its fileModel
  */
-const saveHerkinFile = async (repo, location, content, type) => {
+const saveGobletFile = async (repo, location, content, type) => {
   const { repoRoot } = repo.paths
 
   const inTestRoot = location.startsWith(repoRoot)
@@ -185,7 +185,7 @@ const saveHerkinFile = async (repo, location, content, type) => {
  *
  * @returns {Object} - Contains boolean if create was successful and its fileModel
  */
-const createHerkinFile = async (repo, fileName, fileType) => {
+const createGobletFile = async (repo, fileName, fileType) => {
   const { fileTypes } = repo
   const foundType = fileTypes[fileType]
 
@@ -233,8 +233,8 @@ const createHerkinFile = async (repo, fileName, fileType) => {
 }
 
 module.exports = {
-  createHerkinFile,
-  deleteHerkinFile,
-  getHerkinFile,
-  saveHerkinFile,
+  createGobletFile,
+  deleteGobletFile,
+  getGobletFile,
+  saveGobletFile,
 }

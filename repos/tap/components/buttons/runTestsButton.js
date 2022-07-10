@@ -1,6 +1,6 @@
 import React from 'react'
 import { Rabbit } from 'HKAssets/icons/rabbit'
-import { HerkinButton } from './button.restyle'
+import { GobletButton } from './button.restyle'
 import { useRunAction } from 'HKHooks/tests/useRunAction'
 
 /**
@@ -18,7 +18,7 @@ export const RunTestsButton = props => {
   const onRun = useRunAction(args)
 
   return (
-    <HerkinButton
+    <GobletButton
       {...args}
       Icon={Rabbit}
       onClick={onRun}
@@ -26,6 +26,6 @@ export const RunTestsButton = props => {
       classPrefix='run-tests'
     >
       {children || text}
-    </HerkinButton>
+    </GobletButton>
   )
 }

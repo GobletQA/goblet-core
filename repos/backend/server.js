@@ -21,7 +21,7 @@ const {
 
 /**
  * Starts a express API server, and connects the sockr Websocket
- * Loads the HerkinConfig, which is used for configuring the server
+ * Loads the Goblet Config, which is used for configuring the server
  *
  * @returns {Object} - Express app, server and socket.io socket
  */

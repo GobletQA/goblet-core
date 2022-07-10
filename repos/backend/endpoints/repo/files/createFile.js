@@ -1,4 +1,4 @@
-const { createHerkinFile } = require('GobletSharedFileSys/gobletFiles')
+const { createGobletFile } = require('GobletSharedFileSys/gobletFiles')
 const { asyncWrap, apiRes } = require('GobletSharedExp')
 
 /**
@@ -8,7 +8,7 @@ const { asyncWrap, apiRes } = require('GobletSharedExp')
  */
 const createFile = asyncWrap(async (req, res) => {
   const { name, type } = req.body
-  const meta = await createHerkinFile(res.locals.repo, name, type)
+  const meta = await createGobletFile(res.locals.repo, name, type)
 
   return apiRes(req, res, meta, 200)
 })

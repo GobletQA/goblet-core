@@ -20,7 +20,7 @@ global.getParkinInstance = getParkinInstance
  */
 global.getParkinOptions = () => {
   // Load the both goblet and parkin version
-  // Herkin version overrides parkin version
+  // Goblet version overrides parkin version
   const {
     PARKIN_FEATURE_NAME,
     PARKIN_FEATURE_TAGS,

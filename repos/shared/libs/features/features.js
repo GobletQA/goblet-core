@@ -134,7 +134,7 @@ const parseFeatures = (featureFiles, featuresDir) => {
  * Then maps the passed in definitions to the Feature steps
  * @function
  * @export
- * @param {Object} config - Herkin Config object
+ * @param {Object} config - Goblet Config object
  * @param {Array<Object>} definitions - Loaded definitions
  *
  * @returns {Promise<Array<string>>} - Group of parsed feature files as FileModel objects
@@ -143,7 +143,7 @@ const loadFeatures = async (repo, definitions) => {
   const { featuresDir, repoRoot } = repo.paths
   if (!featuresDir || !repoRoot)
     throw new Error(
-      `Herkin config featuresDir and repoRoot must be defined. Found: 
+      `Goblet config featuresDir and repoRoot must be defined. Found: 
         - featuresDir=${featuresDir}
         - repoRoot=${repoRoot}
       `

@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react'
 import { Save } from 'HKAssets/icons/save'
-import { HerkinButton } from './button.restyle'
+import { GobletButton } from './button.restyle'
 import { removeFile } from 'HKActions/files/api/removeFile'
 
 /**
@@ -19,7 +19,7 @@ export const RemoveFileButton = props => {
   }, [])
 
   return (
-    <HerkinButton
+    <GobletButton
       {...args}
       Icon={Save}
       type='primary'
@@ -27,6 +27,6 @@ export const RemoveFileButton = props => {
       classPrefix='save-file'
     >
       {children || text}
-    </HerkinButton>
+    </GobletButton>
   )
 }

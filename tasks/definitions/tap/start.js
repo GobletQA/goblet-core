@@ -28,7 +28,7 @@ const getRootPath = config =>
  *
  * @returns {void}
  */
-const startHerkin = async args => {
+const startGoblet = async args => {
   const { goblet } = args
   validateConfig(goblet)
 
@@ -58,7 +58,7 @@ module.exports = {
   start: {
     name: 'start',
     alias: ['st'],
-    action: startHerkin,
+    action: startGoblet,
     example: 'test:start',
     // Merge the default task options with these custom task options
     mergeOptions: true,

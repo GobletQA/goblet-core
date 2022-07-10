@@ -14,7 +14,7 @@ const {
 
 /**
  * Starts a express API server for screencast
- * Loads the HerkinConfig, which is used for configuring the server
+ * Loads the Goblet Config, which is used for configuring the server
  *
  * @returns {Object} - Express app, server and socket.io socket
  */
@@ -35,7 +35,7 @@ const initApi = async () => {
     const serverUrl = `http://${serverConf.host}:${serverConf.port}`
 
     Logger.empty()
-    Logger.pair(`Herkin Screencast API listening on`, serverUrl)
+    Logger.pair(`Goblet Screencast API listening on`, serverUrl)
     Logger.empty()
   })
 

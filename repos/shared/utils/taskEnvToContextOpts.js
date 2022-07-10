@@ -52,7 +52,7 @@ const addEnvToOpts = (opts, key, value) => {
 
 /**
  * Parses the GOBLET_TEST_VIDEO_RECORD env, and sets the height and width if true
- * @param {Object} config - Herkin global config
+ * @param {Object} config - Goblet global config
  * @param {Object} opts - Context options being built
  * @param {Object} screenDims - Screen dimensions of the browser
  * @param {boolean} value - True if recording should be turned on
@@ -78,7 +78,7 @@ const parseRecord = (config, opts, screenDims, value, fullScreen) => {
 /**
  * Gets the browser opts set as envs when a task is run
  * This allows passing values into the test environment
- * @param {Object} config - Herkin global config
+ * @param {Object} config - Goblet global config
  *
  * @return {Object} browser options
  */

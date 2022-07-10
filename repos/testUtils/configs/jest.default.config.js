@@ -16,7 +16,7 @@ const { buildTestMatchFiles } = require('GobletSharedUtils/buildTestMatchFiles')
  * Builds the test reports, currently only jest-html-reporter
  * TODO: allow reporters to be more customizable
  * @param {Object} opts - Custom options for the tests being run
- * @param {Object} config - Global Herkin config
+ * @param {Object} config - Global Goblet config
  *
  * @returns {Array} - Built reporters array
  */
@@ -40,7 +40,7 @@ const buildReporters = (opts=noOpObj, gobletRoot) => {
 
 /**
  * Default config that other jest configs can use to set common config properties
- * @param {Object} config - Global Herkin config
+ * @param {Object} config - Global Goblet config
  * @param {Object} opts - Custom options for the tests being run
  * @param {string} [opts.rootDir=/keg] - Absolute path to the root jest test directory
  * @param {string} opts.testDir - Absolute path to the folder containing tests to run

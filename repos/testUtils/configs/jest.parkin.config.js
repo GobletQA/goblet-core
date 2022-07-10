@@ -13,7 +13,7 @@ const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts
 /**
  * Finds all step definition files in client's step directory and
  * also in the config testUtilsDir repo
- * @param {Object} config - Global Herkin config
+ * @param {Object} config - Global Goblet config
  *
  * @return {Array<string>} file paths
  */
@@ -32,7 +32,7 @@ const getStepDefinitions = config => {
 
 /**
  * Gets all file paths for bdd support files
- * @param {Object} config - Global Herkin config
+ * @param {Object} config - Global Goblet config
  *
  * @return {Array<string>} file paths
  */

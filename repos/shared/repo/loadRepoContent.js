@@ -9,7 +9,7 @@ const { fileModelArrayToObj } = require('GobletSharedUtils/fileModelArrayToObj')
  * Includes the fileTree, features and step definitions
  *
  * @param {Object} repo - Repo Class Instance
- * @param {Object} config - Herkin config object for the repo class instance
+ * @param {Object} config - Goblet config object for the repo class instance
  * @param {Object} status - status response object from the statusGoblet workflow
  *
  * @returns {Object} - Repo file content object

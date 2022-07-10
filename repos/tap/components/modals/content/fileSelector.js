@@ -15,7 +15,7 @@ import { formatFileName } from 'HKUtils/helpers/formatFileName'
 import { setActiveModal } from 'HKActions/modals/setActiveModal'
 import { useFileGroups } from 'HKHooks/activeFile/useFileGroups'
 import { ControlledAuto } from 'HKComponents/form/controlledAuto'
-import { HerkinButton } from 'HKComponents/buttons/button.restyle'
+import { GobletButton } from 'HKComponents/buttons/button.restyle'
 import { useFileTypeMeta } from 'HKHooks/activeFile/useFileTypeMeta'
 import { setModalVisibility } from 'HKActions/modals/setModalVisibility'
 import { useFileTypeOptions } from 'HKHooks/activeFile/useFileTypeOptions'
@@ -234,7 +234,7 @@ export const FileSelectorModal = props => {
         )
       }
       footerRight={
-        <HerkinButton
+        <GobletButton
           type='primary'
           text={actionText}
           Icon={CheckCircle}

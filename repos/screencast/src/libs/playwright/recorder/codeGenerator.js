@@ -45,7 +45,7 @@ class CodeGenerator {
 
   generateCodeForPrintEvent = (event) => {
     // TODO: find a way to track this in the dom
-    // Maybe come from the Herkin UI
+    // Maybe come from the Goblet UI
     // See https://playwright.dev/docs/api/class-page#page-pdf
     // return {code: `await page.pdf(${JSON.stringify(event.options)})`}
     return noOpObj
@@ -53,7 +53,7 @@ class CodeGenerator {
 
   generateCodeForScreenshotEvent = (event) => {
     // TODO: find a way to track this in the dom
-    // Maybe come from the Herkin UI
+    // Maybe come from the Goblet UI
     // See https://playwright.dev/docs/api/class-page#page-screenshot
     // return {code: `await page.screenshot(${JSON.stringify(event.options)})`}
     return noOpObj

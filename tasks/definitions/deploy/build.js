@@ -40,7 +40,7 @@ const getBuildTypes = props => {
  *
  * @returns {void}
  */
-const buildHerkin = async args => {
+const buildGoblet = async args => {
   const { params } = args 
   const { log } = params
   const buildTypes = getBuildTypes(params)
@@ -70,7 +70,7 @@ module.exports = {
   build: {
     name: 'build',
     alias: ['bld'],
-    action: buildHerkin,
+    action: buildGoblet,
     example: 'keg goblet deploy build <options>',
     description: 'Build the Goblet production docker image',
     options: {

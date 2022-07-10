@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 
 import { tapColors } from 'HKTheme/tapColors'
 import { Record } from 'HKAssets/icons/record'
-import { HerkinButton } from './button.restyle'
+import { GobletButton } from './button.restyle'
 import { SlowFlash } from 'HKComponents/slowFlash'
 import { useRecordAction } from 'HKHooks/screencast/useRecordAction'
 import { Loading } from '@keg-hub/keg-components'
@@ -71,14 +71,14 @@ export const RecordButton = props => {
       minOpacity={0.3}
       flashing={isRecording}
     >
-      <HerkinButton
+      <GobletButton
         {...recordProps}
         onClick={onClick}
         Icon={recordProps.Icon}
         classPrefix='record-actions'
       >
         {children || (isRecording ? recordText : text)}
-      </HerkinButton>
+      </GobletButton>
     </SlowFlash>
   )
 }

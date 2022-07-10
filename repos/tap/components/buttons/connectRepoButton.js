@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { Values } from 'HKConstants'
 import { Exchange } from 'HKAssets/icons/exchange'
-import { HerkinButton } from './button.restyle'
+import { GobletButton } from './button.restyle'
 import { useSelector } from 'HKHooks/useSelector'
 import { checkCall, isEmptyColl } from '@keg-hub/jsutils'
 import { connectRepo } from 'HKActions/repo/api/connect'
@@ -71,7 +71,7 @@ export const ConnectRepoButton = props => {
   ])
 
   return (
-    <HerkinButton
+    <GobletButton
       Icon={Exchange}
       type='primary'
       onClick={onConnect}

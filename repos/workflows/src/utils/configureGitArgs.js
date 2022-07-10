@@ -6,7 +6,7 @@ const { isObj, exists, isStr } = require('@keg-hub/jsutils')
 
 /**
  * Builds the arguments required for syncing a git repo
- * Expects the passed in objects to match the models from Herkin-Admin
+ * Expects the passed in objects to match the models from Goblet-Admin
  * @function
  * @throws
  *

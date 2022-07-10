@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from 'react'
 import { Values } from 'HKConstants'
 import { Times } from 'HKAssets/icons/times'
 import { gitAuthSignOut } from 'HKActions/admin'
-import { HerkinButton } from './button.restyle'
+import { GobletButton } from './button.restyle'
 import { useSelector } from 'HKHooks/useSelector'
 import { isEmptyColl, checkCall } from '@keg-hub/jsutils'
 import { useDisconnectRepo } from 'HKHooks/repo/useDisconnectRepo'
@@ -40,7 +40,7 @@ export const DisconnectRepoButton = props => {
   const onClick = useDisconnectRepo(onDisconnect)
 
   return (
-    <HerkinButton
+    <GobletButton
       Icon={Times}
       type='danger'
       styles={styles}

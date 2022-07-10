@@ -3,7 +3,7 @@ const { toBool } = require('@keg-hub/jsutils')
 /**
  * Global options for goblet passed to the Jest config global object
  * All values must be serializable
- * @params {Object} config - Herkin config
+ * @params {Object} config - Goblet config
  * @params {Object} browserOpts - Configure browser options
  *
  */

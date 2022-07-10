@@ -3,7 +3,7 @@ const { deployBackend } = require('../../utils/deploy/deployBackend')
 
 
 /**
-  * Deploys Herkin backend to gcloud
+  * Deploys Goblet backend to gcloud
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Root task name
  * @param {Object} args.tasks - All registered tasks of the CLI

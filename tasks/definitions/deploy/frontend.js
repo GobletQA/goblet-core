@@ -5,7 +5,7 @@ const { sharedOptions } = require('../../utils/task/sharedOptions')
 const { deployFrontend } = require('../../utils/deploy/deployFrontend')
 
 /**
- * Deploys Herkin frontend to firebase hosting
+ * Deploys Goblet frontend to firebase hosting
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Root task name
  * @param {Object} args.tasks - All registered tasks of the CLI
@@ -21,7 +21,7 @@ const frontendDeploy = async args => {
   const exitCode = await deployFrontend(args)
   
   if(exitCode)
-    throw new Error(`Error deploying Herkin frontend to firebase. Exit Code: ${exitCode}`)
+    throw new Error(`Error deploying Goblet frontend to firebase. Exit Code: ${exitCode}`)
 
   log && Logger.success(`\n[Success] ${Logger.colors.white('Frontend deployed to firebase')}\n`)
 }

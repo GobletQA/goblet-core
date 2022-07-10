@@ -1,7 +1,7 @@
 const path = require('path')
 const glob = require('glob')
 const { DefinitionsParser } = require('./definitionsParser')
-const { getDefaultHerkinConfig } = require('GobletSharedConfig')
+const { getDefaultGobletConfig } = require('GobletSharedConfig')
 const { getPathFromBase } = require('GobletSharedUtils/getPathFromBase')
 const { parkinOverride } = require('GobletSharedLibs/overrides/parkinOverride')
 
@@ -54,7 +54,7 @@ const parseDefinitions = async (repo, definitionFiles, overrideParkin) => {
 const loadDefinitions = async (repo, gobletConfig) => {
   // Clear out any steps that were already loaded
   DefinitionsParser.clear(repo)
-  gobletConfig = gobletConfig || getDefaultHerkinConfig()
+  gobletConfig = gobletConfig || getDefaultGobletConfig()
 
   const { stepsDir } = repo.paths
   const pathToSteps = getPathFromBase(stepsDir, repo)

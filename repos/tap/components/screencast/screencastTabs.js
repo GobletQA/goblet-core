@@ -3,7 +3,7 @@ import { Tabbar } from 'HKComponents/tabbar'
 import { Browser } from 'HKAssets/icons/browser'
 import { useOnTabSelect } from 'HKHooks/tabs/useOnTabSelect'
 import { RecordButton } from 'HKComponents/buttons/recordButton'
-import { HerkinButton } from 'HKComponents/buttons/button.restyle'
+import { GobletButton } from 'HKComponents/buttons/button.restyle'
 import { ActionsContainer, ActionMain } from './screencast.restyle'
 import { RunTestsButton } from 'HKComponents/buttons/runTestsButton'
 import { actionBrowser } from 'HKActions/screencast/api/actionBrowser'
@@ -31,9 +31,9 @@ const BrowserActions = props => {
   return (
     <ActionsContainer className='screencast-tab-actions'>
       <ActionMain className='screencast-tab-action-start'>
-        <HerkinButton type='primary' Icon={Browser} onClick={onRestartBrowser}>
+        <GobletButton type='primary' Icon={Browser} onClick={onRestartBrowser}>
           Restart Browser
-        </HerkinButton>
+        </GobletButton>
       </ActionMain>
       <ActionMain className='screencast-tab-action-run'>
         <RunTestsButton

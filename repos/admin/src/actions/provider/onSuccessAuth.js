@@ -68,7 +68,7 @@ const validateResp = resp => {
 }
 
 /**
- * Called when a user is authorized to access Herkin-Admin
+ * Called when a user is authorized to access Goblet-Admin
  * If they are a new user, it creates a new user and account
  * On each sign in, it also saves the users auth token, which can be used for accessing the git provider
  * Then loads the Dashboard root

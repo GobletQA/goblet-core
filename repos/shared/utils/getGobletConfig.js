@@ -53,7 +53,7 @@ const loadConfigByType = (config, ...args) => {
 
 /**
  * Adds the fileTypes to the config if they don't already exist
- * @param {Object} config - Herkin config or RepoClass instance
+ * @param {Object} config - Goblet config or RepoClass instance
  *
  * @return {Object} - Config with the fileTypes added
  */
@@ -225,10 +225,10 @@ const loadCustomConfig = (runtimeConfigPath, search = true) => {
 }
 
 /**
- * Gets the Herkin application config from a number of sources
+ * Gets the Goblet application config from a number of sources
  * @param {object} argsConfig - Config options passed at runtime
  *
- * @return {Object} - Loaded Herkin config
+ * @return {Object} - Loaded Goblet config
  */
 const getGobletConfig = (argsConfig = noOpObj) => {
   // TODO: need a better way to handle this
@@ -283,19 +283,18 @@ const resetGobletConfig = () => {
  * Returns the default goblet config
  * Should not be used for loading repo information
  *
- * @returns {Object} - default Herkin Config
+ * @returns {Object} - default Goblet Config
  */
-const getDefaultHerkinConfig = () => {
+const getDefaultGobletConfig = () => {
   return defaultConfig
 }
-
 
 module.exports = {
   findConfig,
   getConfigAtPath,
   getGobletConfig,
   loadCustomConfig,
-  getDefaultHerkinConfig,
+  getDefaultGobletConfig,
   loadConfigFromFolder,
   resetGobletConfig,
 }
