@@ -1,5 +1,6 @@
 const { testTypes } = require('../../constants')
 const { sharedOptions } = require('@keg-hub/cli-utils')
+const { upsertTestMeta } = require('GobletTest/testMeta/testMeta')
 const { runTestCmd } = require('GobletTasks/utils/helpers/runTestCmd')
 const { buildJestArgs } = require('GobletTasks/utils/jest/buildJestArgs')
 const { getJestConfig } = require('GobletTasks/utils/jest/getJestConfig')
@@ -16,7 +17,12 @@ const runWp = async args => {
   const { params, goblet } = args
   const jestConfig = await getJestConfig(params, testTypes.waypoint)
   const reportPath = buildReportPath(testTypes.waypoint, params, goblet)
-  
+
+  await upsertTestMeta(`waypoint.report`, {
+    path: reportPath,
+    name: reportPath.split(`/`).pop(),
+  })
+
   // Run the test command for defined browsers
   const exitCode = await runTestCmd({
     params,

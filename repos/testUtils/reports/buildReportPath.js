@@ -33,6 +33,7 @@ const buildReportPath = (type, { context, testReport }, goblet) => {
   const report = getReportName(type, testReport || context)
 
   // Example: goblet/reports/features/my-tests/my-tests-12345.html
+  // The date/time stamp is always added to allow search and filtering by name
   return path.join(reportsDir, `${type}/${report}/${report}-${Date.now()}.html`)
 }
 

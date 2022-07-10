@@ -1,8 +1,8 @@
-
 const { dockerCmd } = require('@keg-hub/cli-utils')
 const { runCommands } = require('GobletTasks/utils/helpers/runCommands')
 const { getBrowsers } = require('GobletSCPlaywright/helpers/getBrowsers')
 const { handleTestExit } = require('GobletTasks/utils/helpers/handleTestExit')
+const { upsertTestMeta } = require('GobletTest/testMeta/testMeta')
 
 /**
  * Helper to run the command to execute tests
@@ -24,7 +24,17 @@ const runTestCmd = async (args) => {
   const commands = getBrowsers(params).map(
     browser => {
       const cmdOpts = envsHelper(browser)
-      const browserCmd = () => dockerCmd(params.container, [...cmdArgs], cmdOpts)
+      const browserCmd = async () => {
+        // TODO: add callbacks to get access to the dockerCmd output
+        // This way we can extract out logged day same as the frontend
+        const exitCode = await dockerCmd(params.container, [...cmdArgs], cmdOpts)
+        await upsertTestMeta(`bdd.browsers.${browser}`, {
+          name: browser,
+          status: exitCode ? `failed` : `passed`,
+        })
+
+        return exitCode
+      }
 
       browserCmd.browser = browser
       browserCmd.cmdArgs = cmdArgs

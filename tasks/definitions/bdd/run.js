@@ -1,12 +1,12 @@
 const { testTypes } = require('../../constants')
 const { sharedOptions } = require('@keg-hub/cli-utils')
+const { upsertTestMeta } = require('GobletTest/testMeta/testMeta')
 const { runTestCmd } = require('GobletTasks/utils/helpers/runTestCmd')
 const { buildBddEnvs } = require('GobletTasks/utils/envs/buildBddEnvs')
 const { buildReportPath } = require('GobletTest/reports/buildReportPath')
 const { buildJestArgs } = require('GobletTasks/utils/jest/buildJestArgs')
 const { getJestConfig } = require('GobletTasks/utils/jest/getJestConfig')
 const { filterTaskEnvs } = require('GobletTasks/utils/envs/filterTaskEnvs')
-
 /**
  * Run parkin tests in container
  * @param {Object} args
@@ -21,6 +21,12 @@ const runBdd = async args => {
 
   const jestConfig = await getJestConfig(params, testTypes.feature)
   const reportPath = buildReportPath(testTypes.feature, params, goblet)
+
+  await upsertTestMeta(`bdd.report`, {
+    path: reportPath,
+    name: reportPath.split(`/`).pop(),
+  })
+
   // Run the test command for defined browsers
   const exitCode = await runTestCmd({
     params,

@@ -142,6 +142,7 @@ module.exports = {
     gobletRoot: GOBLET_ROOT,
     testUtilsDir: TEST_UTILS_PATH,
     pwMetaDataDir: GOBLET_PW_METADATA_DIR,
+    testMetaFile: `${GOBLET_ROOT}/temp/testMeta.json`,
   },
 
   /** Property to define a valid goblet config object */
