@@ -6,10 +6,9 @@
  * The `wsEndpoint` is then passed to the docker container as an ENV - BROWSER_WS_ENDPOINT
  */
 const { Logger, inDocker } = require('@keg-hub/cli-utils')
-const { noOpObj, exists, isEmpty, limbo } = require('@keg-hub/jsutils')
-
-const { metadata } = require('GobletSCPlaywright/helpers/metadata')
+const metadata = require('GobletSCPlaywright/helpers/metadata')
 const { newServer } = require('GobletSCPlaywright/server/newServer')
+const { noOpObj, exists, isEmpty, limbo } = require('@keg-hub/jsutils')
 const { newBrowserWS } = require('GobletSCPlaywright/browser/newBrowser')
 const { getBrowserType } = require('GobletSCPlaywright/helpers/getBrowserType')
 

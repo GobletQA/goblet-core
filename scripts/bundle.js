@@ -20,6 +20,8 @@ const locations = {
   testUtils: `repos/testUtils`,
   templates: `repos/shared/templates`,
   testConfigs: `repos/testUtils/configs`,
+  tasksIn: path.join(rootDir, `tasks/runTask.js`),
+  tasksOut: path.join(bundleDir, `tasks`),
   containerIn: path.join(rootDir, `container`),
   containerOut: path.join(bundleDir, `container`),
   jestOut: path.join(bundleDir, `repos/testUtils/configs`),
@@ -129,7 +131,7 @@ const makeBundle = async (name=`App`, entry, outdir) => {
  */
 const copyAssets = async () => {
   Logger.log(`Copying assets to bundle directory...`)
-  await dupDir(locations.tasks)
+
   await dupDir(locations.goblet)
   await dupDir(locations.testUtils)
   await dupDir(locations.templates)
@@ -158,10 +160,11 @@ const copyAssets = async () => {
 
   await cleanBundleDir()
   await copyAssets()
+  await makeBundle(`Tasks`, locations.tasksIn, locations.tasksOut)
+  await makeBundle(`Jest-Config`, locations.jestIn, locations.jestOut)
+  await makeBundle(`Goblet-Config`, locations.configIn, locations.configOut)
   await makeBundle(`Backend-API`, locations.backendIn, locations.backendOut)
   await makeBundle(`Screencast-API`, locations.screencastIn, locations.screencastOut)
-  await makeBundle(`Goblet-Config`, locations.configIn, locations.configOut)
-  await makeBundle(`Jest-Config`, locations.jestIn, locations.jestOut)
 
   logSuccess(`Goblet bundling complete!\n`)
 

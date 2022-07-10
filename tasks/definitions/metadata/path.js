@@ -1,5 +1,5 @@
 const { Logger } = require('@keg-hub/cli-utils')
-const { metadata } = require('GobletSCPlaywright/helpers/metadata')
+const metadata = require('GobletSCPlaywright/helpers/metadata')
 
 /**
  * Print the browser metadata path on the HDD
