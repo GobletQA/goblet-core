@@ -1,6 +1,11 @@
 const os = require("os")
 const path = require('path')
-const { jestAliases, registerAliases } = require('./aliases.config')
+
+/**
+ * TODO: This relative path sucks, but don't have a better solution currently
+ * Need to investigate at some point
+ */
+const { jestAliases, registerAliases } = require('../../../configs/aliases.config')
 registerAliases()
 
 const { getGobletConfig } = require('GobletSharedConfig')

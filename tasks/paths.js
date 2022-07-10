@@ -7,5 +7,6 @@ module.exports = {
   containerDir: path.join(appRoot, './container'),
   gobletMountDir: path.join(appRoot, './goblet'),
   bundleDir: path.join(appRoot, `bundle/tap`),
+  testUtilsDir: path.join(appRoot, `repos/testUtils`),
   coreBuildDir: path.join(appRoot, `node_modules/keg-core/web-build`),
 }
