@@ -6,10 +6,10 @@
 
 const path = require('path')
 const { execSync } = require('child_process')
+const { GobletRoot } = require('../gobletRoot')
 const { deepFreeze, snakeCase } = require('@keg-hub/jsutils')
 
-const GOBLET_ROOT = path.join(__dirname, '../')
-const reposDir = path.join(GOBLET_ROOT, 'repos')
+const reposDir = path.join(GobletRoot, 'repos')
 
 /**
  * Finds all sub-repo paths from the <goblet-root>/repos directory
@@ -60,7 +60,7 @@ const dirsFromEnvs = deepFreeze({
 
 // TODO: fix this. It's only valid when in local mode and no locally mounted folder exists
 // absolute path to tests volume inside the container
-const dockerTestsRoot = path.join(GOBLET_ROOT, 'goblet')
+const dockerTestsRoot = path.join(GobletRoot, 'goblet')
 // absolute path to the tests folder on host machine
 const hostRoot = GOBLET_REPO_ROOT || dockerTestsRoot
 // Set the test root based on if DOC_APP_PATH is set ( In a docker container )
@@ -70,8 +70,8 @@ const repoRoot = DOC_APP_PATH ? dockerTestsRoot : hostRoot
  * Constants that should only be imported in a node runtime environment, the backend
  */
 module.exports = deepFreeze({
-  GOBLET_ROOT,
   GOBLET_PW_METADATA_DIR,
+  GOBLET_ROOT: GobletRoot,
   // IMPORTANT - GOBLET_REPO_ROOT can not be used as root folder for a clients repo
   // It should only be used when running from a local environment
   // if DOC_APP_PATH, we are a docker container, so look for tests at <goblet-root>/tests

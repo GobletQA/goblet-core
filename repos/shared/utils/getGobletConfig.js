@@ -96,7 +96,7 @@ const getConfigAtPath = pathToCheck => {
     `.gobletrc.yaml`,
     `.gobletrc.yml`,
     `.gobletrc.js`,
-    `.gobletrc.cjs`
+    `.gobletrc.cjs`,
     `.gobletrc.mjs`,
     // `.gobletrc.ts`,
     // `.gobletrc.cts`

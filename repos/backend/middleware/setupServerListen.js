@@ -6,10 +6,55 @@ const { Logger } = require('@keg-hub/cli-utils')
 
 
 /**
+ * Adds exit listeners to allow graceful shutdown of the servers
+ * @exits
+ * @param {Object} insecureServer - Express server object
+ * @param {Object} secureServer - Express server object
+ *
+ */
+const exitListener = (insecureServer, secureServer) => {
+  let exitCalled
+  ;([
+    `SIGINT`,
+    `SIGTERM`,
+    `SIGUSR1`,
+    `SIGUSR2`,
+    `uncaughtException`,
+  ]).map(type => {
+    
+    process.on(type, () => {
+      if(exitCalled) return
+
+      const exitCode = type === `uncaughtException` ? 1 : 0
+      let secureClosed
+      let insecureClosed
+
+      exitCalled = true
+      Logger.info(`[Goblet] Server cleaning up...`)
+      secureServer &&
+        secureServer.close(() => {
+          secureClosed = true
+          Logger.success(`[Goblet] Finished cleaning up secure server!`)
+          ;(!insecureServer || insecureClosed) && process.exit(exitCode)
+        })
+
+      insecureServer &&
+        insecureServer.close(() => {
+          insecureClosed = true
+          Logger.success(`[Goblet] Finished cleaning up insecure server!`)
+          ;(!secureServer || secureClosed) && process.exit(exitCode)
+        })
+      
+      !secureServer && !insecureServer && process.exit(exitCode)
+    })
+  })
+}
+
+/**
  * Sets up a secure server, typically used for local development
  * @param {Object} app - Express app object
  *
- * @retruns {Object} - Insecure / Secure server object and Express app object
+ * @returns {Object} - Insecure / Secure server object and Express app object
  */
 const serverListen = (app) => {
   const { securePort, port, host } = app.locals.config.server
@@ -32,16 +77,19 @@ const serverListen = (app) => {
 
   const insecureServer = httpServer.listen(port, () => {
     Logger.empty()
-    Logger.pair(`[Tap-Proxy] Insecure Server running on: `, `http://${host}:${port}`)
+    Logger.pair(`[Goblet] Insecure Server running on: `, `http://${host}:${port}`)
     Logger.empty()
   })
 
   const secureServer = httpsServer &&
     httpsServer.listen(securePort, () => {
       Logger.empty()
-      Logger.pair(`[Tap-Proxy] Secure Server running on: `, `https://${host}:443`)
+      Logger.pair(`[Goblet] Secure Server running on: `, `https://${host}:443`)
       Logger.empty()
     })
+
+
+  exitListener(insecureServer, secureServer)
 
   return { insecureServer, secureServer, app }
 }

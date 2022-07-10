@@ -1,6 +1,6 @@
 const path = require('path')
-const rootDir = path.join(__dirname, '../')
 const { toBool } = require('@keg-hub/jsutils')
+const { GobletRoot } = require('../gobletRoot')
 const { loadEnvs } = require('../repos/shared/utils/loadEnvs')
 const nodeEnv = process.env.NODE_ENV || `local`
 
@@ -86,9 +86,9 @@ const serverConfig = {
     port: GOBLET_SOCKET_PORT || API_PORT,
     host: GOBLET_SOCKET_HOST || GOBLET_SERVER_HOST,
     process: {
-      root: rootDir,
+      root: GobletRoot,
       debug: Boolean(GOBLET_LOG_LEVEL == 'debug'),
-      script: path.join(rootDir, 'scripts/sockr.cmd.sh'),
+      script: path.join(GobletRoot, 'scripts/sockr.cmd.sh'),
     },
   },
   jwt: {

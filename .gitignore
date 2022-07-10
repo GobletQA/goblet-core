@@ -12,6 +12,7 @@ jsconfig.json
 container/values-local.yml
 
 /bundle/*
+/compile/*
 .firebase
 
 # code coverage
