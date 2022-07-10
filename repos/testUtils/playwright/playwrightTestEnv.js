@@ -1,4 +1,5 @@
 const { noOpObj, get } = require('@keg-hub/jsutils')
+const { saveRecordingPath } = require('./videoRecording')
 const { getContext } = require('GobletPlaywright/browserContext')
 const { getMetadata } = require('GobletSCPlaywright/server/server')
 const { newBrowser } = require('GobletSCPlaywright/browser/newBrowser')
@@ -15,7 +16,8 @@ const { startTracing, stopTracingChunk, startTracingChunk } = require('./tracing
 const initialize = async () => {
   /** GOBLET_BROWSER is set by the task `keg goblet bdd run` */
   const { GOBLET_BROWSER='chromium' } = process.env
-  
+  let startError
+
   try {
     const { type, launchOptions } = await getMetadata(GOBLET_BROWSER)
 
@@ -25,7 +27,7 @@ const initialize = async () => {
     const { browser } = await newBrowser({
       ...launchOptions,
       type,
-      ...get(global, `__gobletbrowser.options`, noOpObj),
+      ...get(global, `__goblet.browser.options`, noOpObj),
     }, false)
 
     if (!browser)
@@ -36,12 +38,15 @@ const initialize = async () => {
     await startTracing(global.context)
   }
   catch (err) {
+    startError = true
     console.error(err.message)
     // exit 2 seconds later to ensure error
     // has time to be written to stdout
     setTimeout(() => process.exit(1), 2000)
   }
   finally {
+    if(startError) return
+
     await startTracingChunk(global.context)
     return global.context && global.browser
   }
@@ -56,10 +61,13 @@ const initialize = async () => {
  */
 const cleanup = async () => {
   if (!global.browser) return false
-  
-  // TODO: Update to use playwright video record end
+
   await stopTracingChunk(global.context)
-  // await global.context.close()
+
+  // Await the close of the context due to video recording
+  await global.context.close()
+  await saveRecordingPath()
+
   await global.browser.close()
 
   return new Promise((res) => {

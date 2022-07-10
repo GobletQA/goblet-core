@@ -22,7 +22,7 @@ const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts
  * 
  * @returns {Object} - Built browser options
  */
-const buildLaunchOpts = async (config, taskOpts) => {
+const buildLaunchOpts = async (config, taskOpts, optsKey) => {
   const { vncActive, socketActive } = checkVncEnv()
   const { endpoint, launchOptions } = await metadata.read(taskOpts.type)
 
@@ -36,19 +36,10 @@ const buildLaunchOpts = async (config, taskOpts) => {
       : endpoint
     : false
 
-  /**
-   * Get the property base on if VNC is active or not
-   * If not active we want to connect to the host machine browser via websocket
-   * See
-   *  - tasks/utils/envs/buildPWEnvs.js
-   *  - repos/shared/utils/taskEnvToBrowserOpts.js
-   */
-  const browserKey = vncActive ? 'launchOptions' : 'connectOptions'
-
-  const opts = {[browserKey]: getBrowserOpts(launchOptions, config)}
+  const opts = {[optsKey]: getBrowserOpts(launchOptions, config)}
 
   // If VNC is not active, then set the websocket endpoint
-  if(!vncActive) opts[browserKey].wsEndpoint = wsEndpoint
+  if(!vncActive) opts[optsKey].wsEndpoint = wsEndpoint
 
   /**
    * Extra options set for browser to run, and devices to run 
@@ -68,8 +59,20 @@ module.exports = async () => {
   const config = getGobletConfig()
   const baseDir = getRepoGobletDir(config)
   const taskOpts = taskEnvToBrowserOpts(config)
-  const launchOpts = await buildLaunchOpts(config, taskOpts)
-  
+
+  /**
+   * Get the property base on if VNC is active or not
+   * If not active we want to connect to the host machine browser via websocket
+   * See
+   *  - tasks/utils/envs/buildPWEnvs.js
+   *  - repos/shared/utils/taskEnvToBrowserOpts.js
+   */
+  const { vncActive } = checkVncEnv()
+  const optsKey = vncActive ? 'launchOptions' : 'connectOptions'
+  const launchOpts = await buildLaunchOpts(config, taskOpts, optsKey)
+  const browserOpts = launchOpts[optsKey]
+  const contextOpts = getContextOpts(noOpObj, config)
+
   const { testUtilsDir } = config.internalPaths
 
   return {
@@ -80,6 +83,15 @@ module.exports = async () => {
       type: 'waypoint',
       testDir: path.join(baseDir, config.paths.waypointDir),
     }),
+    /** Define the goblet global options durring test runs */
+    globals: {
+      __goblet: {
+        paths: config.paths,
+        browser: { options: browserOpts },
+        context: { options: contextOpts },
+        options: buildJestGobletOpts(config, browserOpts, contextOpts),
+      },
+    },
     /**
      * Set the test env for the jest-playwright plugin
      * See https://www.npmjs.com/package/jest-playwright-preset for all options

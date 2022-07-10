@@ -22,7 +22,7 @@ const runBdd = async args => {
   const jestConfig = await getJestConfig(params, testTypes.feature)
   const reportPath = buildReportPath(testTypes.feature, params, goblet)
 
-  await upsertTestMeta(`bdd.report`, {
+  await upsertTestMeta(`${testTypes.feature}.report`, {
     path: reportPath,
     name: reportPath.split(`/`).pop(),
   })
@@ -31,6 +31,7 @@ const runBdd = async args => {
   const exitCode = await runTestCmd({
     params,
     reportPath,
+    type: testTypes.feature,
     cmdArgs: buildJestArgs(params, jestConfig),
     envsHelper: browser => buildBddEnvs(browser, params, reportPath, testTypes.feature)
   })

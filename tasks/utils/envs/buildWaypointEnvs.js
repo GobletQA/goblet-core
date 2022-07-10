@@ -19,6 +19,7 @@ const buildWaypointEnvs = (browser, params, reportPath, type) => {
 
   // TODO: Update to use the GOBLET_APP_URL
   // Normalize between GOBLET_APP_URL
+  addEnv(env, 'GOBLET_TEST_TYPE', type)
   addEnv(env, 'GOBLET_APP_URL', params.appUrl)
   addEnv(env, 'GOBLET_CONFIG_BASE', params.base)
   addEnv(env, 'GOBLET_BROWSER_LAUNCH_TYPE', params.launchType)

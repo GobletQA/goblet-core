@@ -1,16 +1,24 @@
-
-const path = require('path')
 const { fileSys } = require('@keg-hub/cli-utils')
 const { getDefaultGobletConfig } = require('GobletSharedConfig')
 const { deepClone, set, isArr } = require('@keg-hub/jsutils')
-
 const { readFile, writeFile, pathExists, removeFile } = fileSys
-  
-const getTestMetaPath = () => {
+
+/**
+ * Gets the location to where the testMeta file exists
+ *
+ * @return {string} - Path to the testMeta file
+ */
+ const getTestMetaPath = () => {
   const config = getDefaultGobletConfig()
   return config.internalPaths.testMetaFile
 }
 
+/**
+ * Saves testMeta to file
+ * @param {Object} testMeta - TestMeta data object to be saved
+ *
+ * @return {Object} - Passed in testMeta data object
+ */
 const saveTestMeta = async (testMeta) => {
   const testMetaLoc = getTestMetaPath()
   const [err, _] = await writeFile(
@@ -21,20 +29,23 @@ const saveTestMeta = async (testMeta) => {
 
   return testMeta
 }
-  
+
+/**
+ * Reads testMeta from file
+ *
+ * @return {Object} - json of the testMeta data
+ */
 const readTestMeta = async () => {
   const testMetaLoc = getTestMetaPath()
-  const [exists] = await pathExists(testMetaLoc)
+  const [errExists, exists] = await pathExists(testMetaLoc)  
   if(!exists) return {}
   
   const [err, content] = await readFile(testMetaLoc, 'utf8')
   return err ? {} : JSON.parse(content)
 }
 
-const upsertTestMeta = async (loc, data, autoInit=true) => {
-  const testMeta = await readTestMeta()
-  !testMeta.latest && autoInit && await initTestMeta(testMeta)
-  
+const upsertTestMeta = async (loc, data) => {
+  const testMeta = await readTestMeta()  
   const nextMeta = deepClone(testMeta)
   
   const saveLoc = isArr(loc) ? loc.join(`.`) : loc
@@ -43,6 +54,11 @@ const upsertTestMeta = async (loc, data, autoInit=true) => {
   return await saveTestMeta(nextMeta)
 }
 
+/**
+ * Initializes the testMeta file
+ *
+ * @return {Void}
+ */
 const initTestMeta = async (testMeta) => {
   testMeta = testMeta || await readTestMeta()
   const latest = { id: new Date().getTime() }
@@ -57,7 +73,7 @@ const initTestMeta = async (testMeta) => {
 }
 
 /**
- * Removes the metadata to file
+ * Removes the testMeta to file
  *
  * @return {Void}
  */

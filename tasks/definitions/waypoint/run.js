@@ -18,7 +18,7 @@ const runWp = async args => {
   const jestConfig = await getJestConfig(params, testTypes.waypoint)
   const reportPath = buildReportPath(testTypes.waypoint, params, goblet)
 
-  await upsertTestMeta(`waypoint.report`, {
+  await upsertTestMeta(`${testTypes.waypoint}.report`, {
     path: reportPath,
     name: reportPath.split(`/`).pop(),
   })
@@ -27,6 +27,7 @@ const runWp = async args => {
   const exitCode = await runTestCmd({
     params,
     reportPath,
+    type: testTypes.waypoint,
     cmdArgs: buildJestArgs(params, jestConfig),
     envsHelper: browser => buildWaypointEnvs(browser, params, reportPath, testTypes.waypoint)
   })

@@ -92,7 +92,7 @@ module.exports = async () => {
         paths: config.paths,
         browser: { options: browserOpts },
         context: { options: contextOpts },
-        options: buildJestGobletOpts(config, browserOpts),
+        options: buildJestGobletOpts(config, browserOpts, contextOpts),
       },
     },
     /** Add all support and step files and ensure they are loaded before running the tests */

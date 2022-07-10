@@ -1,5 +1,11 @@
 const { getGobletConfig } = require('GobletSharedConfig')
 const { isObj, isFunc, mapObj } = require('@keg-hub/jsutils')
+const { initTestMeta } = require('GobletTest/testMeta/testMeta')
+
+/**
+ * Initialize the testMeta for CI runs
+ */
+initTestMeta()
 
 /**
  * Injects the goblet.config into a tasks arguments

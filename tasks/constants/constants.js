@@ -18,6 +18,7 @@ const constants = deepFreeze({
   },
   testTypes: {
     unit: `unit`,
+    bdd: `bdd`,
     feature: `feature`,
     waypoint: `waypoint`,
   },

@@ -1,5 +1,6 @@
 const path = require('path')
-const { noOpObj, get, set } = require('@keg-hub/jsutils')
+const { noOpObj, get } = require('@keg-hub/jsutils')
+const { upsertTestMeta } = require('GobletTest/testMeta/testMeta')
 
 /**
  * Helper to check is tracing is disabled
@@ -20,9 +21,15 @@ const tracingDisabled = () => {
 const startTracing = async (context) => {
   if(!context || tracingDisabled()) return
 
-  const tracing = get(global, `__goblet.options.tracing`)
-  await context.tracing.start(tracing)
+  const { tracing, testType } = get(global, `__goblet.options`, noOpObj)
 
+  testType &&
+    await upsertTestMeta(`${testType}.traces`, {
+      tests: {},
+      type: testType,
+    })
+
+  await context.tracing.start(tracing)
   return true
 }
 
@@ -36,8 +43,8 @@ const startTracingChunk = async (context) => {
   if(!context || context.__goblet.tracing || tracingDisabled()) return
 
   await context.tracing.startChunk()
-  context.__goblet.tracing = true
 
+  context.__goblet.tracing = true
   return true
 }
 
@@ -49,17 +56,34 @@ const startTracingChunk = async (context) => {
  */
 const stopTracingChunk = async (context) => {
   if(!context || !context.__goblet.tracing || tracingDisabled()) return
+
+  const { testType } = get(global, `__goblet.options`, noOpObj)
   const { tracesDir } = get(global, `__goblet.browser.options`, noOpObj)
+
+  console.log(`------- stopTracingChunk - global.jasmine -------`)
+  console.log(global.jasmine)
 
   const timestamp = new Date().getTime()
   // TODO: see if theres a better way to get the test name from the jasmine api
   // Get the name of the file being tested and set it here
-  const name = global.jasmine.testPath.split(`/`).pop()
+  const name = global.jasmine.testPath.split(`/`)
+    .pop()
+    .split('.')
+    .shift()
+    .trim()
+    .replace(/ /g, '-')
+
   const traceLoc = path.join(tracesDir, `${name}/${timestamp}/trace.zip`)
 
   await context.tracing.stopChunk({ path: traceLoc })
-  context.__goblet.tracing = false
+
+  testType &&
+    await upsertTestMeta(`${testType}.traces.tests.${name}`, {
+      name,
+      path: traceLoc,
+    })
   
+  context.__goblet.tracing = false
   return true
 }
 
