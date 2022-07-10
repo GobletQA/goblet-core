@@ -11,10 +11,7 @@ jsconfig.json
 
 container/values-local.yml
 
-/bundle/backend/*
-/bundle/screencast/*
-/bundle/frontend/*
-/bundle/tap/*
+/bundle/*
 .firebase
 
 # code coverage

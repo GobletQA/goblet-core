@@ -5,10 +5,31 @@
  */
 
 const path = require('path')
-const { getRepoPaths } = require('./repos')
-const { deepFreeze } = require('@keg-hub/jsutils')
+const { execSync } = require('child_process')
+const { deepFreeze, snakeCase } = require('@keg-hub/jsutils')
 
-const { GOBLET_ROOT, ...repoPaths } = getRepoPaths()
+const GOBLET_ROOT = path.join(__dirname, '../')
+const reposDir = path.join(GOBLET_ROOT, 'repos')
+
+/**
+ * Finds all sub-repo paths from the <goblet-root>/repos directory
+ *
+ * @type {Object} - Key/Value pair of Goblet sub-repos paths converted into snakeCase
+ */
+const repoPaths = execSync('ls', { cwd: reposDir })
+  .toString()
+  .split('\n')
+  .filter(Boolean)
+  .reduce(
+    (values, name) => {
+      const key = snakeCase(name + 'Path').toUpperCase()
+      values[key] = path.join(reposDir, name)
+      return values
+    },
+    { REPOS_PATH: reposDir }
+  )
+
+
 const {
   DOC_APP_PATH,
   GOBLET_REPO_ROOT,

@@ -18,7 +18,7 @@ const constants = {
   contentloaded: `contentloaded`,
 
   recordEnded: `RECORD-ENDED`,
-  recordGeneral: `RECORD-ERROR`,
+  recordError: `RECORD-ERROR`,
   recordAction: `RECORD-ACTION`,
   recordGeneral: `RECORD-GENERAL`,
   recordStarted: `RECORD-STARTED`,

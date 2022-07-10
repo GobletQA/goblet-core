@@ -23,7 +23,7 @@ const {
   GOBLET_WORK_DIR,
   GOBLET_PW_METADATA_DIR,
   TEST_UTILS_PATH,
-} = require('../constants/backend')
+} = require('./paths.config')
 
 module.exports = {
   firebase,

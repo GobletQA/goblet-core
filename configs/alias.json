@@ -23,7 +23,6 @@
   "GobletSharedAsyncWrap": "repos/shared/express/asyncWrap.js",
   "GobletShared": "repos/shared",
 
-  "GobletBackConstants": "constants/backend",
   "GobletBackLibs": "repos/backend/libs",
   "GobletBackUtils": "repos/backend/utils",
   "GobletBackSockr": "repos/backend/sockr",

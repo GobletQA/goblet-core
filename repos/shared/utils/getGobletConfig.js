@@ -96,10 +96,18 @@ const getConfigAtPath = pathToCheck => {
     `.gobletrc.yaml`,
     `.gobletrc.yml`,
     `.gobletrc.js`,
-    `.gobletrc.cjs`,
+    `.gobletrc.cjs`
+    `.gobletrc.mjs`,
+    // `.gobletrc.ts`,
+    // `.gobletrc.cts`
+    // `.gobletrc.mts`,
     `goblet.config.json`,
     `goblet.config.js`,
     `goblet.config.cjs`,
+    `goblet.config.mjs`,
+    // `goblet.config.ts`,
+    // `goblet.config.cts`,
+    // `goblet.config.mts`
   ]
 
   const paths = validNames.map(name => path.join(pathToCheck, name))
@@ -110,6 +118,7 @@ const getConfigAtPath = pathToCheck => {
     // Otherwise changed files would not get reloaded
     delete require.cache[loc]
     try {
+      // TODO: typescript - update this to allow loading .ts file extensions
       const config = fs.existsSync(loc) ? require(loc) : null
       if (config) return loadConfigByType(config)
     }

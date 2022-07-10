@@ -1,7 +1,7 @@
 
 const constants = {
   playEnded: `PLAY-ENDED`,
-  playGeneral: `PLAY-ERROR`,
+  playError: `PLAY-ERROR`,
   playAction: `PLAY-ACTION`,
   playGeneral: `PLAY-GENERAL`,
   playStarted: `PLAY-STARTED`,
