@@ -1,3 +1,4 @@
+const { Logger } = require('@keg-hub/cli-utils')
 const { noOpObj, get } = require('@keg-hub/jsutils')
 const { saveRecordingPath } = require('./videoRecording')
 const { getContext } = require('GobletPlaywright/browserContext')
@@ -42,8 +43,10 @@ const initialize = async () => {
   }
   catch (err) {
     // TODO: something is blocking jest from closing properly need to investigate
+    // UPDATE - This seems to be fixed, by wrapping cleanup in a try catch and exiting
+    // Need to validate
     startError = true
-    console.error(err.message)
+    Logger.stderr(err)
     await cleanup()
     process.exit(1)
   }
@@ -65,23 +68,32 @@ const initialize = async () => {
 const cleanup = async () => {
   if (!global.browser) return false
 
-  await stopTracingChunk(global.context)
+  // Wrap in try catch and properly exit if there's an error
+  // TODO: need to figure out the proper exit code for non-test errors
+  // This way we can know it not a test that failed
+  try {
+    await stopTracingChunk(global.context)
 
-  // Await the close of the context due to video recording
-  global.context && await global.context.close()
-  await saveRecordingPath(LAST_ACTIVE_PAGE)
+    // Await the close of the context due to video recording
+    await global.context.close()
+    await saveRecordingPath(LAST_ACTIVE_PAGE)
 
-  LAST_ACTIVE_PAGE = undefined
-  global.browser && await global.browser.close()
+    LAST_ACTIVE_PAGE = undefined
+    global.browser && await global.browser.close()
 
-  return new Promise((res) => {
-    setTimeout(() => {
-      delete global.browser
-      delete global.context
-      delete global.page
-      res(true)
-    }, 500)
-  })
+    return new Promise((res) => {
+      setTimeout(() => {
+        delete global.browser
+        delete global.context
+        delete global.page
+        res(true)
+      }, 100)
+    })
+  }
+  catch(err){
+    Logger.stderr(err)
+    process.exit(1)
+  }
 }
 
 /**
@@ -93,7 +105,7 @@ const cleanup = async () => {
 const getPage = async (num = 0) => {
   if (!global.context) throw new Error('No browser context initialized')
 
-  const pages = global.context.pages() || []  
+  const pages = global.context.pages() || []
   LAST_ACTIVE_PAGE = pages.length ? pages[num] : await global.context.newPage()
 
   return LAST_ACTIVE_PAGE

@@ -331,10 +331,11 @@ const taskOptions = {
       description: 'A list of permissions to grant to all browser pages, seperated by comma'
     },
     record: {
+      type: `bool`,
       default: false,
       example: '--record',
       env: `GOBLET_TEST_VIDEO_RECORD`,
-      description: 'Records a video of all browser page interactions, and saves to goblet.config#downloads directory'
+      description: 'Records a video of all browser page interactions, and saves to goblet.config#artifacts directory'
     },
     // TOODO: Need to investigate this further
     // storageState: {},

@@ -25,12 +25,13 @@ const getGeneratedName = (override) => {
   const cacheName = `${testType}-${name}`
   if(nameCache[cacheName]) return nameCache[cacheName]
 
-  const relative = `${name}/${name}-${timestamp}`
+  const nameTimestamp = `${name}-${timestamp}`
 
   nameCache[cacheName] = {
     name,
-    relative,
-    full: `${testType}/${relative}`
+    nameTimestamp,
+    dir: `${testType}/${name}`,
+    full: `${testType}/${name}/${nameTimestamp}`,
   }
 
   return nameCache[cacheName]

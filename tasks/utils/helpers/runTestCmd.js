@@ -1,8 +1,47 @@
+const { noOpObj } = require('@keg-hub/jsutils')
 const { dockerCmd } = require('@keg-hub/cli-utils')
 const { upsertTestMeta } = require('GobletTest/testMeta/testMeta')
 const { runCommands } = require('GobletTasks/utils/helpers/runCommands')
 const { getBrowsers } = require('GobletSCPlaywright/helpers/getBrowsers')
 const { handleTestExit } = require('GobletTasks/utils/helpers/handleTestExit')
+
+const filterLogs = (data, { silent }) => {
+  if(silent) return
+
+  return data
+}
+
+const cmdCallbacks = (res, opts=noOpObj) => {
+  const output = { data: [], error: [] }
+
+  return {
+    onStdOut: data => {
+      console.log(`------- on stdout -------`)
+      const filtered = filterLogs(data, opts)
+      filtered && Logger.stdout(filtered)
+      output.data.push(data)
+    },
+    onStdErr: data => {
+      console.log(`------- on stderr -------`)
+      const filtered = filterLogs(data, opts)
+      filtered && Logger.stderr(filtered)
+      output.error.push(data)
+    },
+    onError: data => {
+      const filtered = filterLogs(data, opts)
+      filtered && Logger.stderr(filtered)
+      output.error.push(data)
+    },
+    onExit: (exitCode) => (
+      res({
+        exitCode,
+        data: output.data.join(''),
+        error: output.error.join(''),
+      })
+    )
+  }
+}
+
 
 /**
  * Helper to run the command to execute tests
@@ -26,15 +65,27 @@ const runTestCmd = async (args) => {
     browser => {
       const cmdOpts = envsHelper(browser)
       const browserCmd = async () => {
-        // TODO: add callbacks to get access to the dockerCmd output
-        // This way we can extract out logged day same as the frontend
-        const exitCode = await dockerCmd(params.container, [...cmdArgs], cmdOpts)
-        await upsertTestMeta(`${type}.browsers.${browser}`, {
-          name: browser,
-          status: exitCode ? `failed` : `passed`,
+        // TODO: get the event callbacks working properly
+        // They don't seem to be doing anything
+        const resp = await new Promise(async (res, rej) => {
+
+          await dockerCmd(params.container, [...cmdArgs], {
+            ...cmdOpts,
+            ...cmdCallbacks(res, { ...params, silent: true }),
+          })
+
+          await upsertTestMeta(`${type}.browsers.${browser}`, {
+            name: browser,
+            status: exitCode ? `failed` : `passed`,
+          })
+
+          return res(exitCode)
         })
 
-        return exitCode
+        resp.data && console.log(resp.data)
+        resp.error && console.log(resp.error)
+
+        return resp.exitCode
       }
 
       browserCmd.browser = browser

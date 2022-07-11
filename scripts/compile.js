@@ -9,7 +9,7 @@ const { default:caxa } = require('caxa')
 const { limbo } = require('@keg-hub/jsutils')
 const { Logger, fileSys } = require('@keg-hub/cli-utils')
 const { registerAliases } = require('../configs/aliases.config')
-const { copyFile, mkDir, copySync, emptyDirSync, removeFile } = fileSys
+const { copyFile, mkDir, copySync, emptyDirSync } = fileSys
 
 registerAliases()
 Logger.setTag(`[Goblet]`, `gray`)
