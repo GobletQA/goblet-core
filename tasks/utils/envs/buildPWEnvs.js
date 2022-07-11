@@ -13,14 +13,14 @@ const { noOpObj } = require('@keg-hub/jsutils')
  * @returns {Object} - env object with the ENVs added
  */
 const buildPWEnvs = (env={}, browser, params=noOpObj) => {
-  const { GOBLET_RUN_FROM_UI, GOBLET_RUN_FROM_CI } = process.env
+  const { GOBLET_RUN_FROM_UI, GOBLET_RUN_FROM_CI, PARKIN_LOG_JEST_SPEC } = process.env
 
   // Check if running form the UI and set the display as well as spec result logging
   if(GOBLET_RUN_FROM_UI){
     addEnv(env, 'DISPLAY', ':0.0')
     addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
   }
-  else if(GOBLET_RUN_FROM_CI) addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
+  else if(GOBLET_RUN_FROM_CI) addEnv(env, 'PARKIN_LOG_JEST_SPEC', PARKIN_LOG_JEST_SPEC)
 
   // Playwright browser ENVs
   addEnv(env, 'GOBLET_BROWSER', browser)
@@ -43,11 +43,9 @@ const buildPWEnvs = (env={}, browser, params=noOpObj) => {
   addEnv(env, 'GOBLET_TEST_VIDEO_RECORD', params.record)
   addEnv(env, 'GOBLET_TEST_SCREENSHOT', params.screenshot)
 
-  params.debug && addEnv(env, 'DEBUG', 'pw:api')
-  params.debug &&
-  params.devtools &&
-  addEnv(env, 'GOBLET_DEV_TOOLS', params.devtools)
-  
+  params.debug && (env.DEBUG = 'pw:api*')
+  params.debug && params.devtools && (env.GOBLET_DEV_TOOLS = true)
+
   env.NODE_ENV = `test`
 
   return env

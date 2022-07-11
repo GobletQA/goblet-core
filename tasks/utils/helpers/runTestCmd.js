@@ -1,11 +1,11 @@
 const { noOpObj } = require('@keg-hub/jsutils')
 const { dockerCmd, Logger } = require('@keg-hub/cli-utils')
-const { appendToLatest } = require('GobletTest/testMeta/testMeta')
 const { parseParkinLogs } = require('GobletTest/parkin/parseParkinLogs')
 const { runCommands } = require('GobletTasks/utils/helpers/runCommands')
 const { getBrowsers } = require('GobletSCPlaywright/helpers/getBrowsers')
 const { PARKIN_SPEC_RESULT_LOG } = require('GobletTest/constants/constants')
 const { handleTestExit } = require('GobletTasks/utils/helpers/handleTestExit')
+const { appendToLatest, commitTestMeta } = require('GobletTest/testMeta/testMeta')
 
 const filterLogs = (data, params, parkinLogs) => {
   let filtered = data
@@ -70,12 +70,16 @@ const cmdCallbacks = (res, opts=noOpObj) => {
 const buildBrowserCmd = (cmdArgs, cmdOpts, params, type, browser) => {
   return async () => {
     const resp = await new Promise(async (res, rej) => {
-      await dockerCmd(params.container, [...cmdArgs], {
-        ...cmdOpts,
-        // TODO: Disabled until parkin log parsing is properly configured
-        // stdio: 'pipe',
-        // ...cmdCallbacks(res, params),
-      })
+      // TODO: Disabled until parkin log parsing is properly configured
+      // await dockerCmd(params.container, [...cmdArgs], {
+      //   ...cmdOpts,
+      //   stdio: 'pipe',
+      //   ...cmdCallbacks(res, params),
+      // })
+
+      // TODO: remove this once parkin log parsing is setup
+      const exitCode = await dockerCmd(params.container, [...cmdArgs], cmdOpts)
+      res({ exitCode })
     })
 
     await appendToLatest(`${type}.browsers.${browser}`, {
@@ -118,6 +122,13 @@ const runTestCmd = async (args) => {
 
   // Run each of the test command and capture the exit-codes
   const codes = await runCommands(commands, params)
+
+  // Update the testMeta with the path to the report file
+  await appendToLatest(`${type}.report`, {
+    path: reportPath,
+    name: reportPath.split(`/`).pop(),
+  })
+  await commitTestMeta()
 
   // Calculate the exit codes so we know if all runs were successful
   return handleTestExit(codes, reportPath)

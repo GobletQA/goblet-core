@@ -6,7 +6,6 @@ const { buildReportPath } = require('GobletTest/reports/buildReportPath')
 const { buildJestArgs } = require('GobletTasks/utils/jest/buildJestArgs')
 const { getJestConfig } = require('GobletTasks/utils/jest/getJestConfig')
 const { filterTaskEnvs } = require('GobletTasks/utils/envs/filterTaskEnvs')
-const { appendToLatest, commitTestMeta } = require('GobletTest/testMeta/testMeta')
 
 /**
  * Run parkin tests in container
@@ -31,12 +30,6 @@ const runBdd = async args => {
     cmdArgs: buildJestArgs(params, jestConfig),
     envsHelper: browser => buildBddEnvs(browser, params, reportPath, testTypes.feature)
   })
-
-  await appendToLatest(`${testTypes.bdd}.report`, {
-    path: reportPath,
-    name: reportPath.split(`/`).pop(),
-  })
-  await commitTestMeta()
 
   process.exit(exitCode)
 }

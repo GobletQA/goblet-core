@@ -20,9 +20,12 @@ const { buildTestMatchFiles } = require('GobletSharedUtils/buildTestMatchFiles')
  *
  * @returns {Array} - Built reporters array
  */
-const buildReporters = (opts=noOpObj, gobletRoot) => {
+const buildReporters = (opts=noOpObj, gobletRoot, config) => {
   const { JEST_HTML_REPORTER_OUTPUT_PATH } = process.env
   const title = opts.title || opts.type
+
+  // TODO: check the goblet config for a custom jest reporter
+  // Then add it to the reporters array
 
   const reporters = ['default']
   JEST_HTML_REPORTER_OUTPUT_PATH &&
@@ -30,11 +33,12 @@ const buildReporters = (opts=noOpObj, gobletRoot) => {
       // Since the root is not keg-config, we have to define the full path to the reporter
       `${gobletRoot}/node_modules/jest-html-reporter`,
       {
-        pageTitle: `${title ? capitalize(title) : ``} Test Results`.trim(),
+        includeFailureMsg: true,
         outputPath: JEST_HTML_REPORTER_OUTPUT_PATH,
+        pageTitle: `${title ? capitalize(title) : ``} Test Results`.trim(),
       },
     ])
-  
+
   return reporters
 }
 
@@ -63,7 +67,7 @@ const jestConfig = (config, opts=noOpObj) => {
 
   return {
     testMatch,
-    reporters: buildReporters(opts, gobletRoot),
+    reporters: buildReporters(opts, gobletRoot, config),
     // This seems to be needed based on how the github action is setup
     // But it may be a better option then sym-linking the keg-config node_modules to ~/.node_modules
     // Need to investigate it

@@ -264,8 +264,9 @@ const taskOptions = {
       description: `Sets the playwright browser launch type method used to launch the browser`,
     },
     debug: {
-      env: 'DEBUG',
       default: false,
+      type: `boolean`,
+      env: 'GOBLET_BROWSER_DEBUG',
       description: 'Runs with playwright debug mode activated',
       example: 'keg goblet bdd test --debug',
     },
