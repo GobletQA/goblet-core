@@ -1,47 +1,92 @@
 const { noOpObj } = require('@keg-hub/jsutils')
-const { dockerCmd } = require('@keg-hub/cli-utils')
-const { upsertTestMeta } = require('GobletTest/testMeta/testMeta')
+const { dockerCmd, Logger } = require('@keg-hub/cli-utils')
+const { appendToLatest } = require('GobletTest/testMeta/testMeta')
+const { parseParkinLogs } = require('GobletTest/parkin/parseParkinLogs')
 const { runCommands } = require('GobletTasks/utils/helpers/runCommands')
 const { getBrowsers } = require('GobletSCPlaywright/helpers/getBrowsers')
+const { PARKIN_SPEC_RESULT_LOG } = require('GobletTest/constants/constants')
 const { handleTestExit } = require('GobletTasks/utils/helpers/handleTestExit')
 
-const filterLogs = (data, { silent }) => {
-  if(silent) return
+const filterLogs = (data, params, parkinLogs) => {
+  let filtered = data
 
-  return data
+  if(data.includes(PARKIN_SPEC_RESULT_LOG)){
+    const { other, parkin } = parseParkinLogs(data, params)
+    filtered = other
+    parkinLogs.push(...parkin)
+  }
+
+  return filtered
 }
 
 const cmdCallbacks = (res, opts=noOpObj) => {
+  const parkin = []
   const output = { data: [], error: [] }
 
   return {
     onStdOut: data => {
-      console.log(`------- on stdout -------`)
-      const filtered = filterLogs(data, opts)
-      filtered && Logger.stdout(filtered)
-      output.data.push(data)
+      const filtered = filterLogs(data, opts, parkin)
+      if(!filtered) return
+
+      Logger.stdout(filtered)
+      output.data.push(filtered)
     },
     onStdErr: data => {
-      console.log(`------- on stderr -------`)
-      const filtered = filterLogs(data, opts)
-      filtered && Logger.stderr(filtered)
-      output.error.push(data)
+      const filtered = filterLogs(data, opts, parkin)
+      if(!filtered) return
+
+      Logger.stderr(filtered)
+      output.error.push(filtered)
     },
     onError: data => {
-      const filtered = filterLogs(data, opts)
-      filtered && Logger.stderr(filtered)
-      output.error.push(data)
+      const filtered = filterLogs(data, opts, parkin)
+      if(!filtered) return
+
+      Logger.stderr(filtered)
+      output.error.push(filtered)
     },
-    onExit: (exitCode) => (
-      res({
+    onExit: (exitCode) => {
+      return res({
         exitCode,
         data: output.data.join(''),
         error: output.error.join(''),
       })
-    )
+    }
   }
 }
 
+/**
+ * Builds a browser exec method inside docker via Jest
+ * Runs in a child process and adds listeners for it's output
+ * Allows capturing the output and formatting it as needed
+ * @param {Array|string} cmdArgs - Arguments to pass to the test runner
+ * @param {Object} cmdOpts - Extra Options for the child_process
+ * @param {Object} params - Options arguments parsed into an object
+ * @param {string} type - Type of tests being run
+ * @param {string} browser - Name of the browser to run the tests for
+ *
+ * @returns {Number} - Sum of all exit codes from the executed test commands
+ */
+const buildBrowserCmd = (cmdArgs, cmdOpts, params, type, browser) => {
+  return async () => {
+    const resp = await new Promise(async (res, rej) => {
+      await dockerCmd(params.container, [...cmdArgs], {
+        ...cmdOpts,
+        // TODO: Disabled until parkin log parsing is properly configured
+        // stdio: 'pipe',
+        // ...cmdCallbacks(res, params),
+      })
+    })
+
+    await appendToLatest(`${type}.browsers.${browser}`, {
+      name: browser,
+      exitCode: resp.exitCode,
+      status: resp.exitCode ? `failed` : `passed`,
+    })
+
+    return resp.exitCode
+  }
+}
 
 /**
  * Helper to run the command to execute tests
@@ -62,41 +107,16 @@ const runTestCmd = async (args) => {
   } = args
 
   const commands = getBrowsers(params).map(
-    browser => {
-      const cmdOpts = envsHelper(browser)
-      const browserCmd = async () => {
-        // TODO: get the event callbacks working properly
-        // They don't seem to be doing anything
-        const resp = await new Promise(async (res, rej) => {
-
-          await dockerCmd(params.container, [...cmdArgs], {
-            ...cmdOpts,
-            ...cmdCallbacks(res, { ...params, silent: true }),
-          })
-
-          await upsertTestMeta(`${type}.browsers.${browser}`, {
-            name: browser,
-            status: exitCode ? `failed` : `passed`,
-          })
-
-          return res(exitCode)
-        })
-
-        resp.data && console.log(resp.data)
-        resp.error && console.log(resp.error)
-
-        return resp.exitCode
-      }
-
-      browserCmd.browser = browser
-      browserCmd.cmdArgs = cmdArgs
-      browserCmd.cmdOpts = cmdOpts
-
-      return browserCmd
-    }
+    browser => buildBrowserCmd(
+      cmdArgs,
+      envsHelper(browser),
+      params,
+      type,
+      browser
+    )
   )
 
-  // Run each of the test command in sequence
+  // Run each of the test command and capture the exit-codes
   const codes = await runCommands(commands, params)
 
   // Calculate the exit codes so we know if all runs were successful

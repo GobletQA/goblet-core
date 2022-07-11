@@ -2,6 +2,8 @@ const { Logger } = require('@keg-hub/cli-utils')
 const { noOpObj, get } = require('@keg-hub/jsutils')
 const { saveRecordingPath } = require('./videoRecording')
 const { getContext } = require('GobletPlaywright/browserContext')
+const { commitTestMeta } = require('GobletTest/testMeta/testMeta')
+const { initTestMeta } = require('GobletTest/testMeta/testMeta')
 const { getMetadata } = require('GobletSCPlaywright/server/server')
 const { newBrowser } = require('GobletSCPlaywright/browser/newBrowser')
 const { startTracing, stopTracingChunk, startTracingChunk } = require('./tracing')
@@ -22,6 +24,8 @@ const initialize = async () => {
   let startError
 
   try {
+
+    await initTestMeta()
     const { type, launchOptions } = await getMetadata(GOBLET_BROWSER)
 
     // TODO: Should update to check if in docker container
@@ -42,11 +46,8 @@ const initialize = async () => {
 
   }
   catch (err) {
-    // TODO: something is blocking jest from closing properly need to investigate
-    // UPDATE - This seems to be fixed, by wrapping cleanup in a try catch and exiting
-    // Need to validate
     startError = true
-    Logger.stderr(err)
+    Logger.stderr(err.stack)
     await cleanup()
     process.exit(1)
   }
@@ -66,7 +67,10 @@ const initialize = async () => {
  * @return {boolean} - true if cleanup was successful
  */
 const cleanup = async () => {
-  if (!global.browser) return false
+  if (!global.browser){
+    await commitTestMeta()
+    return false
+  }
 
   // Wrap in try catch and properly exit if there's an error
   // TODO: need to figure out the proper exit code for non-test errors
@@ -81,18 +85,17 @@ const cleanup = async () => {
     LAST_ACTIVE_PAGE = undefined
     global.browser && await global.browser.close()
 
-    return new Promise((res) => {
-      setTimeout(() => {
-        delete global.browser
-        delete global.context
-        delete global.page
-        res(true)
-      }, 100)
-    })
+    await commitTestMeta()
+
+    delete global.browser
+    delete global.context
+    delete global.page
+
+    return true
   }
   catch(err){
-    Logger.stderr(err)
-    process.exit(1)
+    Logger.stderr(err.stack)
+    setTimeout(() => process.exit(1), 500)
   }
 }
 

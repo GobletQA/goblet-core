@@ -20,10 +20,7 @@ const buildPWEnvs = (env={}, browser, params=noOpObj) => {
     addEnv(env, 'DISPLAY', ':0.0')
     addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
   }
-  else if(GOBLET_RUN_FROM_CI){
-    // TODO: Update the runTestCmd method to capture the parkin output
-    // addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
-  }
+  else if(GOBLET_RUN_FROM_CI) addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
 
   // Playwright browser ENVs
   addEnv(env, 'GOBLET_BROWSER', browser)

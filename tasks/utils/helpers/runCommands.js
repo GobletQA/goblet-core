@@ -1,5 +1,4 @@
-const { Logger } = require('@keg-hub/cli-utils')
-const { runSeq, capitalize } = require('@keg-hub/jsutils')
+const { runSeq } = require('@keg-hub/jsutils')
 
 /**
  * Run each command in sequence or all at the same time
@@ -8,18 +7,10 @@ const { runSeq, capitalize } = require('@keg-hub/jsutils')
  * @returns {Array<number>} - Exit code of each command run
  */
 const runCommands = async (commands, params) => {
-  const { concurrent, log } = params
+  const { concurrent } = params
   return concurrent
     ? await runSeq(commands)
-    : await Promise.all(commands.map(async cmd => {
-        const exitCode = await cmd()
-        if(!exitCode) return exitCode
-
-        Logger.error(`[Goblet] Browser ${capitalize(cmd.browser)} Error`)
-        // log && Logger.pair(`CMD Args: `, cmd.cmdArgs.join(' '))
-        // log && Logger.log(`CMD Opts: `, cmd.cmdOpts)
-        return exitCode
-      })) 
+    : await Promise.all(commands.map(async cmd => cmd())) 
 }
 
 module.exports = {
