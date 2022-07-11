@@ -21,7 +21,7 @@ const buildPWEnvs = (env={}, browser, params=noOpObj) => {
     addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
   }
   else if(GOBLET_RUN_FROM_CI){
-    // TODO: add this back at another time
+    // TODO: Update the runTestCmd method to capture the parkin output
     // addEnv(env, 'PARKIN_LOG_JEST_SPEC', 1)
   }
 

@@ -1,4 +1,4 @@
-const { fileSys } = require('@keg-hub/cli-utils')
+const { fileSys, Logger } = require('@keg-hub/cli-utils')
 const { getDefaultGobletConfig } = require('GobletSharedConfig')
 const { deepClone, set, isArr } = require('@keg-hub/jsutils')
 const { readFile, writeFile, pathExists, removeFile } = fileSys
@@ -38,10 +38,23 @@ const saveTestMeta = async (testMeta) => {
 const readTestMeta = async () => {
   const testMetaLoc = getTestMetaPath()
   const [errExists, exists] = await pathExists(testMetaLoc)  
-  if(!exists) return {}
+
+  if((errExists && errExists.code === 'ENOENT') || !exists) return {}
   
   const [err, content] = await readFile(testMetaLoc, 'utf8')
-  return err ? {} : JSON.parse(content)
+  try {
+    if(err) throw err
+    return JSON.parse(content)
+  }
+  catch(readErr){
+    if(readErr.code === 'ENOENT') return {}
+
+    Logger.error(`Error reading Test Meta data. Reverting to empty object`)
+    console.error(readErr)
+    console.log(`Test Meta Content`, content)
+
+    return {}
+  }
 }
 
 const upsertTestMeta = async (loc, data) => {

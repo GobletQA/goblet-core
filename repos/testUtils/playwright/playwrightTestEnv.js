@@ -5,6 +5,8 @@ const { getMetadata } = require('GobletSCPlaywright/server/server')
 const { newBrowser } = require('GobletSCPlaywright/browser/newBrowser')
 const { startTracing, stopTracingChunk, startTracingChunk } = require('./tracing')
 
+let LAST_ACTIVE_PAGE
+
 /**
  * Initializes tests by connecting to the browser loaded at the websocket
  * Then creates a new context from the connected browser
@@ -36,13 +38,14 @@ const initialize = async () => {
     global.browser = browser
     global.context = await getContext(get(global, `__goblet.context.options`))
     await startTracing(global.context)
+
   }
   catch (err) {
+    // TODO: something is blocking jest from closing properly need to investigate
     startError = true
     console.error(err.message)
-    // exit 2 seconds later to ensure error
-    // has time to be written to stdout
-    setTimeout(() => process.exit(1), 2000)
+    await cleanup()
+    process.exit(1)
   }
   finally {
     if(startError) return
@@ -65,10 +68,11 @@ const cleanup = async () => {
   await stopTracingChunk(global.context)
 
   // Await the close of the context due to video recording
-  await global.context.close()
-  await saveRecordingPath()
+  global.context && await global.context.close()
+  await saveRecordingPath(LAST_ACTIVE_PAGE)
 
-  await global.browser.close()
+  LAST_ACTIVE_PAGE = undefined
+  global.browser && await global.browser.close()
 
   return new Promise((res) => {
     setTimeout(() => {
@@ -90,7 +94,9 @@ const getPage = async (num = 0) => {
   if (!global.context) throw new Error('No browser context initialized')
 
   const pages = global.context.pages() || []  
-   return pages.length ? pages[num] : await global.context.newPage()
+  LAST_ACTIVE_PAGE = pages.length ? pages[num] : await global.context.newPage()
+
+  return LAST_ACTIVE_PAGE
 }
 
 /**

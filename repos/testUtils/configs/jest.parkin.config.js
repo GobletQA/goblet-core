@@ -40,7 +40,7 @@ const getParkinSupport = config => {
   const { testUtilsDir } = config.internalPaths
   const { repoRoot, workDir, supportDir } = config.paths
 
-  const parkinEnvironment = `${testUtilsDir}/parkin/parkinTestEnv.js`
+  const parkinEnvironment = `${testUtilsDir}/parkin/parkinTestInit.js`
 
   // **IMPORTANT** - Must be loaded after the parkinEnvironment 
   const configHooks = `${testUtilsDir}/support/hooks`

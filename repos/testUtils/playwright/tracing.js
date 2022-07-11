@@ -1,5 +1,6 @@
 const path = require('path')
 const { noOpObj, get } = require('@keg-hub/jsutils')
+const { getGeneratedName } = require('./getGeneratedName')
 const { upsertTestMeta } = require('GobletTest/testMeta/testMeta')
 
 /**
@@ -56,25 +57,13 @@ const startTracingChunk = async (context) => {
  */
 const stopTracingChunk = async (context) => {
   if(!context || !context.__goblet.tracing || tracingDisabled()) return
-
+  // TODO: use global.jasmine to check if the test passed of failed
+  // Then passed, just delete the trace so we only keep failed traces
   const { testType } = get(global, `__goblet.options`, noOpObj)
   const { tracesDir } = get(global, `__goblet.browser.options`, noOpObj)
-
-  console.log(`------- stopTracingChunk - global.jasmine -------`)
-  console.log(global.jasmine)
-
-  const timestamp = new Date().getTime()
-  // TODO: see if theres a better way to get the test name from the jasmine api
-  // Get the name of the file being tested and set it here
-  const name = global.jasmine.testPath.split(`/`)
-    .pop()
-    .split('.')
-    .shift()
-    .trim()
-    .replace(/ /g, '-')
-
-  const traceLoc = path.join(tracesDir, `${name}/${timestamp}/trace.zip`)
-
+  const { name, full } = getGeneratedName()
+  
+  const traceLoc = path.join(tracesDir, `${full}.zip`)
   await context.tracing.stopChunk({ path: traceLoc })
 
   testType &&
