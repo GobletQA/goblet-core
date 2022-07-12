@@ -74,6 +74,7 @@ const getRecordingPath = async (page, recordDir) => {
  */
 const saveRecordingPath = async (page) => {  
   const { testType } = get(global, `__goblet.options`, noOpObj)
+  const { type:browser=`browser` } = get(global, `__goblet.browser.options`, noOpObj)
   const recordVideo = get(global, `__goblet.context.options.recordVideo`, noOpObj)
 
   if(!recordVideo.dir) return
@@ -96,7 +97,7 @@ const saveRecordingPath = async (page) => {
   if(mvErr) throw mvErr
 
   testType &&
-    await upsertTestMeta(`${testType}.recording.tests.${name}`, {
+    await upsertTestMeta(`${testType}.recording.${browser}.${name}`, {
       ...recordVideo,
       path: savePath,
     })

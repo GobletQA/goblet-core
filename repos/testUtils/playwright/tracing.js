@@ -60,14 +60,14 @@ const stopTracingChunk = async (context) => {
   // TODO: use global.jasmine to check if the test passed of failed
   // Then passed, just delete the trace so we only keep failed traces
   const { testType } = get(global, `__goblet.options`, noOpObj)
-  const { tracesDir } = get(global, `__goblet.browser.options`, noOpObj)
+  const { tracesDir, type:browser=`browser` } = get(global, `__goblet.browser.options`, noOpObj)
   const { name, full } = getGeneratedName()
   
   const traceLoc = path.join(tracesDir, `${full}.zip`)
   await context.tracing.stopChunk({ path: traceLoc })
 
   testType &&
-    await upsertTestMeta(`${testType}.traces.tests.${name}`, {
+    await upsertTestMeta(`${testType}.traces.${browser}.${name}`, {
       name,
       path: traceLoc,
     })

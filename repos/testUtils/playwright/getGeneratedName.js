@@ -10,6 +10,8 @@ const nameCache = {}
  */
 const getGeneratedName = (override) => {
   const { testType } = get(global, `__goblet.options`, noOpObj)
+  const { type:browser='browser' } = get(global, `__goblet.browser.options`, noOpObj)
+
   const timestamp = new Date().getTime()
 
   // TODO: see if theres a better way to get the test name from the jasmine api
@@ -22,10 +24,10 @@ const getGeneratedName = (override) => {
     .replace(/ /g, '-')
 
   // Use a cache name to ensure all generated artifacts use the same timestamp
-  const cacheName = `${testType}-${name}`
+  const cacheName = browser ? `${testType}-${browser}-${name}` : `${testType}-${name}`
   if(nameCache[cacheName]) return nameCache[cacheName]
 
-  const nameTimestamp = `${name}-${timestamp}`
+  const nameTimestamp = browser ? `${name}-${browser}-${timestamp}` : `${name}-${timestamp}`
 
   nameCache[cacheName] = {
     name,

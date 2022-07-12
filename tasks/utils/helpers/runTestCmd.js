@@ -68,7 +68,7 @@ const cmdCallbacks = (res, opts=noOpObj) => {
  *
  * @returns {Number} - Sum of all exit codes from the executed test commands
  */
-const buildBrowserCmd = (cmdArgs, cmdOpts, params, type, browser) => {
+const buildBrowserCmd = (cmdArgs, cmdOpts, params, type, browser, reportPath) => {
   return async () => {
     const resp = await new Promise(async (res, rej) => {
       // TODO: Disabled until parkin log parsing is properly configured
@@ -129,7 +129,8 @@ const runTestCmd = async (args) => {
         envsHelper(browser, reportPath),
         params,
         type,
-        browser
+        browser,
+        reportPath
       )
     }
   )
