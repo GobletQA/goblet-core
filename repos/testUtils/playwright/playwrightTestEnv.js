@@ -49,7 +49,7 @@ const initialize = async () => {
     startError = true
     Logger.stderr(err.stack)
     await cleanup()
-    process.exit(1)
+    setTimeout(() => process.exit(1), 500)
   }
   finally {
     if(startError) return

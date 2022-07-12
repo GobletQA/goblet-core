@@ -3,7 +3,7 @@ const path = require('path')
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
 const { getGeneratedName } = require('./getGeneratedName')
 const { noOpObj, get, wait } = require('@keg-hub/jsutils')
-const { upsertTestMeta } = require('GobletTest/testMeta/testMeta')
+const { appendToLatest } = require('GobletTest/testMeta/testMeta')
 const { mkDir, movePath, getFolderContent, pathExists } = fileSys
 
 /**
@@ -97,10 +97,10 @@ const saveRecordingPath = async (page) => {
   if(mvErr) throw mvErr
 
   testType &&
-    await upsertTestMeta(`${testType}.recording.${browser}.${name}`, {
+    await appendToLatest(`${testType}.recordings.${browser}.${name}`, {
       ...recordVideo,
       path: savePath,
-    })
+    }, true)
 }
 
 module.exports = {

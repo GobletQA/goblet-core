@@ -1,7 +1,7 @@
 const path = require('path')
 const { noOpObj, get } = require('@keg-hub/jsutils')
 const { getGeneratedName } = require('./getGeneratedName')
-const { upsertTestMeta } = require('GobletTest/testMeta/testMeta')
+const { appendToLatest } = require('GobletTest/testMeta/testMeta')
 
 /**
  * Helper to check is tracing is disabled
@@ -22,15 +22,9 @@ const tracingDisabled = () => {
 const startTracing = async (context) => {
   if(!context || tracingDisabled()) return
 
-  const { tracing, testType } = get(global, `__goblet.options`, noOpObj)
-
-  testType &&
-    await upsertTestMeta(`${testType}.traces`, {
-      tests: {},
-      type: testType,
-    })
-
+  const { tracing } = get(global, `__goblet.options`, noOpObj)
   await context.tracing.start(tracing)
+
   return true
 }
 
@@ -67,10 +61,7 @@ const stopTracingChunk = async (context) => {
   await context.tracing.stopChunk({ path: traceLoc })
 
   testType &&
-    await upsertTestMeta(`${testType}.traces.${browser}.${name}`, {
-      name,
-      path: traceLoc,
-    })
+    await appendToLatest(`${testType}.traces.${browser}.${name}`, {path: traceLoc}, true)
   
   context.__goblet.tracing = false
   return true

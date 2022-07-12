@@ -1,6 +1,6 @@
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
 const { getDefaultGobletConfig } = require('GobletSharedConfig')
-const { deepClone, set, isArr } = require('@keg-hub/jsutils')
+const { deepMerge, deepClone, set, isArr } = require('@keg-hub/jsutils')
 const { readFile, writeFile, pathExists, removeFile } = fileSys
 
 let __TEST_META
@@ -23,13 +23,16 @@ let __TEST_META
  */
 const saveTestMeta = async (testMeta) => {
   const testMetaLoc = getTestMetaPath()
+  const savedMeta = await readTestMeta()
+  __TEST_META = deepMerge(savedMeta, testMeta)
+
   const [err, _] = await writeFile(
     testMetaLoc,
-    JSON.stringify(testMeta, null, 2)
+    JSON.stringify(__TEST_META, null, 2)
   )
   if(err) throw err
 
-  return testMeta
+  return __TEST_META
 }
 
 /**
@@ -67,7 +70,7 @@ const readTestMeta = async () => {
  *
  * @return {Object} - json of the testMeta data
  */
-const appendToLatest = async (loc, data) => {
+const appendToLatest = async (loc, data, commit) => {
   if(!__TEST_META){
     const testMeta = await readTestMeta()
     __TEST_META = !testMeta.latest
@@ -76,6 +79,7 @@ const appendToLatest = async (loc, data) => {
   }
 
   await upsertTestMeta(loc, data)
+  return commit && await commitTestMeta()
 }
 
 /**

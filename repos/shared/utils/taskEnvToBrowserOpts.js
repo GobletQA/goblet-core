@@ -39,7 +39,7 @@ const taskEnvToBrowserOpts = config => {
     GOBLET_BROWSER = 'chromium',
     GOBLET_BROWSER_SLOW_MO = `500`,
     GOBLET_BROWSER_TIMEOUT = `60000`, // 15 seconds
-    GOBLET_TRACES_DIR = getPathFromBase(path.join(config.paths.reportsDir, `traces/`), config),
+    GOBLET_TRACES_DIR = getPathFromBase(path.join(config.paths.artifactsDir, `traces/`), config),
     GOBLET_DOWNLOADS_PATH = getPathFromBase(path.join(config.paths.artifactsDir, `downloads/`), config),
   } = process.env
 

@@ -60,7 +60,7 @@ const addEnvToOpts = (opts, key, value) => {
  * 
  * @returns {Object} - Updated opts object with recording settings
  */
-const parseRecord = (config, opts, screenDims, value, fullScreen, testType) => {
+const parseRecord = (config, opts, screenDims, value, fullScreen) => {
   if(!value) return opts
 
   opts.recordVideo = opts.recordVideo || {}
@@ -70,7 +70,7 @@ const parseRecord = (config, opts, screenDims, value, fullScreen, testType) => {
       : screenDims
     : {}
 
-  const savePath = path.join(config.paths.artifactsDir, `videos/${testType || ''}`)
+  const savePath = path.join(config.paths.artifactsDir, `videos/`)
   opts.recordVideo.dir = getPathFromBase(savePath, config)
 
   return opts
@@ -85,7 +85,6 @@ const parseRecord = (config, opts, screenDims, value, fullScreen, testType) => {
  */
 const taskEnvToContextOpts = config => {
   const {
-    GOBLET_TEST_TYPE,
     GOBLET_CONTEXT_TZ, // string
     GOBLET_CONTEXT_GEO, // JSON array
     GOBLET_CONTEXT_TOUCH, // boolean
@@ -112,8 +111,7 @@ const taskEnvToContextOpts = config => {
     opts,
     screenDims,
     toBool(GOBLET_TEST_VIDEO_RECORD),
-    toBool(GOBLET_FULL_SCREEN_VIDEO),
-    GOBLET_TEST_TYPE
+    toBool(GOBLET_FULL_SCREEN_VIDEO)
   )
 
   if(screenDims.height || screenDims.width){
