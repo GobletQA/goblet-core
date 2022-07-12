@@ -22,7 +22,7 @@ const compareSavedElementCount = async (selector, type, worldPath, world) => {
   greaterLessEqual(current, count, type)
 }
 
-Then('the {string} count is {string} to {string}', compareSavedElementCount, {
+const meta = {
   module : `compareSavedElementCount`,
   examples: [
     `Then the "li.list-items" count is "equal" to "app.saved.itemCount"`,
@@ -46,6 +46,8 @@ Then('the {string} count is {string} to {string}', compareSavedElementCount, {
       example: 'page.items.count',
     },
   ],
-})
+}
+
+Then('the {string} count is {string} to {string}', compareSavedElementCount, meta)
 
 module.exports = { compareSavedElementCount }

@@ -9,8 +9,8 @@ const { runSeq } = require('@keg-hub/jsutils')
 const runCommands = async (commands, params) => {
   const { concurrent } = params
   return concurrent
-    ? await runSeq(commands)
-    : await Promise.all(commands.map(async cmd => cmd())) 
+    ? await Promise.all(commands.map(async cmd => cmd())) 
+    : await runSeq(commands)
 }
 
 module.exports = {
