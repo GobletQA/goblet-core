@@ -1,7 +1,7 @@
 const os = require('os')
 const path = require('path')
 const { promises } = require('fs')
-const { get, noOpObj } = require('@keg-hub/jsutils')
+const { get, noOpObj, limbo } = require('@keg-hub/jsutils')
 
 const defaultStateFile = 'browser-context-state'
 const defaultCookieFile = 'browser-cookie-state'
@@ -29,6 +29,12 @@ const saveContextCookie = async (context, location) => {
 
 const setContextCookie = async (context, location) => {
   const loadLoc = browserCookieLoc(location)
+  // TODO: Investigate if this should throw or not
+  // If instead we want to return false because the cookie could not be set
+  // Then uncomment this code
+  // const [err] = await limbo(promises.access(loadLoc, constants.F_OK))
+  // if(err) return false
+
   const cookie = await promises.readFile(loadLoc, 'utf8')
   await context.addCookies(JSON.parse(cookie))
   context.__goblet.cookie = loadLoc
