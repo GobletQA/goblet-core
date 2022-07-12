@@ -10,7 +10,7 @@ const { buildReportTitle } = require('GobletTest/reports/buildReportTitle')
  *
  * @return {Object} dockerCmd options object, with envs
  */
-const buildJestTestEnvs = (env={}, context, reportPath, type) => {
+const buildJestTestEnvs = (browser, env={}, context, reportPath, type) => {
   if(!type || !reportPath || !context) return env
   
   // Add the default playwright envs
@@ -23,7 +23,7 @@ const buildJestTestEnvs = (env={}, context, reportPath, type) => {
     env,
     'JEST_HTML_REPORTER_PAGE_TITLE',
     Boolean(type && context),
-    buildReportTitle(type, context)
+    buildReportTitle(type, context, browser)
   )
 
   return env

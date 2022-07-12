@@ -25,7 +25,7 @@ const buildWaypointEnvs = (browser, params, reportPath, type) => {
   addEnv(env, 'GOBLET_BROWSER_LAUNCH_TYPE', params.launchType)
 
   // Set up html test reporting ENV for jest
-  buildJestTestEnvs(env, params.context, reportPath, type)
+  buildJestTestEnvs(browser, env, params.context, reportPath, type)
 
   // Set the NODE_PATH env, defaults setting it to /keg/tap/node_modules
   setNodePath(env, true)

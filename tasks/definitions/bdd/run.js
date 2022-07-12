@@ -2,7 +2,6 @@ const { testTypes } = require('../../constants')
 const { sharedOptions } = require('@keg-hub/cli-utils')
 const { runTestCmd } = require('GobletTasks/utils/helpers/runTestCmd')
 const { buildBddEnvs } = require('GobletTasks/utils/envs/buildBddEnvs')
-const { buildReportPath } = require('GobletTest/reports/buildReportPath')
 const { buildJestArgs } = require('GobletTasks/utils/jest/buildJestArgs')
 const { getJestConfig } = require('GobletTasks/utils/jest/getJestConfig')
 const { filterTaskEnvs } = require('GobletTasks/utils/envs/filterTaskEnvs')
@@ -18,17 +17,15 @@ const { filterTaskEnvs } = require('GobletTasks/utils/envs/filterTaskEnvs')
 const runBdd = async args => {
   filterTaskEnvs()
   const { params, goblet } = args
-
   const jestConfig = await getJestConfig(params, testTypes.feature)
-  const reportPath = buildReportPath(testTypes.feature, params, goblet)
 
   // Run the test command for defined browsers
   const exitCode = await runTestCmd({
     params,
-    reportPath,
+    goblet,
     type: testTypes.bdd,
     cmdArgs: buildJestArgs(params, jestConfig),
-    envsHelper: browser => buildBddEnvs(browser, params, reportPath, testTypes.feature)
+    envsHelper: (browser, reportPath) => buildBddEnvs(browser, params, reportPath, testTypes.feature)
   })
 
   process.exit(exitCode)

@@ -3,7 +3,6 @@ const { sharedOptions } = require('@keg-hub/cli-utils')
 const { runTestCmd } = require('GobletTasks/utils/helpers/runTestCmd')
 const { buildJestArgs } = require('GobletTasks/utils/jest/buildJestArgs')
 const { getJestConfig } = require('GobletTasks/utils/jest/getJestConfig')
-const { buildReportPath } = require('GobletTest/reports/buildReportPath')
 const { filterTaskEnvs } = require('GobletTasks/utils/envs/filterTaskEnvs')
 const { buildWaypointEnvs } = require('GobletTasks/utils/envs/buildWaypointEnvs')
 const { appendToLatest, commitTestMeta } = require('GobletTest/testMeta/testMeta')
@@ -16,22 +15,15 @@ const runWp = async args => {
   filterTaskEnvs()
   const { params, goblet } = args
   const jestConfig = await getJestConfig(params, testTypes.waypoint)
-  const reportPath = buildReportPath(testTypes.waypoint, params, goblet)
 
   // Run the test command for defined browsers
   const exitCode = await runTestCmd({
     params,
-    reportPath,
+    goblet,
     type: testTypes.waypoint,
     cmdArgs: buildJestArgs(params, jestConfig),
-    envsHelper: browser => buildWaypointEnvs(browser, params, reportPath, testTypes.waypoint)
+    envsHelper: (browser, reportPath) => buildWaypointEnvs(browser, params, reportPath, testTypes.waypoint)
   })
-
-  await appendToLatest(`${testTypes.bdd}.report`, {
-    path: reportPath,
-    name: reportPath.split(`/`).pop(),
-  })
-  await commitTestMeta()
 
   process.exit(exitCode)
 }

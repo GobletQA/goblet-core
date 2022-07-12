@@ -1,5 +1,5 @@
 const path = require('path')
-const { wordCaps } = require('@keg-hub/jsutils')
+const { wordCaps, capitalize } = require('@keg-hub/jsutils')
 
 /**
  * Builds a title of a test report based on the type and context
@@ -8,14 +8,18 @@ const { wordCaps } = require('@keg-hub/jsutils')
  *
  * @returns {string} - Title of the report
  */
-const buildReportTitle = (type, name) => {
+const buildReportTitle = (type, name, browser) => {
   const title = name && path.basename(name).split('.').shift()
 
-  return title
+  const built = title
     ? wordCaps(title)
     : type
     ? `${wordCaps(type)} Test Suite`
     : `Test Suite`
+
+  return browser
+    ? `${built} - ${capitalize(browser)}`
+    : built
 }
 
 module.exports = {

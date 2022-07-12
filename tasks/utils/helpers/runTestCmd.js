@@ -2,6 +2,7 @@ const { noOpObj } = require('@keg-hub/jsutils')
 const { dockerCmd, Logger } = require('@keg-hub/cli-utils')
 const { parseParkinLogs } = require('GobletTest/parkin/parseParkinLogs')
 const { runCommands } = require('GobletTasks/utils/helpers/runCommands')
+const { buildReportPath } = require('GobletTest/reports/buildReportPath')
 const { getBrowsers } = require('GobletSCPlaywright/helpers/getBrowsers')
 const { PARKIN_SPEC_RESULT_LOG } = require('GobletTest/constants/constants')
 const { handleTestExit } = require('GobletTasks/utils/helpers/handleTestExit')
@@ -88,6 +89,13 @@ const buildBrowserCmd = (cmdArgs, cmdOpts, params, type, browser) => {
       status: resp.exitCode ? `failed` : `passed`,
     })
 
+    // Update the testMeta with the path to the report file for the specific browser
+    await appendToLatest(`${type}.reports.${browser}`, {
+      browser: browser,
+      path: reportPath,
+      name: reportPath.split(`/`).pop(),
+    })
+
     return resp.exitCode
   }
 }
@@ -104,34 +112,35 @@ const buildBrowserCmd = (cmdArgs, cmdOpts, params, type, browser) => {
 const runTestCmd = async (args) => {
   const {
     type,
+    goblet,
     params,
     cmdArgs,
-    reportPath,
     envsHelper,
   } = args
 
+  let reportPaths = [] 
   const commands = getBrowsers(params).map(
-    browser => buildBrowserCmd(
-      cmdArgs,
-      envsHelper(browser),
-      params,
-      type,
-      browser
-    )
+    browser => {
+      const reportPath = buildReportPath(type, params, goblet, browser)
+      reportPaths.push(reportPath)
+
+      return buildBrowserCmd(
+        cmdArgs,
+        envsHelper(browser, reportPath),
+        params,
+        type,
+        browser
+      )
+    }
   )
 
   // Run each of the test command and capture the exit-codes
   const codes = await runCommands(commands, params)
 
-  // Update the testMeta with the path to the report file
-  await appendToLatest(`${type}.report`, {
-    path: reportPath,
-    name: reportPath.split(`/`).pop(),
-  })
   await commitTestMeta()
 
   // Calculate the exit codes so we know if all runs were successful
-  return handleTestExit(codes, reportPath)
+  return handleTestExit(codes, reportPaths)
 }
 
 

@@ -23,7 +23,7 @@ const buildBddEnvs = (browser, params, reportPath, type='feature') => {
   addEnv(env, 'GOBLET_TEST_TYPE', type === 'feature' ? `bdd` : type)
 
   // Set up html test reporting ENV for jest
-  buildJestTestEnvs(env, params.context, reportPath, type)
+  buildJestTestEnvs(browser, env, params.context, reportPath, type)
 
   return {env}
 }

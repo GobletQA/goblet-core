@@ -10,7 +10,7 @@ const { getPathFromBase } = require('GobletSharedUtils/getPathFromBase')
  *
  * @return {string} - Name to use for the report
  */
-const getReportName = (type, name) => {
+const getReportName = (type, name, browser) => {
   return !name
     ? `${type}s`
     : path.basename(name).trim().replace(/ /g, '-').split('.').shift()
@@ -25,16 +25,18 @@ const getReportName = (type, name) => {
  *
  * @returns {string} - Path where the report should be created
  */
-const buildReportPath = (type, { context, testReport }, goblet) => {
+const buildReportPath = (type, { context, testReport }, goblet, browser) => {
   if (!type)
     throw new Error(`Test type is required to build the test report path!`)
 
+  type = type === `bdd` ? `feature` : type
   const reportsDir = getPathFromBase(goblet.paths.reportsDir, goblet)
   const report = getReportName(type, testReport || context)
+  const reportName = browser ? `${report}-${browser}` : report
 
-  // Example: goblet/reports/features/my-tests/my-tests-12345.html
+  // Example: goblet/reports/features/my-tests/my-tests-chrome-12345.html
   // The date/time stamp is always added to allow search and filtering by name
-  return path.join(reportsDir, `${type}/${report}/${report}-${Date.now()}.html`)
+  return path.join(reportsDir, `${type}/${report}/${reportName}-${Date.now()}.html`)
 }
 
 module.exports = {
