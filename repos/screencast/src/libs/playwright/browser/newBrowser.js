@@ -83,7 +83,7 @@ const newBrowser = async (browserConf = noOpObj, checkStatus) => {
 
     const pwBrowser = getBrowser(type)
     if (pwBrowser) {
-      Logger.log(`- Found already running Browser`)
+      Logger.stdout(`- Found already running Browser\n`)
       return { browser: pwBrowser }
     }
 
@@ -99,7 +99,7 @@ const newBrowser = async (browserConf = noOpObj, checkStatus) => {
 
     newBrowser.creatingBrowser = true
 
-    Logger.log(`- Starting Browser ${type}...`)
+    Logger.stdout(`- Starting Browser ${type}...\n`)
     const browser = await playwright[type].launch(getBrowserOpts(browserConf))
     setBrowser(browser, type)
 
