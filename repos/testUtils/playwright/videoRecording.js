@@ -79,6 +79,7 @@ const saveRecordingPath = async (page) => {
 
   if(!recordVideo.dir) return
 
+  // TODO: update to use video.saveAs(path)
   const recordPath = await getRecordingPath(page, recordVideo.dir)
   if(!recordPath)
     return Logger.warn(
@@ -91,6 +92,7 @@ const saveRecordingPath = async (page) => {
   const [mkErr, resp] = await mkDir(saveDir)
   if(mkErr) throw mkErr
 
+  // TODO: update to use video.saveAs(path)
   const savePath = path.join(saveDir, `${nameTimestamp}${path.extname(recordPath)}`)
   const [mvErr] = await movePath(recordPath, savePath)
 
