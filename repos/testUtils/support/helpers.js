@@ -1,40 +1,41 @@
 const { get } = require('@keg-hub/jsutils')
+const { Logger } = require('@keg-hub/cli-utils')
 const { getLocator } = require('GobletPlaywright')
 
 const checkTypes = {
   less: {
     match: [`less`, `<`],
     method: (val, count) => {
-      console.log(`Expect ${val} to be less-then ${count}`)
-      expect(val < count).toEqual(true)
+      Logger.stdout(`Expect ${val} to be less-then ${count}`)
+      expect(val).toBeLessThan(count)
     }
   },
   greater: {
     match: [`greater`, `>`],
     method: (val, count) => {
-      console.log(`Expect ${val} to be greater-then ${count}`)
-      expect(val > count).toEqual(true)
+      Logger.stdout(`Expect ${val} to be greater-then ${count}`)
+      expect(val).toBeGreaterThan(count)
     }
   },
   equal: {
     match: [ `equal`, `=`, `==`, `===`],
     method: (val, count) => {
-      console.log(`Expect ${val} to be equal to ${count}`)
-      expect(val === count).toEqual(true)
+      Logger.stdout(`Expect ${val} to be equal to ${count}`)
+      expect(val).toEqual(count)
     }
   },
   lessEqual: {
     match: [`less-equal`, `<=`],
     method: (val, count) => {
-      console.log(`Expect ${val} to be less-then or equal to ${count}`)
-      expect(val <= count).toEqual(true)
+      Logger.stdout(`Expect ${val} to be less-then or equal to ${count}`)
+      expect(val).toBeLessThanOrEqual(count)
     }
   },
   greaterEqual: {
     match: [`greater-equal`, `>=`],
     method: (val, count) => {
-      console.log(`Expect ${val} to be greater-then or equal to ${count}`)
-      expect(val >= count).toEqual(true)
+      Logger.stdout(`Expect ${val} to be greater-then or equal to ${count}`)
+      expect(val).toBeGreaterThanOrEqual(count)
     }
   }
 }

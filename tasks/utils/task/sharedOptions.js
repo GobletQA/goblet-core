@@ -1,5 +1,7 @@
 const { gobletMountDir } = require('GobletTasks/paths')
 const { setSharedOptions } = require('@keg-hub/cli-utils')
+const { ARTIFACT_SAVE_OPTS } = require('GobletTest/constants')
+const artifactSaveOpts = Object(ARTIFACT_SAVE_OPTS).values
 
 const dynamicOpts = {
   version: (type='<cmd>', action='<action>') => ({
@@ -278,10 +280,9 @@ const taskOptions = {
       description: 'Open devtools automatically when the browser opens. The debug option must also be set true',
     },
     tracing: {
-      type: `boolean`,
-      default: false,
-      example: '--tracing',
+      allowed: artifactSaveOpts,
       env: 'GOBLET_TEST_TRACING',
+      example: '--tracing failed',
       description: 'Activates playwrights tracing functionality for all executed tests',
     },
     screenshot: {
@@ -332,11 +333,10 @@ const taskOptions = {
       description: 'A list of permissions to grant to all browser pages, seperated by comma'
     },
     record: {
-      type: `bool`,
-      default: false,
-      example: '--record',
+      allowed: artifactSaveOpts,
+      example: '--record failed',
       env: `GOBLET_TEST_VIDEO_RECORD`,
-      description: 'Records a video of all browser page interactions, and saves to goblet.config#artifacts directory'
+      description: 'Records a video of browser interactions based on a condition. Saves to config#artifactsDir/videos'
     },
     // TOODO: Need to investigate this further
     // storageState: {},

@@ -33,6 +33,7 @@
   "GobletPlaywright": "repos/testUtils/playwright",
   "GobletSteps": "repos/testUtils/steps",
   "GobletSupport": "repos/testUtils/support",
+  "GobletTestUtils": "repos/testUtils/utils",
   "GobletTest": "repos/testUtils",
 
   "GobletSCConstants": "repos/screencast/src/constants",

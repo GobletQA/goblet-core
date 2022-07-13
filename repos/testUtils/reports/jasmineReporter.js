@@ -22,6 +22,12 @@ const eventMap = {
 }
 
 /**
+ * Holds the name of a test mapped to its current jasmine result context
+ */
+const failedSpecMap = {}
+
+
+/**
  * Resolves jasmine from the global context in a safe way
  */
 const resolveJasmine = () => {
@@ -101,6 +107,13 @@ const removeListener = (event, callback, key) => {
 }
 
 /**
+ * Gets the status of the currently active test
+ */
+const getTestResult = (testPath) => {
+  return failedSpecMap[testPath]
+}
+
+/**
  * Builds a custom jasmine reporter
  * Checks failed specs and sets all all specs in a suite to disable when found
  * @function
@@ -130,6 +143,8 @@ const buildReporter = jasmineEnv => {
       })
     },
     specDone: result => {
+      if(result.status === 'failed') failedSpecMap[result.testPath] = result
+
       return dispatchEvent(`stepEnd`, {
         ...result,
         type: 'step',
@@ -145,7 +160,7 @@ const buildReporter = jasmineEnv => {
         action: `end`,
         testPath: global?.jasmine?.testPath,
       })
-    },
+    }
   }
 }
 
@@ -162,6 +177,7 @@ const jasmineReporter = () => {
 module.exports = {
   addListener,
   dispatchEvent,
+  getTestResult,
   removeListener,
-  jasmineReporter
+  jasmineReporter,
 }

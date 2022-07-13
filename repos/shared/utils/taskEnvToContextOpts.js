@@ -1,7 +1,6 @@
-const path = require('path')
 const { getScreenDims } = require('./getScreenDims')
-const { getPathFromBase } = require('./getPathFromBase')
 const { parseJsonEnvArr } = require('./parseJsonEnvArr')
+const { artifactSaveActive } = require('GobletTestUtils/artifactSaveOption')
 const {
   toBool,
   isArr,
@@ -60,8 +59,8 @@ const addEnvToOpts = (opts, key, value) => {
  * 
  * @returns {Object} - Updated opts object with recording settings
  */
-const parseRecord = (config, opts, screenDims, value, fullScreen) => {
-  if(!value) return opts
+const parseRecord = (config, opts, screenDims, shouldRecordVideo, fullScreen) => {
+  if(!shouldRecordVideo) return opts
 
   opts.recordVideo = opts.recordVideo || {}
   opts.recordVideo.size = isObj(screenDims)
@@ -70,8 +69,10 @@ const parseRecord = (config, opts, screenDims, value, fullScreen) => {
       : screenDims
     : {}
 
-  const savePath = path.join(config.paths.artifactsDir, `videos/`)
-  opts.recordVideo.dir = getPathFromBase(savePath, config)
+  // Save videos to the temp dir, and copy them to the repo dir as needed
+  // I.E. a test fails
+  const { videosTempDir } = config.internalPaths
+  opts.recordVideo.dir = videosTempDir
 
   return opts
 }
@@ -92,7 +93,7 @@ const taskEnvToContextOpts = config => {
     GOBLET_CONTEXT_DOWNLOADS, // boolean
     GOBLET_CONTEXT_PERMISSIONS,  // JSON array
     GOBLET_FULL_SCREEN_VIDEO, // boolean
-    GOBLET_TEST_VIDEO_RECORD, // boolean
+    GOBLET_TEST_VIDEO_RECORD, // boolean || string
   } = process.env
 
   const opts = {
@@ -110,7 +111,7 @@ const taskEnvToContextOpts = config => {
     config,
     opts,
     screenDims,
-    toBool(GOBLET_TEST_VIDEO_RECORD),
+    artifactSaveActive(GOBLET_TEST_VIDEO_RECORD),
     toBool(GOBLET_FULL_SCREEN_VIDEO)
   )
 

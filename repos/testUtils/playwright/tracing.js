@@ -1,7 +1,13 @@
 const path = require('path')
 const { noOpObj, get } = require('@keg-hub/jsutils')
-const { getGeneratedName } = require('./getGeneratedName')
+const { ARTIFACT_SAVE_OPTS } = require('GobletTest/constants')
 const { appendToLatest } = require('GobletTest/testMeta/testMeta')
+const { getTestResult } = require('GobletTest/reports/jasmineReporter')
+const {
+  getGeneratedName,
+  copyArtifactToRepo,
+  ensureRepoArtifactDir,
+} = require('GobletPlaywright/generatedArtifacts')
 
 /**
  * Helper to check is tracing is disabled
@@ -22,8 +28,7 @@ const tracingDisabled = () => {
 const startTracing = async (context) => {
   if(!context || tracingDisabled()) return
 
-  const { tracing } = get(global, `__goblet.options`, noOpObj)
-  await context.tracing.start(tracing)
+  await context.tracing.start(get(global, `__goblet.options.tracing`, noOpObj))
 
   return true
 }
@@ -44,6 +49,21 @@ const startTracingChunk = async (context) => {
 }
 
 /**
+ * Checks if the context was recording a video
+ * Then updates the testMeta with the path to the video
+ * @param {string} testStatus - passed || failed
+ * @param {string|boolean} saveVideo - one of `never` | `always` | `on-fail` | true | false
+ *
+ * @returns {boolean} - True if the trace should be saved
+ */
+const shouldSaveTrace = (testStatus, saveTrace) => {
+  if(!saveTrace || saveTrace === ARTIFACT_SAVE_OPTS.never) return false
+
+  return (saveTrace === ARTIFACT_SAVE_OPTS.always) ||
+      (testStatus === ARTIFACT_SAVE_OPTS.failed && saveTrace === ARTIFACT_SAVE_OPTS.failed)
+}
+
+/**
  * Starts tracing on the browser context
  * @param {Object} context - Browser context to stop a tracing chunk
  *
@@ -51,17 +71,26 @@ const startTracingChunk = async (context) => {
  */
 const stopTracingChunk = async (context) => {
   if(!context || !context.__goblet.tracing || tracingDisabled()) return
-  // TODO: use global.jasmine to check if the test passed of failed
-  // Then passed, just delete the trace so we only keep failed traces
-  const { testType } = get(global, `__goblet.options`, noOpObj)
+
+  const { saveTrace, tracesDir:repoTracesDir, testType } = get(global, `__goblet.options`, noOpObj)
+  const { name, full, dir, nameTimestamp, testPath } = getGeneratedName()
+
+  // Get the test result, which contains the passed/failed status of the test
+  // If failed, then copy over trace from temp traces dir, to repoTracesDir
+  // By default traces will not be saved
+  const testResult = getTestResult(testPath)
+  if(!shouldSaveTrace(testResult?.status, saveTrace)) return
+
   const { tracesDir, type:browser=`browser` } = get(global, `__goblet.browser.options`, noOpObj)
-  const { name, full } = getGeneratedName()
   
   const traceLoc = path.join(tracesDir, `${full}.zip`)
   await context.tracing.stopChunk({ path: traceLoc })
 
+  const saveDir = await ensureRepoArtifactDir(repoTracesDir, dir)
+  const savePath = await copyArtifactToRepo(saveDir, nameTimestamp, traceLoc)
+
   testType &&
-    await appendToLatest(`${testType}.traces.${browser}.${name}`, {path: traceLoc}, true)
+    await appendToLatest(`${testType}.traces.${browser}.${name}`, {path: savePath}, true)
   
   context.__goblet.tracing = false
   return true

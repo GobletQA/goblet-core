@@ -1,5 +1,3 @@
-const path = require('path')
-const { getPathFromBase } = require('./getPathFromBase')
 const { parseJsonEnvArr } = require('./parseJsonEnvArr')
 const { toBool, isStr, noOpObj } = require('@keg-hub/jsutils')
 
@@ -38,17 +36,18 @@ const taskEnvToBrowserOpts = config => {
     GOBLET_BROWSER_DEVICES,
     GOBLET_BROWSER = 'chromium',
     GOBLET_BROWSER_SLOW_MO = `500`,
-    GOBLET_BROWSER_TIMEOUT = `60000`, // 15 seconds
-    GOBLET_TRACES_DIR = getPathFromBase(path.join(config.paths.artifactsDir, `traces/`), config),
-    GOBLET_DOWNLOADS_PATH = getPathFromBase(path.join(config.paths.artifactsDir, `downloads/`), config),
+    GOBLET_BROWSER_TIMEOUT = `60000`, // 60 seconds
   } = process.env
+
+  // Save videos to the temp dir, and copy them to the repo dir as needed, I.E. if a test fails
+  const { tracesTempDir, downloadsTempDir } = config.internalPaths
 
   return {
     type: GOBLET_BROWSER,
-    tracesDir: GOBLET_TRACES_DIR,
+    tracesDir: tracesTempDir,
+    downloadsPath: downloadsTempDir,
     headless: toBool(GOBLET_HEADLESS),
     devtools: toBool(GOBLET_DEV_TOOLS),
-    downloadsPath: GOBLET_DOWNLOADS_PATH,
     slowMo: parseInt(GOBLET_BROWSER_SLOW_MO, 10),
     timeout: parseInt(GOBLET_BROWSER_TIMEOUT, 10),
     ...buildDeviceList(GOBLET_BROWSER_DEVICES),

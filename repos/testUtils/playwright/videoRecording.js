@@ -1,10 +1,16 @@
 const fs = require('fs')
-const path = require('path')
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
-const { getGeneratedName } = require('./getGeneratedName')
 const { noOpObj, get, wait } = require('@keg-hub/jsutils')
+const { ARTIFACT_SAVE_OPTS } = require('GobletTest/constants')
 const { appendToLatest } = require('GobletTest/testMeta/testMeta')
-const { mkDir, movePath, getFolderContent, pathExists } = fileSys
+const { getTestResult } = require('GobletTest/reports/jasmineReporter')
+const {
+  getGeneratedName,
+  copyArtifactToRepo,
+  ensureRepoArtifactDir,
+} = require('GobletPlaywright/generatedArtifacts')
+
+const { getFolderContent, pathExists } = fileSys
 
 /**
  * Uses the passed in Playwright page to get the video path
@@ -69,15 +75,38 @@ const getRecordingPath = async (page, recordDir) => {
 /**
  * Checks if the context was recording a video
  * Then updates the testMeta with the path to the video
+ * @param {string} testStatus - passed || failed
+ * @param {string|boolean} saveVideo - one of `never` | `always` | `on-fail` | true | false
+ *
+ * @returns {boolean} - True if the video should be saved
+ */
+const shouldSaveVideo = (testStatus, saveVideo, recordDir) => {
+  if(!saveVideo || saveVideo === ARTIFACT_SAVE_OPTS.never || !recordDir) return false
+
+  return (saveVideo === ARTIFACT_SAVE_OPTS.always) ||
+      (testStatus === ARTIFACT_SAVE_OPTS.failed && saveVideo === ARTIFACT_SAVE_OPTS.failed)
+}
+
+/**
+ * Checks if the context was recording a video
+ * Then updates the testMeta with the path to the video
  * @param {Object} page - Playwright page to get the video path from
  *
  */
-const saveRecordingPath = async (page) => {  
-  const { testType } = get(global, `__goblet.options`, noOpObj)
-  const { type:browser=`browser` } = get(global, `__goblet.browser.options`, noOpObj)
-  const recordVideo = get(global, `__goblet.context.options.recordVideo`, noOpObj)
+const saveRecordingPath = async (page) => {
 
-  if(!recordVideo.dir) return
+  const recordVideo = get(global, `__goblet.context.options.recordVideo`, noOpObj)
+  const { type:browser=`browser` } = get(global, `__goblet.browser.options`, noOpObj)
+  const { saveVideo, testType, videosDir:repoVideoDir } = get(global, `__goblet.options`, noOpObj)
+  const { name, dir, nameTimestamp, testPath } = getGeneratedName()
+
+  // Get the test result, which contains the passed/failed status of the test
+  // If failed, then copy over video from temp video dir, to repoVideoDir
+  // By default video will not be saved
+  const testResult = getTestResult(testPath)
+  const saveTestVideo = shouldSaveVideo(testResult?.status, saveVideo, recordVideo.dir)
+
+  if(!saveTestVideo) return
 
   // TODO: update to use video.saveAs(path)
   const recordPath = await getRecordingPath(page, recordVideo.dir)
@@ -86,17 +115,8 @@ const saveRecordingPath = async (page) => {
       `The video record path for test ${name} does not exist in directory ${recordVideo.dir}`
     )
 
-  // Ensure the test sub-folder exists
-  const { name, dir, nameTimestamp } = getGeneratedName()
-  const saveDir = path.join(recordVideo.dir, dir)
-  const [mkErr, resp] = await mkDir(saveDir)
-  if(mkErr) throw mkErr
-
-  // TODO: update to use video.saveAs(path)
-  const savePath = path.join(saveDir, `${nameTimestamp}${path.extname(recordPath)}`)
-  const [mvErr] = await movePath(recordPath, savePath)
-
-  if(mvErr) throw mvErr
+  const saveDir = await ensureRepoArtifactDir(repoVideoDir, dir)
+  const savePath = await copyArtifactToRepo(saveDir, nameTimestamp, recordPath)
 
   testType &&
     await appendToLatest(`${testType}.recordings.${browser}.${name}`, {

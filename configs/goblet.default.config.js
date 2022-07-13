@@ -142,7 +142,14 @@ module.exports = {
     gobletRoot: GOBLET_ROOT,
     testUtilsDir: TEST_UTILS_PATH,
     pwMetaDataDir: GOBLET_PW_METADATA_DIR,
+    // Temp directories for saving test artifacts
+    // These paths should not be saved with the repo
+    // They are only used when running tests, then discarded
+    tracesTempDir: `${GOBLET_ROOT}/temp/traces`,
+    videosTempDir: `${GOBLET_ROOT}/temp/videos`,
+    downloadsTempDir: `${GOBLET_ROOT}/temp/downloads`,
     testMetaFile: `${GOBLET_ROOT}/temp/testMeta.json`,
+    snapshotsTempDir: `${GOBLET_ROOT}/temp/snapshots`,
   },
 
   /** Property to define a valid goblet config object */

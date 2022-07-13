@@ -11,8 +11,8 @@ let LAST_ACTIVE_PAGE
  * Helper to force exit the process after 1/2 second
  */
 const forceExit = (err) => {
-  Logger.stderr(`[Goblet] Playwright Initialize Error`)
-  err && Logger.stderr(err.stack)
+  Logger.stderr(`\n[Goblet] Playwright Initialize Error\n`)
+  err && Logger.stderr(`\n${err.stack}\n`)
   setTimeout(() => process.exit(1), 500)
 }
 

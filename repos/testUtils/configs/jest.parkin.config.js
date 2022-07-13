@@ -6,8 +6,8 @@ const glob = require('glob')
 const { uniqArr, noOpObj } = require('@keg-hub/jsutils')
 const { getGobletConfig } = require('GobletSharedConfig')
 const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
+const { buildJestGobletOpts } = require('GobletTestUtils/buildJestGobletOpts')
 const { getContextOpts } = require('GobletSCPlaywright/helpers/getContextOpts')
-const { buildJestGobletOpts } = require('GobletSharedUtils/buildJestGobletOpts')
 const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts')
 
 /**
