@@ -42,5 +42,5 @@ Then('I {word} the {string}', generalAction, meta)
 
 
 module.exports = {
-  clickElement,
+  generalAction,
 }

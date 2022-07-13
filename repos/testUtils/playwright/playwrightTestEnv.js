@@ -1,14 +1,20 @@
 const { Logger } = require('@keg-hub/cli-utils')
-const { noOpObj, get } = require('@keg-hub/jsutils')
 const { saveRecordingPath } = require('./videoRecording')
-const { getContext } = require('GobletPlaywright/browserContext')
-const { commitTestMeta } = require('GobletTest/testMeta/testMeta')
 const { initTestMeta } = require('GobletTest/testMeta/testMeta')
-const { getMetadata } = require('GobletSCPlaywright/server/server')
-const { newBrowser } = require('GobletSCPlaywright/browser/newBrowser')
-const { startTracing, stopTracingChunk, startTracingChunk } = require('./tracing')
+const { commitTestMeta } = require('GobletTest/testMeta/testMeta')
+const { stopTracingChunk, startTracingChunk } = require('./tracing')
+const { setupBrowser, setupContext, getContext } = require('GobletPlaywright/browserContext')
 
 let LAST_ACTIVE_PAGE
+
+/**
+ * Helper to force exit the process after 1/2 second
+ */
+const forceExit = (err) => {
+  Logger.stderr(`[Goblet] Playwright Initialize Error`)
+  err && Logger.stderr(err.stack)
+  setTimeout(() => process.exit(1), 500)
+}
 
 /**
  * Initializes tests by connecting to the browser loaded at the websocket
@@ -19,43 +25,22 @@ let LAST_ACTIVE_PAGE
  * @return {boolean} - true if init was successful
  */
 const initialize = async () => {
-  /** GOBLET_BROWSER is set by the task `keg goblet bdd run` */
-  const { GOBLET_BROWSER='chromium' } = process.env
+
   let startError
 
   try {
-
     await initTestMeta()
-    const { type, launchOptions } = await getMetadata(GOBLET_BROWSER)
-
-    // TODO: Should update to check if in docker container
-    // Then pass false based on that
-    // Pass false to bypass checking the browser status
-    const { browser } = await newBrowser({
-      ...launchOptions,
-      type,
-      ...get(global, `__goblet.browser.options`, noOpObj),
-    }, false)
-
-    if (!browser)
-      throw new Error(`Could not create browser. Please ensure the browser server is running.`)
-
-    global.browser = browser
-    global.context = await getContext(get(global, `__goblet.context.options`))
-    await startTracing(global.context)
-
+    await setupBrowser()
+    await setupContext()
   }
   catch (err) {
     startError = true
-    Logger.stderr(err.stack)
-    await cleanup()
-    setTimeout(() => process.exit(1), 500)
+    await cleanup(true)
+    forceExit(err)
   }
   finally {
-    if(startError) return
-
-    await startTracingChunk(global.context)
-    return global.context && global.browser
+    return !startError &&
+      await startTracingChunk(global.context)
   }
 }
 
@@ -66,7 +51,7 @@ const initialize = async () => {
  *
  * @return {boolean} - true if cleanup was successful
  */
-const cleanup = async () => {
+const cleanup = async (fromError) => {
   if (!global.browser){
     await commitTestMeta()
     return false
@@ -94,8 +79,7 @@ const cleanup = async () => {
     return true
   }
   catch(err){
-    Logger.stderr(err.stack)
-    setTimeout(() => process.exit(1), 500)
+    forceExit(err)
   }
 }
 

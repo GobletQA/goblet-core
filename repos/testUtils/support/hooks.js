@@ -10,5 +10,8 @@
 const { AfterAll, BeforeAll } = require('GobletParkin')
 const { initialize, cleanup } = require('GobletPWTestEnv')
 
-BeforeAll(initialize)
-AfterAll(cleanup)
+/**
+ * Add wrap method to ensure no arguments are passed to initialize and cleanup
+ */
+BeforeAll(async () => initialize())
+AfterAll(async () => cleanup())

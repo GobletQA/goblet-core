@@ -6,6 +6,7 @@
 
 const { getParkinInstance } = require('./instance')
 const { toInt, exists } = require('@keg-hub/jsutils')
+const { jasmineReporter } = require('GobletTest/reports/jasmineReporter')
 
 /**
  * Global helper to allow re-using the same parking instance for each test
@@ -38,8 +39,11 @@ const parkinTestInit = () => {
   const { GOBLET_TEST_RETRY } = process.env
 
   // This is set for all tests that are run
-  // Todo it on a per-step basis it would need to be added to Parkin in some capacity
+  // TODO: it on a per-step basis it would need to be added to Parkin in some capacity
   exists(GOBLET_TEST_RETRY) && jest.retryTimes(toInt(GOBLET_TEST_RETRY) || 1)
+
+  // Add a custom jasmine reporter to track test status
+  jasmineReporter()
 }
 
 parkinTestInit()

@@ -1,10 +1,52 @@
 const os = require('os')
 const path = require('path')
 const { promises } = require('fs')
-const { get, noOpObj, limbo } = require('@keg-hub/jsutils')
+const { startTracing } = require('./tracing')
+const { get, noOpObj } = require('@keg-hub/jsutils')
+const { getMetadata } = require('GobletSCPlaywright/server/server')
+const { newBrowser } = require('GobletSCPlaywright/browser/newBrowser')
 
 const defaultStateFile = 'browser-context-state'
 const defaultCookieFile = 'browser-cookie-state'
+
+/**
+ * Sets up the global browser for the test environment
+ *
+ * @returns {Object} - Playwright Browser object
+ */
+const setupBrowser = async () => {
+  /** GOBLET_BROWSER is set by the task `keg goblet bdd run` */
+  const { GOBLET_BROWSER='chromium' } = process.env
+  const { type, launchOptions } = await getMetadata(GOBLET_BROWSER)
+
+  // TODO: Should update to check if in docker container
+  // Then pass false based on that
+  // Pass false to bypass checking the browser status
+  const { browser } = await newBrowser({
+    ...launchOptions,
+    type,
+    ...get(global, `__goblet.browser.options`, noOpObj),
+  }, false)
+
+  if (!browser)
+    throw new Error(`Could not create browser. Please ensure the browser server is running.`)
+
+  global.browser = browser
+  
+  return global.browser
+}
+
+/**
+ * Sets up the global context for the test environment
+ *
+ * @returns {Object} - Playwright Context object
+ */
+const setupContext = async () => {
+  global.context = await getContext(get(global, `__goblet.context.options`))
+  await startTracing(global.context)
+
+  return global.context
+}
 
 /**
  * Gets the storage location from the temp-directory
@@ -94,6 +136,8 @@ const getContext = async (contextOpts, location) => {
 
 module.exports = {
   getContext,
+  setupBrowser,
+  setupContext,
   setContextCookie,
   contextStateLoc,
   saveContextState,

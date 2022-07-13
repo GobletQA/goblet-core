@@ -16,7 +16,7 @@ const getGeneratedName = (override) => {
 
   // TODO: see if theres a better way to get the test name from the jasmine api
   // Get the name of the file being tested and set it here
-  const name = (override || global.jasmine.testPath || testType).split(`/`)
+  const name = (override || global?.jasmine?.testPath || testType).split(`/`)
     .pop()
     .split('.')
     .shift()
