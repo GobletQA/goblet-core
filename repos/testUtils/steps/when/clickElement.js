@@ -36,6 +36,7 @@ const meta = {
 }
 
 When('I click {string}', clickElement, meta)
+When('I click the {string}', clickElement, meta)
 When('I click the element {string}', clickElement, meta)
 
 module.exports = {
