@@ -150,6 +150,8 @@ module.exports = {
     downloadsTempDir: `${GOBLET_ROOT}/temp/downloads`,
     testMetaFile: `${GOBLET_ROOT}/temp/testMeta.json`,
     snapshotsTempDir: `${GOBLET_ROOT}/temp/snapshots`,
+    reportsTempDir: `${GOBLET_ROOT}/temp/reports`,
+    reportsTempFile: `${GOBLET_ROOT}/temp/reports/html-report.html`,
   },
 
   /** Property to define a valid goblet config object */

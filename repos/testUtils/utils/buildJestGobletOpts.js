@@ -29,6 +29,7 @@ const buildArtifactsPaths = (config, options) => {
 const buildJestGobletOpts = (config, browserOpts, contextOpts) => {
   const {
     GOBLET_TEST_TYPE,
+    GOBLET_TEST_REPORT,
     GOBLET_TEST_TRACING,
     GOBLET_TEST_VIDEO_RECORD,
     // TODO: add cli options for these,
@@ -38,6 +39,7 @@ const buildJestGobletOpts = (config, browserOpts, contextOpts) => {
   } = process.env
   const options = {
     saveTrace: artifactSaveOption(GOBLET_TEST_TRACING),
+    saveReport: artifactSaveOption(GOBLET_TEST_REPORT),
     saveVideo: artifactSaveOption(GOBLET_TEST_VIDEO_RECORD),
   }
 

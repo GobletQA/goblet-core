@@ -1,10 +1,18 @@
 const path = require('path')
 const { fileSys } = require('@keg-hub/cli-utils')
-const { noOpObj, get, limbo } = require('@keg-hub/jsutils')
+const { get, limbo } = require('@keg-hub/jsutils')
 
-const { mkDir, movePath, removeFile, copyStream } = fileSys
-
+const { mkDir, removeFile, copyStream } = fileSys
 const nameCache = {}
+
+const formatName = (location) => {
+  return location.split(`/`)
+    .pop()
+    .split('.')
+    .shift()
+    .trim()
+    .replace(/ /g, '-')
+}
 
 /**
  * Gets the name of the most recently run test
@@ -12,21 +20,13 @@ const nameCache = {}
  *
  * @returns {Object} - Contains the short name and full generated path name
  */
-const getGeneratedName = (override) => {
-  const { testType } = get(global, `__goblet.options`, noOpObj)
-  const { type:browser='browser' } = get(global, `__goblet.browser.options`, noOpObj)
+const getGeneratedName = (testLoc, type, browserName) => {
+  const testPath = testLoc || global?.jasmine?.testPath
+  const testType = type || get(global, `__goblet.options.testType`)
+  const browser = browserName || get(global, `__goblet.browser.options.type`, 'browser')
 
   const timestamp = new Date().getTime()
-  const testPath = global?.jasmine?.testPath
-
-  // TODO: see if theres a better way to get the test name from the jasmine api
-  // Get the name of the file being tested and set it here
-  const name = testPath.split(`/`)
-    .pop()
-    .split('.')
-    .shift()
-    .trim()
-    .replace(/ /g, '-')
+  const name = formatName(testPath)
 
   // Use a cache name to ensure all generated artifacts use the same timestamp
   const cacheName = browser ? `${testType}-${browser}-${name}` : `${testType}-${name}`
@@ -86,7 +86,7 @@ const copyArtifactToRepo = async (saveLoc, name, currentLoc) => {
  * @returns {string} - Repo location folder where an artifact will be saved
  */
 const ensureRepoArtifactDir = async (parentDir, childDir) => {
-  const saveDir = path.join(parentDir, childDir)
+  const saveDir = childDir ? path.join(parentDir, childDir) : parentDir
   const [mkErr] = await mkDir(saveDir)
   if(mkErr) throw mkErr
 

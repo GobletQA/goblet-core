@@ -1,8 +1,8 @@
 const { Logger } = require('@keg-hub/cli-utils')
-const { saveRecordingPath } = require('./videoRecording')
-const { initTestMeta } = require('GobletTest/testMeta/testMeta')
-const { commitTestMeta } = require('GobletTest/testMeta/testMeta')
-const { stopTracingChunk, startTracingChunk } = require('./tracing')
+const { copyTestReports } = require('GobletPlaywright/testReport')
+const { saveRecordingPath } = require('GobletPlaywright/videoRecording')
+const { initTestMeta, commitTestMeta } = require('GobletTest/testMeta/testMeta')
+const { stopTracingChunk, startTracingChunk } = require('GobletPlaywright/tracing')
 const { setupBrowser, setupContext, getContext } = require('GobletPlaywright/browserContext')
 
 let LAST_ACTIVE_PAGE
@@ -70,6 +70,7 @@ const cleanup = async (fromError) => {
     LAST_ACTIVE_PAGE = undefined
     global.browser && await global.browser.close()
 
+    await copyTestReports()
     await commitTestMeta()
 
     delete global.browser

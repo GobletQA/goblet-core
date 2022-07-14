@@ -65,6 +65,7 @@ module.exports = {
         'testRetry',
         `testCache`,
         `testReport`,
+        `testReportName`,
         `testColors`,
         'testTimeout',
         `testVerbose`,

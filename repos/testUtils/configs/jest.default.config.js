@@ -21,21 +21,26 @@ const { buildTestMatchFiles } = require('GobletSharedUtils/buildTestMatchFiles')
  * @returns {Array} - Built reporters array
  */
 const buildReporters = (opts=noOpObj, gobletRoot, config) => {
-  const { JEST_HTML_REPORTER_OUTPUT_PATH } = process.env
+  const {
+    // JEST_HTML_REPORTER_PAGE_TITLE,
+    // JEST_HTML_REPORTER_OUTPUT_PATH
+    GOBLET_HTML_REPORTER_PAGE_TITLE,
+    GOBLET_HTML_REPORTER_OUTPUT_PATH,
+  } = process.env
   const title = opts.title || opts.type
 
   // TODO: check the goblet config for a custom jest reporter
   // Then add it to the reporters array
-
   const reporters = ['default']
-  JEST_HTML_REPORTER_OUTPUT_PATH &&
+  GOBLET_HTML_REPORTER_OUTPUT_PATH &&
     reporters.push([
       // Since the root is not keg-config, we have to define the full path to the reporter
       `${gobletRoot}/node_modules/jest-html-reporter`,
       {
         includeFailureMsg: true,
-        outputPath: JEST_HTML_REPORTER_OUTPUT_PATH,
-        pageTitle: `${title ? capitalize(title) : ``} Test Results`.trim(),
+        includeSuiteFailure: true,
+        outputPath: opts.reportOutputPath || GOBLET_HTML_REPORTER_OUTPUT_PATH,
+        pageTitle: GOBLET_HTML_REPORTER_PAGE_TITLE || `${title ? capitalize(title) : ``} Test Results`.trim(),
       },
     ])
 

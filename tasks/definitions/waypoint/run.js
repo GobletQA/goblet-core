@@ -73,6 +73,7 @@ module.exports = {
         `testDebug`,
         `testCache`,
         `testReport`,
+        `testReportName`,
         `testColors`,
         'testTimeout',
         `testVerbose`,

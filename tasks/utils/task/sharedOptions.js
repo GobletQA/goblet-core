@@ -89,6 +89,12 @@ const taskOptions = {
     },
     testReport: {
       example: '--testReport',
+      env: `GOBLET_TEST_REPORT`,
+      allowed: artifactSaveOpts,
+      description: 'Context in which the html test report should be saved',
+    },
+    testReportName: {
+      example: '--testReportName',
       env: `GOBLET_TEST_REPORT_NAME`,
       description: 'Name of the generated HTML test report file',
     },

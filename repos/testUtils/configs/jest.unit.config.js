@@ -5,8 +5,8 @@
 const { jestConfig } = require('./jest.default.config')
 
 const path = require('path')
-const { noOpObj } = require('@keg-hub/jsutils')
 const { inDocker } = require('@keg-hub/cli-utils')
+const { noOpObj, uuid } = require('@keg-hub/jsutils')
 const { getGobletConfig } = require('GobletSharedConfig')
 const metadata = require('GobletSCPlaywright/helpers/metadata')
 const { checkVncEnv } = require('GobletSCLibs/utils/vncActiveEnv')
@@ -82,22 +82,28 @@ module.exports = async () => {
   const browserOpts = launchOpts[optsKey]
   const contextOpts = getContextOpts(noOpObj, config)
 
-  const { testUtilsDir } = config.internalPaths
+  const { testUtilsDir, reportsTempDir } = config.internalPaths
+  const reportOutputPath = path.join(reportsTempDir, `html-report-${uuid()}.html`)
 
   return {
     preset: `jest-playwright-preset`,
     /** Build the default jest config for waypoint files */
     ...jestConfig(config, {
-      shortcut: 'wp',
-      type: 'waypoint',
+      shortcut: 'ut',
+      type: 'unit',
+      reportOutputPath,
       testDir: path.join(baseDir, config.paths.unitDir),
     }),
     /** Define the goblet global options durring test runs */
     globals: {
       __goblet: {
-        paths: config.paths,
+        paths: {
+          ...config.paths,
+          reportTempPath: reportOutputPath
+        },
         browser: { options: browserOpts },
         context: { options: contextOpts },
+        internalPaths: config.internalPaths,
         options: buildJestGobletOpts(config, browserOpts, contextOpts),
       },
     },

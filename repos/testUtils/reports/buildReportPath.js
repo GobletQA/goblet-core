@@ -1,5 +1,6 @@
 const path = require('path')
 const { getPathFromBase } = require('GobletSharedUtils/getPathFromBase')
+const { getGeneratedName } = require('GobletPlaywright/generatedArtifacts')
 
 /**
  * Gets the name for the report based on the name of the test being run
@@ -10,10 +11,8 @@ const { getPathFromBase } = require('GobletSharedUtils/getPathFromBase')
  *
  * @return {string} - Name to use for the report
  */
-const getReportName = (type, name, browser) => {
-  return !name
-    ? `${type}s`
-    : path.basename(name).trim().replace(/ /g, '-').split('.').shift()
+const getReportName = (reportName, context, type) => {
+  return `/${path.basename(reportName || context || (type + 's'))}`
 }
 
 /**
@@ -21,22 +20,25 @@ const getReportName = (type, name, browser) => {
  * Adds a date timestamp to the report file name
  * @param {string} type - Type of tests for the report
  * @param {string} [name=type] - Name of the test related to the report
- * @param {Object} goblet - Goblet global config object
+ * @param {Object} config - Goblet global config object
  *
  * @returns {string} - Path where the report should be created
  */
-const buildReportPath = (type, { context, testReport }, goblet, browser) => {
+const buildReportPath = (type, { context, testReportName }, config, browser) => {
   if (!type)
     throw new Error(`Test type is required to build the test report path!`)
 
   type = type === `bdd` ? `feature` : type
-  const reportsDir = getPathFromBase(goblet.paths.reportsDir, goblet)
-  const report = getReportName(type, testReport || context)
-  const reportName = browser ? `${report}-${browser}` : report
+  const { full } = getGeneratedName(
+    getReportName(testReportName, context, type),
+    type,
+    browser
+  )
 
-  // Example: goblet/reports/features/my-tests/my-tests-chrome-12345.html
+  const reportsDir = getPathFromBase(config.paths.reportsDir, config)
+  // Example: goblet/artifacts/reports/features/my-tests/my-tests-chrome-12345.html
   // The date/time stamp is always added to allow search and filtering by name
-  return path.join(reportsDir, `${type}/${report}/${reportName}-${Date.now()}.html`)
+  return path.join(reportsDir, `${full}.html`)
 }
 
 module.exports = {

@@ -3,8 +3,8 @@ const { jestConfig } = require('./jest.default.config')
 
 const path = require('path')
 const glob = require('glob')
-const { uniqArr, noOpObj } = require('@keg-hub/jsutils')
 const { getGobletConfig } = require('GobletSharedConfig')
+const { uniqArr, noOpObj, uuid } = require('@keg-hub/jsutils')
 const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
 const { buildJestGobletOpts } = require('GobletTestUtils/buildJestGobletOpts')
 const { getContextOpts } = require('GobletSCPlaywright/helpers/getContextOpts')
@@ -69,10 +69,13 @@ module.exports = async () => {
   const { devices, ...browserOpts } = taskEnvToBrowserOpts(config)
   const contextOpts = getContextOpts(noOpObj, config)
 
-  const { testUtilsDir } = config.internalPaths
+  const { testUtilsDir, reportsTempDir } = config.internalPaths
+  const reportOutputPath = path.join(reportsTempDir, `html-report-${uuid()}.html`)
   const defConf = jestConfig(config, {
+    type: `bdd`,
     ext: 'feature',
-    title: 'Parkin',
+    title: 'Feature',
+    reportOutputPath,
     testDir: path.join(baseDir, config.paths.featuresDir),
   })
 
@@ -89,7 +92,10 @@ module.exports = async () => {
     /** Pass on the browser options defined from the task that started the process */
     globals: {
       __goblet: {
-        paths: config.paths,
+        paths: {
+          ...config.paths,
+          reportTempPath: reportOutputPath
+        },
         browser: { options: browserOpts },
         context: { options: contextOpts },
         options: buildJestGobletOpts(config, browserOpts, contextOpts),

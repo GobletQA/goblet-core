@@ -12,16 +12,13 @@ const { buildReportTitle } = require('GobletTest/reports/buildReportTitle')
  */
 const buildJestTestEnvs = (browser, env={}, context, reportPath, type) => {
   if(!type || !reportPath || !context) return env
-  
-  // Add the default playwright envs
-  env.JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG = true
-  env.JEST_HTML_REPORTER_INCLUDE_SUITE_FAILURE = true
 
   // Build the output path, and page title based on the passed in context
-  addEnv(env, 'JEST_HTML_REPORTER_OUTPUT_PATH', reportPath)
+  // JEST_HTML_REPORTER_OUTPUT_PATH
+  addEnv(env, 'GOBLET_HTML_REPORTER_OUTPUT_PATH', reportPath)
   addEnv(
     env,
-    'JEST_HTML_REPORTER_PAGE_TITLE',
+    'GOBLET_HTML_REPORTER_PAGE_TITLE',
     Boolean(type && context),
     buildReportTitle(type, context, browser)
   )
