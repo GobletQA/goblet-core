@@ -56,7 +56,9 @@ const getGeneratedName = (testLoc, type, browserName) => {
  * @returns {string} - Repo location where the artifact was copied to
  */
 const copyArtifactToRepo = async (saveLoc, name, currentLoc) => {
-  const saveFull = path.join(saveLoc, `${name}${path.extname(currentLoc)}`)
+  const saveFull = name
+    ? path.join(saveLoc, `${name}${path.extname(currentLoc)}`)
+    : saveLoc
 
   /**
    * Use copyStream because `movePath` can't move across separate partitions

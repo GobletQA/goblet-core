@@ -1,10 +1,7 @@
 const { noOpObj, get } = require('@keg-hub/jsutils')
+const { ARTIFACT_SAVE_OPTS } = require('GobletTest/constants')
 const { getTestResult } = require('GobletTest/reports/jasmineReporter')
-const {
-  getGeneratedName,
-  copyArtifactToRepo,
-  ensureRepoArtifactDir,
-} = require('GobletPlaywright/generatedArtifacts')
+const { getGeneratedName, ensureRepoArtifactDir } = require('GobletPlaywright/generatedArtifacts')
 
 /**
  * Checks if the context was recording a test report
@@ -31,14 +28,15 @@ const copyTestReports = async () => {
   const { GOBLET_HTML_REPORTER_OUTPUT_PATH } = process.env
   if(!GOBLET_HTML_REPORTER_OUTPUT_PATH) return
 
-  const { saveReport } = get(global, `__goblet.options`, noOpObj)
+  const { saveReport, testType } = get(global, `__goblet.options`, noOpObj)
+  const { type:browser=`browser` } = get(global, `__goblet.browser.options`, noOpObj)
+
   const { testPath } = getGeneratedName()
   const testResult = getTestResult(testPath)
-  
   if(!shouldSaveReport(testResult?.status, saveReport)) return
 
   const reportSplit = GOBLET_HTML_REPORTER_OUTPUT_PATH.split(`/`)
-  const reportName = reportSplit.pop()
+  reportSplit.pop()
   const reportLoc = reportSplit.join(`/`)
   const reportTempPath = get(global, `__goblet.paths.reportTempPath`)
 
@@ -46,8 +44,20 @@ const copyTestReports = async () => {
   if(reportTempPath === GOBLET_HTML_REPORTER_OUTPUT_PATH) return
 
   await ensureRepoArtifactDir(reportLoc)
-  await copyArtifactToRepo(reportLoc, reportName, reportTempPath)
 
+  // Can't copy the html report here because it hasn't been created yet
+  // So we do it after the command has run
+  // Not sure this is the best solution, but seems to be the only one that works right now
+
+  // await copyArtifactToRepo(GOBLET_HTML_REPORTER_OUTPUT_PATH, undefined, reportTempPath)
+
+  // // Update the testMeta with the path to the report file for the specific browser
+  // testType &&
+  //   await appendToLatest(`${testType}.reports.${browser}`, {
+  //     browser,
+  //     path: GOBLET_HTML_REPORTER_OUTPUT_PATH,
+  //     name: GOBLET_HTML_REPORTER_OUTPUT_PATH.split(`/`).pop(),
+  //   })
 }
 
 module.exports = {

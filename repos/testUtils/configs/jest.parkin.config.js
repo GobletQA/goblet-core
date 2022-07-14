@@ -4,7 +4,7 @@ const { jestConfig } = require('./jest.default.config')
 const path = require('path')
 const glob = require('glob')
 const { getGobletConfig } = require('GobletSharedConfig')
-const { uniqArr, noOpObj, uuid } = require('@keg-hub/jsutils')
+const { uniqArr, noOpObj } = require('@keg-hub/jsutils')
 const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
 const { buildJestGobletOpts } = require('GobletTestUtils/buildJestGobletOpts')
 const { getContextOpts } = require('GobletSCPlaywright/helpers/getContextOpts')
@@ -70,7 +70,7 @@ module.exports = async () => {
   const contextOpts = getContextOpts(noOpObj, config)
 
   const { testUtilsDir, reportsTempDir } = config.internalPaths
-  const reportOutputPath = path.join(reportsTempDir, `html-report-${uuid()}.html`)
+  const reportOutputPath = path.join(reportsTempDir, `${browserOpts.type}-html-report.html`)
   const defConf = jestConfig(config, {
     type: `bdd`,
     ext: 'feature',

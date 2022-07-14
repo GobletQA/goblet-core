@@ -40,6 +40,7 @@ const buildPWEnvs = (env={}, browser, params=noOpObj) => {
   addEnv(env, 'GOBLET_CONTEXT_PERMISSIONS', params.permissions, JSON.stringify(params.permissions))
 
   addEnv(env, 'GOBLET_TEST_TRACING', params.tracing)
+  addEnv(env, 'GOBLET_TEST_REPORT', params.testReport)
   addEnv(env, 'GOBLET_TEST_VIDEO_RECORD', params.record)
   addEnv(env, 'GOBLET_TEST_SCREENSHOT', params.screenshot)
 

@@ -37,6 +37,7 @@ const buildJestGobletOpts = (config, browserOpts, contextOpts) => {
     GOBLET_TEST_TRACING_SNAPSHOTS=true,
     GOBLET_TEST_TRACING_SCREENSHOTS=true
   } = process.env
+
   const options = {
     saveTrace: artifactSaveOption(GOBLET_TEST_TRACING),
     saveReport: artifactSaveOption(GOBLET_TEST_REPORT),

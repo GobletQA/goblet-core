@@ -1,3 +1,4 @@
+const path = require('path')
 const { noOpObj } = require('@keg-hub/jsutils')
 const { dockerCmd, Logger } = require('@keg-hub/cli-utils')
 const { parseParkinLogs } = require('GobletTest/parkin/parseParkinLogs')
@@ -5,6 +6,7 @@ const { runCommands } = require('GobletTasks/utils/helpers/runCommands')
 const { buildReportPath } = require('GobletTest/reports/buildReportPath')
 const { getBrowsers } = require('GobletSCPlaywright/helpers/getBrowsers')
 const { PARKIN_SPEC_RESULT_LOG } = require('GobletTest/constants/constants')
+const { copyArtifactToRepo } = require('GobletPlaywright/generatedArtifacts')
 const { handleTestExit } = require('GobletTasks/utils/helpers/handleTestExit')
 const { appendToLatest, commitTestMeta } = require('GobletTest/testMeta/testMeta')
 
@@ -68,7 +70,17 @@ const cmdCallbacks = (res, opts=noOpObj) => {
  *
  * @returns {Number} - Sum of all exit codes from the executed test commands
  */
-const buildBrowserCmd = (cmdArgs, cmdOpts, params, type, browser, reportPath) => {
+const buildBrowserCmd = (args) => {
+  const {
+    type,
+    params,
+    goblet,
+    cmdOpts,
+    cmdArgs,
+    browser,
+    reportPath
+  } = args
+  
   return async () => {
     const resp = await new Promise(async (res, rej) => {
       // TODO: Disabled until parkin log parsing is properly configured
@@ -88,6 +100,13 @@ const buildBrowserCmd = (cmdArgs, cmdOpts, params, type, browser, reportPath) =>
       exitCode: resp.exitCode,
       status: resp.exitCode ? `failed` : `passed`,
     })
+
+    // Copy the report after the tests have run, because it doesn't get created until the very end
+    await copyArtifactToRepo(
+      reportPath,
+      undefined,
+      path.join(goblet.internalPaths.reportsTempDir, `${browser}-html-report.html`)
+    )
 
     // Update the testMeta with the path to the report file for the specific browser
     await appendToLatest(`${type}.reports.${browser}`, {
@@ -124,14 +143,15 @@ const runTestCmd = async (args) => {
       const reportPath = buildReportPath(type, params, goblet, browser)
       reportPaths.push(reportPath)
 
-      return buildBrowserCmd(
-        cmdArgs,
-        envsHelper(browser, reportPath),
-        params,
+      return buildBrowserCmd({
         type,
+        goblet,
+        params,
+        cmdArgs,
         browser,
-        reportPath
-      )
+        reportPath,
+        cmdOpts: envsHelper(browser, reportPath),
+      })
     }
   )
 

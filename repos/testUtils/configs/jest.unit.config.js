@@ -5,8 +5,8 @@
 const { jestConfig } = require('./jest.default.config')
 
 const path = require('path')
+const { noOpObj } = require('@keg-hub/jsutils')
 const { inDocker } = require('@keg-hub/cli-utils')
-const { noOpObj, uuid } = require('@keg-hub/jsutils')
 const { getGobletConfig } = require('GobletSharedConfig')
 const metadata = require('GobletSCPlaywright/helpers/metadata')
 const { checkVncEnv } = require('GobletSCLibs/utils/vncActiveEnv')
@@ -83,7 +83,7 @@ module.exports = async () => {
   const contextOpts = getContextOpts(noOpObj, config)
 
   const { testUtilsDir, reportsTempDir } = config.internalPaths
-  const reportOutputPath = path.join(reportsTempDir, `html-report-${uuid()}.html`)
+  const reportOutputPath = path.join(reportsTempDir, `${browserOpts.type}-html-report.html`)
 
   return {
     preset: `jest-playwright-preset`,
