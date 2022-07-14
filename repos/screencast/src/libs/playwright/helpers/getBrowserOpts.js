@@ -35,8 +35,8 @@ options
   slowMo: 0
   timeout: 3000
   wsPath: '/custom-ws-path' (to serve websocket)
-  tracesDir: reportsDir
-  downloadsPath: artifactsDir
+  tracesDir: /goblet/artifacts/traces
+  downloadsPath: /goblet/artifacts/downloads
 */
 
 /**
@@ -58,13 +58,16 @@ const options = {
 }
 
 const getGobletConfigOpts = config => {
-  const { reportsDir = 'reports', artifactsDir = 'artifacts' } = config.paths
+  const {
+    tracesDir = 'artifacts/traces',
+    downloadsDir = 'artifacts/downloads',
+  } = config.paths
 
   const baseDir = getRepoGobletDir(config)
   return {
     ...config?.screencast?.browser,
-    tracesDir: path.join(baseDir, reportsDir),
-    downloadsPath: path.join(baseDir, artifactsDir),
+    tracesDir: path.join(baseDir, tracesDir),
+    downloadsPath: path.join(baseDir, downloadsDir),
   }
 }
 

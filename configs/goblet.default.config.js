@@ -71,7 +71,7 @@ module.exports = {
      * Where reports for test runs are saved
      * Relative to the "<repoRoot>/<workDir>/"
      * @type {string} - Relative Path
-     * @example - "/reports"
+     * @example - "/artifacts/reports"
      */
     reportsDir: GOBLET_REPORTS_DIR,
 

@@ -16,6 +16,7 @@ sync:
         - "/temp"
         - "/web-build"
         - "/reports"
+        - "/artifacts"
         - "/build"
         - "/bundle"
         - "/repos/example"

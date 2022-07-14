@@ -35,7 +35,7 @@ const {
   GOBLET_REPO_ROOT,
   GOBLET_WORK_DIR = `goblet`,
   GOBLET_ARTIFACTS_DIR = `artifacts`,
-  GOBLET_REPORTS_DIR = `reports`,
+  GOBLET_REPORTS_DIR = `artifacts/reports`,
   GOBLET_FEATURES_DIR = `bdd/features`,
   GOBLET_STEPS_DIR = `bdd/steps`,
   GOBLET_SUPPORT_DIR = `bdd/support`,

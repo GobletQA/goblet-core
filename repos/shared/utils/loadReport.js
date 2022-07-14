@@ -14,7 +14,7 @@ const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
  * @returns {Object} - Reports ast || empty object
  */
 const resolveReportAst = (repo, fullPath, baseDir) => {
-  const { reportsDir } = repo.paths
+  const { reportsDir=`artifacts/reports` } = repo.paths
   return fullPath.startsWith(path.join(baseDir, reportsDir))
     ? {
         ast: {

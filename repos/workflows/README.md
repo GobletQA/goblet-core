@@ -53,11 +53,11 @@
       /repository-root
         - /automation
           - /artifacts
+            - /reports
           - /bdd
             - /features
             - /steps
             - /support
-          - /reports
           - /unit
           - /waypoint
     ```

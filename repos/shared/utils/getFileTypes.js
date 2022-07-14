@@ -32,10 +32,10 @@ const normalizePaths = paths => {
     unitDir: unitDir || GOBLET_UNIT_DIR || 'units',
     stepsDir: stepsDir || GOBLET_STEPS_DIR || 'bdd/steps',
     supportDir: supportDir || GOBLET_SUPPORT_DIR || 'bdd/support',
-    reportsDir: reportsDir || GOBLET_REPORTS_DIR || 'reports',
     featuresDir: featuresDir || GOBLET_FEATURES_DIR || 'bdd/features',
     waypointDir: waypointDir || GOBLET_WAYPOINT_DIR || 'waypoints',
     artifactsDir: artifactsDir || GOBLET_ARTIFACTS_DIR || 'artifacts',
+    reportsDir: reportsDir || GOBLET_REPORTS_DIR || 'artifacts/reports',
   }
 }
 

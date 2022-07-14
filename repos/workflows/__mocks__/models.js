@@ -24,7 +24,7 @@ const parkinRepo = {
   paths: {
     artifacts: '/artifacts',
     features: '/bdd/features',
-    reports: '/reports',
+    reports: '/artifacts/reports',
     root: '/goblet',
     steps: '/bdd/steps',
     units: '/units',

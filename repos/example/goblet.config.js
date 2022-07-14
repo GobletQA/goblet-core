@@ -7,7 +7,8 @@ module.exports = {
   paths: {
     repoRoot: path.join(__dirname),
     workDir: 'goblet',
-    reportsDir: 'reports',
+    artifactsDir: 'artifacts',
+    reportsDir: 'artifacts/reports',
     featuresDir: 'bdd/features',
     supportDir: 'bdd/support',
     stepsDir: 'bdd/steps',
