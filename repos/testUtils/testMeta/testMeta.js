@@ -1,6 +1,8 @@
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
 const { getDefaultGobletConfig } = require('GobletSharedConfig')
-const { deepMerge, deepClone, set, isArr } = require('@keg-hub/jsutils')
+const { deepMerge, deepClone, set, isArr, noOpObj } = require('@keg-hub/jsutils')
+
+const isCIEnv = Boolean(process.env.GOBLET_RUN_FROM_CI)
 const { readFile, writeFile, pathExists, removeFile } = fileSys
 
 let __TEST_META
@@ -11,6 +13,8 @@ let __TEST_META
  * @return {string} - Path to the testMeta file
  */
  const getTestMetaPath = () => {
+  if(!isCIEnv) return ``
+
   const config = getDefaultGobletConfig()
   return config.internalPaths.testMetaFile
 }
@@ -22,6 +26,8 @@ let __TEST_META
  * @return {Object} - Passed in testMeta data object
  */
 const saveTestMeta = async (testMeta) => {
+  if(!isCIEnv) return noOpObj
+
   const testMetaLoc = getTestMetaPath()
   const savedMeta = await readTestMeta()
   __TEST_META = deepMerge(savedMeta, testMeta)
@@ -41,6 +47,8 @@ const saveTestMeta = async (testMeta) => {
  * @return {Object} - json of the testMeta data
  */
 const readTestMeta = async () => {
+  if(!isCIEnv) return noOpObj
+
   try {
     const testMetaLoc = getTestMetaPath()
     const [errExists, exists] = await pathExists(testMetaLoc)
@@ -71,6 +79,8 @@ const readTestMeta = async () => {
  * @return {Object} - json of the testMeta data
  */
 const appendToLatest = async (loc, data, commit) => {
+  if(!isCIEnv) return noOpObj
+
   if(!__TEST_META){
     const testMeta = await readTestMeta()
     __TEST_META = !testMeta.latest
@@ -90,6 +100,8 @@ const appendToLatest = async (loc, data, commit) => {
  * @return {Object} - json of the testMeta data
  */
 const upsertTestMeta = async (loc, data) => {
+  if(!isCIEnv) return noOpObj
+
   const saveLoc = isArr(loc) ? loc.join(`.`) : loc
   set(__TEST_META, `latest.${saveLoc}`, data)
 
@@ -102,6 +114,8 @@ const upsertTestMeta = async (loc, data) => {
  * @return {Void}
  */
 const initTestMeta = async () => {
+  if(!isCIEnv) return noOpObj
+
   const testMeta = await readTestMeta()
   const id = new Date().getTime()
   const latest = { id }
@@ -125,7 +139,9 @@ const initTestMeta = async () => {
  * @return {Object} - json of the testMeta data
  */
 const commitTestMeta = async () => {
-  return __TEST_META && await saveTestMeta(__TEST_META)
+  return isCIEnv
+    ? __TEST_META && await saveTestMeta(__TEST_META)
+    : noOpObj
 }
 
 /**
