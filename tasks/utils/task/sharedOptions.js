@@ -88,12 +88,14 @@ const taskOptions = {
       description: 'Amount of times to retry the test if it fails',
     },
     testReport: {
+      alias: [`report`],
       example: '--testReport',
       env: `GOBLET_TEST_REPORT`,
       allowed: artifactSaveOpts,
       description: 'Context in which the html test report should be saved',
     },
     testReportName: {
+      alias: [`reportName`],
       example: '--testReportName',
       env: `GOBLET_TEST_REPORT_NAME`,
       description: 'Name of the generated HTML test report file',
