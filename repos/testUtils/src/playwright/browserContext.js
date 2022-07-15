@@ -1,14 +1,17 @@
 const os = require('os')
 const path = require('path')
-const { promises } = require('fs')
-const { startTracing } = require('./tracing')
 const { get, noOpObj } = require('@keg-hub/jsutils')
 const { getMetadata } = require('@GSC/Playwright/server/server')
 const { newBrowser } = require('@GSC/Playwright/browser/newBrowser')
+const {
+  browserCookieLoc,
+  setContextCookie,
+  defaultCookieFile,
+  saveContextCookie
+} = require('@GTU/Playwright/browserCookie')
 
 const defaultStateFile = 'browser-context-state'
-const defaultCookieFile = 'browser-cookie-state'
-
+  
 /**
  * Sets up the global browser for the test environment
  *
@@ -46,42 +49,6 @@ const setupContext = async () => {
   await startTracing(global.context)
 
   return global.context
-}
-
-/**
- * Gets the storage location from the temp-directory
- */
-const browserCookieLoc = (saveLocation) => {
-  const tempDir = os.tmpdir()
-  const location = `${(saveLocation || defaultCookieFile).split(`.json`).shift()}.json`
-
-  return path.join(tempDir, location)
-}
-
-/**
- * Save storage state into the file.
- */
-const saveContextCookie = async (context, location) => {
-  const cookies = await context.cookies()
-  const saveLoc = browserCookieLoc(location)
-  await promises.writeFile(saveLoc, JSON.stringify(cookies))
-
-  return true
-}
-
-const setContextCookie = async (context, location) => {
-  const loadLoc = browserCookieLoc(location)
-  // TODO: Investigate if this should throw or not
-  // If instead we want to return false because the cookie could not be set
-  // Then uncomment this code
-  // const [err] = await limbo(promises.access(loadLoc, constants.F_OK))
-  // if(err) return false
-
-  const cookie = await promises.readFile(loadLoc, 'utf8')
-  await context.addCookies(JSON.parse(cookie))
-  context.__goblet.cookie = loadLoc
-
-  return true
 }
 
 /**

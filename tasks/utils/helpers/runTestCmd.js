@@ -1,14 +1,14 @@
 const path = require('path')
 const { noOpObj } = require('@keg-hub/jsutils')
 const { dockerCmd, Logger } = require('@keg-hub/cli-utils')
-const { parseParkinLogs } = require('@GTU//parkin/parseParkinLogs')
+const { parseParkinLogs } = require('@GTU/parkin/parseParkinLogs')
 const { runCommands } = require('@GTasks/utils/helpers/runCommands')
-const { buildReportPath } = require('@GTU//reports/buildReportPath')
+const { buildReportPath } = require('@GTU/reports/buildReportPath')
 const { getBrowsers } = require('@GSC/Playwright/helpers/getBrowsers')
-const { PARKIN_SPEC_RESULT_LOG } = require('@GTU//constants/constants')
+const { PARKIN_SPEC_RESULT_LOG } = require('@GTU/constants/constants')
 const { copyArtifactToRepo } = require('@GTU/Playwright/generatedArtifacts')
 const { handleTestExit } = require('@GTasks/utils/helpers/handleTestExit')
-const { appendToLatest, commitTestMeta } = require('@GTU//testMeta/testMeta')
+const { appendToLatest, commitTestMeta } = require('@GTU/testMeta/testMeta')
 
 const filterLogs = (data, params, parkinLogs) => {
   let filtered = data

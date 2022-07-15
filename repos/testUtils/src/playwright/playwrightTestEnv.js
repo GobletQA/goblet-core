@@ -1,7 +1,7 @@
 const { Logger } = require('@keg-hub/cli-utils')
 const { copyTestReports } = require('@GTU/Playwright/testReport')
 const { saveRecordingPath } = require('@GTU/Playwright/videoRecording')
-const { initTestMeta, commitTestMeta } = require('@GTU//testMeta/testMeta')
+const { initTestMeta, commitTestMeta } = require('@GTU/testMeta/testMeta')
 const { stopTracingChunk, startTracingChunk } = require('@GTU/Playwright/tracing')
 const { setupBrowser, setupContext, getContext } = require('@GTU/Playwright/browserContext')
 

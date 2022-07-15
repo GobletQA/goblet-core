@@ -5,7 +5,6 @@ const { buildJestArgs } = require('@GTasks/utils/jest/buildJestArgs')
 const { getJestConfig } = require('@GTasks/utils/jest/getJestConfig')
 const { filterTaskEnvs } = require('@GTasks/utils/envs/filterTaskEnvs')
 const { buildWaypointEnvs } = require('@GTasks/utils/envs/buildWaypointEnvs')
-const { appendToLatest, commitTestMeta } = require('@GTU//testMeta/testMeta')
 
 /**
  * Run task for waypoint scripts

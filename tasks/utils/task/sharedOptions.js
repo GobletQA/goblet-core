@@ -1,6 +1,6 @@
 const { gobletMountDir } = require('@GTasks/paths')
 const { setSharedOptions } = require('@keg-hub/cli-utils')
-const { ARTIFACT_SAVE_OPTS } = require('@GTU//constants')
+const { ARTIFACT_SAVE_OPTS } = require('@GTU/constants')
 const artifactSaveOpts = Object(ARTIFACT_SAVE_OPTS).values
 
 const dynamicOpts = {
@@ -108,7 +108,7 @@ const taskOptions = {
       description: 'Use internal test cache when executing test',
     },
     testColors: {
-      default: true,
+      default: false,
       type: `boolean`,
       example: '--testColors',
       env: `GOBLET_TEST_COLORS`,

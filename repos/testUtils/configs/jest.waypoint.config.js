@@ -111,6 +111,8 @@ module.exports = async () => {
       },
     },
     setupFilesAfterEnv: [
+      // `${testUtilsDir}/src/waypoint/hooks.js`,
+      `${testUtilsDir}/src/playwright/playwrightTestEnv.js`,
       `${testUtilsDir}/src/waypoint/mockEnv.js`
     ],
     /** Add the custom waypoint transformer for all found .feature files */

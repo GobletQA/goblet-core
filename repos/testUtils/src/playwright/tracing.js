@@ -1,8 +1,8 @@
 const path = require('path')
 const { noOpObj, get } = require('@keg-hub/jsutils')
-const { ARTIFACT_SAVE_OPTS } = require('@GTU//constants')
-const { appendToLatest } = require('@GTU//testMeta/testMeta')
-const { getTestResult } = require('@GTU//reports/jasmineReporter')
+const { ARTIFACT_SAVE_OPTS } = require('@GTU/constants')
+const { appendToLatest } = require('@GTU/testMeta/testMeta')
+const { getTestResult } = require('@GTU/reports/jasmineReporter')
 const {
   getGeneratedName,
   copyArtifactToRepo,

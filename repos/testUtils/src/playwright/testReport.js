@@ -1,6 +1,6 @@
 const { noOpObj, get } = require('@keg-hub/jsutils')
-const { ARTIFACT_SAVE_OPTS } = require('@GTU//constants')
-const { getTestResult } = require('@GTU//reports/jasmineReporter')
+const { ARTIFACT_SAVE_OPTS } = require('@GTU/constants')
+const { getTestResult } = require('@GTU/reports/jasmineReporter')
 const { getGeneratedName, ensureRepoArtifactDir } = require('@GTU/Playwright/generatedArtifacts')
 
 /**
