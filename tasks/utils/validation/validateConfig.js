@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { isObj, noOp } = require('@keg-hub/jsutils')
-const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
+const { getRepoGobletDir } = require('@GSH/Utils/getRepoGobletDir')
 
 /**
  * **IMPORTANT**
@@ -11,7 +11,7 @@ const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
  * All others should use getGobletConfig
  * **IMPORTANT**
  */
-const defaultConfig = require('GobletConfigs/goblet.default.config.js')
+const defaultConfig = require('@GConfigs/goblet.default.config.js')
 
 /**
  * Error type specific to goblet config validation.

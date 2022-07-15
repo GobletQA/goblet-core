@@ -1,5 +1,5 @@
 const { dockerCmd } = require('@keg-hub/cli-utils')
-const { launchBrowser } = require('GobletTasks/utils/playwright/launchBrowser')
+const { launchBrowser } = require('@GTasks/utils/playwright/launchBrowser')
 
 const createTest = async args => {
   const { params } = args

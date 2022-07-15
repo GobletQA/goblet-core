@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 require('../../../configs/aliases.config').registerAliases()
 
-const { getApp } = require('GobletSharedApp')
+const { getApp } = require('@GSH/App')
 const { validateUser } = require('./middleware')
 const { Logger } = require('@keg-hub/cli-utils')
-const apiEndpoints = require('GobletSCEndpoints')
+const apiEndpoints = require('@GSC/Endpoints')
 const {
   setupCors,
   setupServer,
   setupLoggerReq,
   setupLoggerErr,
-} = require('GobletSharedMiddleware')
+} = require('@GSH/Middleware')
 
 /**
  * Starts a express API server for screencast

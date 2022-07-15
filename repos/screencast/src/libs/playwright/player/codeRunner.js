@@ -1,11 +1,11 @@
 // TODO( IMPORTANT ):  @lancetipton - Setup mv2
 // const { NodeVM } = require('vm2')
 const expect = require('expect')
+const { getWorld } = require('@GTU/Support')
 const { Parkin } = require('@ltipton/parkin')
 const { ParkinTest } = require('@ltipton/parkin/test')
-const { getWorld } = require('GobletRepos/testUtils/support')
-const { setParkinInstance } = require('GobletParkin/instance')
-const { getDefinitions } = require('GobletSharedRepo/getDefinitions')
+const { setParkinInstance } = require('@GTU/Parkin/instance')
+const { getDefinitions } = require('@GSH/Repo/getDefinitions')
 
 /**
  * Tiny-Jest allows calling the test methods directly

@@ -7,15 +7,15 @@ const { jestConfig } = require('./jest.default.config')
 const path = require('path')
 const { noOpObj } = require('@keg-hub/jsutils')
 const { inDocker } = require('@keg-hub/cli-utils')
-const { getGobletConfig } = require('GobletSharedConfig')
-const metadata = require('GobletSCPlaywright/helpers/metadata')
-const { checkVncEnv } = require('GobletSCLibs/utils/vncActiveEnv')
-const { getLaunchType } = require('GobletSharedUtils/getLaunchType')
-const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
-const { buildJestGobletOpts } = require('GobletTestUtils/buildJestGobletOpts')
-const { getContextOpts } = require('GobletSCPlaywright/helpers/getContextOpts')
-const { getBrowserOpts } = require('GobletSCPlaywright/helpers/getBrowserOpts')
-const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts')
+const { getGobletConfig } = require('@GSH/Config')
+const metadata = require('@GSC/Playwright/helpers/metadata')
+const { checkVncEnv } = require('@GSC/Libs/utils/vncActiveEnv')
+const { getLaunchType } = require('@GSH/Utils/getLaunchType')
+const { getRepoGobletDir } = require('@GSH/Utils/getRepoGobletDir')
+const { buildJestGobletOpts } = require('@GTU/Utils/buildJestGobletOpts')
+const { getContextOpts } = require('@GSC/Playwright/helpers/getContextOpts')
+const { getBrowserOpts } = require('@GSC/Playwright/helpers/getBrowserOpts')
+const { taskEnvToBrowserOpts } = require('@GSH/Utils/taskEnvToBrowserOpts')
 
 /**
  * Builds the launch / browser options for the jest-playwright-config
@@ -119,14 +119,14 @@ module.exports = async () => {
       },
     },
     setupFilesAfterEnv: [
-      `${testUtilsDir}/waypoint/mockEnv.js`
+      `${testUtilsDir}/src/waypoint/mockEnv.js`
     ],
     /** Add the custom waypoint transformer for all found .feature files */
     transform: {
       // Add the custom waypoint transformer for waypoint files
       // TODO: add a custom transformer for unit tests
-      // '^.*\\.(waypoint.js|wp.js|test.js|spec.js)$': `${testUtilsDir}/waypoint/transformer.js`,
-      // '^(waypoint|wp|test|spec)\\..*\\.(js)$': `${testUtilsDir}/waypoint/transformer.js`,
+      // '^.*\\.(waypoint.js|wp.js|test.js|spec.js)$': `${testUtilsDir}/src/waypoint/transformer.js`,
+      // '^(waypoint|wp|test|spec)\\..*\\.(js)$': `${testUtilsDir}/src/waypoint/transformer.js`,
       '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
     },
   }

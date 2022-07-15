@@ -1,5 +1,5 @@
-const { loadDefinitions } = require('GobletSharedDefinitions/definitions')
-const { definitionsByType } = require('GobletSharedUtils/definitionsByType')
+const { loadDefinitions } = require('@GSH/Definitions/definitions')
+const { definitionsByType } = require('@GSH/Utils/definitionsByType')
 
 const getDefinitions = async (repo, config) => {
   const definitions = await loadDefinitions(repo, config)

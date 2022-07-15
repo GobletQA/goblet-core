@@ -17,7 +17,7 @@ const locations = {
   bundleDir,
   tasks: `tasks`,
   goblet: `goblet`,
-  testUtils: `repos/testUtils`,
+  testUtils: `repos/testUtils/src`,
   templates: `repos/shared/templates`,
   testConfigs: `repos/testUtils/configs`,
   tasksIn: path.join(rootDir, `tasks/runTask.js`),

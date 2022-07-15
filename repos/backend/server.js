@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-const { getApp } = require('GobletSharedApp')
-const apiEndpoints = require('GobletBackEndpoints')
-const { initSockr } = require('GobletBackSockr/sockr')
-const { isDeployedEnv } = require('GobletSharedUtils/isDeployedEnv')
+const { getApp } = require('@GSH/App')
+const apiEndpoints = require('@GBK/Endpoints')
+const { initSockr } = require('@GBK/Sockr/sockr')
+const { isDeployedEnv } = require('@GSH/Utils/isDeployedEnv')
 const {
   setReqRepo,
   setupVNCProxy,
   validateUser,
   setupBlacklist,
   setupServerListen,
-} = require('GobletBackMiddleware')
+} = require('@GBK/Middleware')
 const {
   setupJWT,
   setupCors,
@@ -17,7 +17,7 @@ const {
   setupStatic,
   setupLoggerReq,
   setupLoggerErr,
-} = require('GobletSharedMiddleware')
+} = require('@GSH/Middleware')
 
 /**
  * Starts a express API server, and connects the sockr Websocket

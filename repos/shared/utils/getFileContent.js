@@ -1,4 +1,4 @@
-const { pathExists, readFile } = require('GobletSharedFileSys/fileSys')
+const { pathExists, readFile } = require('@GSH/FileSys/fileSys')
 
 /**
  * Gets the text content of a file from the passed in location

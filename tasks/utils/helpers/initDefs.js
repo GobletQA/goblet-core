@@ -1,4 +1,4 @@
-const { getGobletConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('@GSH/Config')
 const { isObj, isFunc, mapObj } = require('@keg-hub/jsutils')
 
 /**

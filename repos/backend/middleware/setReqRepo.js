@@ -1,6 +1,6 @@
-const { Repo } = require('GobletSharedRepo/repo')
-const { AppRouter } = require('GobletSharedRouter')
-const { asyncWrap } = require('GobletSharedExp')
+const { Repo } = require('@GSH/Repo/repo')
+const { AppRouter } = require('@GSH/Router')
+const { asyncWrap } = require('@GSH/Exp')
 const { pickKeys, deepMerge } = require('@keg-hub/jsutils')
 
 /**

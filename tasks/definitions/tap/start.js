@@ -1,12 +1,12 @@
 const nodePath = require('path')
 const { get } = require('@keg-hub/jsutils')
 const { sharedOptions } = require('@keg-hub/cli-utils')
-const { validateConfig } = require('GobletTasks/utils/validation')
-const { setMountEnvs } = require('GobletTasks/utils/envs/setMountEnvs')
-const { setGobletMode } = require('GobletTasks/utils/helpers/setGobletMode')
+const { validateConfig } = require('@GTasks/utils/validation')
+const { setMountEnvs } = require('@GTasks/utils/envs/setMountEnvs')
+const { setGobletMode } = require('@GTasks/utils/helpers/setGobletMode')
 const {
   launchBrowsers,
-} = require('GobletTasks/utils/playwright/launchBrowsers')
+} = require('@GTasks/utils/playwright/launchBrowsers')
 
 /**
  * @param {String} configPath - path to goblet config file

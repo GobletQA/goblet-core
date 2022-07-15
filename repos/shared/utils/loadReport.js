@@ -1,8 +1,8 @@
 const path = require('path')
 const { noOpObj } = require('@keg-hub/jsutils')
-const { buildFileModel } = require('GobletSharedUtils/buildFileModel')
-const { getMountRootDir } = require('GobletSharedUtils/getMountRootDir')
-const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
+const { buildFileModel } = require('@GSH/Utils/buildFileModel')
+const { getMountRootDir } = require('@GSH/Utils/getMountRootDir')
+const { getRepoGobletDir } = require('@GSH/Utils/getRepoGobletDir')
 
 /**
  * Checks if a path is in the reports folder

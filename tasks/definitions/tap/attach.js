@@ -1,8 +1,8 @@
 const { sharedOptions } = require('@keg-hub/cli-utils')
-const { setGobletMode } = require('GobletTasks/utils/helpers/setGobletMode')
+const { setGobletMode } = require('@GTasks/utils/helpers/setGobletMode')
 const {
   launchBrowsers,
-} = require('GobletTasks/utils/playwright/launchBrowsers')
+} = require('@GTasks/utils/playwright/launchBrowsers')
 
 /**
  * Attach to the running keg-tap container

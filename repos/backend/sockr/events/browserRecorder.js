@@ -1,12 +1,12 @@
 const { noOpObj } = require('@keg-hub/jsutils')
-const { joinBrowserConf } = require('GobletSharedUtils/joinBrowserConf')
+const { joinBrowserConf } = require('@GSH/Utils/joinBrowserConf')
 
 // TODO: @lance-tipton - Move all socket.io setup and files to screencast folder
 const {
   setPage,
   stopBrowser,
   startRecording,
-} = require('GobletSCPlaywright')
+} = require('@GSC/Playwright')
 
 /**
  * Stats a the browser recorder from a socket.io event

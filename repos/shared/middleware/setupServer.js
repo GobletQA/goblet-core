@@ -1,6 +1,6 @@
 const express = require('express')
-const { getApp } = require('GobletSharedApp')
-const { AppRouter } = require('GobletSharedRouter')
+const { getApp } = require('@GSH/App')
+const { AppRouter } = require('@GSH/Router')
 
 /**
  * Configures the express bodyParser and add the AppRouter to the express app

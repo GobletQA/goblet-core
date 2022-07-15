@@ -1,7 +1,7 @@
 const path = require('path')
 const express = require('express')
-const { getApp } = require('GobletSharedApp')
-const { GobletRoot } = require('GobletSharedPaths')
+const { getApp } = require('@GSH/App')
+const { GobletRoot } = require('@GSH/Paths')
 const { isArr, isObj, exists, isStr } = require('@keg-hub/jsutils')
 
 /**

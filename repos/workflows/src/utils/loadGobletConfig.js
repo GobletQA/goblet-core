@@ -1,4 +1,4 @@
-const { getConfigAtPath } = require('GobletSharedConfig')
+const { getConfigAtPath } = require('@GSH/Config')
 const { getCurrentRepoPath } = require('./getCurrentRepoPath')
 
 /**

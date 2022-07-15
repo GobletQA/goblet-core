@@ -1,5 +1,5 @@
 const {eitherArr, noPropArr, isStr} = require('@keg-hub/jsutils')
-const { browserNames, browserMap } = require('GobletSCConstants')
+const { browserNames, browserMap } = require('@GSC/Constants')
 
 /**
  * Creates an array of browsers relative the passed params object properties

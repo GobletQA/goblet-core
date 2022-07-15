@@ -1,14 +1,14 @@
-const { AppRouter } = require('GobletSharedRouter')
+const { AppRouter } = require('@GSH/Router')
 const { noOpObj } = require('@keg-hub/jsutils')
-const { asyncWrap, apiRes } = require('GobletSharedExp')
-const { joinBrowserConf } = require('GobletSharedUtils/joinBrowserConf')
+const { asyncWrap, apiRes } = require('@GSH/Exp')
+const { joinBrowserConf } = require('@GSH/Utils/joinBrowserConf')
 const {
   stopBrowser,
   startBrowser,
   actionBrowser,
   statusBrowser,
   restartBrowser,
-} = require('GobletSCPlaywright')
+} = require('@GSC/Playwright')
 
 /**
  * Starts a Playwright Browser using the passed in params as launch options

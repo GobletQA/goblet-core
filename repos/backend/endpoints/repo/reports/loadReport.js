@@ -1,7 +1,7 @@
-const { asyncWrap } = require('GobletSharedExp')
-const { htmlRes, htmlErr } = require('GobletBackEndpoints/handlers')
-const { getTestReportHtml } = require('GobletBackUtils/getTestReportHtml')
-const { loadTemplate } = require(`GobletSharedTemplate/loadTemplate`)
+const { asyncWrap } = require('@GSH/Exp')
+const { htmlRes, htmlErr } = require('@GBK/Endpoints/handlers')
+const { getTestReportHtml } = require('@GBK/Utils/getTestReportHtml')
+const { loadTemplate } = require(`@GSH/Template/loadTemplate`)
 
 /**
  * Loads reports from the passed in params

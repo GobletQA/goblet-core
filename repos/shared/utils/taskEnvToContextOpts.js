@@ -1,6 +1,6 @@
 const { getScreenDims } = require('./getScreenDims')
 const { parseJsonEnvArr } = require('./parseJsonEnvArr')
-const { artifactSaveActive } = require('GobletTestUtils/artifactSaveOption')
+const { artifactSaveActive } = require('@GTU/Utils/artifactSaveOption')
 const {
   toBool,
   isArr,

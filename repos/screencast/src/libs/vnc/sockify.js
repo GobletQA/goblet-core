@@ -1,7 +1,7 @@
 const fs = require('fs')
 const { Logger } = require('@keg-hub/cli-utils')
-const { getGobletConfig } = require('GobletSharedConfig')
-const { findProc, killProc } = require('GobletSCLibs/proc')
+const { getGobletConfig } = require('@GSH/Config')
+const { findProc, killProc } = require('@GSC/Libs/proc')
 const { create: childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
 const {
   checkCall,

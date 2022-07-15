@@ -1,4 +1,4 @@
-const { asyncWrap, apiRes } = require('GobletSharedExp')
+const { asyncWrap, apiRes } = require('@GSH/Exp')
 
 /**
  * Loads the Parkin World object and passes it to the frontend

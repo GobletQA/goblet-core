@@ -1,9 +1,9 @@
 const path = require('path')
 const glob = require('glob')
 const { DefinitionsParser } = require('./definitionsParser')
-const { getDefaultGobletConfig } = require('GobletSharedConfig')
-const { getPathFromBase } = require('GobletSharedUtils/getPathFromBase')
-const { parkinOverride } = require('GobletSharedLibs/overrides/parkinOverride')
+const { getDefaultGobletConfig } = require('@GSH/Config')
+const { getPathFromBase } = require('@GSH/Utils/getPathFromBase')
+const { parkinOverride } = require('@GSH/Libs/overrides/parkinOverride')
 
 /**
  * Searches the step definition directory for step definitions
@@ -61,7 +61,7 @@ const loadDefinitions = async (repo, gobletConfig) => {
   const definitionFiles = stepsDir && (await loadDefinitionsFiles(pathToSteps))
 
   const gobletDefinitionFiles = await loadDefinitionsFiles(
-    `${gobletConfig.internalPaths.testUtilsDir}/steps`
+    `${gobletConfig.internalPaths.testUtilsDir}/src/steps`
   )
 
   // The repo world may have been updated since the last time load definitions was called

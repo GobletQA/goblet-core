@@ -1,6 +1,6 @@
 const { get } = require('@keg-hub/jsutils')
 const { createProxyMiddleware } = require('http-proxy-middleware')
-const { stopScreencast, startScreencast } = require('GobletSCScreencast')
+const { stopScreencast, startScreencast } = require('@GSC/Screencast')
 
 /**
  * Called when proxy throws an error and can not be connected to

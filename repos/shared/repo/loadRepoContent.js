@@ -1,8 +1,8 @@
-const { loadFeatures } = require('GobletSharedFeatures/features')
-const { buildFileTree } = require('GobletSharedFileSys/fileTree')
-const { loadDefinitions } = require('GobletSharedDefinitions/definitions')
-const { definitionsByType } = require('GobletSharedUtils/definitionsByType')
-const { fileModelArrayToObj } = require('GobletSharedUtils/fileModelArrayToObj')
+const { loadFeatures } = require('@GSH/Features/features')
+const { buildFileTree } = require('@GSH/FileSys/fileTree')
+const { loadDefinitions } = require('@GSH/Definitions/definitions')
+const { definitionsByType } = require('@GSH/Utils/definitionsByType')
+const { fileModelArrayToObj } = require('@GSH/Utils/fileModelArrayToObj')
 
 /**
  * Loads all the needed content for a repo

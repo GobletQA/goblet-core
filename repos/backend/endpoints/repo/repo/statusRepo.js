@@ -1,6 +1,6 @@
-const { Repo } = require('GobletSharedRepo/repo')
-const { asyncWrap, apiRes } = require('GobletSharedExp')
-const { loadRepoContent } = require('GobletSharedRepo/loadRepoContent')
+const { Repo } = require('@GSH/Repo/repo')
+const { asyncWrap, apiRes } = require('@GSH/Exp')
+const { loadRepoContent } = require('@GSH/Repo/loadRepoContent')
 
 /**
  * Could be used to get repos when unmounted and in vnc mode, but logged in

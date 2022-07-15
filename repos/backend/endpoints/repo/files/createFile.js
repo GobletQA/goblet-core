@@ -1,5 +1,5 @@
-const { createGobletFile } = require('GobletSharedFileSys/gobletFiles')
-const { asyncWrap, apiRes } = require('GobletSharedExp')
+const { createGobletFile } = require('@GSH/FileSys/gobletFiles')
+const { asyncWrap, apiRes } = require('@GSH/Exp')
 
 /**
  * Creates new file based on file type within the docker mounted test root folder

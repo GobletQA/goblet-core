@@ -8,9 +8,9 @@ const path = require('path')
 const { jestAliases, registerAliases } = require('../../../configs/aliases.config')
 registerAliases()
 
-const { getGobletConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('@GSH/Config')
 const { noOpObj, noPropArr, capitalize } = require('@keg-hub/jsutils')
-const { buildTestMatchFiles } = require('GobletSharedUtils/buildTestMatchFiles')
+const { buildTestMatchFiles } = require('@GSH/Utils/buildTestMatchFiles')
 
 /**
  * Builds the test reports, currently only jest-html-reporter

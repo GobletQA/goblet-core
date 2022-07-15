@@ -1,4 +1,4 @@
-const { asyncWrap, apiRes } = require('GobletSharedExp')
+const { asyncWrap, apiRes } = require('@GSH/Exp')
 
 /**
  * Responds with the parkin report html as string

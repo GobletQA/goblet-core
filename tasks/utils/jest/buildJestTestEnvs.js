@@ -1,5 +1,5 @@
 const { addEnv } = require('../envs/addEnv')
-const { buildReportTitle } = require('GobletTest/reports/buildReportTitle')
+const { buildReportTitle } = require('@GTU//reports/buildReportTitle')
 
 /**
  * Builds the envs set in the command that runs a test

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
-const { Repo } = require('GobletSharedRepo/repo')
-const { asyncWrap, apiRes } = require('GobletSharedExp')
-const { generateTokens } = require('GobletBackUtils/generateTokens')
+const { Repo } = require('@GSH/Repo/repo')
+const { asyncWrap, apiRes } = require('@GSH/Exp')
+const { generateTokens } = require('@GBK/Utils/generateTokens')
 
 /**
  * Validates the required authentication information exists

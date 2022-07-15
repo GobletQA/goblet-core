@@ -3,12 +3,12 @@ const { jestConfig } = require('./jest.default.config')
 
 const path = require('path')
 const glob = require('glob')
-const { getGobletConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('@GSH/Config')
 const { uniqArr, noOpObj } = require('@keg-hub/jsutils')
-const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
-const { buildJestGobletOpts } = require('GobletTestUtils/buildJestGobletOpts')
-const { getContextOpts } = require('GobletSCPlaywright/helpers/getContextOpts')
-const { taskEnvToBrowserOpts } = require('GobletSharedUtils/taskEnvToBrowserOpts')
+const { getRepoGobletDir } = require('@GSH/Utils/getRepoGobletDir')
+const { buildJestGobletOpts } = require('@GTU/Utils/buildJestGobletOpts')
+const { getContextOpts } = require('@GSC/Playwright/helpers/getContextOpts')
+const { taskEnvToBrowserOpts } = require('@GSH/Utils/taskEnvToBrowserOpts')
 
 /**
  * Finds all step definition files in client's step directory and
@@ -24,7 +24,7 @@ const getStepDefinitions = config => {
   const clientPattern = path.join(baseDir, stepsDir, '**/*.js')
   const clientMatches = glob.sync(clientPattern)
 
-  const configPattern = path.join(testUtilsDir, 'steps/**/*.js')
+  const configPattern = path.join(testUtilsDir, 'src/steps/**/*.js')
   const configMatches = glob.sync(configPattern)
 
   return uniqArr([...clientMatches, ...configMatches])
@@ -40,10 +40,10 @@ const getParkinSupport = config => {
   const { testUtilsDir } = config.internalPaths
   const { repoRoot, workDir, supportDir } = config.paths
 
-  const parkinEnvironment = `${testUtilsDir}/parkin/parkinTestInit.js`
+  const parkinEnvironment = `${testUtilsDir}/src/parkin/parkinTestInit.js`
 
   // **IMPORTANT** - Must be loaded after the parkinEnvironment 
-  const configHooks = `${testUtilsDir}/support/hooks`
+  const configHooks = `${testUtilsDir}/src/support/hooks`
 
   // Don't include the world here because it gets loaded in config/support/world.js
   const baseDir = workDir ? path.join(repoRoot, workDir) : repoRoot
@@ -110,7 +110,7 @@ module.exports = async () => {
     transform: {
       '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
       // Add the custom parkin transformer for feature files
-      '^.*\\.feature': `${testUtilsDir}/parkin/transformer.js`,
+      '^.*\\.feature': `${testUtilsDir}/src/parkin/transformer.js`,
     },
   }
 }

@@ -1,5 +1,5 @@
-const { Given } = require('GobletParkin')
-const { getBrowserContext } = require('GobletPWTestEnv')
+const { Given } = require('@GTU/Parkin')
+const { getBrowserContext } = require('@GTU/PlaywrightEnv')
 const { getPage } = getBrowserContext()
 
 Given('I navigate to {word}', async site => {

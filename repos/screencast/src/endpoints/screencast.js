@@ -1,11 +1,11 @@
 const { parseJSON } = require('@keg-hub/jsutils')
-const { AppRouter } = require('GobletSharedRouter')
-const { asyncWrap, apiRes } = require('GobletSharedExp')
+const { AppRouter } = require('@GSH/Router')
+const { asyncWrap, apiRes } = require('@GSH/Exp')
 const {
   stopScreencast,
   startScreencast,
   statusScreencast,
-} = require('GobletSCScreencast')
+} = require('@GSC/Screencast')
 
 /**
  * Endpoint to get the current status  of the browser

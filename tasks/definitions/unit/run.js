@@ -22,7 +22,7 @@ module.exports = {
       'run',
       {
         jestConfig: {
-          default: 'configs/configs/jest.config.js',
+          default: 'configs/jest.config.js',
         },
       },
       ['jestConfig', 'mode', 'base']

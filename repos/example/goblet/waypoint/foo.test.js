@@ -1,6 +1,6 @@
 const {
   playwrightTestEnv,
-} = require('GobletRepos/testUtils/playwright/playwrightTestEnv')
+} = require('@GTU/PlaywrightEnv')
 
 playwrightTestEnv()
 

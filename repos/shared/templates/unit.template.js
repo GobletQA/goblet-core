@@ -1,4 +1,4 @@
-const { playwrightTestEnv } = require('GobletPWTestEnv')
+const { playwrightTestEnv } = require('@GTU/PlaywrightEnv')
 
 playwrightTestEnv()
 

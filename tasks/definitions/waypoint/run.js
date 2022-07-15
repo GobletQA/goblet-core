@@ -1,11 +1,11 @@
 const { testTypes } = require('../../constants')
 const { sharedOptions } = require('@keg-hub/cli-utils')
-const { runTestCmd } = require('GobletTasks/utils/helpers/runTestCmd')
-const { buildJestArgs } = require('GobletTasks/utils/jest/buildJestArgs')
-const { getJestConfig } = require('GobletTasks/utils/jest/getJestConfig')
-const { filterTaskEnvs } = require('GobletTasks/utils/envs/filterTaskEnvs')
-const { buildWaypointEnvs } = require('GobletTasks/utils/envs/buildWaypointEnvs')
-const { appendToLatest, commitTestMeta } = require('GobletTest/testMeta/testMeta')
+const { runTestCmd } = require('@GTasks/utils/helpers/runTestCmd')
+const { buildJestArgs } = require('@GTasks/utils/jest/buildJestArgs')
+const { getJestConfig } = require('@GTasks/utils/jest/getJestConfig')
+const { filterTaskEnvs } = require('@GTasks/utils/envs/filterTaskEnvs')
+const { buildWaypointEnvs } = require('@GTasks/utils/envs/buildWaypointEnvs')
+const { appendToLatest, commitTestMeta } = require('@GTU//testMeta/testMeta')
 
 /**
  * Run task for waypoint scripts

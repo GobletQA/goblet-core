@@ -2,13 +2,13 @@ require('../../../configs/aliases.config').registerAliases()
 
 const { Logger } = require('@keg-hub/cli-utils')
 const { noOpObj, exists, wait } = require('@keg-hub/jsutils')
-const { checkArgs } = require('GobletSCLibs/utils/checkArgs')
-const { daemonize } = require('GobletSCLibs/utils/daemonize')
+const { checkArgs } = require('@GSC/Libs/utils/checkArgs')
+const { daemonize } = require('@GSC/Libs/utils/daemonize')
 const {
   stopServer,
   statusServer,
   statusBrowser,
-} = require('GobletSCPlaywright')
+} = require('@GSC/Playwright')
 const {
   statusSockify,
   startSockify,
@@ -16,7 +16,7 @@ const {
   statusVNC,
   startVNC,
   stopVNC,
-} = require('GobletSCLibs/vnc')
+} = require('@GSC/Libs/vnc')
 
 /**
  * Helper method to kill the running process

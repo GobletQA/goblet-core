@@ -1,4 +1,4 @@
-const { AppRouter } = require('GobletSharedRouter')
+const { AppRouter } = require('@GSH/Router')
 
 module.exports = () => {
   AppRouter.post('/auth/refresh', require('./refresh').refresh)

@@ -1,10 +1,10 @@
 const fs = require('fs')
 const path = require('path')
 const { noOp } = require('@keg-hub/jsutils')
-const { getApp } = require('GobletSharedApp')
+const { getApp } = require('@GSH/App')
 const blacklist = require('express-blacklist')
 const expressDefend = require('express-defend')
-const { aliases } = require('GobletConfigs/aliases.config')
+const { aliases } = require('@GConfigs/aliases.config')
 
 /**
  * Overwrite the default to allow passing a callback to fs.appendFile
@@ -13,7 +13,7 @@ const { aliases } = require('GobletConfigs/aliases.config')
 expressDefend.fileAppender = (logFile, message) => fs.appendFile(logFile, message, noOp)
 
 /** Path to the logs directory */
-const logDir = aliases.GobletServerLogs
+const logDir = aliases.@GLogs
 
 /** Ensure the logs directory exists */
 !fs.existsSync(logDir) && fs.mkdirSync(logDir)

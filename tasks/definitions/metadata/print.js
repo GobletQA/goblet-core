@@ -1,5 +1,5 @@
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
-const metadata = require('GobletSCPlaywright/helpers/metadata')
+const metadata = require('@GSC/Playwright/helpers/metadata')
 const { pathExistsSync, readFile } = fileSys
 
 /**

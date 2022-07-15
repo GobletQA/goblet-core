@@ -1,6 +1,6 @@
 const { capitalize } = require('@keg-hub/jsutils')
 const { getBrowserType } = require('./getBrowserType')
-const { browserStatus } = require('GobletSCConstants')
+const { browserStatus } = require('@GSC/Constants')
 
 /**
  * Builds the status message for the browser type

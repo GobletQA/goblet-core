@@ -1,6 +1,6 @@
 const { noOpObj } = require('@keg-hub/jsutils')
 const { Logger } = require('@keg-hub/cli-utils')
-const { browserStatus } = require('GobletSCConstants')
+const { browserStatus } = require('@GSC/Constants')
 const { buildStatus } = require('../helpers/buildStatus')
 const { getBrowserOpts } = require('../helpers/getBrowserOpts')
 const { getBrowser, closeBrowser, setBrowser } = require('./browser')

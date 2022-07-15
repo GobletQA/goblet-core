@@ -1,5 +1,5 @@
-const { Then } = require('GobletParkin')
-const { getBrowserContext } = require('GobletPWTestEnv')
+const { Then } = require('@GTU/Parkin')
+const { getBrowserContext } = require('@GTU/PlaywrightEnv')
 const { getPage } = getBrowserContext()
 
 /**

@@ -1,5 +1,5 @@
 const { findProc } = require('../../proc')
-const { browserNames } = require('GobletSCConstants')
+const { browserNames } = require('@GSC/Constants')
 const { limbo, exists } = require('@keg-hub/jsutils')
 
 /**

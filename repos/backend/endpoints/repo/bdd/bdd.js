@@ -1,4 +1,4 @@
-const { AppRouter } = require('GobletSharedRouter')
+const { AppRouter } = require('@GSH/Router')
 
 module.exports = () => {
   AppRouter.get('/repo/:repo/bdd', require('./loadBddFiles').loadBddFiles)

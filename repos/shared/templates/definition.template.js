@@ -1,3 +1,3 @@
-const { Given, When, Then } = require('GobletParkin')
+const { Given, When, Then } = require('@GTU/Parkin')
 
 // Add custom step definitions here...

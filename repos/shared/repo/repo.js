@@ -1,13 +1,13 @@
 const { Parkin } = require('@ltipton/parkin')
-const { getWorld } = require('GobletSupport/world')
+const { getWorld } = require('@GTU/Support/world')
 const { isObj, noOpObj, noPropArr, } = require('@keg-hub/jsutils')
-const { getFileTypes } = require('GobletSharedUtils/getFileTypes')
+const { getFileTypes } = require('@GSH/Utils/getFileTypes')
 const {
   getUserRepos,
   statusGoblet,
   initializeGoblet,
   disconnectGoblet,
-} = require('GobletWF')
+} = require('@GWF')
 
 
 /**

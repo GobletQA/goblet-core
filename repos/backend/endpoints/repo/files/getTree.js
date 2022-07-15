@@ -1,5 +1,5 @@
-const { asyncWrap, apiRes } = require('GobletSharedExp')
-const { buildFileTree } = require('GobletSharedFileSys/fileTree')
+const { asyncWrap, apiRes } = require('@GSH/Exp')
+const { buildFileTree } = require('@GSH/FileSys/fileTree')
 
 /**
  * Iterates through the docker mounted volume of the test root folder

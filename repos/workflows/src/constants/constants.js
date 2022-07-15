@@ -1,7 +1,7 @@
 const path = require('path')
 const { GRAPH } = require('./graph')
 const { deepFreeze } = require('@keg-hub/jsutils')
-const { getMountRootDir } = require('GobletSharedUtils/getMountRootDir')
+const { getMountRootDir } = require('@GSH/Utils/getMountRootDir')
 const { GOBLET_LOCAL_MOUNT = 'goblet-local/current' } = process.env
 
 const mountRootDir = getMountRootDir()

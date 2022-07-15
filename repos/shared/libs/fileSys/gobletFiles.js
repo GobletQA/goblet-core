@@ -1,11 +1,11 @@
 const path = require('path')
 const { wordCaps, get } = require('@keg-hub/jsutils')
-const { loadReport } = require('GobletSharedUtils/loadReport')
-const { loadFeature } = require('GobletSharedFeatures/features')
-const { loadTemplate } = require('GobletSharedTemplate/loadTemplate')
-const { buildFileModel } = require('GobletSharedUtils/buildFileModel')
-const { resolveFileType } = require('GobletSharedUtils/resolveFileType')
-const { getRepoGobletDir } = require('GobletSharedUtils/getRepoGobletDir')
+const { loadReport } = require('@GSH/Utils/loadReport')
+const { loadFeature } = require('@GSH/Features/features')
+const { loadTemplate } = require('@GSH/Template/loadTemplate')
+const { buildFileModel } = require('@GSH/Utils/buildFileModel')
+const { resolveFileType } = require('@GSH/Utils/resolveFileType')
+const { getRepoGobletDir } = require('@GSH/Utils/getRepoGobletDir')
 
 const {
   readFile,

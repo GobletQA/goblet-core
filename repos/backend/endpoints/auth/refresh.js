@@ -1,5 +1,5 @@
-const { asyncWrap, apiRes, resError } = require('GobletSharedExp')
-const { validateRefreshToken } = require('GobletBackUtils/validateRefreshToken')
+const { asyncWrap, apiRes, resError } = require('@GSH/Exp')
+const { validateRefreshToken } = require('@GBK/Utils/validateRefreshToken')
 
 /**
  * Validates the required authentication information exists

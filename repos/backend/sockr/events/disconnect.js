@@ -1,4 +1,4 @@
-const { Repo } = require('GobletSharedRepo/repo')
+const { Repo } = require('@GSH/Repo/repo')
 
 // Called when a user disconnects from the Sockr-Websocket
 const disconnect = app => {

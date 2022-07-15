@@ -1,17 +1,17 @@
 const path = require('path')
 const { template } = require('@keg-hub/jsutils')
-const { aliases } = require('GobletConfigs/aliases.config')
-const { getFileContent } = require('GobletSharedUtils/getFileContent')
+const { aliases } = require('@GConfigs/aliases.config')
+const { getFileContent } = require('@GSH/Utils/getFileContent')
 
 const templates = {
-  reports404: path.join(aliases.GobletSharedTemplate, 'reports.404.html'),
-  page404: path.join(aliases.GobletSharedTemplate, 'page.404.html'),
-  feature: path.join(aliases.GobletSharedTemplate, 'feature.template.feature'),
-  definition: path.join(aliases.GobletSharedTemplate, 'definition.template.js'),
-  support: path.join(aliases.GobletSharedTemplate, 'support.template.js'),
-  emptyJS: path.join(aliases.GobletSharedTemplate, 'empty.template.js'),
-  unit: path.join(aliases.GobletSharedTemplate, 'unit.template.js'),
-  waypoint: path.join(aliases.GobletSharedTemplate, 'waypoint.template.js'),
+  reports404: path.join(aliases.@GSH/Template, 'reports.404.html'),
+  page404: path.join(aliases.@GSH/Template, 'page.404.html'),
+  feature: path.join(aliases.@GSH/Template, 'feature.template.feature'),
+  definition: path.join(aliases.@GSH/Template, 'definition.template.js'),
+  support: path.join(aliases.@GSH/Template, 'support.template.js'),
+  emptyJS: path.join(aliases.@GSH/Template, 'empty.template.js'),
+  unit: path.join(aliases.@GSH/Template, 'unit.template.js'),
+  waypoint: path.join(aliases.@GSH/Template, 'waypoint.template.js'),
 }
 
 const loadTemplate = async (name, data, altName) => {

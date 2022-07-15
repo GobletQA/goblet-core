@@ -26,7 +26,7 @@ const {
   noOpObj,
   deepMerge,
 } = require('@keg-hub/jsutils')
-const { aliases } = require('GobletConfigs/aliases.config')
+const { aliases } = require('@GConfigs/aliases.config')
 
 /**
  * **IMPORTANT**

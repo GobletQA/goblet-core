@@ -1,6 +1,6 @@
-const { getGobletConfig } = require('GobletSharedConfig')
+const { getGobletConfig } = require('@GSH/Config')
 const { noOpObj, deepMerge } = require('@keg-hub/jsutils')
-const { taskEnvToContextOpts } = require('GobletSharedUtils/taskEnvToContextOpts')
+const { taskEnvToContextOpts } = require('@GSH/Utils/taskEnvToContextOpts')
 
 /**
  * Builds the config for a Playwright browser context

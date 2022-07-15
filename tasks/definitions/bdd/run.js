@@ -1,10 +1,10 @@
 const { testTypes } = require('../../constants')
 const { sharedOptions } = require('@keg-hub/cli-utils')
-const { runTestCmd } = require('GobletTasks/utils/helpers/runTestCmd')
-const { buildBddEnvs } = require('GobletTasks/utils/envs/buildBddEnvs')
-const { buildJestArgs } = require('GobletTasks/utils/jest/buildJestArgs')
-const { getJestConfig } = require('GobletTasks/utils/jest/getJestConfig')
-const { filterTaskEnvs } = require('GobletTasks/utils/envs/filterTaskEnvs')
+const { runTestCmd } = require('@GTasks/utils/helpers/runTestCmd')
+const { buildBddEnvs } = require('@GTasks/utils/envs/buildBddEnvs')
+const { buildJestArgs } = require('@GTasks/utils/jest/buildJestArgs')
+const { getJestConfig } = require('@GTasks/utils/jest/getJestConfig')
+const { filterTaskEnvs } = require('@GTasks/utils/envs/filterTaskEnvs')
 
 /**
  * Run parkin tests in container

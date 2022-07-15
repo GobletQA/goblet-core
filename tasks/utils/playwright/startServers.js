@@ -1,9 +1,9 @@
 const { limbo } = require('@keg-hub/jsutils')
-const { startServer } = require('GobletSCPlaywright/server/startServer')
-const { statusServer } = require('GobletSCPlaywright/server/statusServer')
+const { startServer } = require('@GSC/Playwright/server/startServer')
+const { statusServer } = require('@GSC/Playwright/server/statusServer')
 const {
   ensureBrowserType,
-} = require('GobletTasks/utils/helpers/ensureBrowserType')
+} = require('@GTasks/utils/helpers/ensureBrowserType')
 
 /**
  * Starts the browser servers is they are not already running

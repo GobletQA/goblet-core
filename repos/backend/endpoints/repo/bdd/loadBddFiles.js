@@ -1,6 +1,6 @@
-const { asyncWrap, apiRes } = require('GobletSharedExp')
-const { getFeatures } = require('GobletSharedRepo/getFeatures')
-const { fileModelArrayToObj } = require('GobletSharedUtils/fileModelArrayToObj')
+const { asyncWrap, apiRes } = require('@GSH/Exp')
+const { getFeatures } = require('@GSH/Repo/getFeatures')
+const { fileModelArrayToObj } = require('@GSH/Utils/fileModelArrayToObj')
 
 const loadBddFiles = asyncWrap(async (req, res) => {
   const { definitionTypes, definitions, features } = await getFeatures(
