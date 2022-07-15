@@ -13,7 +13,7 @@ const { aliases } = require('@GConfigs/aliases.config')
 expressDefend.fileAppender = (logFile, message) => fs.appendFile(logFile, message, noOp)
 
 /** Path to the logs directory */
-const logDir = aliases.@GLogs
+const logDir = aliases[`@GLogs`]
 
 /** Ensure the logs directory exists */
 !fs.existsSync(logDir) && fs.mkdirSync(logDir)

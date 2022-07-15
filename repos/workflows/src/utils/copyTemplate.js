@@ -21,7 +21,7 @@ const copyTemplate = async (local, template) => {
   if (configLoc) return true
 
   Logger.info(`Creating goblet setup from template...`)
-  const src = template || path.join(aliases.@GWF, `src/templates/repo/*`)
+  const src = template || path.join(aliases[`@GWF`], `src/templates/repo/*`)
   const dest = await getCurrentRepoPath(local)
 
   return await copyContent({ src, dest })

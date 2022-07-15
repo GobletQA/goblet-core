@@ -1,3 +1,4 @@
+const { Logger } = require('@keg-hub/cli-utils')
 const { loadFeatures } = require('@GSH/Features/features')
 const { buildFileTree } = require('@GSH/FileSys/fileTree')
 const { loadDefinitions } = require('@GSH/Definitions/definitions')
@@ -15,16 +16,23 @@ const { fileModelArrayToObj } = require('@GSH/Utils/fileModelArrayToObj')
  * @returns {Object} - Repo file content object
  */
 const loadRepoContent = async (repo, config, status) => {
-  const content = { repo, status }
-  content.fileTree = await buildFileTree(repo)
-  const definitions = await loadDefinitions(repo, config)
-  content.definitionTypes = definitionsByType(definitions)
-  const features = await loadFeatures(repo, content.definitionTypes)
+  try {
+    const content = { repo, status }
+    content.fileTree = await buildFileTree(repo)
+    const definitions = await loadDefinitions(repo, config)
+    content.definitionTypes = definitionsByType(definitions)
+    const features = await loadFeatures(repo, content.definitionTypes)
 
-  content.features = fileModelArrayToObj(features)
-  content.definitions = fileModelArrayToObj(definitions)
+    content.features = fileModelArrayToObj(features)
+    content.definitions = fileModelArrayToObj(definitions)
 
-  return content
+    return content
+  }
+  catch(err){
+    Logger.warn(`[Repo Content Error] Could not load repo content files...`)
+    Logger.stderr(err)
+    throw err
+  }
 }
 
 module.exports = {

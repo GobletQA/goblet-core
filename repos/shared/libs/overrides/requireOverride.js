@@ -1,6 +1,6 @@
 const Module = require('module')
-const @GSH/Paths = require('@GSH/Paths')
-const { GobletRoot } = @GSH/Paths
+const sharedPaths = require('@GSH/Paths')
+const { GobletRoot } = sharedPaths
 
 /**
  * @type {Object} - List of allowed packages to be required
@@ -10,7 +10,7 @@ const { GobletRoot } = @GSH/Paths
 const allowedModules = [
   `@ltipton/parkin`,
   `@keg-hub/jsutils`,
-  ...Object.keys(@GSH/Paths),
+  ...Object.keys(sharedPaths),
 ]
 
 /**

@@ -1,11 +1,9 @@
-const path = require('path')
-
 module.exports = {
   recorder: {
     locator: `-- 🍷 GOBLET`,
   },
   paths: {
-    repoRoot: path.join(__dirname),
+    repoRoot: __dirname,
     workDir: 'goblet',
     artifactsDir: 'artifacts',
     reportsDir: 'artifacts/reports',
