@@ -1,7 +1,7 @@
 {
-  "name": "@gobletqa/screencast",
+  "name": "@gobletqa/backend",
   "version": "0.0.0",
-  "description": "VNC Screencast Backend API and Servers",
+  "description": "Goblet Backend API",
   "main": "index.js",
   "author": "Lance Tipton",
   "license": "MIT",
@@ -17,6 +17,8 @@
     "url": "https://github.com/GobletQA/goblet/issues"
   },
   "scripts": {
+    "api": "yarn api:back",
+    "api:back": "nodemon --config configs/nodemon.backend.json",
     "build": "exit 0",
     "clean:build": "rm -rf build && mkdir build && echo \"\" >> build/.keep",
     "clean:install": "yarn clean:full; yarn install",
@@ -25,37 +27,33 @@
     "format": "yarn lint && yarn pretty",
     "lint": "eslint --color --cache --fix --quiet --ignore-path ../../.eslintignore --config ./configs/eslintrc.config.js",
     "pretty": "prettier --ignore-path ../../.prettierignore --config ./configs/prettier.config.js -w",
-    "start": "yarn sc:api",
-    "sc": "PWDEBUG=1 DEBUG=pw:api node src/screencast.js",
-    "sc:api": "nodemon --config configs/nodemon.screencast.json",
-    "sc:d": "yarn sc:daemon",
-    "sc:daemon": "PWDEBUG=1 DEBUG=pw:api node src/screencast.js --daemon",
-    "sc:k": "yarn sc:kill",
-    "sc:kill": "node src/screencast.js --kill-all-screencast",
-    "sc:r": "yarn sc:restart",
-    "sc:restart": "node src/screencast.js --restart",
-    "sc:s": "yarn sc:status",
-    "sc:status": "PWDEBUG=1 DEBUG=pw:api node src/screencast.js --status",
+    "start": "yarn api:back",
     "task": "node tasks/runTask.js"
   },
   "resolutions": {
     "@keg-hub/cli-utils": "0.6.1",
     "@keg-hub/jsutils": "9.0.3"
   },
-  "peerDependencies": {
-    "playwright": "1.x"
-  },
   "dependencies": {
     "@babel/core": "7.16.7",
+    "@babel/preset-env": "7.16.7",
     "@keg-hub/cli-utils": "0.6.0",
     "@keg-hub/jsutils": "9.0.3",
-    "@keg-hub/spawn-cmd": "0.3.1",
-    "@ltipton/parkin": "1.4.0",
+    "@keg-hub/parse-config": "2.0.1",
     "@ltipton/sockr": "0.3.0",
+    "babel-jest": "26.6.3",
+    "core-js": "3.20.2",
+    "cors": "2.8.5",
     "express": "4.17.3",
+    "express-blacklist": "1.0.3",
+    "express-defend": "1.0.9",
+    "http-proxy-middleware": "2.0.4",
+    "jest": "26.4.2",
+    "jsonwebtoken": "8.5.1",
+    "mime": "3.0.0",
     "module-alias": "2.2.2",
     "nodemon": "2.0.13",
-    "vm2": "3.9.9"
+    "winston": "3.6.0"
   },
   "devDependencies": {
     "eslint": "8.7.0",

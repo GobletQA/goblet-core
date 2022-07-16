@@ -1,0 +1,23 @@
+{
+  "delay": "500",
+  "exec": "node ./repos/backend/index.js",
+  "watch": [
+    "config",
+    "src",
+    "../screencast/src/endpoints",
+    "../screencast/src/libs",
+    "../shared",
+    "../workflows",
+    "node_modules/@ltipton/sockr/src/server",
+    "node_modules/@ltipton/parkin/build/cjs"
+  ],
+  "ignoreRoot": [
+    ".git",
+    "docs",
+    "node_modules/.bin",
+    "scripts",
+    "tasks",
+    "tests",
+    "temp"
+  ]
+}

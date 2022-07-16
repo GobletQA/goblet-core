@@ -23,12 +23,12 @@
   "@GSH/Repo": "repos/shared/repo",
   "@GSH": "repos/shared",
 
-  "@GBK/Libs": "repos/backend/libs",
-  "@GBK/Utils": "repos/backend/utils",
-  "@GBK/Sockr": "repos/backend/sockr",
-  "@GBK/Endpoints": "repos/backend/endpoints",
-  "@GBK/Middleware": "repos/backend/middleware",
-  "@GBK": "repos/backend",
+  "@GBK/Libs": "repos/backend/src/libs",
+  "@GBK/Utils": "repos/backend/src/utils",
+  "@GBK/Sockr": "repos/backend/src/sockr",
+  "@GBK/Endpoints": "repos/backend/src/endpoints",
+  "@GBK/Middleware": "repos/backend/src/middleware",
+  "@GBK": "repos/backend/src",
 
   "@GTU/Parkin": "repos/testUtils/src/parkin",
   "@GTU/jest": "repos/testUtils/src/jest",
