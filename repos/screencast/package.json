@@ -51,16 +51,10 @@
     "@keg-hub/parse-config": "2.0.1",
     "@keg-hub/spawn-cmd": "0.3.1",
     "@ltipton/parkin": "1.4.0",
-    "@ltipton/sockr": "0.3.0",
     "express": "4.17.3",
-    "express-blacklist": "1.0.3",
-    "express-defend": "1.0.9",
-    "http-proxy-middleware": "2.0.4",
     "module-alias": "2.2.2",
     "nodemon": "2.0.13",
     "playwright": "1.23.0",
-    "jsonwebtoken": "8.5.1",
-    "mime": "3.0.0",
     "vm2": "3.9.9"
   },
   "devDependencies": {

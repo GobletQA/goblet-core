@@ -7,16 +7,16 @@ const {
   setReqRepo,
   setupVNCProxy,
   validateUser,
-  setupBlacklist,
-  setupServerListen,
 } = require('@GBK/Middleware')
 const {
   setupJWT,
   setupCors,
   setupServer,
   setupStatic,
+  setupBlacklist,
   setupLoggerReq,
   setupLoggerErr,
+  setupServerListen,
 } = require('@GSH/Middleware')
 
 /**

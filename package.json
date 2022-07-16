@@ -16,17 +16,23 @@
   "author": "Lance Tipton <lancetipton04@gmail.com>",
   "license": "MIT",
   "private": false,
+  "workspaces": [
+    "repos/*",
+    "!repos/example"
+  ],
   "scripts": {
     "api": "cd repos/backend; yarn api",
     "api:back": "cd repos/backend && yarn api:back",
     "api:sc": "cd repos/screencast && yarn sc:api",
     "build": "yarn bundle && yarn compile",
     "build:fe": "node tasks/runTask.js deploy build -- frontend=true",
+    "build:all": "turbo run build",
     "bundle": "node scripts/bundle.js",
     "clean": "yarn clean:nm; yarn install",
     "clean:full": "yarn clean:nm; yarn install",
     "clean:nm": "rm -rf node_modules",
     "compile": "node scripts/compile.js",
+    "cz": "cz",
     "dev": "run-p web api:back",
     "ex": "cd repos/example && yarn dev",
     "ex:build": "cd repos/example && yarn build",
@@ -34,9 +40,14 @@
     "ex:i": "cd repos/example && yarn install",
     "ex:install": "cd repos/example && yarn install",
     "ex:start": "cd repos/example && yarn dev",
-    "format": "yarn pretty",
+    "format": "yarn format:pretty && yarn format:lint",
+    "format:all": "yarn format && lerna run format",
+    "format:lint": "yarn lint .",
+    "format:pretty": "yarn pretty .",
+    "lint": "eslint --color --cache --fix --ignore-path .root.ignore --config ./configs/eslintrc.config.js",
+    "pretty": "prettier --ignore-path .root.ignore --config ./configs/prettier.config.js --write",
     "make": "yarn bundle && yarn compile",
-    "pretty": "node_modules/.bin/prettier --config configs/prettier.config.js --write '**/*.{js,jsx}'",
+    "run": "lerna run",
     "start": "cd node_modules/keg-core; expo start",
     "sc": "cd repos/screencast && yarn sc",
     "sc:api": "cd repos/screencast && yarn sc:api",
@@ -49,6 +60,9 @@
     "sc:s": "cd repos/screencast && yarn sc:status",
     "sc:status": "cd repos/screencast && yarn sc:status",
     "task": "node tasks/runTask.js",
+    "test": "turbo run test",
+    "test:ci": "turbo run test:ci",
+    "validate": "turbo run validate",
     "web": "cd repos/tap && yarn web",
     "web:build": "cd repos/tap && yarn build",
     "web:bundle": "cd repos/tap && yarn bundle",
@@ -58,40 +72,13 @@
     "workflow:test": "cd repos/worflow && yarn workflow:test"
   },
   "dependencies": {
-    "@babel/core": "7.16.7",
-    "@babel/preset-env": "7.16.7",
     "@keg-hub/args-parse": "8.0.1",
     "@keg-hub/ask-it": "1.1.0",
     "@keg-hub/cli-utils": "0.6.0",
     "@keg-hub/jsutils": "9.0.3",
     "@keg-hub/parse-config": "2.0.1",
-    "@keg-hub/spawn-cmd": "0.3.1",
-    "@ltipton/parkin": "1.4.0",
-    "@ltipton/sockr": "0.3.0",
-    "app-root-path": "3.0.0",
-    "axios": "0.24.0",
-    "babel-jest": "26.6.3",
-    "cookie-session": "2.0.0",
-    "core-js": "3.20.2",
-    "cors": "2.8.5",
-    "expect": "28.1.0",
-    "express": "4.17.3",
-    "express-blacklist": "1.0.3",
-    "express-defend": "1.0.9",
-    "express-jwt": "6.1.1",
-    "express-winston": "4.2.0",
-    "http-proxy-middleware": "2.0.4",
-    "is-secret": "1.2.1",
-    "jest": "26.4.2",
-    "jest-html-reporter": "3.4.2",
-    "jest-playwright-preset": "1.7.0",
-    "jsonwebtoken": "8.5.1",
-    "mime": "3.0.0",
-    "module-alias": "2.2.2",
-    "nodemon": "2.0.13",
-    "playwright": "1.23.0",
-    "vm2": "3.9.9",
-    "winston": "3.6.0"
+    "cross-env": "7.0.3",
+    "module-alias": "2.2.2"
   },
   "resolutions": {
     "@keg-hub/args-parse": "8.0.1",
@@ -101,18 +88,37 @@
     "@monaco-editor/react": "4.3.1"
   },
   "devDependencies": {
-    "@cucumber/language-service": "0.11.0",
-    "@monaco-editor/react": "4.3.1",
-    "@novnc/novnc": "1.3.0",
+    "@commitlint/cli": "16.1.0",
+    "@commitlint/config-conventional": "16.0.0",
+    "@lerna-lite/cli": "1.6.0",
+    "@lerna-lite/run": "1.6.0",
+    "@types/node": "17.0.13",
+    "@typescript-eslint/eslint-plugin": "5.28.0",
+    "@typescript-eslint/parser": "5.28.0",
+    "commitizen": "4.2.4",
+    "cz-conventional-changelog": "3.3.0",
     "caxa": "2.1.0",
     "eslint": "8.7.0",
     "esbuild": "^0.14.48",
-    "esbuild-plugin-path-alias": "^1.0.6",
-    "firebase": "9.6.9",
-    "keg-core": "npm:@keg-hub/keg-core@10.1.0",
+    "esbuild-plugin-path-alias": "1.0.6",
+    "husky": "7.0.4",
+    "lint-staged": "12.3.4",
     "npm-run-all": "4.1.5",
     "prettier": "2.5.1",
     "rimraf": "3.0.2",
-    "semver": "7.3.5"
+    "semver": "7.3.5",
+    "turbo": "1.2.16",
+    "typescript": "4.7.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "**/*": [
+      "yarn pretty",
+      "yarn lint"
+    ]
   }
 }

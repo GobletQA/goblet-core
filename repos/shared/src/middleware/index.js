@@ -5,4 +5,6 @@ module.exports = {
   ...require('./setupLogger'),
   ...require('./setupServer'),
   ...require('./setupStatic'),
+  ...require('./setupBlacklist'),
+  ...require('./setupServerListen'),
 }

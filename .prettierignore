@@ -1,0 +1,27 @@
+# Ignore everything:
+/*
+node_modules
+dist
+build
+coverage
+repos/frontend/tsconfig.json
+.eslintignore
+repos/backend/migrations/seedData.cql
+*.png
+*.svg
+*.jpg
+*.jpeg
+*.svg
+.*ignore*
+.gitkeep
+*.hbs
+*.html
+*.svg
+*.md
+
+# Format the following:
+!/configs
+!/repos
+!/src
+!/tap.js
+!/tasks

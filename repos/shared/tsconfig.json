@@ -1,0 +1,28 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "paths": {
+      "@GSH/Template": ["src/templates"],
+      "@GSH/FileSys": ["src/libs/fileSys"],
+      "@GSH/Features": ["src/libs/features"],
+      "@GSH/Definitions": ["src/libs/definitions"],
+      "@GSH/Libs": ["src/libs"],
+      "@GSH/Utils": ["src/utils"],
+      "@GSH/Exp": ["src/express"],
+      "@GSH/Models": ["src/models"],
+      "@GSH/App": ["src/express/app.js"],
+      "@GSH/Paths": ["src/utils/paths.js"],
+      "@GSH/Middleware": ["src/middleware"],
+      "@GSH/Router": ["src/express/appRouter.js"],
+      "@GSH/Config": ["src/utils/getGobletConfig.js"],
+      "@GSH/AsyncWrap": ["src/express/asyncWrap.js"],
+      "@GSH/Repo": ["src/repo"],
+      "@GSH": ["src"],
+      "@GSHRoot": ["."]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

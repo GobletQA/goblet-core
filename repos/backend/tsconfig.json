@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "paths": {
+      "@GBK/Libs": ["src/libs"],
+      "@GBK/Utils": ["src/utils"],
+      "@GBK/Sockr": ["src/sockr"],
+      "@GBK/Endpoints": ["src/endpoints"],
+      "@GBK/Middleware": ["src/middleware"],
+      "@GBK": ["src"],
+      "@GBKRoot": ["./"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

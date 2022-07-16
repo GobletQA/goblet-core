@@ -30,3 +30,8 @@ temp
 browser-meta.json
 tests
 repos/example
+.devspace/
+!container/initialize.sh
+container/chart
+container/.helmignore
+devspace.yaml

@@ -1,0 +1,9 @@
+{
+  "packages": [
+    "repos/*",
+    "!repos/example"
+  ],
+  "version": "independent",
+  "useWorkspaces": true,
+  "npmClient": "yarn"
+}

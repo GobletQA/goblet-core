@@ -22,8 +22,8 @@ const logDir = aliases[`@GLogs`]
  * Sets up IP blocking via a blacklist
  * Attempts to track suspicious activity and then block that IP from access
  */
-const setupBlacklist = () => {
-  const app = getApp()
+const setupBlacklist = (app) => {
+  app = app || getApp()
 
   app.use(blacklist.blockRequests(path.join(logDir, `blacklist.txt`)))
 

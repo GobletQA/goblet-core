@@ -1,0 +1,40 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "baseBranch": "origin/main",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "build/**"],
+      "inputs": ["configs/*.*", "scripts/*.*", "src/**/*.tsx", "src/**/*.ts", "src/**/*.jsx", "src/**/*.js"]
+    },
+    "clean": {
+      "outputs": []
+    },
+    "clean:nm": {
+      "outputs": []
+    },
+    "docker:build": {
+      "dependsOn": ["^docker:build"],
+      "outputs": ["dist/**", "build/**"],
+      "inputs": ["configs/*.*", "scripts/*.*", "src/**/*.tsx", "src/**/*.ts", "src/**/*.jsx", "src/**/*.js"]
+    },
+    "format": {
+      "outputs": [],
+      "inputs": ["configs/*.*", "scripts/*.*", "src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "src/**/*.jsx", "src/**/*.js"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "inputs": ["configs/*.*", "scripts/*.*", "src/**/*.tsx", "src/**/*.ts", "src/**/*.jsx", "src/**/*.js"]
+    },
+    "test:ci": {
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "inputs": ["configs/*.*", "scripts/*.*", "src/**/*.tsx", "src/**/*.ts", "src/**/*.jsx", "src/**/*.js"]
+    },
+    "validate": {
+      "outputs": [],
+      "inputs": ["configs/*.*", "scripts/*.*", "src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "src/**/*.jsx", "src/**/*.js"]
+    }
+  }
+}

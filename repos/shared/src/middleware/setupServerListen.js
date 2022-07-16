@@ -4,7 +4,6 @@ const https = require('https')
 const { getApp } = require('@GSH/App')
 const { Logger } = require('@keg-hub/cli-utils')
 
-
 /**
  * Adds exit listeners to allow graceful shutdown of the servers
  * @exits
@@ -100,9 +99,9 @@ const serverListen = (app) => {
  *
  * @retruns {Object} - Response from server setup method
  */
-const setupServerListen = () => {
-  const app = getApp()
-  return serverListen(app)
+const setupServerListen = (app) => {
+   
+  return serverListen(app || getApp())
 }
 
 module.exports = {

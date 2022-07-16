@@ -1,0 +1,7 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# do not run husky pre-push in CI context
+[[ -n "$CI" && -n "$GITHUB_ACTION" ]] && exit 0
+
+yarn test

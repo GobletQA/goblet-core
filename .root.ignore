@@ -1,0 +1,12 @@
+# Ignore everything:
+/*
+node_modules
+dist
+build
+coverage
+/configs/*.json
+
+# Format the following:
+!/configs
+!/tap.js
+!/tasks

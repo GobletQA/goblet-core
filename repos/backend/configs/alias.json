@@ -1,9 +1,0 @@
-{
-  "@GBK/Libs": "src/libs",
-  "@GBK/Utils": "src/utils",
-  "@GBK/Sockr": "src/sockr",
-  "@GBK/Endpoints": "src/endpoints",
-  "@GBK/Middleware": "src/middleware",
-  "@GBK": "src",
-  "@GBKRoot": "."
-}
