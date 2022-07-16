@@ -1,0 +1,15 @@
+{
+  "@GTap/Actions": "src/actions",
+  "@GTap/Assets": "src/assets",
+  "@GTap/Components": "src/components",
+  "@GTap/Constants": "src/constants",
+  "@GTap/Containers": "src/containers",
+  "@GTap/Hooks": "src/hooks",
+  "@GTap/Models": "src/Models",
+  "@GTap/Reducers": "src/reducers",
+  "@GTap/Services": "src/Services",
+  "@GTap/Theme": "src/theme",
+  "@GTap/Utils": "src/utils",
+  "@GTap": "src",
+  "@GTapRoot": "."
+}

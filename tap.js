@@ -66,7 +66,7 @@ module.exports = {
     },
     tapResolver: {
       paths: {
-        tapSrc: './repos/tap',
+        tapSrc: './repos/tap/src',
       },
       aliases: {
         nameSpace: "HK",

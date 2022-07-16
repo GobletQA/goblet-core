@@ -1,0 +1,56 @@
+{
+  "name": "@gobletqa/tap",
+  "version": "0.0.0",
+  "description": "Frontend Appliction for GobletQA Platform",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "url": "git+https://github.com/GobletQA/goblet.git",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/GobletQA/goblet/issues"
+  },
+  "author": "Lance Tipton",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "yarn remove:bundle && yarn bundle && yarn copy:bundle",
+    "bundle": "cd ../../node_modules/keg-core; yarn build:web && cd ../../repos/tap",
+    "copy:bundle": "cp -R ../../node_modules/keg-core/web-build ../../bundle/tap",
+    "clean:build": "rm -rf build && mkdir build && echo \"\" >> build/.keep",
+    "clean:install": "yarn clean:full; yarn install",
+    "clean:full": "yarn clean; yarn clean:nm; yarn install",
+    "clean:nm": "rm -rf node_modules",
+    "format": "yarn lint && yarn pretty",
+    "lint": "eslint --color --cache --fix --quiet --ignore-path ../../.eslintignore --config ./configs/eslintrc.config.js",
+    "pretty": "prettier --ignore-path ../../.prettierignore --config ./configs/prettier.config.js -w",
+    "remove:bundle": "rm -rf ../../bundle/tap",
+    "start": "cd ../../node_modules/keg-core && yarn web",
+    "task": "node tasks/runTask.js",
+    "web": "cd ../../node_modules/keg-core && yarn web"
+  },
+  "resolutions": {
+    "@keg-hub/cli-utils": "0.6.1",
+    "@keg-hub/jsutils": "9.0.3"
+  },
+  "peerDependencies": {
+  },
+  "dependencies": {
+    "@keg-hub/jsutils": "9.0.3",
+    "@cucumber/language-service": "0.11.0",
+    "@ltipton/sockr": "0.3.0",
+    "@monaco-editor/react": "4.3.1",
+    "@novnc/novnc": "1.3.0",
+    "firebase": "9.6.9",
+    "keg-core": "npm:@keg-hub/keg-core@10.1.0"
+  },
+  "devDependencies": {
+    "@keg-hub/cli-utils": "0.6.0",
+    "jest": "26.4.2",
+    "rimraf": "3.0.2",
+    "semver": "7.3.5"
+  }
+}

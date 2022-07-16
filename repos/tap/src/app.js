@@ -15,10 +15,10 @@ import { SockrProvider } from '@ltipton/sockr'
 import { initAppAction, init } from 'HKActions'
 import { DomStyles } from 'HKComponents/domStyles'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { View, Text } from '@keg-hub/keg-components'
 import { ContainerRoutes } from 'HKNavigation/containerRoutes'
 import { ModalManager } from 'HKComponents/modals/modalManager'
 import { ReThemeProvider, getDefaultTheme } from '@keg-hub/re-theme'
-import { View, Text } from '@keg-hub/keg-components'
 
 // Uncomment to see sockr logs in development
 // const sockrDebug = process.env.NODE_ENV !== 'production'
