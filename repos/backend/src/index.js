@@ -1,4 +1,3 @@
-require('../../../configs/aliases.config').registerAliases()
 const { initApi } = require('./server')
 
 const start = () => {
@@ -10,8 +9,4 @@ const start = () => {
   initApi()
 }
 
-!module.parent
-  ? start()
-  : (module.exports = () => {
-      initApi()
-    })
+start()

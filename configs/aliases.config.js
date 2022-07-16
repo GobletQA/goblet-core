@@ -5,7 +5,6 @@ const { SUB_REPOS } = require('./paths.config')
 const { GobletRoot } = require('../gobletRoot')
 const { fileSys } = require('@keg-hub/cli-utils')
 const { deepFreeze } = require('@keg-hub/jsutils')
-
 const { requireFile } = fileSys
 
 /**
