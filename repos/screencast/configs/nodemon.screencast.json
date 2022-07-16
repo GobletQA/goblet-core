@@ -1,0 +1,19 @@
+{
+  "delay": "500",
+  "exec": "node ./src/server.js",
+  "watch": [
+    "src",
+    "config",
+    "../shared"
+  ],
+  "ignoreRoot": [
+    ".git",
+    "docs",
+    "node_modules/keg-core",
+    "node_modules/.bin",
+    "scripts",
+    "tasks",
+    "tests",
+    "temp"
+  ]
+}
