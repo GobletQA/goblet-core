@@ -23,7 +23,7 @@ const addAliasRoot = (rootPath, aliases={}) => {
   * Loop over the sub repos locations, and set the path relative to the root directory
   * Find the alias.json or tsconfig.json file
  */
-const repoAliases = () => {
+const addRepoAliases = () => {
   return Object.entries(SUB_REPOS)
     .reduce((acc, [_, location]) => {
       // Try to load from the alias.json first
@@ -51,7 +51,7 @@ const aliases = deepFreeze({
   ...addAliasRoot(GobletRoot, aliasList),
   // Loop over the sub repos locations, and set the path relative to the root directory
   // Find the alias.json or tsconfig.json file
-  ...repoAliases()
+  ...addRepoAliases()
 })
 
 // Registers module-alias aliases (done programatically so we can reuse the aliases object for jest)

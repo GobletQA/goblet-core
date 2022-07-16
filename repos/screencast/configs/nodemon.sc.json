@@ -1,6 +1,6 @@
 {
   "delay": "500",
-  "exec": "node ./src/server.js",
+  "exec": "etsc --config=configs/etsc.config.js && node index.js",
   "watch": [
     "src",
     "config",

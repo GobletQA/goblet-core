@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "parserOptions": {
+    "extraFileExtensions": ["json"]
+  },
+  "include": [
+    "src",
+    "configs"
+  ]
+}

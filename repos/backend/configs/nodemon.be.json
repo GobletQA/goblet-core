@@ -1,6 +1,7 @@
 {
   "delay": "500",
-  "exec": "node index.js",
+  "exec": "etsc --config=configs/etsc.config.js && node index.js",
+  "ext": "ts,mjs,js,json,graphql",
   "watch": [
     "config",
     "src",
