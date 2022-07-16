@@ -163,3 +163,7 @@ Generate context
 * Allow creating a feature file the runs in the setup test environment
 * It can then save the context which can be reused in the tests
 * Allow setting option to use browser with context
+
+
+ACTION - SELECTOR - REF - SELECTOR - ACTION/REF - SELECTOR - ACTION/REF
+"select" "element" "next" "sibling"    "loop"    "children"    ""
