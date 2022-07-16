@@ -10,27 +10,27 @@ registerAliases()
 Logger.setTag(`[Goblet]`, `gray`)
 
 const rootDir = path.join(__dirname, `../`)
-const bundleDir = path.join(rootDir, `bundle`)
+const distDir = path.join(rootDir, `dist`)
 
 const locations = {
   rootDir,
-  bundleDir,
+  distDir,
   tasks: `tasks`,
   goblet: `goblet`,
   testUtils: `repos/testUtils/src`,
   templates: `repos/shared/src/templates`,
   testConfigs: `repos/testUtils/configs`,
   tasksIn: path.join(rootDir, `tasks/runTask.js`),
-  tasksOut: path.join(bundleDir, `tasks`),
+  tasksOut: path.join(distDir, `tasks`),
   containerIn: path.join(rootDir, `container`),
-  containerOut: path.join(bundleDir, `container`),
-  jestOut: path.join(bundleDir, `repos/testUtils/configs`),
+  containerOut: path.join(distDir, `container`),
+  jestOut: path.join(distDir, `repos/testUtils/configs`),
   jestIn: path.join(rootDir, `repos/testUtils/configs/jest.default.config.js`),
-  configOut: path.join(bundleDir, `configs`),
+  configOut: path.join(distDir, `configs`),
   configIn: path.join(rootDir, `configs/goblet.default.config.js`),
-  backendOut: path.join(bundleDir, `repos/backend`),
+  backendOut: path.join(distDir, `repos/backend`),
   backendIn: path.join(rootDir, `repos/backend/index.js`),
-  screencastOut: path.join(bundleDir, `repos/screencast`),
+  screencastOut: path.join(distDir, `repos/screencast`),
   screencastIn: path.join(rootDir, `repos/screencast/index.js`),
   containerFiles: [
     `run.sh`,
@@ -82,13 +82,13 @@ const onError = (msg, err) => {
 }
 
 /**
- * Helper to copy a directory relative to the repo root and bundle directory
+ * Helper to copy a directory relative to the repo root and dist directory
  * @param {string} loc - Location where the directory exists
  */
 const dupDir = async (loc) => {
   try {
     if(!loc) throw new Error(`The location ${loc} is invalid`)
-    copySync(path.join(locations.rootDir, loc), path.join(locations.bundleDir, loc))
+    copySync(path.join(locations.rootDir, loc), path.join(locations.distDir, loc))
   }
   catch(err){
     onError(`Error copying location ${loc}`, err)
@@ -96,11 +96,11 @@ const dupDir = async (loc) => {
 }
 
 /**
- * Helper to clean the bundle directory before building to ensure a fresh build
+ * Helper to clean the dist directory before building to ensure a fresh build
  */
 const cleanBundleDir = async () => {
   Logger.log(`Cleaning Bundle directory...`)
-  emptyDirSync(locations.bundleDir)
+  emptyDirSync(locations.distDir)
   logSuccess(`Bundle directory cleaned!`)
 }
 
@@ -130,7 +130,7 @@ const makeBundle = async (name=`App`, entry, outdir) => {
  * Helper to copy assets that can't be bundled with esbuild
  */
 const copyAssets = async () => {
-  Logger.log(`Copying assets to bundle directory...`)
+  Logger.log(`Copying assets to dist directory...`)
 
   await dupDir(locations.goblet)
   await dupDir(locations.testUtils)
@@ -151,7 +151,7 @@ const copyAssets = async () => {
 
 /**
  * Automatically executes esbuild to bundle the Goblet App
- * Cleans the bundle folder first
+ * Cleans the dist folder first
  * Then generates bundle and copies assets
  */
 ;(async () => {

@@ -19,7 +19,7 @@
   "scripts": {
     "build": "yarn remove:bundle && yarn bundle && yarn copy:bundle",
     "bundle": "cd ../../node_modules/keg-core; yarn build:web && cd ../../repos/tap",
-    "copy:bundle": "cp -R ../../node_modules/keg-core/web-build ../../bundle/tap",
+    "copy:bundle": "cp -R ../../node_modules/keg-core/web-build ../../dist/tap",
     "clean:build": "rm -rf build && mkdir build && echo \"\" >> build/.keep",
     "clean:install": "yarn clean:full; yarn install",
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
@@ -27,7 +27,7 @@
     "format": "yarn lint && yarn pretty",
     "lint": "eslint --color --cache --fix --quiet --ignore-path ../../.eslintignore --config ./configs/eslintrc.config.js",
     "pretty": "prettier --ignore-path ../../.prettierignore --config ./configs/prettier.config.js -w",
-    "remove:bundle": "rm -rf ../../bundle/tap",
+    "remove:bundle": "rm -rf ../../dist/tap",
     "start": "cd ../../node_modules/keg-core && yarn web",
     "task": "node tasks/runTask.js",
     "web": "cd ../../node_modules/keg-core && yarn web"

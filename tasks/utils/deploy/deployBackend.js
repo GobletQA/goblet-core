@@ -1,7 +1,7 @@
-const { get, deepMerge } = require('@keg-hub/jsutils')
-const { Logger, runCmd, yarn } = require('@keg-hub/cli-utils')
-const { appRoot, bundleDir, containerDir } = require('../../paths')
 const { buildBackend } = require('./buildBackend')
+const { get, deepMerge } = require('@keg-hub/jsutils')
+const { appRoot, containerDir } = require('../../paths')
+const { Logger, runCmd, yarn } = require('@keg-hub/cli-utils')
 
 const getProjectEnvs = async (envs={}) => {
   const respId = await runCmd(`gcloud`, [

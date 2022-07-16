@@ -17,8 +17,7 @@
   "license": "MIT",
   "private": false,
   "workspaces": [
-    "repos/*",
-    "!repos/example"
+    "/repos/!(example)/**"
   ],
   "scripts": {
     "api": "cd repos/backend; yarn api",

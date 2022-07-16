@@ -1,6 +1,6 @@
 /**
-    "precompile": "mkdir -p && compile && cp -R bundle compile/bundle && cp -R node_modules compile/node_modules && cp package.json compile/package.json",
-    "compile": "npx caxa -D --input bundle --command \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/repos/backend/index.js\" --output \"compile/Goblet.app\"",
+    "precompile": "mkdir -p && compile && cp -R dist compile/dist && cp -R node_modules compile/node_modules && cp package.json compile/package.json",
+    "compile": "npx caxa -D --input dist --command \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/repos/backend/index.js\" --output \"compile/Goblet.app\"",
  */
 
 const path = require('path')
@@ -20,8 +20,8 @@ const appDir = path.join(compileDir, `app`)
 const locations = {
   appDir,
   compileDir,
-  bundleIn: path.join(rootDir, `bundle`),
-  bundleOut: path.join(appDir, `bundle`),
+  distIn: path.join(rootDir, `dist`),
+  distOut: path.join(appDir, `dist`),
   packageIn: path.join(rootDir, `package.json`),
   packageOut: path.join(appDir, `package.json`),
   nmIn: path.join(rootDir, `node_modules`),
@@ -71,7 +71,7 @@ const logSuccess = (msg) => {
 }
 
 /**
- * Helper to clean the bundle directory before building to ensure a fresh build
+ * Helper to clean the dist directory before building to ensure a fresh build
  */
 const cleanCompileDir = async () => {
   Logger.log(`Cleaning compile directory...`)
@@ -93,7 +93,7 @@ const compileApp = async () => {
       "env",
       `GB_CAXA_COMPILED=true`,
       "{{caxa}}/node_modules/.bin/node",
-      "{{caxa}}/bundle/repos/backend/index.js",
+      "{{caxa}}/dist/repos/backend/index.js",
       "{{caxa}}"
     ],
   }))
@@ -110,7 +110,7 @@ const copyAssets = async () => {
   Logger.log(`Copying assets to compile directory...`)
 
   await mkDir(locations.appDir)
-  await copySync(locations.bundleIn, locations.bundleOut)
+  await copySync(locations.distIn, locations.distOut)
   await copyFile(locations.packageIn, locations.packageOut)
   await copySync(locations.nmIn, locations.nmOut)
 

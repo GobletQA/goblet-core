@@ -2,7 +2,7 @@ const { loadEnvs } = require('../envs/loadEnvs')
 const { updateVersion } = require('./updateVersion')
 const { get, deepMerge } = require('@keg-hub/jsutils')
 const { Logger, runCmd, yarn } = require('@keg-hub/cli-utils')
-const { appRoot, bundleDir, containerDir } = require('../../paths')
+const { appRoot, distDir, containerDir } = require('../../paths')
 const { getFirebaseToken } = require('../firebase/getFirebaseToken')
 const { copyFromContainer } = require('../docker/copyFromContainer')
 const { getFirebaseProject } = require('../firebase/getFirebaseProject')
@@ -69,7 +69,7 @@ const { getFirebaseProject } = require('../firebase/getFirebaseProject')
   log && Logger.log(`Copying bundle from docker container ${envs.CONTAINER_NAME}...`)
 
   await copyFromContainer({
-    local: bundleDir,
+    local: distDir,
     container: envs.CONTAINER_NAME,
     // Copy directly from the web-build export in keg-core
     remote: `/keg/tap/node_modules/keg-core/web-build/.`,

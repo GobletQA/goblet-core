@@ -12,6 +12,7 @@ jsconfig.json
 container/values-local.yml
 
 /bundle/*
+/dist/*
 /compile/*
 .firebase
 

@@ -1,5 +1,5 @@
 const { setupBuild } = require('./setupBuild')
-const { appRoot, bundleDir, coreBuildDir } = require('../../paths')
+const { appRoot, distDir, coreBuildDir } = require('../../paths')
 const { Logger, yarn, runCmd, fileSys } = require('@keg-hub/cli-utils')
 
 const bundleCmd = `web:bundle`
@@ -7,7 +7,7 @@ const bundleCmd = `web:bundle`
 /**
  * **IMPORTANT** - Called from within the docker container when using the deploy task
  *
- * Builds the frontend application, then copies it to the app-root/bundle/tap directory
+ * Builds the frontend application, then copies it to the app-root/dist/tap directory
  * @function
  * @public
  * @param {Object} args.params - Options passed to the task parsed as an object
@@ -30,9 +30,9 @@ const buildFrontend = async args => {
   log && Logger.pair(`Running frontend build command`, `yarn ${bundleCmd}`)
   await yarn([bundleCmd], cmdOpts)
 
-  // Copy the build from the keg-core directory to the taps bundle directory
-  log && Logger.pair(`\nMoving build artifacts to`, bundleDir)
-  fileSys.copySync(coreBuildDir, bundleDir)
+  // Copy the build from the keg-core directory to the taps dist directory
+  log && Logger.pair(`\nMoving build artifacts to`, distDir)
+  fileSys.copySync(coreBuildDir, distDir)
   
   log && Logger.success(`\n[Success] ${Logger.colors.white('Frontend build completed successfully')}\n`)
 }
