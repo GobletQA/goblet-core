@@ -12,27 +12,15 @@ const logParkinStatus = (parkinObj) => {
       return name && Logger.pair(`Running ${name.trim()}`)
     }
     case `end`: {
-      const name = parkinObj.description || parkinObj.fullName
-      if(!name){
-        console.log(`------- Missing description -------`)
-        return console.log(parkinObj)
-      }
-
-      const status = parkinObj.status
-      if(!status){
-        console.log(`------- missing status -------`)
-        return console.log(parkinObj)
-      }
-  
       const type = parkinObj.type
-      if(!type){
-        console.log(`------- missing type -------`)
-        return console.log(type)
-      }
+      const status = parkinObj.status
+      const name = parkinObj.description || parkinObj.fullName
 
-      return parkinObj.type !== `step`
-        ? Logger.log(`${name.trim()}: ${status.trim()}`)
-        : Logger.log(`  ${status.trim()} - ${name.trim()} (${capitalize(type).trim()})`) 
+      return name && type && status
+        ? parkinObj.type !== `step`
+          ? Logger.log(`${name.trim()}: ${status.trim()}`)
+          : Logger.log(`  ${status.trim()} - ${name.trim()} (${capitalize(type).trim()})`) 
+        : undefined
     }
   }
 }

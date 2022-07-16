@@ -31,6 +31,7 @@
   "@GBK": "repos/backend",
 
   "@GTU/Parkin": "repos/testUtils/src/parkin",
+  "@GTU/jest": "repos/testUtils/src/jest",
   "@GTU/PlaywrightEnv": "repos/testUtils/src/playwright/playwrightTestEnv",
   "@GTU/Playwright": "repos/testUtils/src/playwright",
   "@GTU/Steps": "repos/testUtils/src/steps",

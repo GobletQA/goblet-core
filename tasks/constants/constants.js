@@ -12,9 +12,9 @@ const constants = deepFreeze({
   },
   browserNames: ['chromium', 'firefox', 'webkit'],
   jestConfigMap: {
-    unit: path.join(testUtilsDir, `configs/jest.unit.config.js`),
-    feature: path.join(testUtilsDir, `configs/jest.parkin.config.js`),
-    waypoint: path.join(testUtilsDir, `configs/jest.waypoint.config.js`),
+    unit: path.join(testUtilsDir, `src/jest/jest.unit.config.js`),
+    feature: path.join(testUtilsDir, `src/jest/jest.parkin.config.js`),
+    waypoint: path.join(testUtilsDir, `src/jest/jest.waypoint.config.js`),
   },
   testTypes: {
     unit: `unit`,

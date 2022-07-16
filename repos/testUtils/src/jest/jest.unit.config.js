@@ -10,7 +10,6 @@ const { inDocker } = require('@keg-hub/cli-utils')
 const { getGobletConfig } = require('@GSH/Config')
 const metadata = require('@GSC/Playwright/helpers/metadata')
 const { checkVncEnv } = require('@GSC/Libs/utils/vncActiveEnv')
-const { getLaunchType } = require('@GSH/Utils/getLaunchType')
 const { getRepoGobletDir } = require('@GSH/Utils/getRepoGobletDir')
 const { buildJestGobletOpts } = require('@GTU/Utils/buildJestGobletOpts')
 const { getContextOpts } = require('@GSC/Playwright/helpers/getContextOpts')
@@ -86,7 +85,6 @@ module.exports = async () => {
   const reportOutputPath = path.join(reportsTempDir, `${browserOpts.type}-html-report.html`)
 
   return {
-    preset: `jest-playwright-preset`,
     /** Build the default jest config for waypoint files */
     ...jestConfig(config, {
       shortcut: 'ut',
@@ -105,17 +103,6 @@ module.exports = async () => {
         context: { options: contextOpts },
         internalPaths: config.internalPaths,
         options: buildJestGobletOpts(config, browserOpts, contextOpts),
-      },
-    },
-    /**
-     * Set the test env for the jest-playwright plugin
-     * See https://www.npmjs.com/package/jest-playwright-preset for all options
-    */
-    testEnvironmentOptions: {
-      'jest-playwright': {
-        ...launchOpts,
-        launchType: getLaunchType(),
-        contextOptions: getContextOpts(noOpObj, config),
       },
     },
     setupFilesAfterEnv: [

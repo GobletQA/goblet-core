@@ -1,5 +1,23 @@
 # Ignore everything:
 /*
+node_modules
+dist
+build
+coverage
+.husky
+*.html
+*.hbs
+*.png
+*.jpg
+*.jpeg
+.*ignore*
+.gitkeep
+*.svg
+*.md
 
-# Except src:
+# Format the following:
+!/configs
+!/repos
 !/src
+!/tap.js
+!/tasks

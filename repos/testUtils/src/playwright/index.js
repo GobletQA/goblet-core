@@ -8,4 +8,7 @@ module.exports = {
   ...require('./evalAll'),
   ...require('./getLocator'),
   ...require('./getLocators'),
+  ...require('./testReport'),
+  ...require('./videoRecording'),
+  ...require('./generatedArtifacts'),
 }

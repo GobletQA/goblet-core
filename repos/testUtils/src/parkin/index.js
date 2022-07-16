@@ -1,7 +1,8 @@
-const hookFunctions = require('./hooks')
-const stepFunctions = require('./stepFunctions')
+
 
 module.exports = {
-  ...stepFunctions,
-  ...hookFunctions,
+  ...require('./hooks'),
+  ...require('./stepFunctions'),
+  ...require('./parseParkinLogs'),
+  transformer: require('./transformer')
 }

@@ -5,7 +5,7 @@ const path = require('path')
  * TODO: This relative path sucks, but don't have a better solution currently
  * Need to investigate at some point
  */
-const { jestAliases, registerAliases } = require('../../../configs/aliases.config')
+const { jestAliases, registerAliases } = require('../../../../configs/aliases.config')
 registerAliases()
 
 const { getGobletConfig } = require('@GSH/Config')
