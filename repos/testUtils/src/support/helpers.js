@@ -1,6 +1,6 @@
 const { get } = require('@keg-hub/jsutils')
 const { Logger } = require('@keg-hub/cli-utils')
-const { getLocator } = require('@GTU/Playwright')
+const { getPage, getLocator } = require('@GTU/Playwright')
 
 const checkTypes = {
   less: {
@@ -59,12 +59,17 @@ const greaterLessEqual = (count1, count2, type) => {
 
   foundType[1].method(count1, count2)
 }
+/**
+ * Builds the match types from the checkTypes and adds to the greaterLessEqual method
+ * Allows them to be accessible when using this method
+ */
 greaterLessEqual.matchTypes = Object.entries(checkTypes)
   .reduce((types, [key, def]) => {
     types.push(...def.match)
     return types
   }, [])
   .join(', ')
+
 
 /**
  * Cleans the passed in world path to ensure world || $world is not the start of the string
@@ -165,15 +170,45 @@ const getLocatorContent = async (selector, locator) => {
     : await element.textContent()
 }
 
+/**
+ * Finds an element from selector or locator, and clicks it
+ * @param {Object} params
+ *
+ * @return {void}
+ */
+const clickElement = async ({ page, selector, locator }) => {
+  page = page || getPage()
+  !locator && await getLocator(selector)
+  await page.click(selector, {
+    force: true
+  }) 
+}
+
+/**
+ * Finds an input from selector or locator, then fills it with text
+ * @param {Object} params
+ *
+ * @return {void}
+ */
+const fillInput = async ({ page, selector, locator, text}) => {
+  page = page || getPage()
+  await clickElement({ page, selector, locator })
+  //clear value before setting otherwise data is appended to end of existing value
+  await page.fill(selector, '')
+  await page.type(selector, text)
+}
+
 
 module.exports = {
+  fillInput,
   getWorldData,
+  clickElement,
   compareValues,
-  callLocatorMethod,
-  getLocatorAttribute,
   cleanWorldPath,
   greaterLessEqual,
   getLocatorProps,
   getLocatorTagName,
   getLocatorContent,
+  callLocatorMethod,
+  getLocatorAttribute,
 }
