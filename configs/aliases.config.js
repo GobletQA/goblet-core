@@ -34,7 +34,11 @@ const addRepoAliases = () => {
         const { paths } = requireFile(location, `tsconfig.json`)
         data = Object.entries(paths)
           .reduce((locs, [alias, arr]) => {
-            locs[alias] = arr[0]
+            const first = arr[0]
+            locs[alias] = first
+            // If no extension, then add the start pattern
+            !path.extname(first) && (locs[`${alias}/*`] = `${first}/*`)
+
             return locs
           }, {})
       }
