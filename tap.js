@@ -73,6 +73,8 @@ module.exports = {
         dynamic: {
           // Path is relative to <tap-root>/node_modules/keg-core/core/base
           // So we have to go-back 4 dirs to get back to tap-root, and find the admin repo
+          GSHUtils: '../../../../repos/shared/src/utils/frontend',
+          GSHModels: '../../../../repos/shared/src/models',
           AdminActions: '../../../../repos/admin/src/actions',
           AdminServices: '../../../../repos/admin/src/services',
           AdminComponents: '../../../../repos/admin/src/components',
