@@ -2,8 +2,9 @@
   "@GRepos": "repos",
   "@GTasks": "tasks",
   "@GConfigs": "configs",
-  "@GWF": "repos/workflows",
   "@GLogs": "logs",
+
+  "@GWF": "repos/workflows/src",
 
   "@GSH/Template": "repos/shared/src/templates",
   "@GSH/FileSys": "repos/shared/src/libs/fileSys",

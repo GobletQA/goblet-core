@@ -1,7 +1,7 @@
 {
-  "name": "@gobletqa/shared",
+  "name": "@gobletqa/backend",
   "version": "0.0.0",
-  "description": "Goblet Shared code",
+  "description": "Goblet Backend API",
   "main": "index.js",
   "author": "Lance Tipton",
   "license": "MIT",
@@ -26,33 +26,23 @@
     "lint": "eslint --color --cache --fix --quiet --ignore-path ../../.eslintignore --config ./configs/eslintrc.config.js",
     "pretty": "prettier --ignore-path ../../.prettierignore --config ./configs/prettier.config.js -w",
     "start": "yarn api:back",
-    "task": "node tasks/runTask.js"
+    "task": "node tasks/runTask.js",
+    "wf:t": "yarn workflow:test",
+    "workflow:test": "node repos/workflows/tests/e2e/e2e.js"
   },
   "resolutions": {
     "@keg-hub/cli-utils": "0.6.1",
     "@keg-hub/jsutils": "9.0.3"
   },
-  "peerDependencies": {
-    "express": ">=4.X"
-  },
   "dependencies": {
     "@keg-hub/cli-utils": "0.6.0",
     "@keg-hub/jsutils": "9.0.3",
     "@keg-hub/parse-config": "2.0.1",
-    "@ltipton/parkin": "1.4.0",
-    "cookie-session": "2.0.0",
-    "cors": "2.8.5",
-    "express-jwt": "6.1.1",
-    "express-winston": "4.2.0",
-    "is-secret": "1.2.1",
-    "mime": "3.0.0",
-    "module-alias": "2.2.2",
-    "winston": "3.6.0"
+    "axios": "0.24.0",
+    "module-alias": "2.2.2"
   },
   "devDependencies": {
     "jest": "26.4.2",
-    "npm-run-all": "4.1.5",
-    "rimraf": "3.0.2",
-    "semver": "7.3.5"
+    "rimraf": "3.0.2"
   }
 }

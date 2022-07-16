@@ -29,30 +29,26 @@
   },
   "resolutions": {
     "@keg-hub/cli-utils": "0.6.1",
-    "@keg-hub/jsutils": "9.0.3"
+    "@keg-hub/jsutils": "9.0.3",
+    "playwright": "1.23.0"
   },
   "peerDependencies": {
-    "expect": ">=28.x",
-    "jest": ">=26.x",
-    "playwright": "1.x"
   },
   "dependencies": {
     "@babel/core": "7.16.7",
+    "@babel/preset-env": "7.16.7",
     "@keg-hub/cli-utils": "0.6.0",
     "@keg-hub/jsutils": "9.0.3",
     "@ltipton/parkin": "1.4.0",
+    "expect": "28.1.0",
     "babel-jest": "26.6.3",
     "core-js": "3.20.2",
+    "jest": "26.4.2",
     "jest-html-reporter": "3.4.2",
-    "module-alias": "2.2.2"
+    "module-alias": "2.2.2",
+    "playwright": "1.23.0"
   },
   "devDependencies": {
-    "eslint": "8.7.0",
-    "expect": "28.1.0",
-    "jest": "26.4.2",
-    "npm-run-all": "4.1.5",
-    "prettier": "2.5.1",
-    "rimraf": "3.0.2",
-    "semver": "7.3.5"
+    "rimraf": "3.0.2"
   }
 }
