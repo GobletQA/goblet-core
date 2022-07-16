@@ -14,7 +14,7 @@ const { buildJestTestEnvs } = require('../jest/buildJestTestEnvs')
  * 
  * @returns {Object} - env object with the ENVs added
  */
-const buildWaypointEnvs = (browser, params, reportPath, type) => {
+const buildWaypointEnvs = (browser, goblet, params, reportPath, type) => {
   const env = buildPWEnvs({}, browser, params)
 
   // TODO: Update to use the GOBLET_APP_URL
@@ -23,6 +23,7 @@ const buildWaypointEnvs = (browser, params, reportPath, type) => {
   addEnv(env, 'GOBLET_APP_URL', params.appUrl)
   addEnv(env, 'GOBLET_CONFIG_BASE', params.base)
   addEnv(env, 'GOBLET_BROWSER_LAUNCH_TYPE', params.launchType)
+  addEnv(env, 'APP_ROOT_PATH', params.base || goblet.paths.repoRoot)
 
   // Set up html test reporting ENV for jest
   buildJestTestEnvs(browser, env, params.context, reportPath, type)

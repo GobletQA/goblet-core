@@ -18,7 +18,8 @@ const { getWorld } = require('@GTU/Support')
   },
   process(src, filename, ...rest) {
     const name = filename.split('/').pop()
-    const world = JSON.stringify(getWorld())
+    const world = getWorld()
+    const worldStr = JSON.stringify(world)
 
     /**
      * Wrap the waypoint script in a single test
@@ -33,7 +34,7 @@ const { getWorld } = require('@GTU/Support')
       `     delete jest.resetModules`,
       `     delete jest.resolver`,
       `     delete jest.restoreAllMocks;`,
-      `     const $world = ${world};`,
+      `     const $world = ${worldStr};`,
       `    ${src}`,
       `  })`,
       `})`

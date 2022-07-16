@@ -87,15 +87,12 @@ export const MonacoEditor = props => {
       : parentRef && (parentRef.current = editor)
   
     editorRef.current = editor
+    monaco.editor.getModels().map(model => {
+      model.updateOptions({ tabSize: 2, insertSpaces: true })
+    })
+
     onMount?.(editor, monaco)
   }, [onMount, activeFile, value, parentRef])
-
-  // const onChangeCB = useCallback((updated, evt) => {
-  //   onChange?.(updated, evt)
-    
-  //   // ed.getPosition()
-  // }, [onChange, activeFile, value])
-
 
   const editorProps = useMemo(() => {
     return {
@@ -116,6 +113,7 @@ export const MonacoEditor = props => {
         codeLens: false,
         useShadows: false,
         contextmenu: false,
+        wordWrapColumn: 200,
         wordWrap: 'bounded',
         horizontal: 'hidden',
         lineNumbersMinChars: 3,

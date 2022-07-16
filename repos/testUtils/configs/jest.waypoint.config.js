@@ -78,7 +78,7 @@ module.exports = async () => {
   const reportOutputPath = path.join(reportsTempDir, `${browserOpts.type}-html-report.html`)
 
   return {
-    preset: `jest-playwright-preset`,
+    // preset: `jest-playwright-preset`,
     /** Build the default jest config for waypoint files */
     ...jestConfig(config, {
       shortcut: 'wp',
@@ -111,9 +111,8 @@ module.exports = async () => {
       },
     },
     setupFilesAfterEnv: [
-      // `${testUtilsDir}/src/waypoint/hooks.js`,
-      `${testUtilsDir}/src/playwright/playwrightTestEnv.js`,
-      `${testUtilsDir}/src/waypoint/mockEnv.js`
+      `${testUtilsDir}/src/waypoint/hooks.js`,
+      `${testUtilsDir}/src/waypoint/mockEnv.js`,
     ],
     /** Add the custom waypoint transformer for all found .feature files */
     transform: {

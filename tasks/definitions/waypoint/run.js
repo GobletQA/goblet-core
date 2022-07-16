@@ -21,7 +21,13 @@ const runWp = async args => {
     goblet,
     type: testTypes.waypoint,
     cmdArgs: buildJestArgs(params, jestConfig),
-    envsHelper: (browser, reportPath) => buildWaypointEnvs(browser, params, reportPath, testTypes.waypoint)
+    envsHelper: (browser, reportPath) => buildWaypointEnvs(
+      browser,
+      goblet,
+      params,
+      reportPath,
+      testTypes.waypoint
+    )
   })
 
   process.exit(exitCode)

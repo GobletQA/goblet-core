@@ -3,9 +3,13 @@ const { copyTestReports } = require('@GTU/Playwright/testReport')
 const { saveRecordingPath } = require('@GTU/Playwright/videoRecording')
 const { initTestMeta, commitTestMeta } = require('@GTU/testMeta/testMeta')
 const { stopTracingChunk, startTracingChunk } = require('@GTU/Playwright/tracing')
-const { setupBrowser, setupContext, getContext } = require('@GTU/Playwright/browserContext')
-
-let LAST_ACTIVE_PAGE
+const {
+  setupContext,
+  setupBrowser,
+  getBrowserContext,
+  setLastActivePage,
+  getLastActivePage,
+} = require('@GTU/Playwright/browserContext')
 
 /**
  * Helper to force exit the process after 1/2 second
@@ -65,9 +69,9 @@ const cleanup = async (fromError) => {
 
     // Await the close of the context due to video recording
     await global.context.close()
-    await saveRecordingPath(LAST_ACTIVE_PAGE)
-
-    LAST_ACTIVE_PAGE = undefined
+    await saveRecordingPath(getLastActivePage())
+    setLastActivePage(undefined)
+  
     global.browser && await global.browser.close()
 
     await copyTestReports()
@@ -83,28 +87,6 @@ const cleanup = async (fromError) => {
     forceExit(err)
   }
 }
-
-/**
- * Gets the browser page instance, or else creates a new one
- * @param {number} num - The page number to get if multiple exist
- *
- * @return {Object} - Playwright browser page object
- */
-const getPage = async (num = 0) => {
-  if (!global.context) throw new Error('No browser context initialized')
-
-  const pages = global.context.pages() || []
-  LAST_ACTIVE_PAGE = pages.length ? pages[num] : await global.context.newPage()
-
-  return LAST_ACTIVE_PAGE
-}
-
-/**
- * Helper method to return the getPage method
- *
- * @return {Object} - Contains the getPage method
- */
-const getBrowserContext = () => ({ getPage, getContext })
 
 
 module.exports = {

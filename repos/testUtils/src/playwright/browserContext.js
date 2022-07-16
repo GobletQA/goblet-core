@@ -1,5 +1,7 @@
 const os = require('os')
 const path = require('path')
+const playwright = require('playwright')
+const { startTracing } = require('./tracing')
 const { get, noOpObj } = require('@keg-hub/jsutils')
 const { getMetadata } = require('@GSC/Playwright/server/server')
 const { newBrowser } = require('@GSC/Playwright/browser/newBrowser')
@@ -10,8 +12,9 @@ const {
   saveContextCookie
 } = require('@GTU/Playwright/browserCookie')
 
+let LAST_ACTIVE_PAGE
 const defaultStateFile = 'browser-context-state'
-  
+
 /**
  * Sets up the global browser for the test environment
  *
@@ -100,16 +103,46 @@ const getContext = async (contextOpts, location) => {
   return global.context
 }
 
+/**
+ * Gets the browser page instance, or else creates a new one
+ * @param {number} num - The page number to get if multiple exist
+ *
+ * @return {Object} - Playwright browser page object
+ */
+const getPage = async (num = 0) => {
+  if (!global.context) throw new Error('No browser context initialized')
+
+  const pages = global.context.pages() || []
+  LAST_ACTIVE_PAGE = pages.length ? pages[num] : await global.context.newPage()
+
+  return LAST_ACTIVE_PAGE
+}
+
+/**
+ * Helper method to return the getPage method
+ *
+ * @return {Object} - Contains the getPage method
+ */
+const getBrowserContext = () => ({ getPage, getContext })
+
+const getLastActivePage = () => LAST_ACTIVE_PAGE
+const setLastActivePage = (page) => {
+  LAST_ACTIVE_PAGE = page
+}
 
 module.exports = {
+  getPage,
   getContext,
   setupBrowser,
   setupContext,
-  setContextCookie,
   contextStateLoc,
   saveContextState,
   defaultStateFile,
   browserCookieLoc,
+  setContextCookie,
+  getLastActivePage,
+  setLastActivePage,
+  getBrowserContext,
   saveContextCookie,
   defaultCookieFile,
 }
