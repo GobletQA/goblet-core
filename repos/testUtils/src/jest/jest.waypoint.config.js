@@ -65,7 +65,7 @@ module.exports = async () => {
    * If not active we want to connect to the host machine browser via websocket
    * See
    *  - tasks/utils/envs/buildPWEnvs.js
-   *  - repos/shared/utils/taskEnvToBrowserOpts.js
+   *  - repos/shared/src/utils/taskEnvToBrowserOpts.js
    */
   const { vncActive } = checkVncEnv()
   const optsKey = vncActive ? 'launchOptions' : 'connectOptions'

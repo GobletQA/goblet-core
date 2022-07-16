@@ -1,7 +1,8 @@
 const path = require('path')
 const { toBool } = require('@keg-hub/jsutils')
 const { GobletRoot } = require('../gobletRoot')
-const { loadEnvs } = require('../repos/shared/utils/loadEnvs')
+// TODO: figure out how to make this an alias instead of relative path
+const { loadEnvs } = require('../repos/shared/src/utils/loadEnvs')
 const nodeEnv = process.env.NODE_ENV || `local`
 
 loadEnvs(nodeEnv === 'local')

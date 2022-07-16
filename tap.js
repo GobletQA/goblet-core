@@ -1,5 +1,6 @@
 require('./configs/aliases.config').registerAliases()
-const { getGobletConfig } = require('./repos/shared/utils/getGobletConfig')
+// TODO: figure out how to make this an alias instead of relative path
+const { getGobletConfig } = require('./repos/shared/src/utils/getGobletConfig')
 const config = getGobletConfig()
 const { serviceAccount, ...firebaseConfig } = config.firebase
 const {
