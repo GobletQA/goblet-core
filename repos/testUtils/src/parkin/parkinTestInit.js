@@ -44,6 +44,9 @@ const parkinTestInit = () => {
 
   // Add a custom jasmine reporter to track test status
   jasmineReporter()
+
+  // Figure out where / how to best set this
+  // jest.setTimeout(1000000000)
 }
 
 parkinTestInit()

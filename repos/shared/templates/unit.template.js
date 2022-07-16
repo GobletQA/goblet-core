@@ -1,6 +1,3 @@
-const { playwrightTestEnv } = require('@GTU/PlaywrightEnv')
-
-playwrightTestEnv()
 
 describe('${name}', () => {
   test('It should', () => {

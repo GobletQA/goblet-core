@@ -1,8 +1,3 @@
-const {
-  playwrightTestEnv,
-} = require('@GTU/PlaywrightEnv')
-
-playwrightTestEnv()
 
 test('foo', async () => {
   const page = await context.newPage()

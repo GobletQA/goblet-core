@@ -2,7 +2,7 @@
  * 
  */
 const { initialize, cleanup } = require('@GTU/PlaywrightEnv')
-const { getBrowserContext } = require('@GTU/Playwright/browserContext')
+const { getBrowserContext } = require('@GTU/Playwright')
 
 /**
  * Add wrap method to ensure no arguments are passed to initialize and cleanup

@@ -1,6 +1,6 @@
 const { Then } = require('@GTU/Parkin')
 const { containsText } = require('./containsText')
-const { getBrowserContext } = require('@GTU/PlaywrightEnv')
+const { getBrowserContext } = require('@GTU/Playwright')
 const { getPage } = getBrowserContext()
 
 /**

@@ -1,7 +1,7 @@
 // TODO( IMPORTANT ):  @lancetipton - Setup mv2
 // const { NodeVM } = require('vm2')
 const expect = require('expect')
-const { getWorld } = require('@GTU/Support')
+const { getWorld } = require('@GTU/Support/world')
 const { Parkin } = require('@ltipton/parkin')
 const { ParkinTest } = require('@ltipton/parkin/test')
 const { setParkinInstance } = require('@GTU/Parkin/instance')

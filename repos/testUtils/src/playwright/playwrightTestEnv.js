@@ -6,7 +6,6 @@ const { stopTracingChunk, startTracingChunk } = require('@GTU/Playwright/tracing
 const {
   setupContext,
   setupBrowser,
-  getBrowserContext,
   setLastActivePage,
   getLastActivePage,
 } = require('@GTU/Playwright/browserContext')
@@ -90,7 +89,6 @@ const cleanup = async (fromError) => {
 
 
 module.exports = {
-  getBrowserContext,
   initialize,
   cleanup,
 }

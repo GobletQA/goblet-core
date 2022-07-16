@@ -1,4 +1,6 @@
 module.exports = {
+  ...require('./browserContext'),
+  ...require('./browserCookie'),
   ...require('./playwrightTestEnv'),
   ...require('./getElement'),
   ...require('./getElements'),

@@ -1,6 +1,6 @@
 const { When } = require('@GTU/Parkin')
 const { get } = require('@keg-hub/jsutils')
-const { getBrowserContext } = require('@GTU/PlaywrightEnv')
+const { getBrowserContext } = require('@GTU/Playwright')
 
 const { getPage } = getBrowserContext()
 

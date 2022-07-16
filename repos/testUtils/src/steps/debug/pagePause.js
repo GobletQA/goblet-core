@@ -1,5 +1,5 @@
 const { Given } = require('@GTU/Parkin')
-const { getBrowserContext } = require('@GTU/PlaywrightEnv')
+const { getBrowserContext } = require('@GTU/Playwright')
 const { getPage } = getBrowserContext()
 
 /**

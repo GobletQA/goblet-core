@@ -1,4 +1,4 @@
-const { getBrowserContext } = require('@GTU/PlaywrightEnv')
+const { getBrowserContext } = require('@GTU/Playwright')
 const { getPage } = getBrowserContext()
 
 /**

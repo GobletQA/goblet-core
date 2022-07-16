@@ -1,5 +1,5 @@
 const { Then } = require('@GTU/Parkin')
-const { getBrowserContext } = require('@GTU/PlaywrightEnv')
+const { getBrowserContext } = require('@GTU/Playwright')
 const { defaultStateFile, saveContextState } = require('@GTU/Playwright/browserContext')
 
 /**
