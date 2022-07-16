@@ -14,5 +14,6 @@
   "@GSH/Config": "src/utils/getGobletConfig.js",
   "@GSH/AsyncWrap": "src/express/asyncWrap.js",
   "@GSH/Repo": "src/repo",
-  "@GSH": "src"
+  "@GSH": "src",
+  "@GSHRoot": "."
 }

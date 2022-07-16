@@ -5,5 +5,6 @@
   "@GSC/Libs": "src/libs",
   "@GSC/Playwright": "src/libs/playwright",
   "@GSC/Vnc": "src/libs/vnc",
-  "@GSC": "src"
+  "@GSC": "src",
+  "@GSCRoot": "."
 }

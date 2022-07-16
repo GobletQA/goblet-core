@@ -1,4 +1,4 @@
-require('../../configs/aliases.config').registerAliases()
+require('../../../configs/aliases.config').registerAliases()
 const { initApi } = require('./server')
 
 const start = () => {

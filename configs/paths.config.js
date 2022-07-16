@@ -76,6 +76,6 @@ module.exports = deepFreeze({
   // It should only be used when running from a local environment
   // if DOC_APP_PATH, we are a docker container, so look for tests at <goblet-root>/tests
   GOBLET_REPO_ROOT: repoRoot,
+  SUB_REPOS: repoPaths,
   ...dirsFromEnvs,
-  ...repoPaths,
 })

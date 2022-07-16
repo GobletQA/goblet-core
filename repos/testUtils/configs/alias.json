@@ -6,5 +6,6 @@
   "@GTU/Steps": "src/steps",
   "@GTU/Support": "src/support",
   "@GTU/Utils": "src/utils",
-  "@GTU": "src"
+  "@GTU": "src",
+  "@GTURoot": "."
 }

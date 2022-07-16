@@ -1,3 +1,4 @@
 {
-  "@GWF": "src"
+  "@GWF": "src",
+  "@GWFRoot": "."
 }

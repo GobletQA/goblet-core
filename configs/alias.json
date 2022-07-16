@@ -2,49 +2,5 @@
   "@GRepos": "repos",
   "@GTasks": "tasks",
   "@GConfigs": "configs",
-  "@GLogs": "logs",
-
-  "@GWF": "repos/workflows/src",
-
-  "@GSH/Template": "repos/shared/src/templates",
-  "@GSH/FileSys": "repos/shared/src/libs/fileSys",
-  "@GSH/Features": "repos/shared/src/libs/features",
-  "@GSH/Definitions": "repos/shared/src/libs/definitions",
-  
-  "@GSH/Libs": "repos/shared/src/libs",
-  "@GSH/Utils": "repos/shared/src/utils",
-  "@GSH/Exp": "repos/shared/src/express",
-  "@GSH/Models": "repos/shared/src/models",
-  "@GSH/App": "repos/shared/src/express/app.js",
-  "@GSH/Paths": "repos/shared/src/utils/paths.js",
-  "@GSH/Middleware": "repos/shared/src/middleware",
-  "@GSH/Router": "repos/shared/src/express/appRouter.js",
-  "@GSH/Config": "repos/shared/src/utils/getGobletConfig.js",
-  "@GSH/AsyncWrap": "repos/shared/src/express/asyncWrap.js",
-  "@GSH/Repo": "repos/shared/src/repo",
-  "@GSH": "repos/shared/src",
-
-  "@GBK/Libs": "repos/backend/src/libs",
-  "@GBK/Utils": "repos/backend/src/utils",
-  "@GBK/Sockr": "repos/backend/src/sockr",
-  "@GBK/Endpoints": "repos/backend/src/endpoints",
-  "@GBK/Middleware": "repos/backend/src/middleware",
-  "@GBK": "repos/backend/src",
-
-  "@GTU/Parkin": "repos/testUtils/src/parkin",
-  "@GTU/jest": "repos/testUtils/src/jest",
-  "@GTU/PlaywrightEnv": "repos/testUtils/src/playwright/playwrightTestEnv",
-  "@GTU/Playwright": "repos/testUtils/src/playwright",
-  "@GTU/Steps": "repos/testUtils/src/steps",
-  "@GTU/Support": "repos/testUtils/src/support",
-  "@GTU/Utils": "repos/testUtils/src/utils",
-  "@GTU": "repos/testUtils/src",
-
-  "@GSC/Constants": "repos/screencast/src/constants",
-  "@GSC/Endpoints": "repos/screencast/src/endpoints",
-  "@GSC/Screencast": "repos/screencast/src/screencast",
-  "@GSC/Libs": "repos/screencast/src/libs",
-  "@GSC/Playwright": "repos/screencast/src/libs/playwright",
-  "@GSC/Vnc": "repos/screencast/src/libs/vnc",
-  "@GSC": "repos/screencast/src"
+  "@GLogs": "logs"
 }

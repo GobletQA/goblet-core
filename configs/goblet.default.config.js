@@ -22,8 +22,9 @@ const {
   GOBLET_WAYPOINT_DIR,
   GOBLET_WORK_DIR,
   GOBLET_PW_METADATA_DIR,
-  TEST_UTILS_PATH,
+  SUB_REPOS,
 } = require('./paths.config')
+
 
 module.exports = {
   firebase,
@@ -140,7 +141,7 @@ module.exports = {
    */
   internalPaths: {
     gobletRoot: GOBLET_ROOT,
-    testUtilsDir: TEST_UTILS_PATH,
+    testUtilsDir: SUB_REPOS.TEST_UTILS_PATH,
     pwMetaDataDir: GOBLET_PW_METADATA_DIR,
     // Temp directories for saving test artifacts
     // These paths should not be saved with the repo

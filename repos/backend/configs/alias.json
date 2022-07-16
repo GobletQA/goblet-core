@@ -4,5 +4,6 @@
   "@GBK/Sockr": "src/sockr",
   "@GBK/Endpoints": "src/endpoints",
   "@GBK/Middleware": "src/middleware",
-  "@GBK": "src"
+  "@GBK": "src",
+  "@GBKRoot": "."
 }
