@@ -5,7 +5,8 @@ FROM $GB_BASE_IMAGE as goblet-installer
 WORKDIR /keg/tap
 COPY package.json package.json
 COPY yarn.lock yarn.lock
-RUN yarn install --non-interactive --ignore-optional --frozen-lockfile
+RUN yarn install --non-interactive --frozen-lockfile
+
 COPY . .
 
 # Commenting out for now until the compile script it finished

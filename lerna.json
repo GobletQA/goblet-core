@@ -1,7 +1,6 @@
 {
   "packages": [
-    "repos/*",
-    "!repos/example"
+    "repos/*"
   ],
   "version": "independent",
   "useWorkspaces": true,

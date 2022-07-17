@@ -29,16 +29,16 @@
     "task": "node tasks/runTask.js"
   },
   "resolutions": {
-    "@keg-hub/cli-utils": "0.6.1",
+    "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3"
   },
   "peerDependencies": {
     "express": ">=4.X"
   },
   "dependencies": {
-    "@keg-hub/cli-utils": "0.6.0",
+    "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3",
-    "@keg-hub/parse-config": "2.0.1",
+    "@keg-hub/parse-config": "2.0.2",
     "@ltipton/parkin": "1.4.0",
     "cookie-session": "2.0.0",
     "cors": "2.8.5",

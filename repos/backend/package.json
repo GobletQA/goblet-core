@@ -31,13 +31,13 @@
     "task": "node tasks/runTask.js"
   },
   "resolutions": {
-    "@keg-hub/cli-utils": "0.6.1",
+    "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3"
   },
   "dependencies": {
-    "@keg-hub/cli-utils": "0.6.0",
+    "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3",
-    "@keg-hub/parse-config": "2.0.1",
+    "@keg-hub/parse-config": "2.0.2",
     "@ltipton/sockr": "0.3.0",
     "express": "4.17.3",
     "http-proxy-middleware": "2.0.4",

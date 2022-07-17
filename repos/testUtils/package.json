@@ -28,7 +28,7 @@
     "task": "node tasks/runTask.js"
   },
   "resolutions": {
-    "@keg-hub/cli-utils": "0.6.1",
+    "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3",
     "playwright": "1.23.0"
   },
@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@types/jest": "26.0.14",
-    "@keg-hub/cli-utils": "0.6.0",
+    "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3",
     "@ltipton/parkin": "1.4.0",
     "expect": "28.1.0",

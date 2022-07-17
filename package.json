@@ -17,7 +17,7 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "repos/!(example)"
+    "repos/*"
   ],
   "scripts": {
     "api": "cd repos/backend; yarn api",
@@ -66,18 +66,18 @@
     "workflow:test": "cd repos/worflow && yarn workflow:test"
   },
   "dependencies": {
-    "@keg-hub/args-parse": "8.0.1",
-    "@keg-hub/ask-it": "1.1.0",
-    "@keg-hub/cli-utils": "0.6.0",
+    "@keg-hub/args-parse": "9.0.0",
+    "@keg-hub/ask-it": "1.1.2",
+    "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3",
-    "@keg-hub/parse-config": "2.0.1",
+    "@keg-hub/parse-config": "2.0.2",
     "cross-env": "7.0.3",
     "module-alias": "2.2.2"
   },
   "resolutions": {
-    "@keg-hub/args-parse": "8.0.1",
-    "@keg-hub/ask-it": "1.1.0",
-    "@keg-hub/cli-utils": "0.6.1",
+    "@keg-hub/args-parse": "9.0.0",
+    "@keg-hub/ask-it": "1.1.2",
+    "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3",
     "@monaco-editor/react": "4.3.1"
   },

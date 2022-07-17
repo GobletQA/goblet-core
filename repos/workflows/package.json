@@ -31,13 +31,13 @@
     "workflow:test": "node repos/workflows/tests/e2e/e2e.js"
   },
   "resolutions": {
-    "@keg-hub/cli-utils": "0.6.1",
+    "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3"
   },
   "dependencies": {
-    "@keg-hub/cli-utils": "0.6.0",
+    "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3",
-    "@keg-hub/parse-config": "2.0.1",
+    "@keg-hub/parse-config": "2.0.2",
     "axios": "0.24.0",
     "module-alias": "2.2.2"
   },

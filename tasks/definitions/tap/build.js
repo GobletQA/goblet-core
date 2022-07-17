@@ -20,15 +20,20 @@ const { sharedOptions, Logger } = require('@keg-hub/cli-utils')
 const buildGoblet = async args => {
   const { base, img, log } = args.params
   const toBuild = (!img || !img.length) ? [`base`, `core`] : uniqArr(ensureArr(img))
+  const includeBase = base || (base !== false && toBuild.includes(`base`))
+  const imgs = !includeBase && toBuild.includes(`base`)
+    ? toBuild.filter(item => item !== `base`)
+    : toBuild
 
   log &&
     Logger.pair(
       `Building docker images:`,
-      toBuild.map(name => `Goblet-${capitalize(name)}`).join(`, `)
+      imgs.map(name => `Goblet-${capitalize(name)}`).join(`, `)
     )
 
-  base || (base !== false && toBuild.includes(`base`)) && await buildBase(args)
-  toBuild.includes(`core`) && args.task.cliTask(args)
+  includeBase && await buildBase(args)
+  imgs.includes(`core`) && args.task.cliTask(args)
+
 }
 
 module.exports = {
