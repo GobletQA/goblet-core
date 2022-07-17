@@ -51,6 +51,7 @@
     "@keg-hub/parse-config": "2.0.2",
     "@keg-hub/spawn-cmd": "0.3.2",
     "@ltipton/parkin": "1.4.0",
+    "expect": "28.1.0",
     "express": "4.17.3",
     "module-alias": "2.2.2",
     "nodemon": "2.0.13",
