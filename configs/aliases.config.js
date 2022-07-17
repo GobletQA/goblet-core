@@ -4,7 +4,7 @@ const moduleAlias = require('module-alias')
 const { SUB_REPOS } = require('./paths.config')
 const { GobletRoot } = require('../gobletRoot')
 const { fileSys } = require('@keg-hub/cli-utils')
-const { deepFreeze } = require('@keg-hub/jsutils')
+const { deepFreeze, get } = require('@keg-hub/jsutils')
 const { requireFile } = fileSys
 
 
@@ -40,10 +40,13 @@ const addRepoAliases = () => {
 
       // If no data is returned, then try to load paths from tsconfig.json
       if(!data){
-        const { data:{ compilerOptions } } = requireFile(location, `tsconfig.json`)
+        const paths = get(
+          requireFile(location, `tsconfig.json`),
+          `data.compilerOptions.paths`
+        )
 
-        compilerOptions && (
-          data = Object.entries(compilerOptions.paths)
+        paths && (
+          data = Object.entries(paths)
             .reduce((locs, [alias, arr]) => {
 
               const first = arr[0]
