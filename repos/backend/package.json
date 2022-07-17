@@ -19,6 +19,7 @@
   "scripts": {
     "api": "yarn start",
     "build": "etsc --config=configs/etsc.config.js",
+    "build:start": "yarn build && yarn start",
     "clean:build": "rm -rf build && mkdir build && echo \"\" >> build/.keep",
     "clean:install": "yarn clean:full; yarn install",
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
@@ -26,11 +27,12 @@
     "format": "yarn lint && yarn pretty",
     "lint": "eslint --color --cache --fix --quiet --ignore-path ../../.eslintignore --config ./configs/eslintrc.config.js",
     "pretty": "prettier --ignore-path ../../.prettierignore --config ./configs/prettier.config.js -w",
-    "watch": "nodemon --config configs/nodemon.be.json",
+    "pm2": "pm2 start configs/backend.pm2.js",
     "start": "node dist/index.js",
     "serve": "node dist/index.js",
     "task": "node tasks/runTask.js",
-    "validate": "tsc --noEmit"
+    "validate": "tsc --noEmit",
+    "watch": "nodemon --config configs/nodemon.be.json"
   },
   "resolutions": {
     "@keg-hub/cli-utils": "0.7.0",

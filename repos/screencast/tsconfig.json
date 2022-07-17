@@ -4,6 +4,7 @@
     "baseUrl": "./",
     "outDir": "./dist",
     "paths": {
+      "@GSC/Configs": ["configs"],
       "@GSC/Constants": ["src/constants"],
       "@GSC/Endpoints": ["src/endpoints"],
       "@GSC/Screencast": ["src/screencast"],

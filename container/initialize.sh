@@ -1,4 +1,5 @@
 #!/usr/bin/env
+set -Eeo pipefail
 
 # Ensure required envs are set
 [[ -z "$KEG_PROXY_PORT" ]] && KEG_PROXY_PORT=19006
@@ -12,7 +13,7 @@
 # Starts the screen cast servers when not using a websocket from the hostmachine
 goblet_start_screen_cast(){
   cd /keg/tap/repos/screencast
-  yarn sc:pm2
+  yarn sc:pm2 >> /proc/1/fd/1 &
 }
 
 # Serve the backend server API only

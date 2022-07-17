@@ -36,6 +36,7 @@
     "lint": "eslint --color --cache --fix --ignore-path .root.ignore --config ./configs/eslintrc.config.js",
     "make": "yarn bundle && yarn compile",
     "pretty": "prettier --ignore-path .root.ignore --config ./configs/prettier.config.js --write",
+    "pm2": "pm2 start configs/pm2.config.js",
     "run": "lerna run",
     "task": "node tasks/runTask.js",
     "test": "turbo run test",

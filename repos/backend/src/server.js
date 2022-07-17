@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('../resolveRoot')
 const { getApp } = require('@GSH/App')
 const apiEndpoints = require('@GBK/Endpoints')
 const { initSockr } = require('@GBK/Sockr/sockr')

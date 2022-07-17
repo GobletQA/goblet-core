@@ -16,15 +16,5 @@ COPY --from=goblet-installer /keg/tap /keg/tap
 RUN ln -s /keg/tap/node_modules $HOME/.node_modules && \
     ln -s /keg/tap/node_modules /keg/node_modules
 
-RUN yarn global add pm2 && \
-    pm2 install pm2-logrotate && \
-    pm2 set pm2-logrotate:retain '7' && \
-    pm2 set pm2-logrotate:rotateInterval '0 0 * * 1' && \
-    mkdir -p logs && \
-    touch logs/vnc.out && \
-    touch logs/vnc.err && \
-    touch logs/sockify.out && \
-    touch logs/sockify.err
-
 EXPOSE $KEG_PROXY_PORT
 CMD [ "/bin/bash", "container/initialize.sh" ]

@@ -39,6 +39,11 @@ ARG SCREENCAST_API_PORT=7005
 # COPY --from=goblet-builder /keg/tap/repos/screencast/tsconfig.build.json repos/screencast/tsconfig.json
 # COPY --from=goblet-builder /keg/tap/repos/screencast/node_modules/. repos/screencast/node_modules/.
 
+RUN pm2 install pm2-logrotate && \
+    pm2 set pm2-logrotate:retain '7' && \
+    pm2 set pm2-logrotate:rotateInterval '0 0 * * 1' && \
+    mkdir -p logs
+
 RUN ln -s /keg/tap/node_modules $HOME/.node_modules && \
     ln -s /keg/tap/node_modules /keg/node_modules
 EXPOSE $SCREENCAST_API_PORT

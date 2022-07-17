@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('../resolveRoot')
 const { initApi } = require('./server')
 
 const start = () => {

@@ -4,6 +4,7 @@
     "baseUrl": "./",
     "outDir": "./dist",
     "paths": {
+      "@GBK/Configs": ["configs"],
       "@GBK/Libs": ["src/libs"],
       "@GBK/Utils": ["src/utils"],
       "@GBK/Sockr": ["src/sockr"],

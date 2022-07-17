@@ -34,7 +34,7 @@ ENV HOME=/root \
 WORKDIR /keg/tap
 
 # Install the dependecies with yarn setup, nstall gitFS
-RUN yarn global add npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
+RUN yarn global add pm2 npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
     apt-get update && apt-get install -y --no-install-recommends \
     novnc \
     tigervnc-standalone-server \
@@ -55,4 +55,8 @@ RUN yarn global add npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
     sysctl -p; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
     mkdir -p $DOC_APP_PATH/logs && \
-    rm -rf /keg/gitfs
+    rm -rf /keg/gitfs && \
+    pm2 install pm2-logrotate && \
+    pm2 set pm2-logrotate:retain '7' && \
+    pm2 set pm2-logrotate:rotateInterval '0 0 * * 1' && \
+    mkdir -p logs

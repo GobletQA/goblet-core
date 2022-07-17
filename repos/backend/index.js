@@ -1,3 +1,3 @@
 #!/usr/bin/env node
-require('../../configs/aliases.config').registerAliases()
+require('./resolveRoot')
 module.exports = require('./src')

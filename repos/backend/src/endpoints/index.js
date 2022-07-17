@@ -10,5 +10,5 @@ module.exports = (...args) => {
   authApi(...args)
   repoApi(...args)
   rootApi(...args)
-  screencastApi(...args)
+  // screencastApi(...args)
 }

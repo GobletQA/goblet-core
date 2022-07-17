@@ -18,12 +18,14 @@
   },
   "scripts": {
     "build": "etsc --config=configs/etsc.config.js",
+    "build:start": "yarn build && yarn start",
     "clean:install": "yarn clean:full; yarn install",
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
     "clean:nm": "rm -rf node_modules",
     "format": "yarn lint && yarn pretty",
     "lint": "eslint --color --cache --fix --quiet --ignore-path ../../.eslintignore --config ./configs/eslintrc.config.js",
     "pretty": "prettier --ignore-path ../../.prettierignore --config ./configs/prettier.config.js -w",
+    "pm2": "pm2 start configs/screencast.pm2.js",
     "start": "node dist/index.js",
     "sc": "PWDEBUG=1 DEBUG=pw:api node src/screencast.js",
     "sc:d": "yarn sc:daemon",
@@ -37,9 +39,8 @@
     "sc:status": "PWDEBUG=1 DEBUG=pw:api node src/screencast.js --status",
     "sc:vnc": "node src/libs/vnc/vnc.js",
     "sc:soc": "node src/libs/vnc/sockify.js",
-    "sc:pm2": "pm2 start configs/pm2.config.js",
-    "task": "node tasks/runTask.js",
-    "watch": "nodemon --config configs/nodemon.sc.json"
+    "sc:pm2": "pm2 start configs/vnc.pm2.js",
+    "task": "node tasks/runTask.js"
   },
   "resolutions": {
     "@keg-hub/cli-utils": "0.7.0",
