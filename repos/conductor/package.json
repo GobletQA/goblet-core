@@ -1,7 +1,7 @@
 {
   "name": "@gobletqa/conductor",
   "version": "0.0.0",
-  "description": "Goblet Backend API",
+  "description": "Goblet Conductor API",
   "main": "index.js",
   "author": "Lance Tipton",
   "license": "MIT",
