@@ -35,7 +35,7 @@ env:
   # When building the goblet image, this acts as the parent image
   # Image to use when building goblet
   # KEG_BASE_IMAGE: mcr.microsoft.com/playwright:bionic
-  KEG_BASE_IMAGE: mcr.microsoft.com/playwright:v1.23.0-focal
+  KEG_BASE_IMAGE: mcr.microsoft.com/playwright:v1.23.4-focal
 
   # Image to use when running goblet
   # Even if the dockerfile does not use this in the FROM directive

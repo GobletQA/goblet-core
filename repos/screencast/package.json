@@ -44,7 +44,7 @@
   "resolutions": {
     "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3",
-    "playwright": "1.23.0"
+    "playwright": "1.23.4"
   },
   "peerDependencies": {
   },
@@ -59,7 +59,7 @@
     "express": "4.17.3",
     "module-alias": "2.2.2",
     "nodemon": "2.0.13",
-    "playwright": "1.23.0",
+    "playwright": "1.23.4",
     "vm2": "3.9.9"
   },
   "devDependencies": {

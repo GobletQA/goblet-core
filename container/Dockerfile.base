@@ -2,7 +2,7 @@
 # Define ARGS before anything else, to use them in the FROM directives
 ARG GB_GITFS_VER=0.0.0
 ARG GB_GITFS_IMAGE=ghcr.io/gobletqa/gitfs:$GB_GITFS_VER
-ARG KEG_BASE_IMAGE=mcr.microsoft.com/playwright:v1.23.0-focal
+ARG KEG_BASE_IMAGE=mcr.microsoft.com/playwright:v1.23.4-focal
 
 # Hack to ensure the gitfs image can be used on the COPY --from option
 # The COPY --from option does not allow passing $args
