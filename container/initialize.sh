@@ -30,28 +30,33 @@ goblet_serve_screencast(){
   tail -f /dev/null && exit 0;
 }
 
-# Check if the vnc screen-cast servers should be started
-if [[ "$GOBLET_USE_VNC" == "true" ]]; then
-  goblet_start_screen_cast
+# From the root navigate to the service directory
+goblet_start_service(){
+  cd /keg/tap/$1
+
+  if [ -z $3 ] ; then
+    yarn $2 &
+  else
+    yarn $2 >> /proc/1/fd/1 &
+  fi
+}
+
+if [[ "$GOBLET_SUB_REPO" == "screencast" ]]; then
+  # Check if the vnc screen-cast servers should be started
+  if [[ "$GOBLET_USE_VNC" == "true" ]]; then
+    goblet_start_screen_cast
+  fi
 fi
 
-# Check if we should be running only the backend API
-if [[ "$GOBLET_API_TYPE" == "backend" ]]; then
-  goblet_serve_backend
-
-# Check if we should be running only the screencast API
-elif [[ "$GOBLET_API_TYPE" == "screencast" ]]; then
-  goblet_serve_screencast
-
-# Check the NODE_ENV, and use that to know which environment to start
-# For non-development environments, we want to serve the bundle if it exists
-elif [[ ! " development develop local test " =~ " $NODE_ENV " ]]; then
-  goblet_serve_backend
-
-# If none of the above exist, then we run the develop / local yarn command
-# And Serve the app bundle in development environemnts
+# Check if the process to run is defined, then run it
+if [[ "$GOBLET_SUB_REPO" ]]; then
+  goblet_start_service "repos/$GOBLET_SUB_REPO" "watch" "pipe-output"
 else
-  echo $"[ KEG-CLI ] Running development server!" >&2
-  cd $DOC_APP_PATH
-  [[ -z "$KEG_EXEC_CMD" ]] && yarn web || yarn $KEG_EXEC_CMD
+  # Start each of the services and canvas
+  goblet_start_service "repos/backend" "watch" "pipe-output"
+  goblet_start_service "repos/screencast" "watch" "pipe-output"
+  goblet_start_service "repos/tap" "start" "pipe-output"
 fi
+
+# Tail /dev/null to keep the container running
+tail -f /dev/null && exit 0;

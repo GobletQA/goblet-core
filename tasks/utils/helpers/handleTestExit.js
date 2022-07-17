@@ -26,7 +26,7 @@ const handleTestExit = (exitCodes = noPropArr, reportPaths=noPropArr) => {
         const reportSplit = reportPath.split('/')
         const name = reportSplit.pop().replace('.html', '')
         const type = reportSplit.pop()
-        console.log(`http://localhost:5005/reports/${type}/${name}`)
+        console.log(`http://localhost:7005/reports/${type}/${name}`)
       })
       console.log('\n=====================================================')
     })

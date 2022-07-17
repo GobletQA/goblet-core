@@ -56,7 +56,7 @@
     "esbuild": "0.14.49",
     "esbuild-node-tsc": "1.8.6",
     "esbuild-plugin-path-alias": "1.0.6",
-    "estrella": "1.4.1",
+    "esbuild-plugin-tsc": "0.3.1",
     "rimraf": "3.0.2"
   }
 }

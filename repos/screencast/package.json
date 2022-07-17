@@ -17,17 +17,15 @@
     "url": "https://github.com/GobletQA/goblet/issues"
   },
   "scripts": {
-    "build": "exit 0",
-    "clean:build": "rm -rf build && mkdir build && echo \"\" >> build/.keep",
+    "build": "etsc --config=configs/etsc.config.js",
     "clean:install": "yarn clean:full; yarn install",
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
     "clean:nm": "rm -rf node_modules",
     "format": "yarn lint && yarn pretty",
     "lint": "eslint --color --cache --fix --quiet --ignore-path ../../.eslintignore --config ./configs/eslintrc.config.js",
     "pretty": "prettier --ignore-path ../../.prettierignore --config ./configs/prettier.config.js -w",
-    "start": "nodemon --config configs/nodemon.sc.json",
+    "start": "node dist/index.js",
     "sc": "PWDEBUG=1 DEBUG=pw:api node src/screencast.js",
-    "sc:api": "yarn start",
     "sc:d": "yarn sc:daemon",
     "sc:daemon": "PWDEBUG=1 DEBUG=pw:api node src/screencast.js --daemon",
     "sc:k": "yarn sc:kill",
@@ -36,7 +34,8 @@
     "sc:restart": "node src/screencast.js --restart",
     "sc:s": "yarn sc:status",
     "sc:status": "PWDEBUG=1 DEBUG=pw:api node src/screencast.js --status",
-    "task": "node tasks/runTask.js"
+    "task": "node tasks/runTask.js",
+    "watch": "nodemon --config configs/nodemon.sc.json"
   },
   "resolutions": {
     "@keg-hub/cli-utils": "0.7.0",
@@ -51,6 +50,7 @@
     "@keg-hub/parse-config": "2.0.2",
     "@keg-hub/spawn-cmd": "0.3.2",
     "@ltipton/parkin": "1.4.0",
+    "@jest/expect-utils": "28.1.3",
     "expect": "28.1.0",
     "express": "4.17.3",
     "module-alias": "2.2.2",
@@ -66,7 +66,7 @@
     "esbuild": "0.14.49",
     "esbuild-node-tsc": "1.8.6",
     "esbuild-plugin-path-alias": "1.0.6",
-    "estrella": "1.4.1",
+    "esbuild-plugin-tsc": "0.3.1",
     "jest": "26.4.2",
     "rimraf": "3.0.2",
     "ts-node": "10.8.1",

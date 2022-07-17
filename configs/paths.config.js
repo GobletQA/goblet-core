@@ -5,10 +5,9 @@
  */
 
 const path = require('path')
-const { execSync } = require('child_process')
+const { readdirSync } = require('fs')
 const { GobletRoot } = require('../gobletRoot')
 const { deepFreeze, snakeCase } = require('@keg-hub/jsutils')
-
 const reposDir = path.join(GobletRoot, 'repos')
 
 /**
@@ -16,18 +15,20 @@ const reposDir = path.join(GobletRoot, 'repos')
  *
  * @type {Object} - Key/Value pair of Goblet sub-repos paths converted into snakeCase
  */
-const repoPaths = execSync('ls', { cwd: reposDir })
-  .toString()
-  .split('\n')
-  .filter(Boolean)
-  .reduce(
-    (values, name) => {
-      const key = snakeCase(name + 'Path').toUpperCase()
-      values[key] = path.join(reposDir, name)
-      return values
-    },
-    { REPOS_PATH: reposDir }
-  )
+const getDirectories = (source, existing) => {
+  return readdirSync(source, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name)
+    .reduce(
+      (values, name) => {
+        const key = snakeCase(name + 'Path').toUpperCase()
+        values[key] = path.join(source, name)
+        return values
+      },
+      existing || {}
+    )
+}
+const repoPaths = getDirectories(reposDir, { REPOS_PATH: reposDir })
 
 
 const {

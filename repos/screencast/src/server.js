@@ -1,16 +1,17 @@
 #!/usr/bin/env node
-require('../../../configs/aliases.config').registerAliases()
-
 const { getApp } = require('@GSH/App')
-const { validateUser } = require('./middleware')
-const { Logger } = require('@keg-hub/cli-utils')
 const apiEndpoints = require('@GSC/Endpoints')
+const { validateUser } = require('./middleware')
+const { isDeployedEnv } = require('@GSH/Utils/isDeployedEnv')
 const {
   setupCors,
   setupServer,
   setupLoggerReq,
   setupLoggerErr,
+  setupBlacklist,
+  setupServerListen,
 } = require('@GSH/Middleware')
+
 
 /**
  * Starts a express API server for screencast
@@ -22,30 +23,32 @@ const initApi = async () => {
   const app = getApp()
 
   const { screencast } = app.locals.config
-  const { server: serverConf } = screencast
 
   setupLoggerReq(app)
+  setupBlacklist(app)
   setupCors(app)
   setupServer(app)
   validateUser(app)
   apiEndpoints(app)
   setupLoggerErr(app)
 
-  const server = app.listen(serverConf.port, serverConf.host, () => {
-    const serverUrl = `http://${serverConf.host}:${serverConf.port}`
+  const {
+    secureServer,
+    insecureServer,
+  } = setupServerListen(app, { name: `Screencast`, ...screencast.server })
 
-    Logger.empty()
-    Logger.pair(`Goblet Screencast API listening on`, serverUrl)
-    Logger.empty()
-  })
-
-  return { app, server }
+  return { app, server: secureServer || insecureServer }
 }
 
+/**
+ * Ensure nodemon restarts properly
+ * Sometimes nodemon tries to restart faster then the process can shutdown
+ * This should force kill the process when it receives the SIGUSR2 event from nodemon
+ * Taken from https://github.com/standard-things/esm/issues/676#issuecomment-766338189
+ */
+!isDeployedEnv &&
+  process.once('SIGUSR2', () => process.kill(process.pid, 'SIGUSR2'))
 
-
-require.main === module
-  ? initApi()
-  : (module.exports = () => {
-      initApi()
-    })
+module.exports = {
+  initApi,
+}

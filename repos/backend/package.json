@@ -18,8 +18,7 @@
   },
   "scripts": {
     "api": "yarn start",
-    "api:back": "yarn start",
-    "build": "exit 0",
+    "build": "etsc --config=configs/etsc.config.js",
     "clean:build": "rm -rf build && mkdir build && echo \"\" >> build/.keep",
     "clean:install": "yarn clean:full; yarn install",
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
@@ -27,8 +26,11 @@
     "format": "yarn lint && yarn pretty",
     "lint": "eslint --color --cache --fix --quiet --ignore-path ../../.eslintignore --config ./configs/eslintrc.config.js",
     "pretty": "prettier --ignore-path ../../.prettierignore --config ./configs/prettier.config.js -w",
-    "start": "nodemon --config configs/nodemon.be.json",
-    "task": "node tasks/runTask.js"
+    "watch": "nodemon --config configs/nodemon.be.json",
+    "start": "node dist/index.js",
+    "serve": "node dist/index.js",
+    "task": "node tasks/runTask.js",
+    "validate": "tsc --noEmit"
   },
   "resolutions": {
     "@keg-hub/cli-utils": "0.7.0",
@@ -52,7 +54,7 @@
     "esbuild": "0.14.49",
     "esbuild-node-tsc": "1.8.6",
     "esbuild-plugin-path-alias": "1.0.6",
-    "estrella": "1.4.1",
+    "esbuild-plugin-tsc": "0.3.1",
     "nodemon": "2.0.13",
     "jest": "26.4.2",
     "rimraf": "3.0.2",

@@ -28,7 +28,7 @@ services:
       - KEG_PROXY_HOST
       - KEG_PROXY_PORT
       - NODE_ENV
-      - GOBLET_API_TYPE
+      - GOBLET_SUB_REPO
     ports:
       - ${API_PORT}:${API_PORT}
 

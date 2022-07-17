@@ -25,7 +25,6 @@
     "format": "yarn lint && yarn pretty",
     "lint": "eslint --color --cache --fix --quiet --ignore-path ../../.eslintignore --config ./configs/eslintrc.config.js",
     "pretty": "prettier --ignore-path ../../.prettierignore --config ./configs/prettier.config.js -w",
-    "start": "yarn api:back",
     "task": "node tasks/runTask.js",
     "wf:t": "yarn workflow:test",
     "workflow:test": "node repos/workflows/tests/e2e/e2e.js"
@@ -49,7 +48,7 @@
     "esbuild": "0.14.49",
     "esbuild-node-tsc": "1.8.6",
     "esbuild-plugin-path-alias": "1.0.6",
-    "estrella": "1.4.1",
+    "esbuild-plugin-tsc": "0.3.1",
     "jest": "26.4.2",
     "rimraf": "3.0.2",
     "ts-node": "10.8.1",

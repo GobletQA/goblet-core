@@ -27,7 +27,7 @@ const {
  */
 const initApi = async () => {
   const app = getApp()
-  const { server: serverConf, sockr: sockrConf } = app.locals.config
+  const { sockr, server:serverConf } = app.locals.config
 
   setupLoggerReq(app)
   setupBlacklist(app)
@@ -39,14 +39,16 @@ const initApi = async () => {
   setReqRepo(app)
   apiEndpoints(app)
   setupLoggerErr(app)
-
+  
   const wsProxy = setupVNCProxy(app)
-  const { insecureServer, secureServer } = setupServerListen(app)
+  const {
+    insecureServer,
+    secureServer
+  } = setupServerListen(app, { name: `Backend`, ...serverConf })
 
   const server = secureServer || insecureServer
-
   server.on('upgrade', wsProxy.upgrade)
-  const socket = await initSockr(app, server, sockrConf, 'tests')
+  const socket = await initSockr(app, server, sockr, 'tests')
 
   return { app, server, socket }
 }

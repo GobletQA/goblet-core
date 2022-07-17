@@ -52,11 +52,12 @@ const exitListener = (insecureServer, secureServer) => {
 /**
  * Sets up a secure server, typically used for local development
  * @param {Object} app - Express app object
+ * @param {Object} serverConf - Configuration for the server
  *
  * @returns {Object} - Insecure / Secure server object and Express app object
  */
-const serverListen = (app) => {
-  const { securePort, port, host } = app.locals.config.server
+const serverListen = (app, serverConf) => {
+  const { securePort, port, host, name } = serverConf
   const creds = {
     key: process.env.KEG_PROXY_PRIVATE_KEY,
     cert: process.env.KEG_PROXY_CERT,
@@ -74,19 +75,19 @@ const serverListen = (app) => {
     credentials.key &&
     https.createServer(credentials, app)
 
+  const serverTag = `[Goblet ${name || 'Server'}]`
   const insecureServer = httpServer.listen(port, () => {
     Logger.empty()
-    Logger.pair(`[Goblet] Insecure Server running on: `, `http://${host}:${port}`)
+    Logger.pair(`${serverTag} Insecure Server running on: `, `http://${host}:${port}`)
     Logger.empty()
   })
 
   const secureServer = httpsServer &&
     httpsServer.listen(securePort, () => {
       Logger.empty()
-      Logger.pair(`[Goblet] Secure Server running on: `, `https://${host}:443`)
+      Logger.pair(`${serverTag} Secure Server running on: `, `https://${host}:443`)
       Logger.empty()
     })
-
 
   exitListener(insecureServer, secureServer)
 
@@ -99,9 +100,8 @@ const serverListen = (app) => {
  *
  * @retruns {Object} - Response from server setup method
  */
-const setupServerListen = (app) => {
-   
-  return serverListen(app || getApp())
+const setupServerListen = (app, config) => {
+  return serverListen(app || getApp(), config)
 }
 
 module.exports = {

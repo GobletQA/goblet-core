@@ -28,7 +28,7 @@ services:
       - KEG_DOCKER_EXEC
       - KEG_PROXY_PORT
       - NODE_ENV
-      - GOBLET_API_TYPE
+      - GOBLET_SUB_REPO
       - KEG_PROXY_PRIVATE_KEY
       - KEG_PROXY_CERT
       - KEG_PROXY_CA

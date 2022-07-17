@@ -1,6 +1,7 @@
 {
   "delay": "500",
-  "exec": "etsc --config=configs/etsc.config.js && node index.js",
+  "exec": "yarn build && yarn start",
+  "ext": "ts,mjs,js,json,graphql",
   "watch": [
     "src",
     "config",

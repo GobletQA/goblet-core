@@ -16,3 +16,4 @@ require.main === module
       ...require('./libs'),
       ...require('./screencast'),
     })
+

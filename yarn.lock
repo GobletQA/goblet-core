@@ -1751,7 +1751,7 @@
     "@types/node" "*"
     jest-mock "^26.6.2"
 
-"@jest/expect-utils@^28.1.0":
+"@jest/expect-utils@28.1.3", "@jest/expect-utils@^28.1.0":
   version "28.1.3"
   resolved "https://registry.yarnpkg.com/@jest/expect-utils/-/expect-utils-28.1.3.tgz#58561ce5db7cd253a7edddbc051fb39dda50f525"
   integrity sha512-wvbi9LUrHJLn3NlDW6wF2hvIMtd4JUl2QNVrjq+IBSHirgfrR3o9RnVtxzdEGO2n9JyIWwHnLfby5KzqBGg2YA==
@@ -4996,6 +4996,13 @@ esbuild-plugin-path-alias@1.0.6:
   resolved "https://registry.yarnpkg.com/esbuild-plugin-path-alias/-/esbuild-plugin-path-alias-1.0.6.tgz#94d576295a97b44a2a668123d1f4c71eba88f81f"
   integrity sha512-cFzLuY+SMDCYy5meq679KBrp89f3rm7R1m8a1SthMf2lZeDmgxdFVDbZ1x/9VrWwiUoj440hHxKzQCf7muNiKg==
 
+esbuild-plugin-tsc@0.3.1:
+  version "0.3.1"
+  resolved "https://registry.npmjs.org/esbuild-plugin-tsc/-/esbuild-plugin-tsc-0.3.1.tgz#673a18e236c3afaa0c85df8cbddc9a372f04b117"
+  integrity sha512-/AWxnbo/flR6oaWmciNe3oWs/l57ojOwPZlsSH/B4cxovkLnlXbgm8KjxNGQbbB4bx+IVP5rkDnZJYntX/zrgg==
+  dependencies:
+    strip-comments "^2.0.1"
+
 esbuild-sunos-64@0.14.49:
   version "0.14.49"
   resolved "https://registry.yarnpkg.com/esbuild-sunos-64/-/esbuild-sunos-64-0.14.49.tgz#47d042739365b61aa8ca642adb69534a8eef9f7a"
@@ -5041,11 +5048,6 @@ esbuild@0.14.49:
     esbuild-windows-32 "0.14.49"
     esbuild-windows-64 "0.14.49"
     esbuild-windows-arm64 "0.14.49"
-
-esbuild@^0.11.0:
-  version "0.11.23"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.11.23.tgz#c42534f632e165120671d64db67883634333b4b8"
-  integrity sha512-iaiZZ9vUF5wJV8ob1tl+5aJTrwDczlvGP0JoMmnpC2B0ppiMCu8n8gmy5ZTGl5bcG081XBVn+U+jP+mPFm5T5Q==
 
 escalade@^3.1.1:
   version "3.1.1"
@@ -5200,15 +5202,6 @@ estraverse@^5.1.0, estraverse@^5.2.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/estraverse/-/estraverse-5.3.0.tgz#2eea5290702f26ab8fe5370370ff86c965d21123"
   integrity sha512-MMdARuVEQziNTeJD8DgMqmhwR11BRQ/cBP+pLtYdSTnf3MIO8fFeiINEbX36ZdNlfU/7A9f3gUw49B3oQsvwBA==
-
-estrella@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/estrella/-/estrella-1.4.1.tgz#6971a710a91d38abe3ced6f6ffa68c0c6e08d369"
-  integrity sha512-h8vlec27CFxw+8uYFtgbvLvohx0v+IssCwb/haTQnI+kO2WaL0ApSTWxg49LneAtqrZkrnYVwXQB2ZgyIIAImw==
-  dependencies:
-    esbuild "^0.11.0"
-  optionalDependencies:
-    fsevents "~2.3.1"
 
 esutils@^2.0.2:
   version "2.0.3"
@@ -5740,7 +5733,7 @@ fs.realpath@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
 
-fsevents@^2.1.2, fsevents@~2.3.1, fsevents@~2.3.2:
+fsevents@^2.1.2, fsevents@~2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
@@ -10410,6 +10403,11 @@ strip-bom@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/strip-bom/-/strip-bom-3.0.0.tgz#2334c18e9c759f7bdd56fdef7e9ae3d588e68ed3"
   integrity sha512-vavAMRXOgBVNF6nyEEmL3DBK19iRpDcoIwW+swQ+CbGiu7lju6t+JklA1MHweoWtadgt4ISVUsXLyDq34ddcwA==
+
+strip-comments@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/strip-comments/-/strip-comments-2.0.1.tgz#4ad11c3fbcac177a67a40ac224ca339ca1c1ba9b"
+  integrity sha512-ZprKx+bBLXv067WTCALv8SSz5l2+XhpYCsVtSqlMnkAXMWDq+/ekVbl1ghqP9rUHTzv6sm/DwCOiYutU/yp1fw==
 
 strip-eof@^1.0.0:
   version "1.0.0"
