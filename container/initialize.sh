@@ -41,7 +41,6 @@ goblet_start_service(){
   fi
 }
 
-
 # Check if the vnc screen-cast servers should be started
 START_VNC_SERVER=""
 if [[ -z "$GOBLET_SUB_REPO" ]]; then
