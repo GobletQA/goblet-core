@@ -17,7 +17,6 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "repos/*",
     "repos/!(example)"
   ],
   "scripts": {
@@ -28,8 +27,8 @@
     "build:fe": "node tasks/runTask.js deploy build -- frontend=true",
     "build:all": "turbo run build",
     "bundle": "node scripts/bundle.js",
-    "clean": "yarn clean:nm; yarn install",
-    "clean:full": "yarn clean:nm; yarn install",
+    "clean": "yarn clean:nm && lerna run clean:nm && yarn install",
+    "clean:full": "yarn clean:nm && yarn install",
     "clean:nm": "rm -rf node_modules",
     "compile": "node scripts/compile.js",
     "cz": "cz",
