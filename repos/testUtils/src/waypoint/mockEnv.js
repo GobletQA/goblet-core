@@ -72,7 +72,7 @@ if(process.env.GOBLET_MOCK_TEST_ENV){
   jest.setMock('v8', {})
   jest.setMock('vm', {})
   jest.setMock('worker_threads', {})
-  jest.useFakeTimers('modern')
+  jest.useFakeTimers()
   jest.setMock('os', {
     homedir: () => global.__goblet.paths.repoRoot
   })

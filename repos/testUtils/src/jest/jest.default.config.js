@@ -72,6 +72,8 @@ const jestConfig = (config, opts=noOpObj) => {
 
   return {
     testMatch,
+    // TODO: investigate using jest-circus at some point
+    testRunner: 'jest-jasmine2',
     preset: 'ts-jest/presets/js-with-ts',
     reporters: buildReporters(opts, gobletRoot, config),
     // This seems to be needed based on how the github action is setup
