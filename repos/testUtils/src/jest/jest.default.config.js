@@ -11,6 +11,7 @@ registerAliases()
 const { getGobletConfig } = require('@GSH/Config')
 const { noOpObj, noPropArr, capitalize } = require('@keg-hub/jsutils')
 const { buildTestMatchFiles } = require('@GSH/Utils/buildTestMatchFiles')
+const testUtilsDir = path.join(__dirname, '../../')
 
 /**
  * Builds the test reports, currently only jest-html-reporter
@@ -22,8 +23,6 @@ const { buildTestMatchFiles } = require('@GSH/Utils/buildTestMatchFiles')
  */
 const buildReporters = (opts=noOpObj, gobletRoot, config) => {
   const {
-    // JEST_HTML_REPORTER_PAGE_TITLE,
-    // JEST_HTML_REPORTER_OUTPUT_PATH
     GOBLET_HTML_REPORTER_PAGE_TITLE,
     GOBLET_HTML_REPORTER_OUTPUT_PATH,
   } = process.env
@@ -60,6 +59,7 @@ const buildReporters = (opts=noOpObj, gobletRoot, config) => {
  * 
  * @returns {Object} - Jest config object
  */
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 const jestConfig = (config, opts=noOpObj) => {
   const { GOBLET_CONFIG_BASE, GOBLET_MOUNT_ROOT } = process.env
 
@@ -72,6 +72,7 @@ const jestConfig = (config, opts=noOpObj) => {
 
   return {
     testMatch,
+    preset: 'ts-jest/presets/js-with-ts',
     reporters: buildReporters(opts, gobletRoot, config),
     // This seems to be needed based on how the github action is setup
     // But it may be a better option then sym-linking the keg-config node_modules to ~/.node_modules
@@ -86,6 +87,11 @@ const jestConfig = (config, opts=noOpObj) => {
     // So set the root to be the parent of keg-config and the repos dir
     // If no rootDir override is set
     rootDir: opts.rootDir || GOBLET_MOUNT_ROOT || '/keg',
+    globals: {
+      'ts-jest': {
+        tsconfig: `${testUtilsDir}/tsconfig.json`,
+      },
+    }
   }
 }
 

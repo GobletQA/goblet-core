@@ -61,8 +61,7 @@ const buildLaunchOpts = async (config, taskOpts, optsKey) => {
 }
 
 
-// It's recommend to use a separate Jest configuration jest.e2e.config.js for jest-playwright
-// to gain speed improvements and by that to only use Playwright in the end-to-end tests
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = async () => {
   const config = getGobletConfig()
   const baseDir = getRepoGobletDir(config)
@@ -84,16 +83,19 @@ module.exports = async () => {
   const { testUtilsDir, reportsTempDir } = config.internalPaths
   const reportOutputPath = path.join(reportsTempDir, `${browserOpts.type}-html-report.html`)
 
+  const defConf = jestConfig(config, {
+    shortcut: 'ut',
+    type: 'unit',
+    reportOutputPath,
+    testDir: path.join(baseDir, config.paths.unitDir),
+  })
+
   return {
-    /** Build the default jest config for waypoint files */
-    ...jestConfig(config, {
-      shortcut: 'ut',
-      type: 'unit',
-      reportOutputPath,
-      testDir: path.join(baseDir, config.paths.unitDir),
-    }),
-    /** Define the goblet global options durring test runs */
+    /** Build the default jest config for unit files */
+    ...defConf,
+    /** Define the goblet global options durning test runs */
     globals: {
+      ...defConf.globals,
       __goblet: {
         paths: {
           ...config.paths,

@@ -63,6 +63,7 @@ const getParkinSupport = config => {
   return matches
 }
 
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = async () => {
   const config = getGobletConfig()
   const baseDir = getRepoGobletDir(config)
@@ -91,6 +92,7 @@ module.exports = async () => {
     ],
     /** Pass on the browser options defined from the task that started the process */
     globals: {
+      ...defConf.globals,
       __goblet: {
         paths: {
           ...config.paths,

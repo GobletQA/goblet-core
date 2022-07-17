@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "paths": {
+      "@GTU/Parkin": ["src/parkin"],
+      "@GTU/jest": ["src/jest"],
+      "@GTU/PlaywrightEnv": ["src/playwright/playwrightTestEnv"],
+      "@GTU/Playwright": ["src/playwright"],
+      "@GTU/Steps": ["src/steps"],
+      "@GTU/Support": ["src/support"],
+      "@GTU/Utils": ["src/utils"],
+      "@GTU": ["src"],
+      "@GTURoot": ["./"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
