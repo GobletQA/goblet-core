@@ -1,0 +1,18 @@
+{
+  "delay": "500",
+  "exec": "yarn build && yarn start",
+  "ext": "ts,mjs,js,json,graphql",
+  "watch": [
+    "config",
+    "src"
+  ],
+  "ignoreRoot": [
+    ".git",
+    "docs",
+    "node_modules/.bin",
+    "scripts",
+    "tasks",
+    "tests",
+    "temp"
+  ]
+}
