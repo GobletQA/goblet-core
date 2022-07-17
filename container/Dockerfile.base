@@ -34,11 +34,13 @@ ENV HOME=/root \
 WORKDIR /keg/tap
 
 # Install the dependecies with yarn setup, nstall gitFS
-RUN yarn global add pm2 npm-run-all nodemon expo-cli@$EXPO_CLI_VERSION; \
+RUN yarn global add pm2 npm-run-all expo-cli@$EXPO_CLI_VERSION; \
     apt-get update && apt-get install -y --no-install-recommends \
+    make \
     novnc \
     tigervnc-standalone-server \
     gcc \
+    g++ \
     fuse \
     libffi-dev \
     libgit2-dev \
