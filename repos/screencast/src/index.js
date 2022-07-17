@@ -1,4 +1,5 @@
-require('../../../configs/aliases.config').registerAliases()
+#!/usr/bin/env node
+require('../resolveRoot')
 const { initApi } = require('./server')
 
 const start = () => {

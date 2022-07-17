@@ -10,7 +10,7 @@ const { checkCall } = require('@keg-hub/jsutils')
  * @return {Void}
  */
 const checkAndCall = async (args, arg, method) => {
-  Boolean(args.find(_arg => _arg === arg)) && (await checkCall(method))
+  Boolean(args.find(_arg => _arg === arg)) && (await checkCall(method, args))
 }
 
 /**
@@ -25,6 +25,7 @@ const checkAndCall = async (args, arg, method) => {
  */
 const checkArgs = async (args, methods) => {
   args = args || process.argv.slice(2)
+  await checkAndCall(args, '--pid', methods.pid)
   await checkAndCall(args, '--status', methods.status)
   await checkAndCall(args, '--daemon', methods.daemon)
   await checkAndCall(args, '--restart', methods.restart)

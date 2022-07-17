@@ -11,9 +11,8 @@
 
 # Starts the screen cast servers when not using a websocket from the hostmachine
 goblet_start_screen_cast(){
-  npx playwright install
-  cd $DOC_APP_PATH
-  yarn sc:daemon
+  cd /keg/tap/repos/screencast
+  yarn sc:pm2
 }
 
 # Serve the backend server API only
@@ -41,11 +40,17 @@ goblet_start_service(){
   fi
 }
 
-if [[ "$GOBLET_SUB_REPO" == "screencast" ]]; then
-  # Check if the vnc screen-cast servers should be started
-  if [[ "$GOBLET_USE_VNC" == "true" ]]; then
-    goblet_start_screen_cast
-  fi
+
+# Check if the vnc screen-cast servers should be started
+START_VNC_SERVER=""
+if [[ -z "$GOBLET_SUB_REPO" ]]; then
+  START_VNC_SERVER=1
+elif [[ "$GOBLET_SUB_REPO" == "screencast" ]]; then
+  START_VNC_SERVER=1
+fi
+
+if [[ "$GOBLET_USE_VNC" == "true" || "$START_VNC_SERVER" ]]; then
+  goblet_start_screen_cast
 fi
 
 # Check if the process to run is defined, then run it

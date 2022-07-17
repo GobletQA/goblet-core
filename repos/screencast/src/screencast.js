@@ -1,7 +1,7 @@
-require('../../../configs/aliases.config').registerAliases()
-
+#!/usr/bin/env node
+require('../resolveRoot')
 const { Logger } = require('@keg-hub/cli-utils')
-const { noOpObj, exists, wait } = require('@keg-hub/jsutils')
+const { noOpObj, exists, wait, get } = require('@keg-hub/jsutils')
 const { checkArgs } = require('@GSC/Libs/utils/checkArgs')
 const { daemonize } = require('@GSC/Libs/utils/daemonize')
 const {
@@ -17,6 +17,27 @@ const {
   startVNC,
   stopVNC,
 } = require('@GSC/Libs/vnc')
+
+/**
+ * Helper method to get the PId of the screencast servers
+ * @function
+ * @private
+ *
+ * @returns {Void}
+ */
+const getPid = async (args) => {
+  
+  const status = await statusScreencast()
+  
+  const type = Boolean(args.find(_arg => _arg.includes(`--soc`) ||_arg.includes(`=soc`)))
+    ? `sockify`
+    : `vnc`
+
+  const pid = get(status, `${type}.pid`)
+  pid && console.log(pid)
+
+  process.exit(0)
+}
 
 /**
  * Helper method to kill the running process
@@ -66,14 +87,14 @@ const killAndExit = exitStatus => {
  * @returns {Void}
  */
 const handleOnExit = exitStatus => {
-  Array.from([
-    'SIGBREAK',
-    'SIGINT',
-    'SIGUSR1',
-    'SIGUSR2',
-    'uncaughtException',
-    'SIGTERM',
-  ])
+  // Array.from([
+  //   'SIGBREAK',
+  //   'SIGINT',
+  //   'SIGUSR1',
+  //   'SIGUSR2',
+  //   'uncaughtException',
+  //   'SIGTERM',
+  // ])
   // .map(type => process.on(type, exitCode => stopScreencast(exitCode || exitStatus || 0)))
 }
 
@@ -160,6 +181,7 @@ const startScreencast = async params => {
   // Checks if a a method should be called based on the arg
   !__internal &&
     (await checkArgs(args, {
+      pid: getPid,
       kill: killAndExit,
       daemon: daemonize,
       status: checkStatus,

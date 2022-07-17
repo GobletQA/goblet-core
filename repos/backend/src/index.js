@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const { initApi } = require('./server')
 
 const start = () => {

@@ -103,10 +103,6 @@ env:
   IMAGE: goblet
   CONTAINER_NAME: goblet
 
-  # Git tap url in github
-  GIT_APP_URL: https://github.com/gobletqa/goblet.git
-  GIT_APP_BRANCH: master
-
   GOBLET_MOUNT_ROOT: /keg/repos
   GOBLET_LOCAL_MOUNT: goblet-local/current
 
@@ -127,7 +123,6 @@ env:
   GOBLET_JWT_CREDENTIALS: true
   GOBLET_JWT_REFRESH_EXP: 7200000
   GOBLET_JWT_REFRESH_SECRET: 4321-nIKR3h-g3K
-  AZ_CONTAINER_REGISTRY: KegRegistryCentralUS
 
   # TODO: @lance-tipton - Make this more dynamic - value comes from firebase?
   GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com,nnorman15@gmail.com,lance.tipton@workboard.com,mpcarolin.dev@gmail.com

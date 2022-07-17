@@ -1,13 +1,14 @@
+#!/usr/bin/env node
+require('../../../resolveRoot')
 const { Logger } = require('@keg-hub/cli-utils')
 const { getGobletConfig } = require('@GSH/Config')
 const { findProc, killProc } = require('@GSC/Libs/proc')
 const { create: childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
 const {
-  checkCall,
-  deepMerge,
-  flatUnion,
   limbo,
   noOpObj,
+  deepMerge,
+  flatUnion,
   noPropArr,
 } = require('@keg-hub/jsutils')
 
@@ -15,7 +16,6 @@ const {
  * Cache holder for the tigervnc process
  * @type {Object|undefined}
  */
-let VNC_PROC
 
 /**
  * Starts tigervnc to allow loading VNC in the browser
@@ -43,14 +43,14 @@ const startVNC = async ({
 
   if (status.pid) {
     Logger.pair(`- Tigervnc already running with pid:`, status.pid)
-    return (VNC_PROC = status)
+    return status
   }
 
   Logger.log(`- Starting tigervnc server...`)
   const config = getGobletConfig()
   const { vnc } = config.screencast
 
-  VNC_PROC = await childProc({
+  return await childProc({
     log: true,
     cmd: 'Xtigervnc',
     args: flatUnion(
@@ -88,8 +88,6 @@ const startVNC = async ({
       { env }
     ),
   })
-
-  return VNC_PROC
 }
 
 /**
@@ -99,14 +97,8 @@ const startVNC = async ({
  * @return {Void}
  */
 const stopVNC = async () => {
-  VNC_PROC
-    ? killProc(VNC_PROC)
-    : await checkCall(async () => {
-        const status = await statusVNC()
-        status && status.pid && killProc(status)
-      })
-
-  VNC_PROC = undefined
+  const status = await statusVNC()
+  status && status.pid && killProc(status)
 }
 
 /**
@@ -124,3 +116,5 @@ module.exports = {
   startVNC,
   stopVNC,
 }
+
+require.main === module && startVNC(noOpObj)

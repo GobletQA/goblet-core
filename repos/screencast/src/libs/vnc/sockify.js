@@ -1,22 +1,18 @@
+#!/usr/bin/env node
+require('../../../resolveRoot')
 const fs = require('fs')
 const { Logger } = require('@keg-hub/cli-utils')
 const { getGobletConfig } = require('@GSH/Config')
 const { findProc, killProc } = require('@GSC/Libs/proc')
 const { create: childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
 const {
-  checkCall,
-  deepMerge,
-  flatUnion,
   limbo,
   noOpObj,
+  deepMerge,
+  flatUnion,
   noPropArr,
 } = require('@keg-hub/jsutils')
 
-/**
- * Cache holder for the websockify process
- * @type {Object|undefined}
- */
-let SOCK_PROC
 
 /**
  * Starts websockify to allow loading VNC in the browser
@@ -40,13 +36,11 @@ const startSockify = async ({
   const config = getGobletConfig()
   const { proxy, vnc } = config.screencast
 
-  if (SOCK_PROC) return SOCK_PROC
-
   const status = await statusSockify()
 
   if (status.pid) {
     Logger.pair(`- Websockify already running with pid:`, status.pid)
-    return (SOCK_PROC = status)
+    return status
   }
 
   const creds = {
@@ -66,7 +60,7 @@ const startSockify = async ({
     : []
 
   Logger.log(`- Starting websockify server...`)
-  SOCK_PROC = await childProc({
+  return await childProc({
     cmd: 'websockify',
     args: flatUnion(
       [
@@ -91,8 +85,6 @@ const startSockify = async ({
     ),
     log: true,
   })
-
-  return SOCK_PROC
 }
 
 /**
@@ -104,14 +96,8 @@ const startSockify = async ({
  * @return {Void}
  */
 const stopSockify = async () => {
-  SOCK_PROC
-    ? killProc(SOCK_PROC)
-    : await checkCall(async () => {
-        const status = await statusSockify()
-        status && status.pid && killProc(status)
-      })
-
-  SOCK_PROC = undefined
+  const status = await statusSockify()
+  status && status.pid && killProc(status)
 }
 
 /**
@@ -129,3 +115,5 @@ module.exports = {
   startSockify,
   stopSockify,
 }
+
+require.main === module && startSockify(noOpObj)

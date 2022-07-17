@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 const { getApp } = require('@GSH/App')
 const apiEndpoints = require('@GSC/Endpoints')
 const { validateUser } = require('./middleware')
