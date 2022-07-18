@@ -1,4 +1,4 @@
-const { getPage } = require('@GTU/Playwright')
+const { getPage } = require('@GTU/Playwright/browserContext')
 
 /**
  * @param {String} selector

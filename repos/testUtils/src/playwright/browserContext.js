@@ -1,6 +1,5 @@
 const os = require('os')
 const path = require('path')
-const playwright = require('playwright')
 const { startTracing } = require('./tracing')
 const { get, noOpObj } = require('@keg-hub/jsutils')
 const { getMetadata } = require('@GSC/Playwright/server/server')
@@ -118,13 +117,6 @@ const getPage = async (num = 0) => {
   return LAST_ACTIVE_PAGE
 }
 
-/**
- * Helper method to return the getPage method
- *
- * @return {Object} - Contains the getPage method
- */
-const getBrowserContext = () => ({ getPage, getContext })
-
 const getLastActivePage = () => LAST_ACTIVE_PAGE
 const setLastActivePage = (page) => {
   LAST_ACTIVE_PAGE = page
@@ -142,7 +134,6 @@ module.exports = {
   setContextCookie,
   getLastActivePage,
   setLastActivePage,
-  getBrowserContext,
   saveContextCookie,
   defaultCookieFile,
 }
