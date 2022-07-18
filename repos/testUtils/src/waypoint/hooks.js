@@ -1,15 +1,14 @@
 /**
  * 
  */
+const { getPage } = require('@GTU/Playwright')
 const { initialize, cleanup } = require('@GTU/PlaywrightEnv')
-const { getBrowserContext } = require('@GTU/Playwright')
 
 /**
  * Add wrap method to ensure no arguments are passed to initialize and cleanup
  */
 beforeAll(async () => {
   await initialize()
-  const { getPage } = getBrowserContext()
   global.page = await getPage()
 })
 

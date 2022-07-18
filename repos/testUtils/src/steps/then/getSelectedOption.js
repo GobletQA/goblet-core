@@ -1,6 +1,5 @@
 const { Then } = require('@GTU/Parkin')
-const { getBrowserContext } = require('@GTU/Playwright')
-const { getPage } = getBrowserContext()
+const { getPage } = require('@GTU/Playwright')
 
 /**
  * Expects the element matching `selector` and verifies selected options === `data`

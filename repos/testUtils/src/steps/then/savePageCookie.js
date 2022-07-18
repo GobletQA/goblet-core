@@ -1,13 +1,15 @@
 const { Then } = require('@GTU/Parkin')
-const { getBrowserContext } = require('@GTU/Playwright')
-const { defaultCookieFile, saveContextCookie } = require('@GTU/Playwright/browserContext')
+const {
+  getContext,
+  defaultCookieFile,
+  saveContextCookie
+} = require('@GTU/Playwright')
 
 /**
  * Checks that the page title is `title`
  * @param {*} title - text to compare to page title
  */
 const savePageCookie = async (name) => {
-  const { getContext } = getBrowserContext()
   const context = await getContext()
 
   return await saveContextCookie(context, name)

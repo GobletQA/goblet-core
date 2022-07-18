@@ -41,6 +41,7 @@ ARG PLAYWRIGHT_BROWSERS_VERSION
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
     PLAYWRIGHT_BROWSERS_VERSION=$PLAYWRIGHT_BROWSERS_VERSION
 
+COPY . .
 COPY --from=goblet-installer /keg/tap /keg/tap
 RUN ln -s /keg/tap/node_modules $HOME/.node_modules && \
     ln -s /keg/tap/node_modules /keg/node_modules

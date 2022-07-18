@@ -1,13 +1,11 @@
 const { Then } = require('@GTU/Parkin')
-const { getBrowserContext } = require('@GTU/Playwright')
-const { defaultStateFile, saveContextState } = require('@GTU/Playwright/browserContext')
+const { defaultStateFile, saveContextState, getContext } = require('@GTU/Playwright')
 
 /**
  * Checks that the page title is `title`
  * @param {*} title - text to compare to page title
  */
 const savePageState = async (name) => {
-  const { getContext } = getBrowserContext()
   const context = await getContext()
 
   return await saveContextState(context, name)

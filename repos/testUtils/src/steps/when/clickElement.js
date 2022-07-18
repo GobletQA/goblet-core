@@ -1,7 +1,5 @@
 const { When } = require('@GTU/Parkin')
-const { getBrowserContext } = require('@GTU/Playwright')
-const { getPage } = getBrowserContext()
-const { getLocator } = require('@GTU/Playwright')
+const { getPage, getLocator } = require('@GTU/Playwright')
 
 /**
  * Click the element matching `selector`

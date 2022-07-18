@@ -1,6 +1,5 @@
 const { Then } = require('@GTU/Parkin')
-const { getBrowserContext } = require('@GTU/Playwright')
-const { getPage } = getBrowserContext()
+const { getPage } = require('@GTU/Playwright')
 
 /**
  * Expects the number of dom elements matching `selector` to equal `count`

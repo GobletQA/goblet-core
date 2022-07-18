@@ -1,8 +1,6 @@
 const { Given } = require('@GTU/Parkin')
+const { getPage } = require('@GTU/Playwright')
 const { get, isStr } = require('@keg-hub/jsutils')
-const { getBrowserContext } = require('@GTU/Playwright')
-
-const { getPage } = getBrowserContext()
 
 /**
  * Parses the url, replacing any dynamic variables

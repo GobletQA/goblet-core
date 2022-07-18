@@ -1,7 +1,6 @@
-const { Then } = require('@GTU/Parkin')
-const { getBrowserContext } = require('@GTU/Playwright')
-const { getPage } = getBrowserContext()
 const expect = require('expect')
+const { Then } = require('@GTU/Parkin')
+const { getPage } = require('@GTU/Playwright')
 
 /**
  * Checks that the page title is not `title`

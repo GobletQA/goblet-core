@@ -1,5 +1,4 @@
-const { getBrowserContext } = require('@GTU/Playwright')
-const { getPage } = getBrowserContext()
+const { getPage } = require('@GTU/Playwright')
 
 /**
  * Evaluates all the element that match selector

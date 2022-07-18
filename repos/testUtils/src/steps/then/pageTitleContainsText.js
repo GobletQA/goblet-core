@@ -1,7 +1,5 @@
 const { Then } = require('@GTU/Parkin')
-const { containsText } = require('./containsText')
-const { getBrowserContext } = require('@GTU/Playwright')
-const { getPage } = getBrowserContext()
+const { getPage } = require('@GTU/Playwright')
 
 /**
  * Checks that the page title is `title`
@@ -10,6 +8,7 @@ const { getPage } = getBrowserContext()
 const pageTitleContainsText = async title => {
   const page = await getPage()
   const actualTitle = await page.title()
+  // TODO: update to use expect contains text for better test output
   expect(actualTitle.includes(title)).toBe(true)
 }
 

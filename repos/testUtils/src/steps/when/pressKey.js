@@ -1,7 +1,6 @@
 const { When } = require('@GTU/Parkin')
-const { getBrowserContext } = require('@GTU/Playwright')
-const { getPage } = getBrowserContext()
 const keyboardMap = require('./keyboardMap')
+const { getPage } = require('@GTU/Playwright')
 
 /**
  * Simulates a key press

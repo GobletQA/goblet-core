@@ -1,6 +1,5 @@
 const { Given } = require('@GTU/Parkin')
-const { getBrowserContext } = require('@GTU/Playwright')
-const { getPage } = getBrowserContext()
+const { getPage } = require('@GTU/Playwright')
 
 /**
  * Calls page.pause to stop test execution until playwright.resume() is called
