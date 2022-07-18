@@ -1,4 +1,5 @@
 {
+  "@GTapRoot/Configs": "configs",
   "@GTap/Actions": "src/actions",
   "@GTap/Assets": "src/assets",
   "@GTap/Components": "src/components",

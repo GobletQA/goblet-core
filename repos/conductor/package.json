@@ -20,7 +20,7 @@
     "api": "yarn start",
     "build": "etsc --config=configs/etsc.config.js",
     "build:start": "yarn build && yarn start",
-    "clean:build": "rm -rf build && mkdir build && echo \"\" >> build/.keep",
+    "clean:dist": "rm -rf dist && mkdir dist && echo \"\" >> dist/.keep",
     "clean:install": "yarn clean:full; yarn install",
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
     "clean:nm": "rm -rf node_modules",

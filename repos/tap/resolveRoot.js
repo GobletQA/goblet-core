@@ -1,3 +1,5 @@
+require('../../configs/aliases.config').registerAliases()
+
 /**
  * Will be needed when the package is bundled
  * Still needs to be figured out

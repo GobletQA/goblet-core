@@ -20,10 +20,11 @@
     "repos/*"
   ],
   "scripts": {
-    "build": "yarn bundle && yarn compile",
+    "build": "turbo run build",
     "build:fe": "node tasks/runTask.js deploy build -- frontend=true",
     "build:all": "turbo run build",
     "bundle": "node scripts/bundle.js",
+    "bundle:compile": "yarn bundle && yarn compile",
     "clean": "yarn clean:full",
     "clean:full": "yarn clean:nm && yarn cache clean && yarn install",
     "clean:nm": "rm -rf node_modules && lerna run clean:nm",

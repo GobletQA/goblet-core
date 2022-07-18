@@ -10,52 +10,38 @@ set -Eeo pipefail
 # This is to keep our container running forever
 [[ -z "$KEG_DOCKER_EXEC" ]] && tail -f /dev/null && exit 0;
 
-# Starts the screen cast servers when not using a websocket from the hostmachine
-goblet_start_screen_cast(){
-  cd /keg/tap/repos/screencast
-  yarn sc:pm2 >> /proc/1/fd/1 &
+gobletRunScreencast(){
+
+  # Check if the vnc screen-cast servers should be started
+  START_VNC_SERVER=""
+  if [[ -z "$GOBLET_SUB_REPO" ]]; then
+    START_VNC_SERVER=1
+  elif [[ "$GOBLET_SUB_REPO" == "screencast" ]]; then
+    START_VNC_SERVER=1
+  fi
+
+  # Starts the screen cast servers when not using a websocket from the hostmachine
+  if [[ "$GOBLET_USE_VNC" == "true" || "$START_VNC_SERVER" ]]; then
+    echo "------ Runing VNC Screencast - $GOBLET_SUB_REPO --------"
+    cd /keg/tap/repos/screencast
+    yarn sc:pm2 >> /proc/1/fd/1 &
+  fi
 }
-
-# Serve the backend server API only
-goblet_serve_backend(){
-  echo $"[ KEG-CLI ] Running backend API server!" >&2
-  node ./repos/backend/index.js &>> /proc/1/fd/1 &
-  tail -f /dev/null && exit 0;
-}
-
-# Serve the screencast server API only
-goblet_serve_screencast(){
-  echo $"[ KEG-CLI ] Running screencast API server!" >&2
-  node ./repos/screencast/index.js &>> /proc/1/fd/1 &
-  tail -f /dev/null && exit 0;
-}
-
-
-# Check if the vnc screen-cast servers should be started
-START_VNC_SERVER=""
-if [[ -z "$GOBLET_SUB_REPO" ]]; then
-  START_VNC_SERVER=1
-elif [[ "$GOBLET_SUB_REPO" == "screencast" ]]; then
-  START_VNC_SERVER=1
-fi
-
-if [[ "$GOBLET_USE_VNC" == "true" || "$START_VNC_SERVER" ]]; then
-  goblet_start_screen_cast
-fi
 
 # Check if the process to run is defined, then run it
 if [[ "$GOBLET_SUB_REPO" ]]; then
-  cd repos/$GOBLET_SUB_REPO
+  echo "------ Runing Sub Repo - $GOBLET_SUB_REPO --------"
+  gobletRunScreencast "$@"
 
-  if [ "$GOBLET_SUB_REPO" == "frontend" ]; then
-    yarn start >> /proc/1/fd/1 &
-  else
-    yarn pm2 >> /proc/1/fd/1 &
-  fi
-else
-  # Start each of the services and canvas
+  cd repos/$GOBLET_SUB_REPO
   yarn pm2 >> /proc/1/fd/1 &
+
+else
+  echo "------ Runing All via PM2 --------"
+  # Start each of the services and canvas
+  yarn pm2
+  tail -f /keg/tap/logs/*.* >> /proc/1/fd/1 &
 fi
 
 # Tail /dev/null to keep the container running
-tail -f /dev/null && exit 0;
+tail -f /keg/tap/logs/*.* && exit 0;
