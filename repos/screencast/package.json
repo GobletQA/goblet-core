@@ -25,7 +25,7 @@
     "format": "yarn lint && yarn pretty",
     "lint": "eslint --color --cache --fix --quiet --ignore-path ../../.eslintignore --config ./configs/eslintrc.config.js",
     "pretty": "prettier --ignore-path ../../.prettierignore --config ./configs/prettier.config.js -w",
-    "pm2": "pm2 start configs/screencast.pm2.js",
+    "pm2": "pm2 start configs/pm2.sc.config.js",
     "start": "node dist/index.js",
     "sc": "PWDEBUG=1 DEBUG=pw:api node src/screencast.js",
     "sc:d": "yarn sc:daemon",
@@ -39,7 +39,7 @@
     "sc:status": "PWDEBUG=1 DEBUG=pw:api node src/screencast.js --status",
     "sc:vnc": "node src/libs/vnc/vnc.js",
     "sc:soc": "node src/libs/vnc/sockify.js",
-    "sc:pm2": "pm2 start configs/vnc.pm2.js",
+    "sc:pm2": "pm2 start configs/pm2.vnc.config.js",
     "task": "node tasks/runTask.js"
   },
   "resolutions": {

@@ -6,15 +6,17 @@ const { aliases } = require('@GConfigs/aliases.config')
 const logDir = aliases[`@GLogs`]
 const bkRoot = aliases[`@GBKRoot`]
 
+
 module.exports = {
-  apps : [
+  apps: [
     {
       cwd: bkRoot,
-      watch: true,
       script: 'yarn',
-      name: `Backend`,
+      name: `PM2.BE`,
       args: 'build:start',
       interpreter: '/bin/bash',
+      watch: [`src`, `configs`],
+      ignore_watch: [`dist`, `node_modules`],
       out_file: path.join(logDir, `backend.out`),
       error_file: path.join(logDir, `backend.err`),
     }

@@ -10,11 +10,12 @@ module.exports = {
   apps : [
     {
       cwd: scRoot,
-      watch: true,
       script: 'yarn',
-      name: `Screencast`,
+      name: `PM2.SC`,
       args: 'build:start',
       interpreter: '/bin/bash',
+      watch: [`src`, `configs`],
+      ignore_watch: [`dist`, `node_modules`],
       out_file: path.join(logDir, `screencast.out`),
       error_file: path.join(logDir, `screencast.err`),
     },

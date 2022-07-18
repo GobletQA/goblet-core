@@ -30,16 +30,6 @@ goblet_serve_screencast(){
   tail -f /dev/null && exit 0;
 }
 
-# From the root navigate to the service directory
-goblet_start_service(){
-  cd /keg/tap/$1
-
-  if [ -z $3 ] ; then
-    yarn $2 &
-  else
-    yarn $2 >> /proc/1/fd/1 &
-  fi
-}
 
 # Check if the vnc screen-cast servers should be started
 START_VNC_SERVER=""
@@ -55,12 +45,16 @@ fi
 
 # Check if the process to run is defined, then run it
 if [[ "$GOBLET_SUB_REPO" ]]; then
-  goblet_start_service "repos/$GOBLET_SUB_REPO" "watch" "pipe-output"
+  cd repos/$GOBLET_SUB_REPO
+
+  if [ "$GOBLET_SUB_REPO" == "frontend" ]; then
+    yarn start >> /proc/1/fd/1 &
+  else
+    yarn pm2 >> /proc/1/fd/1 &
+  fi
 else
   # Start each of the services and canvas
-  goblet_start_service "repos/backend" "watch" "pipe-output"
-  goblet_start_service "repos/screencast" "watch" "pipe-output"
-  goblet_start_service "repos/tap" "start" "pipe-output"
+  yarn pm2 >> /proc/1/fd/1 &
 fi
 
 # Tail /dev/null to keep the container running
