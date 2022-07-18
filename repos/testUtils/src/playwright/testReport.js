@@ -28,12 +28,11 @@ const copyTestReports = async () => {
   const { GOBLET_HTML_REPORTER_OUTPUT_PATH } = process.env
   if(!GOBLET_HTML_REPORTER_OUTPUT_PATH) return
 
-  const { saveReport } = get(global, `__goblet.options`, noOpObj)
-  const { type:browser=`browser` } = get(global, `__goblet.browser.options`, noOpObj)
-
   const { testPath } = getGeneratedName()
-  const testResult = getTestResult(testPath)
-  if(!shouldSaveReport(testResult?.status, saveReport)) return
+  const testResult = getTestResult(testPath)  
+  const reportSaved = shouldSaveReport(testResult?.status, get(global, `__goblet.options.saveReport`))
+
+  if(!reportSaved) return
 
   const reportSplit = GOBLET_HTML_REPORTER_OUTPUT_PATH.split(`/`)
   reportSplit.pop()
