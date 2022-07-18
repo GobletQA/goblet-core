@@ -9,9 +9,9 @@ const logDir = aliases[`@GLogs`]
 
 const bkConfdir = aliases[`@GBK/Configs`]
 const scConfdir = aliases[`@GSC/Configs`]
-const vncPM2Conf = require(path.join(scConfdir, `vnc.pm2.js`))
-const backPM2Conf = require(path.join(bkConfdir, `backend.pm2.js`))
-const scPM2Conf = require(path.join(scConfdir, `screencast.pm2.js`))
+const scPM2Conf = require(path.join(scConfdir, `pm2.sc.config.js`))
+const vncPM2Conf = require(path.join(scConfdir, `pm2.vnc.config.js`))
+const backPM2Conf = require(path.join(bkConfdir, `pm2.be.config.js`))
 
 module.exports = {
   apps : [
