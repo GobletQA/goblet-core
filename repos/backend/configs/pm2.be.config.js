@@ -15,7 +15,12 @@ module.exports = {
       name: `PM2.BE`,
       args: 'build:start',
       interpreter: '/bin/bash',
-      watch: [`src`, `configs`],
+      watch: [
+        `src`,
+        `configs`,
+        `../shared`,
+        `../workflows`,
+      ],
       ignore_watch: [`dist`, `node_modules`],
       out_file: path.join(logDir, `backend.out`),
       error_file: path.join(logDir, `backend.err`),

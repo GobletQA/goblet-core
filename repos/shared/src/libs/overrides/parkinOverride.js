@@ -2,7 +2,11 @@
 /**
  * Helper method to validate the require request is for Parkin
  */
-const parkinCheck = (request) => request === `GobletParkin`
+const parkinCheck = (request) => (
+  request === `@GTU/Parkin` ||
+  request === `GobletParkin`
+)
+
 
 /**
  * Override module for Parkin to allow loading the repo specific parkin instance
