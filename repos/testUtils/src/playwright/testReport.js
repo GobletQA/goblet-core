@@ -28,7 +28,7 @@ const copyTestReports = async () => {
   const { GOBLET_HTML_REPORTER_OUTPUT_PATH } = process.env
   if(!GOBLET_HTML_REPORTER_OUTPUT_PATH) return
 
-  const { saveReport, testType } = get(global, `__goblet.options`, noOpObj)
+  const { saveReport } = get(global, `__goblet.options`, noOpObj)
   const { type:browser=`browser` } = get(global, `__goblet.browser.options`, noOpObj)
 
   const { testPath } = getGeneratedName()
@@ -40,7 +40,7 @@ const copyTestReports = async () => {
   const reportLoc = reportSplit.join(`/`)
   const reportTempPath = get(global, `__goblet.paths.reportTempPath`)
 
-  // IF the temp report path is the same as the ENV output path, then just return
+  // If the temp report path is the same as the ENV output path, then just return
   if(reportTempPath === GOBLET_HTML_REPORTER_OUTPUT_PATH) return
 
   await ensureRepoArtifactDir(reportLoc)

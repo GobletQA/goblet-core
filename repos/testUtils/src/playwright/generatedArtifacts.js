@@ -66,12 +66,16 @@ const copyArtifactToRepo = async (saveLoc, name, currentLoc) => {
    * So we stream copy from the temp dir to the actual save dir
    * Then remove them temp file
   */
-  const [copyErr] = await limbo(new Promise((res, rej) =>
-    copyStream(
+  const [copyErr] = await limbo(new Promise(async (res, rej) => {
+    const streams = copyStream(
       currentLoc,
       saveFull,
-      (err, success) => (err ? rej(err) : res(success || true)))
-  ))
+      (err, success) => err ? rej(err) : res(success || true)
+    )
+    streams?.readStream?.on('error', err => rej(err))
+    streams?.writeStream?.on('error', err => rej(err))
+  }))
+
   if(copyErr) throw copyErr
 
   const [rmErr] = await removeFile(currentLoc)

@@ -1,5 +1,5 @@
 const path = require('path')
-const { noOpObj } = require('@keg-hub/jsutils')
+const { noOpObj, noPropArr } = require('@keg-hub/jsutils')
 const { dockerCmd, Logger } = require('@keg-hub/cli-utils')
 const { parseParkinLogs } = require('@GTU/parkin/parseParkinLogs')
 const { runCommands } = require('@GTasks/utils/helpers/runCommands')
@@ -101,6 +101,9 @@ const buildBrowserCmd = (args) => {
       status: resp.exitCode ? `failed` : `passed`,
     })
 
+    // Only copy the reports if testReport option is set, otherwise just return
+    if(!params.testReport) return
+
     // Copy the report after the tests have run, because it doesn't get created until the very end
     await copyArtifactToRepo(
       reportPath,
@@ -161,7 +164,7 @@ const runTestCmd = async (args) => {
   await commitTestMeta()
 
   // Calculate the exit codes so we know if all runs were successful
-  return handleTestExit(codes, reportPaths)
+  return handleTestExit(codes, params.testReport ? reportPaths : noPropArr)
 }
 
 
