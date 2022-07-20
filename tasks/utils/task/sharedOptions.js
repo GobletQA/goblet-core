@@ -78,7 +78,7 @@ const taskOptions = {
       default: false,
       type: `boolean`,
       example: '--testDebug',
-      env: `GOBLET_JEST_DEBUG`,
+      env: `GOBLET_TEST_DEBUG`,
       description: 'Pass the --debug flag to the jest command',
     },
     testRetry: {
@@ -187,6 +187,7 @@ const taskOptions = {
       description: 'Mode to run goblet in. In not set, uses launch option',
     },
     base: {
+      env: `GOBLET_CONFIG_BASE`,
       alias: ['baseDir', 'rootDir', 'root'],
       example: ['--base /my/test/repo/directory'],
       description: `The root or base directory containing a goblet.config outside of Goblet root directory`,

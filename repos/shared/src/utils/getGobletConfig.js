@@ -160,7 +160,10 @@ const loadConfigFromBase = base => {
     GOBLET_RUN_FROM_CI,
   } = process.env
 
-  base = base || GOBLET_CONFIG_BASE
+  // Check if running from a CI environment and the GOBLET_CONFIG_BASE is set
+  base = GOBLET_RUN_FROM_CI && GOBLET_CONFIG_BASE
+    ? GOBLET_CONFIG_BASE
+    : base || GOBLET_CONFIG_BASE
 
   if (!base) return null
 
@@ -232,7 +235,8 @@ const loadCustomConfig = (runtimeConfigPath, search = true) => {
  */
 const getGobletConfig = (argsConfig = noOpObj) => {
   // TODO: need a better way to handle this
-  if (!Boolean(process.env.JEST_WORKER_ID) && __GOBLET_CONFIG) return __GOBLET_CONFIG
+  if (!Boolean(process.env.JEST_WORKER_ID) && __GOBLET_CONFIG)
+    return __GOBLET_CONFIG
 
   const baseConfig = loadConfigFromBase(isStr(argsConfig.base) && argsConfig.base)
   const customConfig = loadCustomConfig(argsConfig.config)
