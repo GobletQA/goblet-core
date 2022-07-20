@@ -12,9 +12,9 @@ let __TEST_META
 const debugTag = Logger.colors.blue(`[Goblet - TestMeta]`)
 const debugLog = (...args) => {
   const toLog = args.map(item => 
-    isObj(item) || isArr(item) ? `\n${JSON.stringify(item)}\n` : item
+    isObj(item) || isArr(item) ? `\n${JSON.stringify(item, null, 2)}\n` : item
   ).join(` `)
-  debugActive && Logger.log(`${debugTag} ${toLog}`)
+  debugActive && Logger.stdout(`${debugTag} ${toLog}\n`)
 }
 
 /**
@@ -42,7 +42,7 @@ const saveTestMeta = async (testMeta) => {
   const savedMeta = await readTestMeta()
   __TEST_META = deepMerge(savedMeta, testMeta)
 
-  debugLog(`Saving TestMeta file`, __TEST_META)
+  debugLog(`Saving TestMeta file`, __TEST_META?.latest)
 
   const [err, _] = await writeFile(
     testMetaLoc,
@@ -160,7 +160,7 @@ const initTestMeta = async () => {
  * @return {Object} - json of the testMeta data
  */
 const commitTestMeta = async () => {
-  debugLog(`Committing TestMeta content to file`, __TEST_META)
+  debugLog(`Committing TestMeta content to file`, __TEST_META?.latest)
   
   return isCIEnv
     ? __TEST_META && await saveTestMeta(__TEST_META)

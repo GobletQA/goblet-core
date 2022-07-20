@@ -1,4 +1,5 @@
 const path = require('path')
+const { ARTIFACT_SAVE_OPTS } = require('@GTU/constants')
 const { noOpObj, noPropArr } = require('@keg-hub/jsutils')
 const { dockerCmd, Logger } = require('@keg-hub/cli-utils')
 const { parseParkinLogs } = require('@GTU/parkin/parseParkinLogs')
@@ -6,9 +7,10 @@ const { runCommands } = require('@GTasks/utils/helpers/runCommands')
 const { buildReportPath } = require('@GTU/reports/buildReportPath')
 const { getBrowsers } = require('@GSC/Playwright/helpers/getBrowsers')
 const { PARKIN_SPEC_RESULT_LOG } = require('@GTU/constants/constants')
-const { copyArtifactToRepo } = require('@GTU/Playwright/generatedArtifacts')
+const { shouldSaveArtifact } = require('@GTU/Utils/artifactSaveOption')
 const { handleTestExit } = require('@GTasks/utils/helpers/handleTestExit')
 const { appendToLatest, commitTestMeta } = require('@GTU/testMeta/testMeta')
+const { copyArtifactToRepo } = require('@GTU/Playwright/generatedArtifacts')
 
 const filterLogs = (data, params, parkinLogs) => {
   let filtered = data
@@ -95,14 +97,19 @@ const buildBrowserCmd = (args) => {
       res({ exitCode })
     })
 
+    const testStatus = resp.exitCode
+      ? ARTIFACT_SAVE_OPTS.failed
+      : ARTIFACT_SAVE_OPTS.passed
+
     await appendToLatest(`${type}.browsers.${browser}`, {
       name: browser,
+      status: testStatus,
       exitCode: resp.exitCode,
-      status: resp.exitCode ? `failed` : `passed`,
     })
 
     // Only copy the reports if testReport option is set, otherwise just return
-    if(!params.testReport) return
+    const saveArtifact = shouldSaveArtifact(params.testReport, testStatus)
+    if(!saveArtifact) return
 
     // Copy the report after the tests have run, because it doesn't get created until the very end
     await copyArtifactToRepo(

@@ -60,6 +60,9 @@ const copyArtifactToRepo = async (saveLoc, name, currentLoc) => {
     ? path.join(saveLoc, `${name}${path.extname(currentLoc)}`)
     : saveLoc
 
+  // Ensure the folder path exists before the file copy
+  await mkDir(path.dirname(folderPath))
+
   /**
    * Use copyStream because `movePath` can't move across separate partitions
    * When in dev, sometimes the temp save dir is mounted via the goblet repo
