@@ -235,10 +235,17 @@ const loadCustomConfig = (runtimeConfigPath, search = true) => {
  */
 const getGobletConfig = (argsConfig = noOpObj) => {
   // TODO: need a better way to handle this
-  if (!Boolean(process.env.JEST_WORKER_ID) && __GOBLET_CONFIG)
+  if (!Boolean(process.env.JEST_WORKER_ID) && __GOBLET_CONFIG){
+    // TEST-LOGGING -- 
+    Logger.stdout(`getGobletConfig - use existing config repoRoot: ${__GOBLET_CONFIG.paths.repoRoot}`)
     return __GOBLET_CONFIG
+  }
 
   const baseConfig = loadConfigFromBase(isStr(argsConfig.base) && argsConfig.base)
+  // TEST-LOGGING -- 
+  Logger.stdout(`getGobletConfig - base config repoRoot: ${baseConfig?.paths?.repoRoot}`)
+  
+  
   const customConfig = loadCustomConfig(argsConfig.config)
 
   if (!customConfig && argsConfig.local && argsConfig.warn) {

@@ -8,6 +8,7 @@ const path = require('path')
 const { jestAliases, registerAliases } = require('../../../../configs/aliases.config')
 registerAliases()
 
+const { Logger } = require('@keg-hub/cli-utils')
 const { getGobletConfig } = require('@GSH/Config')
 const { noOpObj, noPropArr, capitalize } = require('@keg-hub/jsutils')
 const { buildTestMatchFiles } = require('@GSH/Utils/buildTestMatchFiles')
@@ -62,7 +63,10 @@ const buildReporters = (opts=noOpObj, gobletRoot, config) => {
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 const jestConfig = (config, opts=noOpObj) => {
   const { GOBLET_CONFIG_BASE, GOBLET_MOUNT_ROOT, GOBLET_TEST_DEBUG } = process.env
-  GOBLET_TEST_DEBUG && Logger.stdout(`[Goblet] Loaded Config:\n${JSON.stringify(config)}\n`)
+  if(GOBLET_TEST_DEBUG){
+    // TEST-LOGGING -- 
+    Logger.stdout(`[Goblet] Loaded Config:\n${JSON.stringify(config, null, 2)}\n`)
+  }
 
   config = config || getGobletConfig()
   const { gobletRoot } = config.internalPaths

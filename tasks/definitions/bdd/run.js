@@ -1,5 +1,5 @@
 const { testTypes } = require('../../constants')
-const { sharedOptions } = require('@keg-hub/cli-utils')
+const { sharedOptions, Logger } = require('@keg-hub/cli-utils')
 const { runTestCmd } = require('@GTasks/utils/helpers/runTestCmd')
 const { buildBddEnvs } = require('@GTasks/utils/envs/buildBddEnvs')
 const { buildJestArgs } = require('@GTasks/utils/jest/buildJestArgs')
@@ -16,6 +16,12 @@ const { filterTaskEnvs } = require('@GTasks/utils/envs/filterTaskEnvs')
  */
 const runBdd = async args => {
   const { params, goblet, task } = args
+
+  if(process.env.GOBLET_TEST_DEBUG){
+    // TEST-LOGGING -- 
+    Logger.stdout(`runBdd Task Config repoRoot:\n${goblet?.paths?.repoRoot}\n`)
+    Logger.stdout(`runBdd Task Params:\n${JSON.stringify(params, null, 2)}\n`)
+  }
 
   filterTaskEnvs(params, task)
   const jestConfig = await getJestConfig(params, testTypes.feature)
@@ -52,7 +58,6 @@ module.exports = {
         'headless',
         'tags',
         'filter',
-        'bddConfig',
         'concurrent',
         'log',
         'noTests',

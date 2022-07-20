@@ -3,7 +3,8 @@ const { jestConfig } = require('./jest.default.config')
 
 const path = require('path')
 const glob = require('glob')
-const { getGobletConfig } = require('@GSH/Config')
+const { Logger } = require('@keg-hub/cli-utils')
+const { getGobletConfig, resetGobletConfig } = require('@GSH/Config')
 const { uniqArr, noOpObj } = require('@keg-hub/jsutils')
 const { getRepoGobletDir } = require('@GSH/Utils/getRepoGobletDir')
 const { buildJestGobletOpts } = require('@GTU/Utils/buildJestGobletOpts')
@@ -65,7 +66,19 @@ const getParkinSupport = config => {
 
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = async () => {
+
+  // TEST-LOGGING -- 
+  // Logger.stdout(`----- PARKIN-CONFIG - getting goblet config -----`)
+  // const firstConf = getGobletConfig()
+  // Logger.stdout(`BEFORE RESET - config.repoRoot: ${firstConf?.paths?.repoRoot}`)
+
+  // Logger.stdout(`----- PARKIN-CONFIG - resetting goblet config -----`)
+  // resetGobletConfig()
+
+  Logger.stdout(`----- PARKIN-CONFIG - getting goblet config -----`)
   const config = getGobletConfig()
+  Logger.stdout(`AFTER RESET - config.repoRoot: ${config?.paths?.repoRoot}`)
+  
   const baseDir = getRepoGobletDir(config)
   const { devices, ...browserOpts } = taskEnvToBrowserOpts(config)
   const contextOpts = getContextOpts(noOpObj, config)
