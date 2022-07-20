@@ -15,8 +15,9 @@ const { filterTaskEnvs } = require('@GTasks/utils/envs/filterTaskEnvs')
  * @param {Array} args.options - Options passed to the task from the command line
  */
 const runBdd = async args => {
-  filterTaskEnvs()
-  const { params, goblet } = args
+  const { params, goblet, task } = args
+
+  filterTaskEnvs(params, task)
   const jestConfig = await getJestConfig(params, testTypes.feature)
 
   // Run the test command for defined browsers
@@ -91,6 +92,7 @@ module.exports = {
         'record',
         'storageState',
         'timezone',
+        `artifactsDebug`,
       ]
     ),
   },

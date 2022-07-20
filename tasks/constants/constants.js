@@ -48,6 +48,9 @@ const constants = deepFreeze({
     ],
     exclude: [
       `PLAYWRIGHT_BROWSERS_PATH`
+    ],
+    add: [
+      `GOBLET_ARTIFACTS_DEBUG`,
     ]
   }
 })

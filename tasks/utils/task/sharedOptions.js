@@ -354,7 +354,16 @@ const taskOptions = {
     }
   },
   waypoint: {
-    
+  },
+  test: {
+    artifactsDebug: {
+      default: false,
+      type: `boolean`,
+      env: 'GOBLET_ARTIFACTS_DEBUG',
+      alias: [ `artDebug`, `artD`, `adebug` ],
+      description: 'Enable debug logs for artifacts generated durring test execution',
+      example: 'keg goblet bdd test --artifactsDebug',
+    },
   }
 }
 
@@ -377,6 +386,7 @@ setSharedOptions({
   ...taskOptions.goblet,
   ...taskOptions.playwright,
   ...taskOptions.pwContext,
+  ...taskOptions.test,
 })
 
 

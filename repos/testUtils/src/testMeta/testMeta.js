@@ -1,11 +1,21 @@
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
 const { getDefaultGobletConfig } = require('@GSH/Config')
-const { deepMerge, deepClone, set, isArr, noOpObj } = require('@keg-hub/jsutils')
+const { deepMerge, deepClone, set, isArr, noOpObj, isStr, isObj } = require('@keg-hub/jsutils')
 
 const isCIEnv = Boolean(process.env.GOBLET_RUN_FROM_CI)
+const debugActive = Boolean(process.env.GOBLET_ARTIFACTS_DEBUG)
 const { readFile, writeFile, pathExists, removeFile } = fileSys
 
 let __TEST_META
+
+
+const debugTag = Logger.colors.blue(`[Goblet - TestMeta]`)
+const debugLog = (...args) => {
+  const toLog = args.map(item => 
+    isObj(item) || isArr(item) ? `\n${JSON.stringify(item)}\n` : item
+  ).join(` `)
+  debugActive && Logger.log(`${debugTag} ${toLog}`)
+}
 
 /**
  * Gets the location to where the testMeta file exists
@@ -32,6 +42,8 @@ const saveTestMeta = async (testMeta) => {
   const savedMeta = await readTestMeta()
   __TEST_META = deepMerge(savedMeta, testMeta)
 
+  debugLog(`Saving TestMeta file`, __TEST_META)
+
   const [err, _] = await writeFile(
     testMetaLoc,
     JSON.stringify(__TEST_META, null, 2)
@@ -49,6 +61,8 @@ const saveTestMeta = async (testMeta) => {
 const readTestMeta = async () => {
   if(!isCIEnv) return noOpObj
 
+  debugLog(`Reading TestMeta file`)
+
   try {
     const testMetaLoc = getTestMetaPath()
     const [errExists, exists] = await pathExists(testMetaLoc)
@@ -63,6 +77,7 @@ const readTestMeta = async () => {
   catch(readErr){
     if(readErr.code === 'ENOENT') return {}
 
+    debugLog(`Error reading TestMeta file`)
     Logger.error(`Error reading Test Meta data. Reverting to empty object`)
     console.error(readErr)
     console.log(`Test Meta Content`, content)
@@ -80,6 +95,8 @@ const readTestMeta = async () => {
  */
 const appendToLatest = async (loc, data, commit) => {
   if(!isCIEnv) return noOpObj
+
+  debugLog(`Appending to TestMeta`)
 
   if(!__TEST_META){
     const testMeta = await readTestMeta()
@@ -103,7 +120,10 @@ const upsertTestMeta = async (loc, data) => {
   if(!isCIEnv) return noOpObj
 
   const saveLoc = isArr(loc) ? loc.join(`.`) : loc
-  set(__TEST_META, `latest.${saveLoc}`, data)
+  const latestLoc = `latest.${saveLoc}`
+  
+  debugLog(`Upsert to cached TestMeta\n`, latestLoc, data)
+  set(__TEST_META, latestLoc, data)
 
   return __TEST_META
 }
@@ -116,6 +136,7 @@ const upsertTestMeta = async (loc, data) => {
 const initTestMeta = async () => {
   if(!isCIEnv) return noOpObj
 
+  debugLog(`Initializing TestMeta...`)
   const testMeta = await readTestMeta()
   const id = new Date().getTime()
   const latest = { id }
@@ -139,6 +160,8 @@ const initTestMeta = async () => {
  * @return {Object} - json of the testMeta data
  */
 const commitTestMeta = async () => {
+  debugLog(`Committing TestMeta content to file`, __TEST_META)
+  
   return isCIEnv
     ? __TEST_META && await saveTestMeta(__TEST_META)
     : noOpObj

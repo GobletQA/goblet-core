@@ -11,8 +11,9 @@ const { buildWaypointEnvs } = require('@GTasks/utils/envs/buildWaypointEnvs')
  * node ./tasks/runTask.js waypoint run context=/keg/repos/lancetipton/current/goblet/waypoint/first.waypoint.js
  */
 const runWp = async args => {
-  filterTaskEnvs()
-  const { params, goblet } = args
+  const { params, goblet, task } = args
+
+  filterTaskEnvs(params, task)
   const jestConfig = await getJestConfig(params, testTypes.waypoint)
 
   // Run the test command for defined browsers
@@ -84,6 +85,7 @@ module.exports = {
         `testVerbose`,
         `testWorkers`,
         `testOpenHandles`,
+        `artifactsDebug`,
       ]
     ),
   },
