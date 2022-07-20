@@ -20,7 +20,7 @@ const removeEnv = key => {
  * @returns {void}
  */
 const addEnv = (key, val) => {
-  !exists(process.env[key]) && (process.env[key] = val)
+  !exists(process.env[key]) && exists(val) && (process.env[key] = val)
 }
 
 /**

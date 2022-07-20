@@ -61,7 +61,7 @@ const copyArtifactToRepo = async (saveLoc, name, currentLoc) => {
     : saveLoc
 
   // Ensure the folder path exists before the file copy
-  await mkDir(path.dirname(folderPath))
+  await mkDir(path.dirname(saveFull))
 
   /**
    * Use copyStream because `movePath` can't move across separate partitions

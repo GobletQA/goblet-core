@@ -1,10 +1,11 @@
 const path = require('path')
 const { ARTIFACT_SAVE_OPTS } = require('@GTU/constants')
-const { noOpObj, noPropArr } = require('@keg-hub/jsutils')
+const { noOpObj, noPropArr, toBool } = require('@keg-hub/jsutils')
 const { dockerCmd, Logger } = require('@keg-hub/cli-utils')
 const { parseParkinLogs } = require('@GTU/parkin/parseParkinLogs')
-const { runCommands } = require('@GTasks/utils/helpers/runCommands')
 const { buildReportPath } = require('@GTU/reports/buildReportPath')
+const { runCommands } = require('@GTasks/utils/helpers/runCommands')
+const { clearTestMetaDirs } = require('@GTU/Utils/clearTestMetaDirs')
 const { getBrowsers } = require('@GSC/Playwright/helpers/getBrowsers')
 const { PARKIN_SPEC_RESULT_LOG } = require('@GTU/constants/constants')
 const { shouldSaveArtifact } = require('@GTU/Utils/artifactSaveOption')
@@ -147,7 +148,12 @@ const runTestCmd = async (args) => {
     envsHelper,
   } = args
 
-  let reportPaths = [] 
+  // Clear out the temp folder that hold the temp artifacts
+  // Should make this a task option at some point
+  // For now only do it when developing locally
+  toBool(process.env.LOCAL_DEV) && clearTestMetaDirs()
+
+  let reportPaths = []
   const commands = getBrowsers(params).map(
     browser => {
       const reportPath = buildReportPath(type, params, goblet, browser)

@@ -1,14 +1,17 @@
+const { getGobletConfig } = require('@GSH/Config')
 const { fileSys, Logger } = require('@keg-hub/cli-utils')
-const { getDefaultGobletConfig } = require('@GSH/Config')
-const { deepMerge, deepClone, set, isArr, noOpObj, isStr, isObj } = require('@keg-hub/jsutils')
+const { getPathFromBase } = require('@GSH/Utils/getPathFromBase')
+const { deepMerge, deepClone, set, isArr, noOpObj, toBool, isObj } = require('@keg-hub/jsutils')
 
-const isCIEnv = Boolean(process.env.GOBLET_RUN_FROM_CI)
-const debugActive = Boolean(process.env.GOBLET_ARTIFACTS_DEBUG)
+const isCIEnv = toBool(process.env.GOBLET_RUN_FROM_CI)
+const debugActive = toBool(process.env.GOBLET_ARTIFACTS_DEBUG)
 const { readFile, writeFile, pathExists, removeFile } = fileSys
 
 let __TEST_META
 
-
+/**
+  * Debug Logger to debugging the testMeta data file by logging to stdout
+ */
 const debugTag = Logger.colors.blue(`[Goblet - TestMeta]`)
 const debugLog = (...args) => {
   const toLog = args.map(item => 
@@ -23,10 +26,20 @@ const debugLog = (...args) => {
  * @return {string} - Path to the testMeta file
  */
  const getTestMetaPath = () => {
+   return !isCIEnv ? `` : getGobletConfig()?.internalPaths?.testMetaFile
+}
+
+/**
+ * Gets the artifacts dir for the active repo
+ *
+ * @return {string} - Path to the artifacts dir
+ */
+const getArtifactsDir = () => {
   if(!isCIEnv) return ``
 
-  const config = getDefaultGobletConfig()
-  return config.internalPaths.testMetaFile
+  const { artifactsDir } = (global?.__goblet?.paths ?? getGobletConfig()?.paths)
+
+  return getPathFromBase(artifactsDir)
 }
 
 /**
@@ -139,7 +152,8 @@ const initTestMeta = async () => {
   debugLog(`Initializing TestMeta...`)
   const testMeta = await readTestMeta()
   const id = new Date().getTime()
-  const latest = { id }
+  const latest = { id, rootDir: getArtifactsDir() }
+
   if(!testMeta.latest){
     __TEST_META = { latest, perv: {} }
 
