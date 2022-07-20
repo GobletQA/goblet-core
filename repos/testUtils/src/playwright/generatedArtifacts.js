@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 const { fileSys } = require('@keg-hub/cli-utils')
 const { get, limbo } = require('@keg-hub/jsutils')
@@ -5,6 +6,13 @@ const { get, limbo } = require('@keg-hub/jsutils')
 const { mkDir, removeFile, copyStream } = fileSys
 const nameCache = {}
 
+/**
+ * Formats the passed in location file name
+ * Removes parent dirs, file extension and spaces in the file name
+ * @param {string} location - File location that should have it's name formatted
+ *
+ * @returns {string} - Formatted file name
+ */
 const formatName = (location) => {
   return location.split(`/`)
     .pop()
@@ -62,24 +70,7 @@ const copyArtifactToRepo = async (saveLoc, name, currentLoc) => {
 
   // Ensure the folder path exists before the file copy
   await mkDir(path.dirname(saveFull))
-
-  /**
-   * Use copyStream because `movePath` can't move across separate partitions
-   * When in dev, sometimes the temp save dir is mounted via the goblet repo
-   * So we stream copy from the temp dir to the actual save dir
-   * Then remove them temp file
-  */
-  const [copyErr] = await limbo(new Promise(async (res, rej) => {
-    const streams = copyStream(
-      currentLoc,
-      saveFull,
-      (err, success) => err ? rej(err) : res(success || true)
-    )
-    streams?.readStream?.on('error', err => rej(err))
-    streams?.writeStream?.on('error', err => rej(err))
-  }))
-
-  if(copyErr) throw copyErr
+  fs.copyFileSync(currentLoc, saveFull)
 
   const [rmErr] = await removeFile(currentLoc)
   if(rmErr) throw rmErr
