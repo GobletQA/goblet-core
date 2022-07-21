@@ -11,12 +11,7 @@ const injectGobletConfig = taskAction => {
   return args =>
     taskAction({
       ...args,
-      // TEST-LOGGING -- 
-      // Having a bug causing it to not load the config from the correct location
-      // This is a work around to try and fix it
-      goblet: process.env.GOBLET_RUN_FROM_CI || process.env.GOBLET_RUN_FROM_UI
-        ? getGobletConfig()
-        : getGobletConfig(args.params)
+      goblet: getGobletConfig(args.params),
     })
 }
 

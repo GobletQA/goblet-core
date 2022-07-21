@@ -76,6 +76,9 @@ const addConfigFileTypes = config => {
  * @return {Object} - The goblet config if the config exists at baseDir/<folder>/goblet.config.js, else null
  */
 const loadConfigFromFolder = baseDir => {
+    // TEST-LOGGING -- 
+  Logger.stdout(`loadConfigFromFolder - baseDir - ${baseDir}\n`)
+  
   return ['', './config', './configs', './goblet', './test', './tests'].reduce(
     (found, loc) => found || getConfigAtPath(path.join(baseDir, loc)),
     false
@@ -140,8 +143,16 @@ const getConfigAtPath = pathToCheck => {
  */
 const findConfig = startDir => {
   let currentPath = startDir || process.cwd()
+
+  // TEST-LOGGING -- 
+  Logger.stdout(`findConfig - resolved currentPath - ${currentPath}\n`)
+  
   while (currentPath != '/') {
     const configAtPath = loadConfigFromFolder(currentPath)
+    
+    // TEST-LOGGING -- 
+    Logger.stdout(`findConfig - resolved configAtPath - ${configAtPath}\n`)
+    
     if (configAtPath) return configAtPath
     currentPath = path.join(currentPath, '../')
   }
@@ -160,15 +171,31 @@ const loadConfigFromBase = base => {
     GOBLET_RUN_FROM_CI,
   } = process.env
 
+  // TEST-LOGGING -- 
+  Logger.stdout(`loadConfigFromBase - env:GOBLET_RUN_FROM_CI - ${GOBLET_RUN_FROM_CI}\n`)
+  Logger.stdout(`loadConfigFromBase - env:GOBLET_CONFIG_BASE - ${GOBLET_CONFIG_BASE}\n`)
+
   // Check if running from a CI environment and the GOBLET_CONFIG_BASE is set
   base = GOBLET_RUN_FROM_CI && GOBLET_CONFIG_BASE
     ? GOBLET_CONFIG_BASE
     : base || GOBLET_CONFIG_BASE
 
+  // TEST-LOGGING -- 
+  Logger.stdout(`loadConfigFromBase - resolved base - ${base}\n`)
+  
+
   if (!base) return null
 
   const cleanedDir = path.normalize(base)
+
+  // TEST-LOGGING -- 
+  Logger.stdout(`loadConfigFromBase - cleanedDir - ${cleanedDir}\n`)
+  
   if (!fs.existsSync(cleanedDir)) {
+
+    // TEST-LOGGING -- 
+    Logger.stdout(`loadConfigFromBase - NO EXISTS - cleanedDir - ${cleanedDir}\n`)
+    
     Logger.warn(
       [
         `\n`,
@@ -189,6 +216,9 @@ const loadConfigFromBase = base => {
   const startDir = stat.isDirectory() || (GOBLET_RUN_FROM_CI && stat.isSymbolicLink())
     ? cleanedDir
     : path.dirname(cleanedDir)
+
+  // TEST-LOGGING -- 
+  Logger.stdout(`loadConfigFromBase - resolved startDir - ${startDir}\n`)
 
   return findConfig(startDir)
 }
@@ -235,17 +265,9 @@ const loadCustomConfig = (runtimeConfigPath, search = true) => {
  */
 const getGobletConfig = (argsConfig = noOpObj) => {
   // TODO: need a better way to handle this
-  if (!Boolean(process.env.JEST_WORKER_ID) && __GOBLET_CONFIG){
-    // TEST-LOGGING -- 
-    Logger.stdout(`getGobletConfig - use existing config repoRoot: ${__GOBLET_CONFIG.paths.repoRoot}`)
-    return __GOBLET_CONFIG
-  }
+  if (!Boolean(process.env.JEST_WORKER_ID) && __GOBLET_CONFIG) return __GOBLET_CONFIG
 
   const baseConfig = loadConfigFromBase(isStr(argsConfig.base) && argsConfig.base)
-  // TEST-LOGGING -- 
-  Logger.stdout(`getGobletConfig - base config repoRoot: ${baseConfig?.paths?.repoRoot}`)
-  
-  
   const customConfig = loadCustomConfig(argsConfig.config)
 
   if (!customConfig && argsConfig.local && argsConfig.warn) {

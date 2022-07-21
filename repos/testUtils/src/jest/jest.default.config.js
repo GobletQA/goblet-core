@@ -63,10 +63,8 @@ const buildReporters = (opts=noOpObj, gobletRoot, config) => {
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 const jestConfig = (config, opts=noOpObj) => {
   const { GOBLET_CONFIG_BASE, GOBLET_MOUNT_ROOT, GOBLET_TEST_DEBUG } = process.env
-  if(GOBLET_TEST_DEBUG){
-    // TEST-LOGGING -- 
+  GOBLET_TEST_DEBUG &&
     Logger.stdout(`[Goblet] Loaded Config:\n${JSON.stringify(config, null, 2)}\n`)
-  }
 
   config = config || getGobletConfig()
   const { gobletRoot } = config.internalPaths
