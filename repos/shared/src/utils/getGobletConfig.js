@@ -75,9 +75,9 @@ const addConfigFileTypes = config => {
  *
  * @return {Object} - The goblet config if the config exists at baseDir/<folder>/goblet.config.js, else null
  */
-const loadConfigFromFolder = baseDir => {
+const loadConfigFromFolder = (baseDir, type) => {
     // TEST-LOGGING -- 
-  Logger.stdout(`loadConfigFromFolder - baseDir - ${baseDir}\n`)
+  type === 'base' && Logger.stdout(`loadConfigFromFolder - baseDir - ${baseDir}\n`)
   
   return ['', './config', './configs', './goblet', './test', './tests'].reduce(
     (found, loc) => found || getConfigAtPath(path.join(baseDir, loc)),
@@ -141,17 +141,17 @@ const getConfigAtPath = pathToCheck => {
  *
  * @return {Object?} - the goblet config if the config is found, else null
  */
-const findConfig = startDir => {
+const findConfig = (startDir, type) => {
   let currentPath = startDir || process.cwd()
 
   // TEST-LOGGING -- 
-  Logger.stdout(`findConfig - resolved currentPath - ${currentPath}\n`)
+  type === 'base' && Logger.stdout(`findConfig - resolved currentPath - ${currentPath}\n`)
   
   while (currentPath != '/') {
-    const configAtPath = loadConfigFromFolder(currentPath)
+    const configAtPath = loadConfigFromFolder(currentPath, type)
     
     // TEST-LOGGING -- 
-    Logger.stdout(`findConfig - resolved configAtPath - ${configAtPath}\n`)
+    type === 'base' && Logger.stdout(`findConfig - resolved configAtPath.paths.repoRoot - ${configAtPath?.paths.repoRoot}\n`)
     
     if (configAtPath) return configAtPath
     currentPath = path.join(currentPath, '../')
@@ -220,7 +220,7 @@ const loadConfigFromBase = base => {
   // TEST-LOGGING -- 
   Logger.stdout(`loadConfigFromBase - resolved startDir - ${startDir}\n`)
 
-  return findConfig(startDir)
+  return findConfig(startDir, `base`)
 }
 
 /**
@@ -245,15 +245,16 @@ const loadCustomConfig = (runtimeConfigPath, search = true) => {
 
     const customConfig = configPath
       ? require(path.resolve(configPath))
-      : search && findConfig()
+      : search && findConfig(undefined, `custom`)
 
     return customConfig && loadConfigByType(customConfig)
-  } catch (err) {
+  }
+  catch (err) {
     if (configPath) throw err
 
     // if config is not specified by param or env,
     // try finding it at the execution directory
-    return search && findConfig()
+    return search && findConfig(undefined, `custom`)
   }
 }
 

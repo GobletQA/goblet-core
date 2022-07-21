@@ -17,11 +17,8 @@ const { filterTaskEnvs } = require('@GTasks/utils/envs/filterTaskEnvs')
 const runBdd = async args => {
   const { params, goblet, task } = args
 
-  if(process.env.GOBLET_TEST_DEBUG){
-    // TEST-LOGGING -- 
-    Logger.stdout(`runBdd Task Config repoRoot:\n${goblet?.paths?.repoRoot}\n`)
+  process.env.GOBLET_TEST_DEBUG &&
     Logger.stdout(`runBdd Task Params:\n${JSON.stringify(params, null, 2)}\n`)
-  }
 
   filterTaskEnvs(params, task)
   const jestConfig = await getJestConfig(params, testTypes.feature)

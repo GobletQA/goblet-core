@@ -1,4 +1,5 @@
 # TODO
+* IMPORTANT - Normalize GOBLET_REPO_ROOT / GOBLET_CONFIG_BASE / DOC_APP_PATH / task repo option??
 
 
 ## Record
@@ -167,3 +168,5 @@ Generate context
 
 ACTION - SELECTOR - REF - SELECTOR - ACTION/REF - SELECTOR - ACTION/REF
 "select" "element" "next" "sibling"    "loop"    "children"    ""
+
+
