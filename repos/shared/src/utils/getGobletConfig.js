@@ -75,10 +75,7 @@ const addConfigFileTypes = config => {
  *
  * @return {Object} - The goblet config if the config exists at baseDir/<folder>/goblet.config.js, else null
  */
-const loadConfigFromFolder = (baseDir, type) => {
-    // TEST-LOGGING -- 
-  type === 'base' && Logger.stdout(`loadConfigFromFolder - baseDir - ${baseDir}\n`)
-  
+const loadConfigFromFolder = baseDir => {
   return ['', './config', './configs', './goblet', './test', './tests'].reduce(
     (found, loc) => found || getConfigAtPath(path.join(baseDir, loc)),
     false
@@ -141,18 +138,10 @@ const getConfigAtPath = pathToCheck => {
  *
  * @return {Object?} - the goblet config if the config is found, else null
  */
-const findConfig = (startDir, type) => {
+const findConfig = startDir => {
   let currentPath = startDir || process.cwd()
-
-  // TEST-LOGGING -- 
-  type === 'base' && Logger.stdout(`findConfig - resolved currentPath - ${currentPath}\n`)
-  
   while (currentPath != '/') {
-    const configAtPath = loadConfigFromFolder(currentPath, type)
-    
-    // TEST-LOGGING -- 
-    type === 'base' && Logger.stdout(`findConfig - resolved configAtPath.paths.repoRoot - ${configAtPath?.paths.repoRoot}\n`)
-    
+    const configAtPath = loadConfigFromFolder(currentPath)
     if (configAtPath) return configAtPath
     currentPath = path.join(currentPath, '../')
   }
@@ -171,31 +160,15 @@ const loadConfigFromBase = base => {
     GOBLET_RUN_FROM_CI,
   } = process.env
 
-  // TEST-LOGGING -- 
-  Logger.stdout(`loadConfigFromBase - env:GOBLET_RUN_FROM_CI - ${GOBLET_RUN_FROM_CI}\n`)
-  Logger.stdout(`loadConfigFromBase - env:GOBLET_CONFIG_BASE - ${GOBLET_CONFIG_BASE}\n`)
-
   // Check if running from a CI environment and the GOBLET_CONFIG_BASE is set
-  base = GOBLET_RUN_FROM_CI && GOBLET_CONFIG_BASE
-    ? GOBLET_CONFIG_BASE
-    : base || GOBLET_CONFIG_BASE
-
-  // TEST-LOGGING -- 
-  Logger.stdout(`loadConfigFromBase - resolved base - ${base}\n`)
-  
+  base = base || GOBLET_CONFIG_BASE
 
   if (!base) return null
 
   const cleanedDir = path.normalize(base)
 
-  // TEST-LOGGING -- 
-  Logger.stdout(`loadConfigFromBase - cleanedDir - ${cleanedDir}\n`)
-  
   if (!fs.existsSync(cleanedDir)) {
 
-    // TEST-LOGGING -- 
-    Logger.stdout(`loadConfigFromBase - NO EXISTS - cleanedDir - ${cleanedDir}\n`)
-    
     Logger.warn(
       [
         `\n`,
@@ -217,10 +190,7 @@ const loadConfigFromBase = base => {
     ? cleanedDir
     : path.dirname(cleanedDir)
 
-  // TEST-LOGGING -- 
-  Logger.stdout(`loadConfigFromBase - resolved startDir - ${startDir}\n`)
-
-  return findConfig(startDir, `base`)
+  return findConfig(startDir)
 }
 
 /**
@@ -245,7 +215,7 @@ const loadCustomConfig = (runtimeConfigPath, search = true) => {
 
     const customConfig = configPath
       ? require(path.resolve(configPath))
-      : search && findConfig(undefined, `custom`)
+      : search && findConfig()
 
     return customConfig && loadConfigByType(customConfig)
   }
@@ -254,7 +224,7 @@ const loadCustomConfig = (runtimeConfigPath, search = true) => {
 
     // if config is not specified by param or env,
     // try finding it at the execution directory
-    return search && findConfig(undefined, `custom`)
+    return search && findConfig()
   }
 }
 
