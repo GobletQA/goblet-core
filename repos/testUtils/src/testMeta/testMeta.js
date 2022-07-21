@@ -152,7 +152,7 @@ const initTestMeta = async () => {
   debugLog(`Initializing TestMeta...`)
   const testMeta = await readTestMeta()
   const id = new Date().getTime()
-  const latest = { id, rootDir: getArtifactsDir() }
+  const latest = { id, artifactsDir: getArtifactsDir() }
 
   if(!testMeta.latest){
     __TEST_META = { latest, perv: {} }
