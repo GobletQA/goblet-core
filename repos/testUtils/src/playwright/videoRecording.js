@@ -10,6 +10,9 @@ const {
   ensureRepoArtifactDir,
 } = require('@GTU/Playwright/generatedArtifacts')
 
+// TODO: Update to use this method, and remove shouldSaveVideo method
+// const { shouldSaveArtifact } = require('@GTU/Utils/artifactSaveOption')
+
 const { getFolderContent, pathExists } = fileSys
 
 /**

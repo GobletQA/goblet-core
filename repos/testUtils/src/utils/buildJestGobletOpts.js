@@ -1,5 +1,6 @@
 const path = require('path')
 const { toBool } = require('@keg-hub/jsutils')
+const { canRecordVideo } = require('@GSC/Constants')
 const { ARTIFACT_TYPES } = require('@GTU/constants')
 const { getPathFromBase } = require('@GSH/Utils/getPathFromBase')
 const { artifactSaveOption, artifactSaveActive } = require('@GTU/Utils/artifactSaveOption')
@@ -41,7 +42,10 @@ const buildJestGobletOpts = (config, browserOpts, contextOpts) => {
   const options = {
     saveTrace: artifactSaveOption(GOBLET_TEST_TRACING),
     saveReport: artifactSaveOption(GOBLET_TEST_REPORT),
-    saveVideo: artifactSaveOption(GOBLET_TEST_VIDEO_RECORD),
+    // Only chromium can record video so only turn it on for that browser
+    // Should be able to record on others, but not currently working
+    saveVideo: canRecordVideo.includes(browserOpts.type) &&
+      artifactSaveOption(GOBLET_TEST_VIDEO_RECORD),
   }
 
   if(GOBLET_TEST_TYPE) options.testType = GOBLET_TEST_TYPE

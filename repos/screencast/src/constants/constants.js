@@ -13,6 +13,7 @@ const browserNames = [
 const constants = deepFreeze({
   browserNames,
   defaultBrowser: 'chromium',
+  canRecordVideo: ['chromium'],
   browserMap: {
     ...keyMap(browserNames),
     // Shortcuts to browser names
