@@ -1,6 +1,7 @@
 {
+  "@GLogs": "logs",
   "@GRepos": "repos",
   "@GTasks": "tasks",
   "@GConfigs": "configs",
-  "@GLogs": "logs"
+  "@GEnvironment": "scripts/environment"
 }

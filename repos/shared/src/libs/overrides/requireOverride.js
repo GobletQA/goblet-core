@@ -2,6 +2,9 @@ const Module = require('module')
 const sharedPaths = require('@GSH/Paths')
 const { GobletRoot } = sharedPaths
 
+const overrideNoOp = () => true
+const resolveNoOp = () => ({})
+
 /**
  * @type {Object} - List of allowed packages to be required
  * Needs more investigation on what modules should be allowed
@@ -30,8 +33,11 @@ const validateRequest = (request, { repoRoot }) => {
   const isRepoRoot = request.startsWith(repoRoot)
   const isGobletRoot = request.startsWith(GobletRoot)
 
-  // Check if the root is the regular docker container or a github action path
-  const isRootPathValid = request.startsWith('/keg') || request.startsWith('/home/runner')
+  // Check if the root is the regular docker container or a github action paths
+  const isRootPathValid = request.startsWith('/keg')
+    || request.startsWith('/home/runner')
+    || request.startsWith('/github/workspace')
+    || request.startsWith('/github/alt')
 
   if(!isRepoRoot && !isGobletRoot){
     console.error(`Can not require module ${request}.\nOutside of root directory`)
@@ -52,7 +58,7 @@ const validateRequest = (request, { repoRoot }) => {
  *
  * @returns {Function} - Reset require module 
  */
-const requireOverride = (repo, isOverride, resolveOverride) => {
+const requireOverride = (repo, isOverride=overrideNoOp, resolveOverride=resolveNoOp) => {
   const originalLoad = Module._load
 
   Module._load = function (request, parent) {
