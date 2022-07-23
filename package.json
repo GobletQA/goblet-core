@@ -40,6 +40,7 @@
     "pm2": "pm2 start configs/pm2.config.js",
     "run": "lerna run",
     "task": "node tasks/runTask.js",
+    "cp:tracer": "node scripts/cpTracer.js",
     "test": "turbo run test",
     "test:ci": "turbo run test:ci",
     "validate": "turbo run validate"

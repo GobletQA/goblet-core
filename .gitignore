@@ -170,7 +170,7 @@ jspm_packages/
 # production
 /repos/**/build
 /repos/**/dist
-
+/repos/traceViewer
 # Optional npm cache directory
 .npm
 
