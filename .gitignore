@@ -203,4 +203,4 @@ configs/*firebase*.json
 !**/**/.gitkeep
 
 container/azure/**
-repos/devspace/**
+repos/devspace
