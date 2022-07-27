@@ -1617,6 +1617,11 @@
   resolved "https://registry.npmjs.org/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.6.2.tgz#6d05fa126104c9907573364dc04147b89b530e15"
   integrity sha512-zThUKcqIU6utWzM93uEvhlh8qj8A5LMPFJPvk/ODb+8GSSif19xM2Lw1M2ijyBy8+6skSkQBbavPzOU5Oh/8tQ==
 
+"@fnproject/fdk@>=0.0.36":
+  version "0.0.36"
+  resolved "https://registry.npmjs.org/@fnproject/fdk/-/fdk-0.0.36.tgz#9e78885ca53392da46dae50dc99851b0c8cff7be"
+  integrity sha512-rE+2gfDg+uTE49FsWCJA2a9M9nb7aVF7MDPLoykndNUQ5pYWbfEzByYdVcet6tEN9OQWsCfGSZTfBxnq073R/g==
+
 "@gar/promisify@^1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
@@ -1917,7 +1922,7 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@keg-hub/args-parse@*", "@keg-hub/args-parse@9.0.0":
+"@keg-hub/args-parse@*", "@keg-hub/args-parse@8.0.0", "@keg-hub/args-parse@9.0.0":
   version "9.0.0"
   resolved "https://registry.npmjs.org/@keg-hub/args-parse/-/args-parse-9.0.0.tgz#4525f33a8ccabb968fd8358bb23c49f4caf24c76"
   integrity sha512-N7/98lGiZDWGbYAWz1Q/EvknrT4GywjQV9gGtxZco0JP2HJR/9rU3fP4Vl7ciGWLxIXikjt4N5t1j8g4rp6FbQ==
@@ -1926,30 +1931,12 @@
     "@keg-hub/jsutils" "*"
     app-root-path "3.0.0"
 
-"@keg-hub/args-parse@8.0.0":
-  version "8.0.0"
-  resolved "https://registry.npmjs.org/@keg-hub/args-parse/-/args-parse-8.0.0.tgz#742946d0264a048d40728065177732c5df42b8c6"
-  integrity sha512-lLbT0iU0VGqPygqvP5OKpE02yD/2g+EevRchwXhvcvgMEGJTJYeVsJ+mlPHtV0BAOcXbzHt8Zar2qKAhSKBkxA==
-  dependencies:
-    "@keg-hub/ask-it" "1.1.0"
-    "@keg-hub/jsutils" "8.8.0"
-    app-root-path "3.0.0"
-
 "@keg-hub/ask-it@*", "@keg-hub/ask-it@1.1.2":
   version "1.1.2"
   resolved "https://registry.npmjs.org/@keg-hub/ask-it/-/ask-it-1.1.2.tgz#36708b17c3149d1693817ca3ba160dcbd999d6bd"
   integrity sha512-i/KMYeNZGOA++LHRM0tsJ57pa2qaFyRMrDq9Q0zCilu3ET+gFBphrrQuzJB+03jA/HNpNUjNwNFc5XjkgfBbjA==
   dependencies:
     "@keg-hub/jsutils" "*"
-    colors "1.4.0"
-    inquirer "7.3.3"
-
-"@keg-hub/ask-it@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/@keg-hub/ask-it/-/ask-it-1.1.0.tgz#d165cc099f39b62ec92c168eb70662f9b9e82aea"
-  integrity sha512-U4Hzyb1cJcccUKiMiuIaRyWUyDYwoHcP6oMw1sxvCtOFoYJ4pGU8xWmOpK3X0jweFJ5qA3YaRl9vyEZK43zFbA==
-  dependencies:
-    "@keg-hub/jsutils" "8.8.0"
     colors "1.4.0"
     inquirer "7.3.3"
 
@@ -5305,6 +5292,11 @@ fb-watchman@^2.0.0:
   integrity sha512-DkPJKQeY6kKwmuMretBhr7G6Vodr7bFwDYTXIkfG1gjvNpaxBTQV3PbXg6bR1c1UP4jPOX0jHUbbHANL9vRjVg==
   dependencies:
     bser "2.1.1"
+
+fdir@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.npmjs.org/fdir/-/fdir-5.2.0.tgz#5b3d6ae282f8bc0ef48bf913d46f9e08496304ea"
+  integrity sha512-skyI2Laxtj9GYzmktPgY6DT8uswXq+VoxH26SskykvEhTSbi7tRM/787uZt/p8maxrQCJdzC90zX1btbxiJ6lw==
 
 fecha@^4.2.0:
   version "4.2.3"

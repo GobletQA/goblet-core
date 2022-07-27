@@ -42,8 +42,6 @@
     "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3",
     "@keg-hub/parse-config": "2.0.2",
-    "@ltipton/sockr": "0.3.0",
-    "delay": "^5.0.0",
     "dockerode": "^3.3.2",
     "express": "4.17.3",
     "get-port": "^6.1.2",
