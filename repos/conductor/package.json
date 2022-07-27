@@ -2,7 +2,7 @@
   "name": "@gobletqa/conductor",
   "version": "0.0.0",
   "description": "Goblet Conductor API",
-  "main": "index.js",
+  "main": "app/app.js",
   "author": "Lance Tipton",
   "license": "MIT",
   "private": true,
@@ -17,7 +17,8 @@
     "url": "https://github.com/GobletQA/goblet/issues"
   },
   "scripts": {
-    "api": "yarn start",
+    "app:build": "etsc --config=configs/app.config.js",
+    "app:start": "yarn app:build && node dist/app.js",
     "build": "etsc --config=configs/etsc.config.js && tsc --emitDeclarationOnly --outDir dist",
     "build:start": "yarn build && yarn start",
     "clean:dist": "rm -rf dist && mkdir dist && echo \"\" >> dist/.keep",
@@ -27,7 +28,7 @@
     "format": "yarn lint && yarn pretty",
     "lint": "eslint --color --cache --fix --quiet --ignore-path ../../.eslintignore --config ./configs/eslintrc.config.js",
     "pretty": "prettier --ignore-path ../../.prettierignore --config ./configs/prettier.config.js -w",
-    "pm2": "pm2 start configs/backend.pm2.js",
+    "pm2": "pm2 start configs/conductor.pm2.js",
     "start": "node dist/index.js",
     "serve": "node dist/index.js",
     "task": "node tasks/runTask.js",
@@ -45,7 +46,7 @@
     "@keg-hub/parse-config": "2.0.2",
     "dockerode": "^3.3.2",
     "express": "4.17.3",
-    "get-port": "^6.1.2",
+    "get-port-please": "^2.5.0",
     "http-proxy-middleware": "2.0.4",
     "jsonwebtoken": "8.5.1",
     "module-alias": "2.2.2"

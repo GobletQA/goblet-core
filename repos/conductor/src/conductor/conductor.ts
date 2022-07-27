@@ -2,7 +2,8 @@ import { Proxy } from '../proxy'
 import { Docker } from '../docker'
 import { Logger, wait } from '@keg-hub/cli-utils'
 import { TConductorOpts } from '../options.types'
-import { TConductorConfig } from '../conductor.types'
+import { buildConfig } from '../utils/buildConfig'
+import { TConductorConfig, TContainerRef } from '../conductor.types'
 
 export class Conductor {
 
@@ -14,19 +15,18 @@ export class Conductor {
   containerTimeoutMap: Record<any, any>
 
   constructor(config:TConductorOpts) {
-
-    this.config = config
-
-    // ip -> time
     this.rateLimitMap = {}
-
-    // container => timeout id
     this.containerTimeoutMap = {}
+    this.config = buildConfig(config)
+    
+    console.log(`------- built conf -------`)
+    console.log(this.config)
 
-    this.proxy = new Proxy(this, config.proxy)
-    this.docker = new Docker(this, config.docker)
+    this.proxy = new Proxy(this, this.config.proxy)
+    this.docker = new Docker(this, this.config.docker)
 
-    config.images && this.docker.buildImgs(config.images)
+    config.images
+      && this.docker.buildImgs(this.config.images)
   }
 
   /**
@@ -43,7 +43,10 @@ export class Conductor {
     }
   }
 
-  async _handleRateLimit(client) {
+  /**
+   * Ensures a single IP doesn't make to many requests
+   */
+  async handleRateLimit(client) {
     if (this.config.proxy.rateLimit <= 0) return
 
     const addr = client.remoteAddress
@@ -62,6 +65,9 @@ export class Conductor {
     this.rateLimitMap[addr] = nextTime
   }
 
+  /**
+   * Spawns a new container based on the passed in request
+   */
   async spawnContainer(client:Conductor, request) {
     const { key, ...img } = request?.body
     if(!key && !img.name)
@@ -77,13 +83,11 @@ export class Conductor {
     return { image, container, ports }
   }
 
-
-  static async _cleanupContainer(container) {
-    await container.stop()
-    await container.remove()
+  async cleanupContainer(containerRef:TContainerRef) {
+    await this.docker.remove(containerRef)
   }
 
-  async _clientHandler(client) {
+  async clientHandler(client) {
     // ignore errors so logic not interrupted
     client.on('error', () => {})
 
@@ -94,7 +98,7 @@ export class Conductor {
 
     Logger.info(`new connection from ${client.remoteAddress}`)
 
-    await this._handleRateLimit(client)
+    await this.handleRateLimit(client)
     if (client.destroyed) {
       Logger.warn(`client ${client.remoteAddress} disconnected before container created`)
       return
@@ -110,7 +114,7 @@ export class Conductor {
     await this.proxy.create(client, ports)
 
     Logger.info(`session ${client.remoteAddress}/${id} ending`)
-    await Conductor._cleanupContainer(container)
+    await this.cleanupContainer(container)
   }
 
   start() {

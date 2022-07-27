@@ -1,6 +1,6 @@
-import { TConductorOpts } from '../../dist'
+import * as Conductor from './index'
 
-export const config:TConductorOpts = {
+const config = {
   images: {
     goblet: {
       tag: `develop`,
@@ -23,3 +23,10 @@ export const config:TConductorOpts = {
     }
   }
 }
+
+
+console.log(Conductor)
+
+// const conductor = new Conductor(config)
+
+// console.log(conductor)

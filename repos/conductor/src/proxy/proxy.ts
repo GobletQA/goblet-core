@@ -17,7 +17,7 @@ export class Proxy {
 
   start() {
     return new Promise((res, rej) => {
-      this.server = net.createServer(this.conductor._clientHandler.bind(this))
+      this.server = net.createServer(this.conductor.clientHandler.bind(this.conductor))
 
       this.server.on('listening', () => {
         Logger.info(`listening on ${this.config.host}:${this.config.port}`)

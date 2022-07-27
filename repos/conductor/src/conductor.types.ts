@@ -41,3 +41,11 @@ export type TConductorConfig = {
   images?: TImgsConfig
   docker: TDockerConfig
 }
+
+export type TContainerObj = {
+  stop: () => Promise<void>
+  remove: () => Promise<void>
+  [key:string]: any
+}
+
+export type TContainerRef = string|TContainerObj

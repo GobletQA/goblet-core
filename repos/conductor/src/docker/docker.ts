@@ -3,7 +3,9 @@ import Dockerode from 'dockerode'
 import type { Conductor } from '../conductor'
 import { checkImgConfig } from '../utils/checkImgConfig'
 import { buildContainerPorts } from '../utils/buildContainerPorts'
-import { TDockerConfig, TImgsConfig, TImgConfig } from '../conductor.types'
+import { TContainerRef, TDockerConfig, TImgsConfig, TImgConfig, TContainerObj } from '../conductor.types'
+
+
 
 export class Docker {
 
@@ -11,6 +13,7 @@ export class Docker {
   images: TImgsConfig
   conductor: Conductor
   config: TDockerConfig
+  containers:Record<string, any> = {}
 
   constructor(conductor:Conductor, config:TDockerConfig){
     this.config = config
@@ -19,6 +22,17 @@ export class Docker {
 
   getImg(key:string, image?:TImgConfig){
     return image = image || this.images[key]
+  }
+
+  getContainer(containerRef:TContainerRef):TContainerObj {
+    if(typeof containerRef === 'string')
+      return this.containers[containerRef]
+
+    return Object.values(this.containers)
+      .find(cont => (
+        cont === containerRef
+        || cont.id === containerRef.id
+      ))
   }
 
   buildImgUri(key:string, image?:TImgConfig){
@@ -54,9 +68,16 @@ export class Docker {
       Image: this.buildImgUri(key, img),
       PidsLimit: img.pidsLimit || this.config.pidsLimit || 20,
     })
+    
+    this.containers[container.id] = container
 
     return { image: img, container, ports: PortBindings }
+  }
 
+  remove = async (containerRef:TContainerRef) => {
+    const container = this.getContainer(containerRef)
+    await container.stop()
+    await container.remove()
   }
 
 }

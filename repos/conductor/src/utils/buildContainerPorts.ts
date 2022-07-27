@@ -1,4 +1,4 @@
-import getPort from 'get-port'
+import { getPort, checkPort, getRandomPort, waitForPort } from 'get-port-please'
 import { TImgConfig } from '../conductor.types'
 import { DEF_HOST_IP } from '../constants/constants'
 

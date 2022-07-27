@@ -15,9 +15,7 @@ export const config:TConductorConfig = {
   images,
   docker: {
     pidsLimit: (toNum(CD_PIDS_LIMIT) || 20) as number,
-    connect: {
-      socketPath: '/var/run/docker.sock'
-    }
+    connect: {}
   } as TDockerConfig,
   proxy: {
     logLevel: CD_LOG_LEVEL || `info`,
