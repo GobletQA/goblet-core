@@ -19,9 +19,6 @@ export const config:TConductorConfig = {
       socketPath: '/var/run/docker.sock'
     }
   } as TDockerConfig,
-  conductor: {
-    
-  },
   proxy: {
     logLevel: CD_LOG_LEVEL || `info`,
     host: CD_PROXY_HOST || `0.0.0.0`,

@@ -1,3 +1,4 @@
-import { config } from './configs'
+import { config } from './configs/app.config'
+import { Conductor } from '../dist'
 
-console.log(config)
+const conductor = new Conductor(config)

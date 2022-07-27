@@ -1,9 +1,8 @@
 import net from 'net'
-import { DEF_HOST_IP } from './constants'
 import { Logger } from '@keg-hub/cli-utils'
-import type { Conductor } from './conductor'
-import { TProxyConfig } from './conductor.types'
-
+import type { Conductor } from '../conductor'
+import { TProxyConfig } from '../conductor.types'
+import { DEF_HOST_IP } from '../constants/constants'
 
 export class Proxy {
 

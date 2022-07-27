@@ -1,10 +1,12 @@
+export type TLogLevel = 'info' | 'warn' | 'error' | 'debug' | 'verbose'
+
 export type TPort = number | string
 export type TPorts = TPort[]
 
 export type TContainerConfig = {
   mem: number
   idle: number
-  ports: TPorts
+  ports?: TPorts
   timeout: number
   rateLimit: number
 }
@@ -25,8 +27,8 @@ export type TProxyConfig = {
   port: number,
   host?: string,
   timeout: number
-  logLevel: string
   rateLimit: number
+  logLevel: TLogLevel
 }
 
 export type TDockerConfig = {
@@ -34,12 +36,8 @@ export type TDockerConfig = {
   connect: Record<any, any>
 }
 
-export type TConductorConf = Record<any, any>
-
 export type TConductorConfig = {
   proxy: TProxyConfig
   images?: TImgsConfig
   docker: TDockerConfig
-  conductor: TConductorConf
 }
-

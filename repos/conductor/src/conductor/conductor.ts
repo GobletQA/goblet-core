@@ -1,7 +1,8 @@
-import { Docker } from './docker'
-import { Proxy } from './proxy'
+import { Proxy } from '../proxy'
+import { Docker } from '../docker'
 import { Logger, wait } from '@keg-hub/cli-utils'
-import { TConductorConfig } from './conductor.types'
+import { TConductorOpts } from '../options.types'
+import { TConductorConfig } from '../conductor.types'
 
 export class Conductor {
 
@@ -12,7 +13,7 @@ export class Conductor {
   rateLimitMap:Record<any, any>
   containerTimeoutMap: Record<any, any>
 
-  constructor(config:TConductorConfig) {
+  constructor(config:TConductorOpts) {
 
     this.config = config
 
