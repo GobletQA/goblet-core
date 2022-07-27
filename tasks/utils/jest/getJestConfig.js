@@ -10,7 +10,7 @@ const { jestConfigMap } = require('../../constants')
  * @throws
  * 
  * @param {Object} params - Options passed to the task, converted into an object
- * @param {string} type - Type of config to load based on the testing strategy type
+ * @param {string} type - Type of config to load based on the testing type
  * 
  * @returns {string} - Path to the found jest config
  */
