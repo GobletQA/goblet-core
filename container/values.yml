@@ -129,6 +129,22 @@ env:
 
   # Tag / Version of the gitfs docker image to use when building the goblet container
   GB_GITFS_VER: 0.0.0
+  
+  
+  # Enable to override the default fn port
+  # GB_FN_PORT:
+  # Must also set this env to the host and port when overriding the default port
+  # Or use fn contexts api
+  # FN_API_URL=http://127.0.0.1:8081
+  
+  # Enable to set the default context that fn will use for all task command
+  # GB_FN_CONTEXT: <context-name>
+
+  # Enable the name of the default app used for goblet
+  # GB_FN_APP_NAME
+
+  # Enable the name of the default func used for fn deploys
+  # GB_FN_APP_FUNC
 
 actions:
   tap:
