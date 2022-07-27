@@ -18,9 +18,6 @@ export class Conductor {
     this.rateLimitMap = {}
     this.containerTimeoutMap = {}
     this.config = buildConfig(config)
-    
-    console.log(`------- built conf -------`)
-    console.log(this.config)
 
     this.proxy = new Proxy(this, this.config.proxy)
     this.docker = new Docker(this, this.config.docker)
@@ -117,12 +114,14 @@ export class Conductor {
     await this.cleanupContainer(container)
   }
 
-  start() {
-    return this.proxy.start()
+  async start() {
+    await this.proxy.start()
+    return this
   }
 
-  stop() {
-    return this.proxy.stop()
+  async stop() {
+    await this.proxy.stop()
+    return this
   }
 }
 

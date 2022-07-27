@@ -1,0 +1,14 @@
+{
+  "exec": "node dist/index.js",
+  "ext": "none",
+  "verbose": true,
+  "watch": [""],
+  "ignore": ["../../repos"],
+  "watchOptions": {
+    "interval": 0,
+    "usePolling": false,
+    "persistent": false,
+    "useFsEvents": false,
+    "disableGlobbing": true
+  }
+}

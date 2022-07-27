@@ -1,6 +1,6 @@
-import * as Conductor from './index'
+import { Conductor } from './index'
 
-const config = {
+const conductor = new Conductor({
   images: {
     goblet: {
       tag: `develop`,
@@ -22,11 +22,6 @@ const config = {
       }
     }
   }
-}
+})
 
-
-console.log(Conductor)
-
-// const conductor = new Conductor(config)
-
-// console.log(conductor)
+conductor.start()
