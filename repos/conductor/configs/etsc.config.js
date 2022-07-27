@@ -1,5 +1,4 @@
 const path = require("path")
-const esbuildPluginTsc = require("esbuild-plugin-tsc")
 const aliasPlugin = require('esbuild-plugin-path-alias')
 const aliasConfig = path.join(process.cwd().split(`/repos`).shift(), `configs/aliases.config`)
 const { aliases } = require(aliasConfig)
@@ -34,7 +33,7 @@ module.exports = {
     allowOverwrite: true,
     plugins: [
       aliasPlugin(aliases),
-      esbuildPluginTsc(),
+
       externalPlugin,
     ],
   },

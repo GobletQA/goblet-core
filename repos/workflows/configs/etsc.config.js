@@ -1,4 +1,3 @@
-const esbuildPluginTsc = require("esbuild-plugin-tsc")
 const aliasPlugin = require('esbuild-plugin-path-alias')
 const { aliases } = require('../../../configs/aliases.config')
 
@@ -11,7 +10,6 @@ module.exports = {
     target: "es2015",
     plugins: [
       aliasPlugin(aliases),
-      esbuildPluginTsc()
     ],
   },
   assets: {
