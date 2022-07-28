@@ -6,17 +6,22 @@ export type TLogLevel = 'info' | 'warn' | 'error' | 'debug' | 'verbose'
 export type TPort = number | string
 export type TPorts = TPort[]
 
+export type TContainerLabels = Record<string, string>
+
 export type TContainerConfig = {
   mem: number
   idle: number
   ports?: TPorts
   timeout: number
   rateLimit: number
+  envs?: Record<string, string>
 }
 
 export type TImgConfig = {
   tag: string
   name: string
+  user?: string
+  uri?: string
   provider: string
   pidsLimit?: number
   container: TContainerConfig
@@ -26,6 +31,7 @@ export type TImgConfig = {
 export type TCreateOpts = {
   tag?: string
   name?: string
+  user?: string
   provider?: string
   pidsLimit?: number
   container?: TContainerConfig
@@ -95,4 +101,13 @@ export type TContainerRoute = {
   host: string
   port: string|number
   protocol?: 'http' | 'https'
+}
+
+export type TSpawnOpts = {
+  imageRef: string
+  tag?: string
+  name?: string
+  user?: string
+  provider?: string
+  [key: string]: any
 }

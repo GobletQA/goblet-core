@@ -5,11 +5,24 @@
     "outDir": "./dist",
     "paths": {
       "@GCD": ["src"],
-      "@GCDRoot": ["./"],
-      "@GCD/Proxy": ["src/proxy"],
-      "@GCD/Utils": ["src/utils"],
       "@GCD/Configs": ["configs"],
-      "@GCD/Docker": ["src/docker"]
+      "@GCD/Controller": ["src/controller"],
+      "@GCD/Controller/*": ["src/controller/*"],
+      "@GCD/Endpoints": ["src/endpoints"],
+      "@GCD/Endpoints/*": ["src/endpoints/*"],
+      "@GCD/Middleware": ["src/middleware"],
+      "@GCD/Middleware/*": ["src/middleware/*"],
+      "@GCD/Proxy": ["src/proxy"],
+      "@GCD/Proxy/*": ["src/proxy/*"],
+      "@GCDRoot": ["./"],
+      "@GCD/Server": ["src/server"],
+      "@GCD/Server/*": ["src/server/*"],
+      "@GCD/Utils": ["src/utils"],
+      "@GCD/Utils/*": ["src/utils/*"],
+      "@gobletqa/shared/app": ["../shared/src/express/app"],
+      "@gobletqa/shared/middleware": ["../shared/src/middleware"],
+      "@gobletqa/shared/middleware/*": ["../shared/src/middleware/*"],
+      "@gobletqa/shared/appRouter": ["../shared/src/express/appRouter"]
     }
   },
   "include": ["src/**/*"],

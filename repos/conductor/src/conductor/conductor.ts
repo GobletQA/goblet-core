@@ -1,13 +1,14 @@
-import { Request } from 'express'
 import { createProxy } from '../proxy'
-import { createServer } from '../server'
 import { wait } from '@keg-hub/jsutils'
+import { createServer } from '../server'
+import { Request, Express } from 'express'
+import { getApp } from '@gobletqa/shared/app'
 import { TConductorOpts } from '../options.types'
 import { buildConfig } from '../utils/buildConfig'
 import { Controller } from '../controller/controller'
 import { resolveHostName } from '../utils/resolveHostName'
 import { getController } from '../controller/controllerTypes'
-import { TConductorConfig, TContainerRef } from '../conductor.types'
+import { TConductorConfig, TContainerRef, TSpawnOpts } from '../conductor.types'
 
 export class Conductor {
 
@@ -20,10 +21,13 @@ export class Conductor {
     this.rateLimitMap = {}
     this.containerTimeoutMap = {}
     this.config = buildConfig(config)
-    this.controller = getController(this.config.controller)
+    this.controller = getController(this, this.config.controller)
 
     config.images
       && this.controller.buildImgs(this.config.images)
+    
+    const app = getApp() as Express
+    app.locals.conductor = this
   }
 
   /**
@@ -66,12 +70,11 @@ export class Conductor {
    * Spawns a new container based on the passed in request
    * Is called from the spawn endpoint
    */
-  async spawnContainer(req:Request) {
-    const { key, ...createOpts } = req?.body
-    if(!key && !createOpts.name)
+  async spawnContainer(imageRef, spawnOpts:TSpawnOpts) {
+    if(!imageRef && !spawnOpts.name)
       throw new Error(`Image ref or name is require to spawn a new container`)
     
-    const {container, ports, image } = await this.controller.create(key, createOpts)
+    const {container, ports, image } = await this.controller.create(imageRef, spawnOpts)
     await container.start()
 
     // Wait slightly longer for container to start.
@@ -91,7 +94,6 @@ export class Conductor {
 
   async proxyRouter(req:Request) {
     const destination = resolveHostName(req)
-
     const route = await this.controller.getContainerRoute(destination)
     if(!route) throw new Error(`Unrecognized route for destination ${destination}`)
 
@@ -104,8 +106,8 @@ export class Conductor {
 
   async start() {
     createServer(this.config.server)
-    
     createProxy({ ...this.config.proxy, proxyRouter: this.proxyRouter.bind(this) })
+
     return this
   }
 

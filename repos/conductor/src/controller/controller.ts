@@ -1,6 +1,6 @@
 
 import path from 'path'
-import { capitalize } from '@keg-hub/jsutils'
+import { capitalize, deepMerge } from '@keg-hub/jsutils'
 import type { Conductor } from '../conductor'
 import { checkImgConfig } from '../utils/checkImgConfig'
 import {
@@ -37,9 +37,19 @@ export class Controller {
   }
 
   buildImgUri(imageRef:TImgRef){
-    const { name=``, tag=`latest`, provider=`` } = this.getImg(imageRef)
+    const image = this.getImg(imageRef)
+    !image && this.notFoundErr({ type: `image`, ref: imageRef as string })
+    
+    if(image.uri) return image.uri
 
-    return `${path.join(provider, name)}:${tag}`
+    const {
+      user=``,
+      name=``,
+      provider=``,
+      tag=`latest`,
+    } = image
+
+    return `${path.join(...[provider, user, name].filter(Boolean))}:${tag}`
   }
 
   /**
@@ -54,7 +64,8 @@ export class Controller {
     this.images = Object.entries(images)
       .reduce((acc, [key, img]) => {
         checkImgConfig(img, key)
-        acc[key] = img
+        acc[key] = deepMerge(img)
+        acc[key].uri = acc[key].uri || this.buildImgUri(acc[key])
 
         return acc
       }, {})
@@ -92,21 +103,33 @@ export class Controller {
     return undefined
   }
 
+  getContainerRoute = async (containerRef:TContainerRef):Promise<TContainerRoute> => {
+    throwOverrideErr()
+    return undefined
+  }
+
   notFoundErr = (args:Record<string, string>) => {
     const {
       ref=``,
       message,
       type='container',
     } = args
-    throw new Error(message || [
+    this.controllerErr({
+      ...args,
+      message: message || [
       `Failed removing ${type}.`,
       `${capitalize(type)} ${ref ? ref+' ' : ''} could not be found.\n`
-    ].join(' '))
+    ].join(' ')
+    })
   }
 
-  getContainerRoute = async (containerRef:TContainerRef):Promise<TContainerRoute> => {
-    throwOverrideErr()
-    return undefined
+  controllerErr = (args:Record<string, string>) => {
+    const {
+      ref=``,
+      message,
+      type='container',
+    } = args
+    throw new Error(`[Controller Error] - ${capitalize(type)}: ${message}`)
   }
 
 }

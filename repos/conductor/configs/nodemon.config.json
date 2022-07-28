@@ -4,6 +4,7 @@
   "verbose": true,
   "watch": [""],
   "ignore": ["../../repos"],
+  "events": {},
   "watchOptions": {
     "interval": 0,
     "usePolling": false,

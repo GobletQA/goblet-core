@@ -1,10 +1,9 @@
-import { AppRouter } from '@GSH/Router'
+import { Express } from 'express'
 import { onProxyError } from '@GCD/Utils'
-import { createProxyMiddleware } from 'http-proxy-middleware'
-
+import { getApp } from '@gobletqa/shared/app'
 import { TProxyConfig } from '../conductor.types'
 import { DEF_HOST_IP } from '../constants/constants'
-
+import { createProxyMiddleware } from 'http-proxy-middleware'
 
 const addAllowOriginHeader = (proxyRes, origin) => {
   proxyRes.headers['Access-Control-Allow-Origin'] = origin
@@ -37,8 +36,9 @@ const mapResponseHeaders = (proxyRes, res) => {
  */
 export const createProxy = (config:TProxyConfig) => {
   const { host, proxyRouter, proxy } = config
-
-  AppRouter.use(`**`, createProxyMiddleware({
+  const app = getApp() as Express
+  
+  app.use(`**`, createProxyMiddleware({
     // xfwd: true,
     // changeOrigin: true,
     ws: true,

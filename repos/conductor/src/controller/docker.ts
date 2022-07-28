@@ -1,7 +1,9 @@
 import Dockerode from 'dockerode'
 import { Controller } from './controller'
 import type { Conductor } from '../conductor'
+import { buildContainerEnvs } from '../utils/buildContainerEnvs'
 import { buildContainerPorts } from '../utils/buildContainerPorts'
+import { buildContainerLabels } from '../utils/buildContainerLabels'
 import {
   TImgRef,
   TImgsConfig,
@@ -31,16 +33,27 @@ export class Docker extends Controller {
 
     const ports = await buildContainerPorts(image)
 
-    const container = await this.docker.createContainer({
+    const createConfig = {
       // TODO: investigate createContainer options that should be allowed form a request
       ...createOpts,
       PortBindings: ports,
+      Env: buildContainerEnvs(image),
       Image: this.buildImgUri(image),
-      PidsLimit: image.pidsLimit || this.config.pidsLimit || 20,
-    })
+      Labels: buildContainerLabels(image),
+      HostConfig: {
+        // TODO: investigate this
+        // IpcMode: 'none',
+        // StorageOpt: { size: `10G`},
+        // RestartPolicy: { name: `on-failure`, MaximumRetryCount: 2 },
+        AutoRemove: true,
+        PidsLimit: image?.pidsLimit || this?.config?.pidsLimit || 20,
+      }
+    }
+
+    const container = await this.docker.createContainer(createConfig)
 
     !container
-      && this.notFoundErr({ message: `Docker could not create container from image ${image.name}` })
+      && this.controllerErr({ message: `Docker could not create container from image ${image.name}` })
 
     this.containers[container.id] = container
 

@@ -1,3 +1,7 @@
+require('source-map-support').install({
+  environment: 'node',
+})
+
 import { Conductor } from './index'
 
 const conductor = new Conductor({
@@ -7,8 +11,9 @@ const conductor = new Conductor({
   images: {
     goblet: {
       tag: `develop`,
+      name: `goblet`,
+      user: `gobletqa`,
       provider: `ghcr.io`,
-      name: `gobletqa/goblet`,
       container: {
         mem: 0,
         idle: 5000,

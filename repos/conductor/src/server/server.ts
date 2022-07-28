@@ -1,9 +1,10 @@
 import http from 'http'
 import https from 'https'
-import { getApp } from '@GSH/App'
 import { Express } from 'express'
+import { getApp } from '@gobletqa/shared/app'
 import { TServerConfig } from '../conductor.types'
 import { DEF_HOST_IP } from '../constants/constants'
+import { setupEndpoints } from '@GCD/Middleware/setupEndpoints'
 import {
   setupJWT,
   setupCors,
@@ -11,8 +12,7 @@ import {
   setupLoggerReq,
   setupLoggerErr,
   setupServerListen,
-} from '@GSH/Middleware'
-
+} from '@gobletqa/shared/middleware'
 
 export const createServer = (config:TServerConfig) => {
   const serverConf = {name: `Conductor`, host: DEF_HOST_IP, ...config}
@@ -20,12 +20,10 @@ export const createServer = (config:TServerConfig) => {
   const app = getApp() as Express
   setupLoggerReq(app)
   setupCors(app)
-
   // TODO: Investigate setting up JWT for proxies
   // setupJWT(app)
-
-  // TODO: add flag to disable json parsing middleware
-  setupServer(app)
+  setupServer(app, false, false)
+  setupEndpoints(app)
 
   const { insecureServer, secureServer } = setupServerListen(app, serverConf)
   setupLoggerErr(app)

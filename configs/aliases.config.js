@@ -7,11 +7,13 @@ const { fileSys } = require('@keg-hub/cli-utils')
 const { deepFreeze, get } = require('@keg-hub/jsutils')
 const { requireFile } = fileSys
 
-
 const ignoreRepos = [
   `ADMIN_PATH`,
   `EXAMPLE_PATH`,
   `REPOS_PATH`,
+  `DEVSPACE_PATH`,
+  `SERVERLESS_PATH`,
+  `TRACE_VIEWER_PATH`
 ]
 
 /**
@@ -40,10 +42,8 @@ const addRepoAliases = () => {
 
       // If no data is returned, then try to load paths from tsconfig.json
       if(!data){
-        const paths = get(
-          requireFile(location, `tsconfig.json`),
-          `data.compilerOptions.paths`
-        )
+        const tsConfResp = requireFile(location, `tsconfig.json`, true)
+        const paths = get(tsConfResp, `data.compilerOptions.paths`)
 
         paths && (
           data = Object.entries(paths)

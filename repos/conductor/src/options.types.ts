@@ -6,6 +6,7 @@ export type TContainerOpts = TContainerConfig & {
   ports?: TPorts
   timeout?: number
   rateLimit?: number 
+  envs?: Record<string, string>
 }
 
 export type TImgOpts = TImgConfig & {
