@@ -1,5 +1,6 @@
 import { Request } from 'express'
 import { createProxy } from '../proxy'
+import { createServer } from '../server'
 import { wait } from '@keg-hub/jsutils'
 import { TConductorOpts } from '../options.types'
 import { buildConfig } from '../utils/buildConfig'
@@ -12,7 +13,6 @@ export class Conductor {
 
   config: TConductorConfig
   controller: Controller
-
   rateLimitMap:Record<any, any>
   containerTimeoutMap: Record<any, any>
 
@@ -103,6 +103,8 @@ export class Conductor {
   }
 
   async start() {
+    createServer(this.config.server)
+    
     createProxy({ ...this.config.proxy, proxyRouter: this.proxyRouter.bind(this) })
     return this
   }

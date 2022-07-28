@@ -43,7 +43,7 @@ const loopEnsure = (mergedConfig:TPartialConf, config:TPartialConf) => {
         acc[key] = {socketPath: '/var/run/docker.sock'}
 
       else if(key !== 'images' && typeof acc[key] === 'object'){
-        tracker = tracker[key]
+        tracker = tracker?.[key]
         acc[key] = loopEnsure(acc[key], tracker)
       }
 

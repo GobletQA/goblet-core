@@ -1,6 +1,9 @@
 import { Conductor } from './index'
 
 const conductor = new Conductor({
+  controller: {
+    type: 'Docker'
+  },
   images: {
     goblet: {
       tag: `develop`,

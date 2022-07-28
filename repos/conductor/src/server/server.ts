@@ -20,8 +20,11 @@ export const createServer = (config:TServerConfig) => {
   const app = getApp() as Express
   setupLoggerReq(app)
   setupCors(app)
-  // Investigate setting up JWT for proxies
+
+  // TODO: Investigate setting up JWT for proxies
   // setupJWT(app)
+
+  // TODO: add flag to disable json parsing middleware
   setupServer(app)
 
   const { insecureServer, secureServer } = setupServerListen(app, serverConf)
