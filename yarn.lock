@@ -1922,7 +1922,7 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@keg-hub/args-parse@*", "@keg-hub/args-parse@9.0.0":
+"@keg-hub/args-parse@*", "@keg-hub/args-parse@8.0.0", "@keg-hub/args-parse@9.0.0":
   version "9.0.0"
   resolved "https://registry.npmjs.org/@keg-hub/args-parse/-/args-parse-9.0.0.tgz#4525f33a8ccabb968fd8358bb23c49f4caf24c76"
   integrity sha512-N7/98lGiZDWGbYAWz1Q/EvknrT4GywjQV9gGtxZco0JP2HJR/9rU3fP4Vl7ciGWLxIXikjt4N5t1j8g4rp6FbQ==
@@ -1931,30 +1931,12 @@
     "@keg-hub/jsutils" "*"
     app-root-path "3.0.0"
 
-"@keg-hub/args-parse@8.0.0":
-  version "8.0.0"
-  resolved "https://registry.npmjs.org/@keg-hub/args-parse/-/args-parse-8.0.0.tgz#742946d0264a048d40728065177732c5df42b8c6"
-  integrity sha512-lLbT0iU0VGqPygqvP5OKpE02yD/2g+EevRchwXhvcvgMEGJTJYeVsJ+mlPHtV0BAOcXbzHt8Zar2qKAhSKBkxA==
-  dependencies:
-    "@keg-hub/ask-it" "1.1.0"
-    "@keg-hub/jsutils" "8.8.0"
-    app-root-path "3.0.0"
-
 "@keg-hub/ask-it@*", "@keg-hub/ask-it@1.1.2":
   version "1.1.2"
   resolved "https://registry.npmjs.org/@keg-hub/ask-it/-/ask-it-1.1.2.tgz#36708b17c3149d1693817ca3ba160dcbd999d6bd"
   integrity sha512-i/KMYeNZGOA++LHRM0tsJ57pa2qaFyRMrDq9Q0zCilu3ET+gFBphrrQuzJB+03jA/HNpNUjNwNFc5XjkgfBbjA==
   dependencies:
     "@keg-hub/jsutils" "*"
-    colors "1.4.0"
-    inquirer "7.3.3"
-
-"@keg-hub/ask-it@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/@keg-hub/ask-it/-/ask-it-1.1.0.tgz#d165cc099f39b62ec92c168eb70662f9b9e82aea"
-  integrity sha512-U4Hzyb1cJcccUKiMiuIaRyWUyDYwoHcP6oMw1sxvCtOFoYJ4pGU8xWmOpK3X0jweFJ5qA3YaRl9vyEZK43zFbA==
-  dependencies:
-    "@keg-hub/jsutils" "8.8.0"
     colors "1.4.0"
     inquirer "7.3.3"
 
@@ -4561,7 +4543,7 @@ docker-modem@^3.0.0:
     split-ca "^1.0.1"
     ssh2 "^1.4.0"
 
-dockerode@^3.3.2:
+dockerode@3.3.2:
   version "3.3.2"
   resolved "https://registry.npmjs.org/dockerode/-/dockerode-3.3.2.tgz#f3545700d2f7f86141b58843a755eeb21e38d5cd"
   integrity sha512-oXN+1XVH2TeyE0Jj9Ci6Fim8ZIDxyqeJrkx9qhEOaRiA+nhLihKfd3M2L+Aqrj5C2ObPw8RVN2zPWvvk0x2dwg==
@@ -5632,7 +5614,7 @@ get-pkg-repo@^4.0.0:
     through2 "^2.0.0"
     yargs "^16.2.0"
 
-get-port-please@^2.5.0:
+get-port-please@2.5.0:
   version "2.5.0"
   resolved "https://registry.npmjs.org/get-port-please/-/get-port-please-2.5.0.tgz#1e2d40a6f55c02a1caed99991c64ed84afe50c72"
   integrity sha512-NblPebBznYARC1R2r1qmusbJAAgBr954gWhEZgwTerzR8r3ud6U5PI1SG4Lue43r87aikPPjObs85VieIDK99A==
@@ -6068,7 +6050,7 @@ http-proxy-middleware@2.0.4:
 
 http-proxy@^1.18.1:
   version "1.18.1"
-  resolved "https://registry.yarnpkg.com/http-proxy/-/http-proxy-1.18.1.tgz#401541f0534884bbf95260334e72f88ee3976549"
+  resolved "https://registry.npmjs.org/http-proxy/-/http-proxy-1.18.1.tgz#401541f0534884bbf95260334e72f88ee3976549"
   integrity sha512-7mz/721AbnJwIVbnaSv1Cz3Am0ZLT/UBwkC92VlxhXv/k/BBQfM2fXElQNC27BVGr0uwUpplYPQM9LnaBMR5NQ==
   dependencies:
     eventemitter3 "^4.0.0"

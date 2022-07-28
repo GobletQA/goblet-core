@@ -44,9 +44,9 @@
     "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3",
     "@keg-hub/parse-config": "2.0.2",
-    "dockerode": "^3.3.2",
+    "dockerode": "3.3.2",
     "express": "4.17.3",
-    "get-port-please": "^2.5.0",
+    "get-port-please": "2.5.0",
     "http-proxy-middleware": "2.0.4",
     "jsonwebtoken": "8.5.1",
     "module-alias": "2.2.2"

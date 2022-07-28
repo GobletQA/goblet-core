@@ -1,8 +1,10 @@
 const path = require('path')
 const { toBool } = require('@keg-hub/jsutils')
 const { GobletRoot } = require('../gobletRoot')
-// TODO: figure out how to make this an alias instead of relative path
+// TODO: figure out how to make these an alias instead of relative path
 const { loadEnvs } = require('../repos/shared/src/utils/loadEnvs')
+const { generateOrigins } = require('../repos/shared/src/utils/generateOrigins')
+
 const nodeEnv = process.env.NODE_ENV || `local`
 
 loadEnvs(nodeEnv === 'local')
@@ -36,31 +38,6 @@ const {
   GOBLET_SERVER_ORIGINS = 'localhost,dev.gobletqa.app,gobletqa-develop.local.keghub.io',
 } = process.env
 
-// TODO: @lance-tipton - extract to shared utility methods
-const generateOrigins = () => {
-  return (GOBLET_SERVER_ORIGINS).split(',')
-    .reduce((acc, origin) => {
-      const host = (origin || '').trim()
-      if(!host || acc.includes(host)) return acc
-
-      const cleaned = host.replace(`https://`, '')
-        .replace(`http://`, '')
-        .replace(`wss://`, '')
-        .replace(`ws://`, '')
-      
-      !acc.includes(cleaned) &&
-        acc.push(
-          cleaned,
-          `https://${cleaned}`,
-          `http://${cleaned}`,
-          `wss://${cleaned}`,
-          `ws://${cleaned}`
-        )
-
-      return acc
-    }, [])
-}
-
 const serverConfig = {
   port: API_PORT,
   environment: nodeEnv,
@@ -68,9 +45,9 @@ const serverConfig = {
   path: GOBLET_SOCKR_PATH,
   host: GOBLET_SERVER_HOST,
   logLevel: GOBLET_LOG_LEVEL,
-  origins: generateOrigins(),
   auth: toBool(GOBLET_USE_AUTH),
   hostPWSocket: toBool(GOBLET_PW_SOCKET),
+  origins: generateOrigins(GOBLET_SERVER_ORIGINS),
   cookie: {
     key: GOBLET_COOKIE_KEY,
     name: GOBLET_COOKIE_NAME,

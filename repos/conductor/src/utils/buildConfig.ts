@@ -1,6 +1,7 @@
 import { TConductorOpts } from '../options.types'
+import { DEF_HOST_IP } from '../constants/constants'
 import { toNum, deepMerge, exists, isEmptyColl } from '@keg-hub/jsutils'
-import { TConductorConfig, TDockerConfig, TProxyConfig } from '../conductor.types'
+import { TConductorConfig, TDockerConfig, TProxyConfig, TServerConfig } from '../conductor.types'
 
 type TPartialConf = Record<any, any>
 
@@ -10,21 +11,26 @@ const {
   CD_PROXY_PORT=9901,
   CD_RATE_LIMIT=5000,
   CD_LOG_LEVEL=`info`,
-  CD_PROXY_HOST=`0.0.0.0`,
+  CD_PROXY_HOST=DEF_HOST_IP,
 } = process.env
 
 export const config:TConductorConfig = {
-  docker: {
+  controller: {
     pidsLimit: (toNum(CD_PIDS_LIMIT) || 20) as number,
     connect: {}
   } as TDockerConfig,
   proxy: {
+    host: CD_PROXY_HOST,
     logLevel: CD_LOG_LEVEL || `info`,
-    host: CD_PROXY_HOST || `0.0.0.0`,
-    port: (toNum(CD_PROXY_PORT) || 9901) as number,
     timeout: (toNum(CD_TIMEOUT) || 5000) as number,
     rateLimit: (toNum(CD_RATE_LIMIT) || 5000) as number,
   } as TProxyConfig,
+  server: {
+    host: CD_PROXY_HOST,
+    logLevel: CD_LOG_LEVEL || `info`,
+    port: (toNum(CD_PROXY_PORT) || 9901) as number,
+    rateLimit: (toNum(CD_RATE_LIMIT) || 5000) as number,
+  } as TServerConfig,
 }
 
 const loopEnsure = (mergedConfig:TPartialConf, config:TPartialConf) => {

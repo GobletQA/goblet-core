@@ -4,9 +4,12 @@
     "baseUrl": "./",
     "outDir": "./dist",
     "paths": {
-      "@GCD/Configs": ["configs"],
       "@GCD": ["src"],
-      "@GCDRoot": ["./"]
+      "@GCDRoot": ["./"],
+      "@GCD/Proxy": ["src/proxy"],
+      "@GCD/Utils": ["src/utils"],
+      "@GCD/Configs": ["configs"],
+      "@GCD/Docker": ["src/docker"]
     }
   },
   "include": ["src/**/*"],

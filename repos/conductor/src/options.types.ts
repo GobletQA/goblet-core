@@ -1,4 +1,4 @@
-import { TPorts, TImgConfig, TContainerConfig, TLogLevel } from './conductor.types'
+import { TPorts, TImgConfig, TContainerConfig, TLogLevel, TControllerType } from './conductor.types'
 
 export type TContainerOpts = TContainerConfig & {
   mem?: number
@@ -16,8 +16,9 @@ export type TImagesOpts = {
   [key:string]: TImgOpts
 }
 
-export type TDockerOpts = {
+export type TControllerOpts = {
   pidsLimit?: number
+  type: TControllerType
   connect?: Record<any, any>
 }
 
@@ -31,6 +32,6 @@ export type TProxyOpts = {
 
 export type TConductorOpts = {
   proxy?: TProxyOpts
-  docker?:TDockerOpts
   images:  TImagesOpts
+  controller?:TControllerOpts
 }

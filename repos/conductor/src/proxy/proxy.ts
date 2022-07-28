@@ -1,65 +1,60 @@
-import net from 'net'
-import { Logger } from '@keg-hub/cli-utils'
-import type { Conductor } from '../conductor'
+import { AppRouter } from '@GSH/Router'
+import { onProxyError } from '@GCD/Utils'
+import { createProxyMiddleware } from 'http-proxy-middleware'
+
 import { TProxyConfig } from '../conductor.types'
 import { DEF_HOST_IP } from '../constants/constants'
 
-export class Proxy {
 
-  server: net.Server
-  config:TProxyConfig
-  conductor:Conductor
+const addAllowOriginHeader = (proxyRes, origin) => {
+  proxyRes.headers['Access-Control-Allow-Origin'] = origin
+}
 
-  constructor(conductor:Conductor, config:TProxyConfig){
-    this.config = config
-    this.conductor = conductor
-  }
+const mapRequestHeaders = (proxyReq, req) => {
+  Object.keys(req.headers)
+    .forEach(key => proxyReq.setHeader(key, req.headers[key]))
+}
 
-  start() {
-    return new Promise((res, rej) => {
-      this.server = net.createServer(this.conductor.clientHandler.bind(this.conductor))
+/**
+ * Maps the response headers from the response to the proxied response
+ * @param {Object} proxyRes - Respose object used by the proxy
+ * @param {Object} res - Original response object
+ *
+ * @returns {void}
+ */
+const mapResponseHeaders = (proxyRes, res) => {
+  Object.keys(proxyRes.headers)
+    .forEach(key => res.append(key, proxyRes.headers[key]))
+}
 
-      this.server.on('listening', () => {
-        Logger.info(`listening on ${this.config.host}:${this.config.port}`)
-        res()
-      })
+/**
+ * Global proxy handler. Any request that reach here, get passed on to a container via the proxy
+ * It's not documented anywhere, but if null is returned, the express app router handles the request
+ * This allows the `<domain>/tap-proxy/**` routes to work
+ * @function
+ * 
+ * @returns {Object} - Contains the port and host ip address to proxy the request to
+ */
+export const createProxy = (config:TProxyConfig) => {
+  const { host, proxyRouter, proxy } = config
 
-      this.server.listen(this.config.port, this.config.host)
-  
-    }) as Promise<void>
-  }
+  AppRouter.use(`**`, createProxyMiddleware({
+    // xfwd: true,
+    // changeOrigin: true,
+    ws: true,
+    logLevel: 'error',
+    router: proxyRouter,
+    onError: onProxyError,
+    target: host || DEF_HOST_IP,
+    onProxyReq: (proxyReq, req, res) => {
+      mapRequestHeaders(proxyReq, req)
+    },
+    onProxyRes: (proxyRes, req, res) => {
+      mapResponseHeaders(proxyRes, res)
+      addAllowOriginHeader(proxyRes, origin)
+    },
+    ...proxy,
+  }))
 
-  stop() {
-    return new Promise((res, rej) => {
-      this.server.close(() => {
-        Logger.info('Proxy server shutting down...')
-        res()
-      })
-    }) as Promise<void>
-  }
 
-  create(client, ports) {
-    return new Promise((res) => {
-      client.on('error', res)
-      client.on('close', res)
-
-      const service = new net.Socket()
-
-      // TODO: need to loop ports and create proxy for each port
-      const port = ports[0]
-
-      service.connect(port, DEF_HOST_IP, () => {
-        client.pipe(service)
-        service.pipe(client)
-      })
-
-      service.on('error', res)
-      service.on('close', res)
-
-      if (this.config.timeout) {
-        setTimeout(res, this.config.timeout)
-      }
-    })
-  }
-
-} 
+}

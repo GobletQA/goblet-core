@@ -1,15 +1,17 @@
-import { Proxy } from '../proxy'
-import { Docker } from '../docker'
-import { Logger, wait } from '@keg-hub/cli-utils'
+import { Request } from 'express'
+import { createProxy } from '../proxy'
+import { wait } from '@keg-hub/jsutils'
 import { TConductorOpts } from '../options.types'
 import { buildConfig } from '../utils/buildConfig'
+import { Controller } from '../controller/controller'
+import { resolveHostName } from '../utils/resolveHostName'
+import { getController } from '../controller/controllerTypes'
 import { TConductorConfig, TContainerRef } from '../conductor.types'
 
 export class Conductor {
 
-  proxy: Proxy
-  docker: Docker
   config: TConductorConfig
+  controller: Controller
 
   rateLimitMap:Record<any, any>
   containerTimeoutMap: Record<any, any>
@@ -18,12 +20,10 @@ export class Conductor {
     this.rateLimitMap = {}
     this.containerTimeoutMap = {}
     this.config = buildConfig(config)
-
-    this.proxy = new Proxy(this, this.config.proxy)
-    this.docker = new Docker(this, this.config.docker)
+    this.controller = getController(this.config.controller)
 
     config.images
-      && this.docker.buildImgs(this.config.images)
+      && this.controller.buildImgs(this.config.images)
   }
 
   /**
@@ -64,65 +64,49 @@ export class Conductor {
 
   /**
    * Spawns a new container based on the passed in request
+   * Is called from the spawn endpoint
    */
-  async spawnContainer(client:Conductor, request) {
-    const { key, ...img } = request?.body
-    if(!key && !img.name)
+  async spawnContainer(req:Request) {
+    const { key, ...createOpts } = req?.body
+    if(!key && !createOpts.name)
       throw new Error(`Image ref or name is require to spawn a new container`)
     
-    const {container, ports, image } = await this.docker.create(key, img)
+    const {container, ports, image } = await this.controller.create(key, createOpts)
     await container.start()
 
     // Wait slightly longer for container to start.
     // Hack because sometimes the connection gets randomly reset.
     await wait(200)
 
-    return { image, container, ports }
+    return {
+      ports,
+      image,
+      container,
+    }
   }
 
   async cleanupContainer(containerRef:TContainerRef) {
-    await this.docker.remove(containerRef)
+    await this.controller.remove(containerRef)
   }
 
-  async clientHandler(client) {
-    // ignore errors so logic not interrupted
-    client.on('error', () => {})
+  async proxyRouter(req:Request) {
+    const destination = resolveHostName(req)
 
-    if (!client.remoteAddress) {
-      Logger.warn('client immediately disconnected')
-      return
+    const route = await this.controller.getContainerRoute(destination)
+    if(!route) throw new Error(`Unrecognized route for destination ${destination}`)
+
+    return {
+      port: route.port,
+      host: route.host,
+      protocol: route.port === 443 ? `https:` : `http:`,
     }
-
-    Logger.info(`new connection from ${client.remoteAddress}`)
-
-    await this.handleRateLimit(client)
-    if (client.destroyed) {
-      Logger.warn(`client ${client.remoteAddress} disconnected before container created`)
-      return
-    }
-    
-    // TODO figure out to pass in the client request instead of {}
-    const { container, ports } = await this.spawnContainer(client, {})
-
-    const id = container.id.substring(0, 12)
-    Logger.info(`container ${client.remoteAddress}/${id} created`)
-
-    // TODO: investigate this to see why it waiting
-    await this.proxy.create(client, ports)
-
-    Logger.info(`session ${client.remoteAddress}/${id} ending`)
-    await this.cleanupContainer(container)
   }
 
   async start() {
-    await this.proxy.start()
+    createProxy({ ...this.config.proxy, proxyRouter: this.proxyRouter.bind(this) })
     return this
   }
 
-  async stop() {
-    await this.proxy.stop()
-    return this
-  }
 }
 
 
