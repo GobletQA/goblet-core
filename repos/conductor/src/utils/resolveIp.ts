@@ -1,5 +1,5 @@
+import { TContainerInspect } from '../types'
 import { DEF_HOST_IP } from '../constants/constants'
-import { TContainerInspect } from '../types/conductor.types'
 
 
 /**

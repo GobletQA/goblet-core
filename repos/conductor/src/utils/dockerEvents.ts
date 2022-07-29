@@ -1,7 +1,7 @@
 import Dockerode from 'dockerode'
 import DockerEvents from 'docker-events'
 import { checkCall, noOpObj } from '@keg-hub/jsutils'
-import { TControllerEvts } from '../types/controller.types'
+import { TControllerEvts } from '../types'
 
 const eventTypes = [
   `die`,

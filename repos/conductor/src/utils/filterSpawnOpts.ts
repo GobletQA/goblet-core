@@ -1,5 +1,5 @@
 
-import { TSpawnOpts } from '../types/conductor.types'
+import { TSpawnOpts } from '../types'
 
 /**
  * Used to filter the input options passed to the spawn endpoint

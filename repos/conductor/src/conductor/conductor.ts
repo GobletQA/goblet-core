@@ -3,7 +3,7 @@ import { wait } from '@keg-hub/jsutils'
 import { createServer } from '../server'
 import { Request, Express } from 'express'
 import { getApp } from '@gobletqa/shared/app'
-import { TConductorOpts } from '../types/options.types'
+import { getDomain } from '../utils/getDomain'
 import { buildConfig } from '../utils/buildConfig'
 import { Controller } from '../controller/controller'
 import { resolveHostName } from '../utils/resolveHostName'
@@ -13,13 +13,15 @@ import {
   TSpawnOpts,
   TProxyRoute,
   TContainerRef,
+  TConductorOpts,
   TConductorConfig,
-} from '../types/conductor.types'
+} from '../types'
 
 export class Conductor {
 
-  config: TConductorConfig
+  domain: string
   controller: Controller
+  config: TConductorConfig
   rateLimitMap:Record<any, any>
   containerTimeoutMap: Record<any, any>
 
@@ -27,6 +29,7 @@ export class Conductor {
     this.rateLimitMap = {}
     this.containerTimeoutMap = {}
     this.config = buildConfig(config)
+    this.domain = getDomain(this.config)
     this.controller = getController(this, this.config.controller)
 
     config.images
@@ -81,16 +84,13 @@ export class Conductor {
    * Spawns a new container based on the passed in request
    * Is called from the spawn endpoint
    */
-  async spawn(imageRef:TImgRef, spawnOpts:TSpawnOpts) {
+  async spawn(imageRef:TImgRef, spawnOpts:TSpawnOpts, subdomain:string) {
     if(!imageRef && !spawnOpts.name)
       throw new Error(`Image ref or name is require to spawn a new container`)
     
-    const { containerInfo, ...rest } = await this.controller.run(imageRef, spawnOpts)
+    const runResp = await this.controller.run(imageRef, spawnOpts, subdomain)
 
-    return {
-      ...rest,
-      containerInfo,
-    }
+    return runResp
   }
 
   async cleanup(containerRef:TContainerRef) {

@@ -4,16 +4,16 @@ import { capitalize, deepMerge } from '@keg-hub/jsutils'
 import { checkImgConfig } from '../utils/checkImgConfig'
 import {
   TImgRef,
+  TRunOpts,
   TPullOpts,
   TImgConfig,
   TImgsConfig,
-  TCreateOpts,
   TRunResponse,
   TContainerObj,
   TContainerRef,
   TContainerRoute,
   TControllerConfig,
-} from '../types/conductor.types'
+} from '../types'
 
 
 const throwOverrideErr = (message?:string) => {
@@ -71,7 +71,7 @@ export class Controller {
     return undefined
   }
 
-  run = async (imageRef:TImgRef, createOpts?:TCreateOpts):Promise<TRunResponse> => {
+  run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TRunResponse> => {
     throwOverrideErr()
     return undefined
   }

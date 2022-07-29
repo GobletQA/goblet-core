@@ -1,12 +1,6 @@
 import { Request } from 'express'
+import { DockerOptions } from 'dockerode'
 import { Options } from 'http-proxy-middleware'
-import {
-  Image,
-  Container,
-  ContainerInfo,
-  DockerOptions,
-  ContainerInspectInfo,
-} from 'dockerode'
 
 export type TContainerLabels = Record<string, string>
 
@@ -19,20 +13,6 @@ export type TContainerConfig = {
   envs?: Record<string, string>
 }
 
-export type TImageObj = Image & {
-  [key:string]: any
-}
-
-export type TContainerInspect = ContainerInspectInfo & {}
-export type TContainerInfo = ContainerInfo & {}
-
-export type TContainerObj = Container & {
-  [key:string]: any
-}
-
-export type TContainerRef = string | TContainerObj
-
-
 export type TImgConfig = {
   tag: string
   name: string
@@ -41,18 +21,6 @@ export type TImgConfig = {
   provider: string
   pidsLimit?: number
   container: TContainerConfig
-}
-
-
-// TODO: Update this to whatever options end up being correct for spawning a new container
-export type TCreateOpts = {
-  tag?: string
-  name?: string
-  user?: string
-  provider?: string
-  pidsLimit?: number
-  container?: TContainerConfig
-  hostConfig?: Record<any, any>
 }
 
 export type TCreatePortsObj = {
@@ -102,6 +70,7 @@ export type TProxyConfig = {
   host?: string
   domain?:string
   proxy: Options
+  hashKey: string
   timeout: number
   rateLimit: number
   logLevel: TLogLevel
@@ -122,25 +91,6 @@ export type TConductorConfig = {
   controller: TDockerConfig
 }
 
-type TPortBinding = {
-  HostIP: string
-  HostPort: string
-}
-
-export type TRunResponse = {
-  urls: TUrls
-  ports: TPortsMap
-  routes: TProxyRoutes
-  image: Record<any, any>
-  container: TContainerObj
-  containerInfo: TContainerInspect
-}
-
-export type TContainerRoute = {
-  host: string
-  port: string|number
-  protocol?: 'http' | 'https'
-}
 
 export type TSpawnOpts = {
   imageRef: string
@@ -149,18 +99,4 @@ export type TSpawnOpts = {
   user?: string
   provider?: string
   [key: string]: any
-}
-
-export type TProxyRoute = {
-  host: string,
-  protocol: string,
-  port: string|number,
-}
-
-export type TProxyRoutes = {
-  [key:string]: TProxyRoute
-}
-
-export type TUrls = {
-  [key:string]: string
 }

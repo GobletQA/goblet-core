@@ -14,21 +14,20 @@ import { buildContainerPorts } from '../utils/buildContainerPorts'
 import { buildContainerLabels } from '../utils/buildContainerLabels'
 import {
   TImgRef,
+  TRunOpts,
   TPullOpts,
   TImgsConfig,
-  TCreateOpts,
-  TProxyRoutes,
   TRunResponse,
   TContainerObj,
   TContainerRef,
   TDockerConfig,
   TContainerInfo,
   TContainerRoute,
-  TContainerInspect,
-} from '../types/conductor.types'
+} from '../types'
 
 export class Docker extends Controller {
 
+  domain: string
   docker: Dockerode
   images: TImgsConfig
   conductor: Conductor
@@ -40,6 +39,7 @@ export class Docker extends Controller {
     this.config = config
     this.docker = new Dockerode(config?.options)
     this.events = dockerEvents(this.docker)
+
   }
 
   pull = async (imageRef:TImgRef, pullOpts:TPullOpts):Promise<void> => {
@@ -69,20 +69,21 @@ export class Docker extends Controller {
     })
   }
 
-  run = async (imageRef:TImgRef, createOpts:TCreateOpts):Promise<TRunResponse> => {
+  run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TRunResponse> => {
     const image = this.getImg(imageRef)
     !image && this.notFoundErr({ type: `image`, ref: imageRef as string })
+
 
     const { ports, exposed, bindings } = await buildContainerPorts(image)
     const createConfig = {
       // TODO: investigate createContainer options that should be allowed form a request
-      ...createOpts,
+      ...runOpts,
       ExposedPorts: exposed,
       Env: buildContainerEnvs(image),
       Image: buildImgUri(image),
       Labels: buildContainerLabels(image),
       HostConfig: {
-        ...createOpts.hostConfig,
+        ...runOpts.hostConfig,
         AutoRemove: true,
         PortBindings: bindings,
         PidsLimit: image?.pidsLimit || this?.config?.pidsLimit || 20,
@@ -104,19 +105,12 @@ export class Docker extends Controller {
     await wait(200)
 
     const containerInfo = await container.inspect()
-    const routes = await this.buildRoutes(containerInfo)
+    const { urls, map } = generateUrls(containerInfo, ports, subdomain, this?.conductor)
 
     this.containers[container.id] = container
-    
-    const urls = generateUrls(containerInfo, ports)
-    
+
     return {
       urls,
-      image,
-      ports,
-      routes,
-      container,
-      containerInfo
     }
   }
 
@@ -159,11 +153,6 @@ export class Docker extends Controller {
         rej(err)
       }
     })
-  }
-
-  buildRoutes = async (containerInfo:TContainerInspect):Promise<TProxyRoutes> => {
-    
-    return {} as TProxyRoutes
   }
 
   route = async (containerRef:TContainerRef):Promise<TContainerRoute> => {

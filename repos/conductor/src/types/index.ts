@@ -1,3 +1,5 @@
+export * from './docker.types'
 export * from './options.types'
 export * from './conductor.types'
 export * from './controller.types'
+export * from './routes.types'

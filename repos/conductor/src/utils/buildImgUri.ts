@@ -1,6 +1,6 @@
 import path from 'path'
 import { pickKeys } from '@keg-hub/jsutils'
-import { TImgConfig } from '../types/conductor.types'
+import { TImgConfig } from '../types'
 
 export const buildImgUri = (image:TImgConfig, withKeys?:string[]) => {
   const hasKeys = Boolean(withKeys && withKeys.length)

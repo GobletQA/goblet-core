@@ -1,8 +1,8 @@
 import http from 'http'
 import https from 'https'
 import { Express } from 'express'
+import { TServerConfig } from '../types'
 import { getApp } from '@gobletqa/shared/app'
-import { TServerConfig } from '../types/conductor.types'
 import { DEF_HOST_IP } from '../constants/constants'
 import { setupEndpoints } from '@GCD/Middleware/setupEndpoints'
 import {

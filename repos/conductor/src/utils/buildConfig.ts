@@ -1,7 +1,13 @@
-import { TConductorOpts } from '../types/options.types'
+
 import { DEF_HOST_IP } from '../constants/constants'
 import { toNum, deepMerge, exists, isEmptyColl } from '@keg-hub/jsutils'
-import { TConductorConfig, TDockerConfig, TProxyConfig, TServerConfig } from '../types/conductor.types'
+import {
+  TDockerConfig,
+  TProxyConfig,
+  TServerConfig,
+  TConductorOpts,
+  TConductorConfig
+} from '../types'
 
 type TPartialConf = Record<any, any>
 
@@ -11,6 +17,8 @@ const {
   CD_PROXY_PORT=9901,
   CD_RATE_LIMIT=5000,
   CD_LOG_LEVEL=`info`,
+  // Salting the user hash string. Not intended to be secure, just anonymous
+  CD_HASH_KEY=`C0nDuc10R`,
   CD_PROXY_HOST=DEF_HOST_IP,
   CD_PROXY_DOMAIN=CD_PROXY_HOST
 } = process.env
@@ -22,6 +30,7 @@ export const config:TConductorConfig = {
   } as TDockerConfig,
   proxy: {
     host: CD_PROXY_HOST,
+    hashKey: CD_HASH_KEY,
     logLevel: CD_LOG_LEVEL || `info`,
     domain: CD_PROXY_DOMAIN || CD_PROXY_HOST,
     timeout: (toNum(CD_TIMEOUT) || 5000) as number,
