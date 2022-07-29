@@ -1,0 +1,51 @@
+
+ARG GB_BASE_IMAGE=ghcr.io/gobletqa/goblet-base:develop
+
+# ---- Turbo Prune Stage ---- #
+FROM $GB_BASE_IMAGE as goblet-pruner
+WORKDIR /app
+RUN yarn global add turbo
+COPY . .
+RUN turbo prune --docker --scope=@@gobletqa/conductor
+# ---- End Stage ---- #
+
+# ---- Install Stage ---- #
+FROM $GB_BASE_IMAGE as goblet-installer
+WORKDIR /keg/tap
+COPY --from=goblet-pruner /app/out/json/ .
+COPY --from=goblet-pruner /app/out/yarn.lock ./yarn.lock
+RUN yarn install --frozen-lockfile
+# ---- End Stage ---- #
+
+# ---- Build Stage ---- #
+FROM $GB_BASE_IMAGE as goblet-builder
+WORKDIR /keg/tap
+COPY --from=goblet-pruner /app/out/full/ .
+COPY --from=goblet-installer /app/ .
+RUN yarn turbo run build --filter=@gobletqa/conductor && \
+    yarn install --frozen-lockfile --production
+# ---- End Stage ---- #
+
+# ---- Run Stage ---- #
+FROM $GB_BASE_IMAGE as goblet-runner
+WORKDIR /keg/tap/repos/screencast
+ARG DOC_APP_PATH=/keg/tap
+ARG SCREENCAST_API_PORT=7005
+
+# TODO: investigate what else needs copied over form build stage
+# COPY --from=goblet-builder /keg/tap/repos/screencast/dist repos
+# COPY --from=goblet-builder /keg/tap/node_modules/. node_modules/.
+# COPY --from=goblet-builder /keg/tap/repos/screencast/package.json repos/screencast/.
+# COPY --from=goblet-builder /keg/tap/repos/screencast/tsconfig.build.json repos/screencast/tsconfig.json
+# COPY --from=goblet-builder /keg/tap/repos/screencast/node_modules/. repos/screencast/node_modules/.
+
+RUN pm2 install pm2-logrotate && \
+    pm2 set pm2-logrotate:retain '7' && \
+    pm2 set pm2-logrotate:rotateInterval '0 0 * * 1' && \
+    mkdir -p logs
+
+RUN ln -s /keg/tap/node_modules $HOME/.node_modules && \
+    ln -s /keg/tap/node_modules /keg/node_modules
+EXPOSE $SCREENCAST_API_PORT
+CMD [ "yarn", "serve" ]
+

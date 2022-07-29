@@ -1,17 +1,17 @@
-
-import path from 'path'
-import { capitalize, deepMerge } from '@keg-hub/jsutils'
 import type { Conductor } from '../conductor'
+import { buildImgUri } from '../utils/buildImgUri'
+import { capitalize, deepMerge } from '@keg-hub/jsutils'
 import { checkImgConfig } from '../utils/checkImgConfig'
 import {
   TImgRef,
+  TPullOpts,
   TImgConfig,
   TImgsConfig,
   TCreateOpts,
+  TRunResponse,
   TContainerObj,
   TContainerRef,
   TContainerRoute,
-  TCreateResponse,
   TControllerConfig,
 } from '../conductor.types'
 
@@ -36,22 +36,6 @@ export class Controller {
     return typeof imageRef === 'string' ? this.images[imageRef] : imageRef
   }
 
-  buildImgUri(imageRef:TImgRef){
-    const image = this.getImg(imageRef)
-    !image && this.notFoundErr({ type: `image`, ref: imageRef as string })
-    
-    if(image.uri) return image.uri
-
-    const {
-      user=``,
-      name=``,
-      provider=``,
-      tag=`latest`,
-    } = image
-
-    return `${path.join(...[provider, user, name].filter(Boolean))}:${tag}`
-  }
-
   /**
    * Ensures the passed in config is valid
    */
@@ -65,7 +49,7 @@ export class Controller {
       .reduce((acc, [key, img]) => {
         checkImgConfig(img, key)
         acc[key] = deepMerge(img)
-        acc[key].uri = acc[key].uri || this.buildImgUri(acc[key])
+        acc[key].uri = acc[key].uri || buildImgUri(acc[key])
 
         return acc
       }, {})
@@ -82,28 +66,32 @@ export class Controller {
       ))
   }
 
-  remove = async (containerRef:TContainerRef) => {
-    const container = this.getContainer(containerRef)
-    !container && this.notFoundErr({ type: `container`, ref: containerRef as string })
-
-    await container.stop()
-    await container.remove()
-
-    this.containers = Object.entries(this.containers)
-      .reduce((acc, [ref, cont]:[string, TContainerObj]) => {
-        cont.id !== container.id && (acc[ref] = cont)
-
-        return acc
-      }, {})
-
-  }
-
-  async create(imageRef:TImgRef, createOpts?:TCreateOpts):Promise<TCreateResponse> {
+  pull = async (imageRef:TImgRef, pullOpts?:TPullOpts) => {
     throwOverrideErr()
     return undefined
   }
 
-  getContainerRoute = async (containerRef:TContainerRef):Promise<TContainerRoute> => {
+  run = async (imageRef:TImgRef, createOpts?:TCreateOpts):Promise<TRunResponse> => {
+    throwOverrideErr()
+    return undefined
+  }
+
+  route = async (containerRef:TContainerRef):Promise<TContainerRoute> => {
+    throwOverrideErr()
+    return undefined
+  }
+
+  remove = async (containerRef:TContainerRef) => {
+    throwOverrideErr()
+    return undefined
+  }
+
+  removeAll = async () => {
+    throwOverrideErr()
+    return undefined
+  }
+
+  cleanup = async () => {
     throwOverrideErr()
     return undefined
   }

@@ -1,10 +1,12 @@
 import { Request } from 'express'
 import { Options } from 'http-proxy-middleware'
-
-export type TLogLevel = 'info' | 'warn' | 'error' | 'debug' | 'verbose'
-
-export type TPort = number | string
-export type TPorts = TPort[]
+import {
+  Image,
+  Container,
+  ContainerInfo,
+  DockerOptions,
+  ContainerInspectInfo,
+} from 'dockerode'
 
 export type TContainerLabels = Record<string, string>
 
@@ -17,6 +19,20 @@ export type TContainerConfig = {
   envs?: Record<string, string>
 }
 
+export type TImageObj = Image & {
+  [key:string]: any
+}
+
+export type TContainerInspect = ContainerInspectInfo & {}
+export type TContainerInfo = ContainerInfo & {}
+
+export type TContainerObj = Container & {
+  [key:string]: any
+}
+
+export type TContainerRef = string | TContainerObj
+
+
 export type TImgConfig = {
   tag: string
   name: string
@@ -27,6 +43,7 @@ export type TImgConfig = {
   container: TContainerConfig
 }
 
+
 // TODO: Update this to whatever options end up being correct for spawning a new container
 export type TCreateOpts = {
   tag?: string
@@ -35,13 +52,51 @@ export type TCreateOpts = {
   provider?: string
   pidsLimit?: number
   container?: TContainerConfig
+  hostConfig?: Record<any, any>
+}
+
+export type TCreatePortsObj = {
+  ports: Record<any, any>
+  exposed: Record<string, Record<any, any>>
+  bindings: Record<string, Record<'HostPort', string>[]>
 }
 
 export type TImgsConfig = {
   [key:string]: TImgConfig
 }
 
-export type TImgRef = string|TImgConfig
+export type TImgRef = string | TImgConfig
+
+export type TDockerAuth = {
+  key?: string
+  auth?: string,
+  email?: string,
+  username?: string,
+  password?: string,
+  serveraddress?: string
+}
+
+export type TPullOpts = {
+  [key:string]: any
+  authconfig: TDockerAuth
+}
+
+export type TDockerConfig = TControllerConfig & {
+}
+
+export type TControllerType = 'docker' | 'Docker'
+
+export type TControllerConfig = DockerOptions & {
+  pidsLimit: number
+  type: TControllerType
+  options:DockerOptions
+}
+
+export type TLogLevel = 'info' | 'warn' | 'error' | 'debug' | 'verbose'
+
+export type TPort = number | string
+export type TPorts = TPort[]
+export type TPortsMap = Record<string, string>
 
 export type TProxyConfig = {
   host?: string
@@ -59,17 +114,6 @@ export type TServerConfig = {
   logLevel: TLogLevel
 }
 
-export type TDockerConfig = TControllerConfig & {
-}
-
-export type TControllerType = 'docker' | 'Docker'
-
-export type TControllerConfig = {
-  pidsLimit: number
-  type: TControllerType
-  connect: Record<any, any>
-}
-
 export type TConductorConfig = {
   server: TServerConfig
   proxy: TProxyConfig
@@ -77,25 +121,19 @@ export type TConductorConfig = {
   controller: TDockerConfig
 }
 
-export type TContainerObj = {
-  stop: () => Promise<void>
-  remove: () => Promise<void>
-  [key:string]: any
-}
-
-export type TContainerRef = string|TContainerObj
-
 type TPortBinding = {
   HostIP: string
   HostPort: string
 }
 
-export type TCreateResponse = {
+export type TRunResponse = {
+  urls: TUrls
+  ports: TPortsMap
+  routes: TProxyRoutes
   image: Record<any, any>
   container: TContainerObj
-  ports: Record<string, TPortBinding[]>
+  containerInfo: TContainerInspect
 }
-
 
 export type TContainerRoute = {
   host: string
@@ -110,4 +148,18 @@ export type TSpawnOpts = {
   user?: string
   provider?: string
   [key: string]: any
+}
+
+export type TProxyRoute = {
+  host: string,
+  protocol: string,
+  port: string|number,
+}
+
+export type TProxyRoutes = {
+  [key:string]: TProxyRoute
+}
+
+export type TUrls = {
+  [key:string]: string
 }

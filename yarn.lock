@@ -1922,7 +1922,7 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@keg-hub/args-parse@*", "@keg-hub/args-parse@8.0.0", "@keg-hub/args-parse@9.0.0":
+"@keg-hub/args-parse@*", "@keg-hub/args-parse@9.0.0":
   version "9.0.0"
   resolved "https://registry.npmjs.org/@keg-hub/args-parse/-/args-parse-9.0.0.tgz#4525f33a8ccabb968fd8358bb23c49f4caf24c76"
   integrity sha512-N7/98lGiZDWGbYAWz1Q/EvknrT4GywjQV9gGtxZco0JP2HJR/9rU3fP4Vl7ciGWLxIXikjt4N5t1j8g4rp6FbQ==
@@ -1931,12 +1931,30 @@
     "@keg-hub/jsutils" "*"
     app-root-path "3.0.0"
 
+"@keg-hub/args-parse@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.npmjs.org/@keg-hub/args-parse/-/args-parse-8.0.0.tgz#742946d0264a048d40728065177732c5df42b8c6"
+  integrity sha512-lLbT0iU0VGqPygqvP5OKpE02yD/2g+EevRchwXhvcvgMEGJTJYeVsJ+mlPHtV0BAOcXbzHt8Zar2qKAhSKBkxA==
+  dependencies:
+    "@keg-hub/ask-it" "1.1.0"
+    "@keg-hub/jsutils" "8.8.0"
+    app-root-path "3.0.0"
+
 "@keg-hub/ask-it@*", "@keg-hub/ask-it@1.1.2":
   version "1.1.2"
   resolved "https://registry.npmjs.org/@keg-hub/ask-it/-/ask-it-1.1.2.tgz#36708b17c3149d1693817ca3ba160dcbd999d6bd"
   integrity sha512-i/KMYeNZGOA++LHRM0tsJ57pa2qaFyRMrDq9Q0zCilu3ET+gFBphrrQuzJB+03jA/HNpNUjNwNFc5XjkgfBbjA==
   dependencies:
     "@keg-hub/jsutils" "*"
+    colors "1.4.0"
+    inquirer "7.3.3"
+
+"@keg-hub/ask-it@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/@keg-hub/ask-it/-/ask-it-1.1.0.tgz#d165cc099f39b62ec92c168eb70662f9b9e82aea"
+  integrity sha512-U4Hzyb1cJcccUKiMiuIaRyWUyDYwoHcP6oMw1sxvCtOFoYJ4pGU8xWmOpK3X0jweFJ5qA3YaRl9vyEZK43zFbA==
+  dependencies:
+    "@keg-hub/jsutils" "8.8.0"
     colors "1.4.0"
     inquirer "7.3.3"
 
@@ -2634,6 +2652,22 @@
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
   integrity sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
 
+"@types/docker-modem@*":
+  version "3.0.2"
+  resolved "https://registry.npmjs.org/@types/docker-modem/-/docker-modem-3.0.2.tgz#c49c902e17364fc724e050db5c1d2b298c6379d4"
+  integrity sha512-qC7prjoEYR2QEe6SmCVfB1x3rfcQtUr1n4x89+3e0wSTMQ/KYCyf+/RAA9n2tllkkNc6//JMUZePdFRiGIWfaQ==
+  dependencies:
+    "@types/node" "*"
+    "@types/ssh2" "*"
+
+"@types/dockerode@^3.3.9":
+  version "3.3.9"
+  resolved "https://registry.npmjs.org/@types/dockerode/-/dockerode-3.3.9.tgz#8c6e519fd4d0d86717b2c6a864904f4e6aa8af40"
+  integrity sha512-SYRN5FF/qmwpxUT6snJP5D8k0wgoUKOGVs625XvpRJOOUi6s//UYI4F0tbyE3OmzpI70Fo1+aqpzX27zCrInww==
+  dependencies:
+    "@types/docker-modem" "*"
+    "@types/node" "*"
+
 "@types/express-serve-static-core@*":
   version "4.17.29"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.29.tgz#2a1795ea8e9e9c91b4a4bbe475034b20c1ec711c"
@@ -2778,6 +2812,13 @@
   integrity sha512-nCkHGI4w7ZgAdNkrEu0bv+4xNV/XDqW+DydknebMOQwkpDGx8G+HTlj7R7ABI8i8nKxVw0wtKPi1D+lPOkh4YQ==
   dependencies:
     "@types/mime" "^1"
+    "@types/node" "*"
+
+"@types/ssh2@*":
+  version "1.11.5"
+  resolved "https://registry.npmjs.org/@types/ssh2/-/ssh2-1.11.5.tgz#b669c97fa4f9dfd7193c4750e87eaabffad0ae9d"
+  integrity sha512-RaBsPKr+YP/slH8iR7XfC7chyomU+V57F/gJ5cMSP2n6/YWKVmeRLx7lrkgw4YYLpEW5lXLAdfZJqGo0PXboSA==
+  dependencies:
     "@types/node" "*"
 
 "@types/stack-utils@^2.0.0":

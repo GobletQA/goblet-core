@@ -8,7 +8,13 @@ import { buildConfig } from '../utils/buildConfig'
 import { Controller } from '../controller/controller'
 import { resolveHostName } from '../utils/resolveHostName'
 import { getController } from '../controller/controllerTypes'
-import { TConductorConfig, TContainerRef, TSpawnOpts } from '../conductor.types'
+import {
+  TImgRef,
+  TSpawnOpts,
+  TProxyRoute,
+  TContainerRef,
+  TConductorConfig,
+} from '../conductor.types'
 
 export class Conductor {
 
@@ -66,42 +72,42 @@ export class Conductor {
     this.rateLimitMap[addr] = nextTime
   }
 
+  async pull(imageRef:TImgRef){
+    await this.controller.pull(imageRef)
+  } 
+
+
   /**
    * Spawns a new container based on the passed in request
    * Is called from the spawn endpoint
    */
-  async spawnContainer(imageRef, spawnOpts:TSpawnOpts) {
+  async spawn(imageRef:TImgRef, spawnOpts:TSpawnOpts) {
     if(!imageRef && !spawnOpts.name)
       throw new Error(`Image ref or name is require to spawn a new container`)
     
-    const {container, ports, image } = await this.controller.create(imageRef, spawnOpts)
-    await container.start()
-
-    // Wait slightly longer for container to start.
-    // Hack because sometimes the connection gets randomly reset.
-    await wait(200)
+    const { containerInfo, ...rest } = await this.controller.run(imageRef, spawnOpts)
 
     return {
-      ports,
-      image,
-      container,
+      ...rest,
+      containerInfo,
     }
   }
 
-  async cleanupContainer(containerRef:TContainerRef) {
-    await this.controller.remove(containerRef)
+  async cleanup(containerRef:TContainerRef) {
+    return await this.controller.removeAll()
+    // return await this.controller.remove(containerRef)
   }
 
-  async proxyRouter(req:Request) {
+  async proxyRouter(req:Request):Promise<TProxyRoute> {
     const destination = resolveHostName(req)
-    const route = await this.controller.getContainerRoute(destination)
+    const route = await this.controller.route(destination)
     if(!route) throw new Error(`Unrecognized route for destination ${destination}`)
 
     return {
       port: route.port,
       host: route.host,
       protocol: route.port === 443 ? `https:` : `http:`,
-    }
+    } as TProxyRoute
   }
 
   async start() {

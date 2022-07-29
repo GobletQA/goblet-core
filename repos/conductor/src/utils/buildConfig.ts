@@ -17,7 +17,7 @@ const {
 export const config:TConductorConfig = {
   controller: {
     pidsLimit: (toNum(CD_PIDS_LIMIT) || 20) as number,
-    connect: {}
+    options: {}
   } as TDockerConfig,
   proxy: {
     host: CD_PROXY_HOST,
@@ -39,7 +39,7 @@ const loopEnsure = (mergedConfig:TPartialConf, config:TPartialConf) => {
     .reduce((acc, [key, value]) => {
       acc[key] = exists(value) ? value : tracker[key]
 
-      if(key === 'connect' && isEmptyColl(acc[key]))
+      if(key === 'options' && isEmptyColl(acc[key]))
         acc[key] = {socketPath: '/var/run/docker.sock'}
 
       else if(key !== 'images' && typeof acc[key] === 'object'){

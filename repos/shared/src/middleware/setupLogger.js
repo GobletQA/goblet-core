@@ -12,17 +12,19 @@ const { buildLogger } = require('../utils/buildLogger')
 const setupLoggerReq = (app, middlewareOpts=noOpObj) => {
   const loggerOpts = app.locals.config.logger || noOpObj
   const logger = buildLogger(loggerOpts)
-  const appLogLevel = config.npm.levels[loggerOpts.level || 'info']
+  const logLevel = config.npm.levels[loggerOpts.level || 'info']
 
   const requestLogger = expressWinston.logger({
-    winstonInstance: logger,
     colorize: false,
     expressFormat: true,
+    winstonInstance: logger,
     /** Only log the metadata, if the log level is set to at least verbose */
-    meta: Boolean(appLogLevel >= config.npm.levels.verbose),
+    meta: Boolean(logLevel >= config.npm.levels.verbose),
     /** override options above with passed in options */
     ...middlewareOpts,
   })
+
+  app.use(requestLogger)
 
   return requestLogger
 }
@@ -36,15 +38,17 @@ const setupLoggerReq = (app, middlewareOpts=noOpObj) => {
 const setupLoggerErr = (app, middlewareOpts=noOpObj) => {
   const loggerOpts = app.locals.config.logger || noOpObj
   const logger = buildLogger(loggerOpts)
-  const appLogLevel = config.npm.levels[loggerOpts.level || 'info']
+  const logLevel = config.npm.levels[loggerOpts.level || 'info']
 
   const errorLogger = expressWinston.errorLogger({
     winstonInstance: logger,
     /** Only log the metadata, if the log level is set to at least verbose */
-    meta: Boolean(appLogLevel >= config.npm.levels.verbose),
+    meta: Boolean(logLevel >= config.npm.levels.verbose),
     /** override options above with passed in options */
     ...middlewareOpts,
   })
+
+  app.use(errorLogger)
 
   return errorLogger
 }
