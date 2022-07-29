@@ -1,10 +1,13 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import { AppRouter } from '@GCD/Server/router'
 
 /**
  * Root get endpoint to validate the server is running
  */
-AppRouter.get(`/`, (req: Request, res: Response) => {
+AppRouter.get(`/`, (req: Request, res: Response, next: NextFunction) => {
+  // TODO: Add middleware to bypass these specific routes when sub-domains exist
+  console.log(`TODO: Add middleware to bypass these specific routes when sub-domains exist`)
+  
   return res.status(200).json({ message: `Conductor API is running`, })
 })
 

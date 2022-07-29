@@ -18,9 +18,9 @@ import {
   TPullOpts,
   TImgsConfig,
   TRunResponse,
-  TContainerObj,
   TContainerRef,
   TDockerConfig,
+  TContainerData,
   TContainerInfo,
   TContainerRoute,
 } from '../types'
@@ -39,7 +39,21 @@ export class Docker extends Controller {
     this.config = config
     this.docker = new Dockerode(config?.options)
     this.events = dockerEvents(this.docker)
+    this.hydrate()
+  }
 
+  hydrate = async () => {
+    const containers = await this.getAll()
+
+    this.containers = containers.reduce((acc, container) => {
+      if(container.Labels[`${CONDUCTOR_LABEL}.conductor`]){
+        container.State !== 'running'
+          ? this.docker.getContainer(container.Id).remove()
+          : acc[container.Id] = container
+      }
+
+      return acc
+    }, {})
   }
 
   pull = async (imageRef:TImgRef, pullOpts:TPullOpts):Promise<void> => {
@@ -63,7 +77,7 @@ export class Docker extends Controller {
 
   getAll = async ():Promise<TContainerInfo[]> => {
     return new Promise((res, rej) => {
-      this.docker.listContainers((err, containers) => {
+      this.docker.listContainers({ all: true }, (err, containers) => {
         err ? rej(err) : res(containers)
       })
     })
@@ -75,22 +89,24 @@ export class Docker extends Controller {
 
 
     const { ports, exposed, bindings } = await buildContainerPorts(image)
+    const pidLimit = image?.pidsLimit || this?.config?.pidsLimit
+
     const createConfig = {
       // TODO: investigate createContainer options that should be allowed form a request
       ...runOpts,
       ExposedPorts: exposed,
-      Env: buildContainerEnvs(image),
       Image: buildImgUri(image),
+      Env: buildContainerEnvs(image),
       Labels: buildContainerLabels(image),
       HostConfig: {
         ...runOpts.hostConfig,
-        AutoRemove: true,
+        // AutoRemove: true,
         PortBindings: bindings,
-        PidsLimit: image?.pidsLimit || this?.config?.pidsLimit || 20,
+        PidsLimit: pidLimit,
         // TODO: investigate this
         // IpcMode: 'none',
         // StorageOpt: { size: `10G`},
-        // RestartPolicy: { name: `on-failure`, MaximumRetryCount: 2 },
+        RestartPolicy: { Name: `on-failure`, MaximumRetryCount: 2 },
       }
     }
 
@@ -107,7 +123,7 @@ export class Docker extends Controller {
     const containerInfo = await container.inspect()
     const { urls, map } = generateUrls(containerInfo, ports, subdomain, this?.conductor)
 
-    this.containers[container.id] = container
+    this.containers[container.id] = containerInfo
 
     return {
       urls,
@@ -115,15 +131,16 @@ export class Docker extends Controller {
   }
 
   remove = async (containerRef:TContainerRef) => {
-    const container = this.getContainer(containerRef)
-    !container && this.notFoundErr({ type: `container`, ref: containerRef as string })
+    const containerData = this.getContainer(containerRef)
+    !containerData && this.notFoundErr({ type: `container`, ref: containerRef as string })
 
-    await container.stop()
-    await container.remove()
+    const cont = await this.docker.getContainer(containerData.Id)
+    await cont.stop()
+    await cont.remove()
 
     this.containers = Object.entries(this.containers)
-      .reduce((acc, [ref, cont]:[string, TContainerObj]) => {
-        cont.id !== container.id && (acc[ref] = cont)
+      .reduce((acc, [ref, cont]:[string, TContainerData]) => {
+        cont.Id !== containerData.Id && (acc[ref] = cont)
 
         return acc
       }, {})
@@ -132,12 +149,21 @@ export class Docker extends Controller {
 
   removeAll = async () => {
     const containers = await this.getAll()
-    return containers.map(container => {
-      container.Labels[`${CONDUCTOR_LABEL}.conductor`]
-        && this.docker.getContainer(container.Id).stop()
+    const removed = await Promise.all(
+      containers.map(container => {
+        if(container.Labels[`${CONDUCTOR_LABEL}.conductor`]){
+          (async () => {
+            const cont = this.docker.getContainer(container.Id)
+            await cont.stop()
+            await cont.remove()
+          })()
 
-      return container
-    })
+          return container
+        }
+      })
+    )
+
+    return removed.filter(Boolean)
   }
 
   cleanup = async () => {

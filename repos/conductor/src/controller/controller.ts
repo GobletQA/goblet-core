@@ -9,8 +9,8 @@ import {
   TImgConfig,
   TImgsConfig,
   TRunResponse,
-  TContainerObj,
   TContainerRef,
+  TContainerData,
   TContainerRoute,
   TControllerConfig,
 } from '../types'
@@ -25,7 +25,7 @@ export class Controller {
   images: TImgsConfig
   conductor: Conductor
   config: TControllerConfig
-  containers:Record<string, TContainerObj> = {}
+  containers:Record<string, TContainerData> = {}
 
   constructor(conductor:Conductor, config:TControllerConfig){
     this.config = config
@@ -55,14 +55,14 @@ export class Controller {
       }, {})
   }
 
-  getContainer(containerRef:TContainerRef):TContainerObj {
+  getContainer(containerRef:TContainerRef):TContainerData {
     if(typeof containerRef === 'string')
       return this.containers[containerRef]
 
     return Object.values(this.containers)
       .find(cont => (
         cont === containerRef
-        || cont.id === containerRef.id
+        || cont?.Id === containerRef?.Id
       ))
   }
 

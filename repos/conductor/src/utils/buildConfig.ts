@@ -13,7 +13,7 @@ type TPartialConf = Record<any, any>
 
 const {
   CD_TIMEOUT=5000,
-  CD_PIDS_LIMIT=20,
+  CD_PIDS_LIMIT=500,
   CD_PROXY_PORT=9901,
   CD_RATE_LIMIT=5000,
   CD_LOG_LEVEL=`info`,
@@ -25,8 +25,8 @@ const {
 
 export const config:TConductorConfig = {
   controller: {
-    pidsLimit: (toNum(CD_PIDS_LIMIT) || 20) as number,
-    options: {}
+    options: {},
+    pidsLimit: toNum(CD_PIDS_LIMIT) as number,
   } as TDockerConfig,
   proxy: {
     host: CD_PROXY_HOST,

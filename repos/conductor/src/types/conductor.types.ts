@@ -10,7 +10,7 @@ export type TContainerConfig = {
   ports?: TPorts
   timeout: number
   rateLimit: number
-  envs?: Record<string, string>
+  envs?: Record<string, string|boolean|number>
 }
 
 export type TImgConfig = {

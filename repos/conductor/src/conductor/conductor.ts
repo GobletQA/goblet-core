@@ -99,15 +99,16 @@ export class Conductor {
   }
 
   async proxyRouter(req:Request):Promise<TProxyRoute> {
-    const destination = resolveHostName(req)
-    const route = await this.controller.route(destination)
-    if(!route) throw new Error(`Unrecognized route for destination ${destination}`)
+    return undefined
+    // const destination = resolveHostName(req)
+    // const route = await this.controller.route(destination)
+    // if(!route) throw new Error(`Unrecognized route for destination ${destination}`)
 
-    return {
-      port: route.port,
-      host: route.host,
-      protocol: route.port === 443 ? `https:` : `http:`,
-    } as TProxyRoute
+    // return {
+    //   port: route.port,
+    //   host: route.host,
+    //   protocol: route.port === 443 ? `https:` : `http:`,
+    // } as TProxyRoute
   }
 
   async start() {
