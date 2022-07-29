@@ -44,6 +44,7 @@
     "@keg-hub/cli-utils": "0.7.0",
     "@keg-hub/jsutils": "9.0.3",
     "@keg-hub/parse-config": "2.0.2",
+    "docker-events": "0.0.2",
     "dockerode": "3.3.2",
     "express": "4.17.3",
     "express-async-handler": "^1.2.0",

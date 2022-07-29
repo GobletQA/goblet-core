@@ -3,7 +3,7 @@ import { wait } from '@keg-hub/jsutils'
 import { createServer } from '../server'
 import { Request, Express } from 'express'
 import { getApp } from '@gobletqa/shared/app'
-import { TConductorOpts } from '../options.types'
+import { TConductorOpts } from '../types/options.types'
 import { buildConfig } from '../utils/buildConfig'
 import { Controller } from '../controller/controller'
 import { resolveHostName } from '../utils/resolveHostName'
@@ -14,7 +14,7 @@ import {
   TProxyRoute,
   TContainerRef,
   TConductorConfig,
-} from '../conductor.types'
+} from '../types/conductor.types'
 
 export class Conductor {
 

@@ -1,7 +1,7 @@
-import { TConductorOpts } from '../options.types'
+import { TConductorOpts } from '../types/options.types'
 import { DEF_HOST_IP } from '../constants/constants'
 import { toNum, deepMerge, exists, isEmptyColl } from '@keg-hub/jsutils'
-import { TConductorConfig, TDockerConfig, TProxyConfig, TServerConfig } from '../conductor.types'
+import { TConductorConfig, TDockerConfig, TProxyConfig, TServerConfig } from '../types/conductor.types'
 
 type TPartialConf = Record<any, any>
 
@@ -12,6 +12,7 @@ const {
   CD_RATE_LIMIT=5000,
   CD_LOG_LEVEL=`info`,
   CD_PROXY_HOST=DEF_HOST_IP,
+  CD_PROXY_DOMAIN=CD_PROXY_HOST
 } = process.env
 
 export const config:TConductorConfig = {
@@ -22,6 +23,7 @@ export const config:TConductorConfig = {
   proxy: {
     host: CD_PROXY_HOST,
     logLevel: CD_LOG_LEVEL || `info`,
+    domain: CD_PROXY_DOMAIN || CD_PROXY_HOST,
     timeout: (toNum(CD_TIMEOUT) || 5000) as number,
     rateLimit: (toNum(CD_RATE_LIMIT) || 5000) as number,
   } as TProxyConfig,

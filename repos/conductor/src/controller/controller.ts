@@ -13,7 +13,7 @@ import {
   TContainerRef,
   TContainerRoute,
   TControllerConfig,
-} from '../conductor.types'
+} from '../types/conductor.types'
 
 
 const throwOverrideErr = (message?:string) => {

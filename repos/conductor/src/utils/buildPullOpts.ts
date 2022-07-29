@@ -1,4 +1,4 @@
-import { TImgConfig, TPullOpts } from '../conductor.types'
+import { TImgConfig, TPullOpts } from '../types/conductor.types'
 
 export const buildPullOpts = (image:TImgConfig, pullOpts?:TPullOpts) => {
   if(!image || !image.provider) return pullOpts

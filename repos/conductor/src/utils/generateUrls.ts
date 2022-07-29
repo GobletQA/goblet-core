@@ -1,6 +1,6 @@
 import { resolveIp } from './resolveIp'
 import { DEF_HOST_IP } from '../constants/constants'
-import { TUrls, TPortsMap, TContainerInspect } from '../conductor.types'
+import { TUrls, TPortsMap, TContainerInspect } from '../types/conductor.types'
 
 /**
  * Loops over the possible ports and generates uris for them relative to the IP ||domain

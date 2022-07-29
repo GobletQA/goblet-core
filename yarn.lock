@@ -3746,6 +3746,11 @@ cjs-module-lexer@^1.0.0:
   resolved "https://registry.npmjs.org/cjs-module-lexer/-/cjs-module-lexer-1.2.2.tgz#9f84ba3244a512f3a54e5277e8eef4c489864e40"
   integrity sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==
 
+clarinet@~0.7.0:
+  version "0.7.3"
+  resolved "https://registry.npmjs.org/clarinet/-/clarinet-0.7.3.tgz#3512ffcac21a693b2ab778809e592403e76862b0"
+  integrity sha512-9TnJea4s0AGa8NKj3STkUyaTKd9rKg+whaKFRWTgXo5YbawPDEqLrzj0F86Uq8Aqaad0cJztGyHu6sV+deWrnQ==
+
 class-transformer@0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.4.0.tgz#b52144117b423c516afb44cc1c76dbad31c2165b"
@@ -4573,6 +4578,13 @@ dir-glob@^3.0.1:
   integrity sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==
   dependencies:
     path-type "^4.0.0"
+
+docker-events@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.npmjs.org/docker-events/-/docker-events-0.0.2.tgz#c001f998f5bccb2d92d7b6c5c0f7f9b8d4001e90"
+  integrity sha512-zmIZ3VY+y4g6WmiFk5V1J5VUvepw/otTJTVYjDmwPi4mpfsPYRl9hqbULPS0XnZcVWFiScw/dODH+4jVsPZ23g==
+  dependencies:
+    jsuck "0.0.4"
 
 docker-modem@^3.0.0:
   version "3.0.5"
@@ -7265,6 +7277,13 @@ jsonwebtoken@8.5.1, jsonwebtoken@^8.1.0:
     lodash.once "^4.0.0"
     ms "^2.1.1"
     semver "^5.6.0"
+
+jsuck@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/jsuck/-/jsuck-0.0.4.tgz#e0f4071f7809e72682d1ecd39292739c78d15f15"
+  integrity sha512-WDAF3X5cEsiP+Pluzrz2MKztLeS/zAmGVOjpDB/PBWkzBFPuPSFDxKY5Ior+uTYttM7V92RKi4J7JsMyOh6pmA==
+  dependencies:
+    clarinet "~0.7.0"
 
 jszip@^3.6.0:
   version "3.10.0"

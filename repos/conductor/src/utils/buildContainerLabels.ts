@@ -1,6 +1,6 @@
 import { CONDUCTOR_LABEL, CONTAINER_LABELS } from '../constants'
 import { exists } from '@keg-hub/jsutils'
-import { TImgConfig , TContainerLabels} from '../conductor.types'
+import { TImgConfig , TContainerLabels} from '../types/conductor.types'
 
 
 export const buildContainerLabels = (image:TImgConfig):TContainerLabels => {

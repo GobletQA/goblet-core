@@ -1,5 +1,5 @@
 import { exists } from '@keg-hub/jsutils'
-import { TImgConfig } from '../conductor.types'
+import { TImgConfig } from '../types/conductor.types'
 
 export const buildContainerEnvs = (image:TImgConfig) => {
   return image?.container?.envs &&

@@ -1,5 +1,5 @@
 import { getPort } from 'get-port-please'
-import { TImgConfig, TCreatePortsObj } from '../conductor.types'
+import { TImgConfig, TCreatePortsObj } from '../types/conductor.types'
 import { DEF_HOST_IP } from '../constants/constants'
 
 const findPort = async (conf:Record<any, any>, cachePorts:number[]):Promise<number> => {

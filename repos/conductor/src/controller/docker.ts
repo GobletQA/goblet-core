@@ -1,10 +1,12 @@
 import { ReadStream } from 'tty'
 import Dockerode from 'dockerode'
+import DockerEvents from 'docker-events'
 import { Controller } from './controller'
 import type { Conductor } from '../conductor'
 import { wait, noOp } from '@keg-hub/jsutils'
 import { CONDUCTOR_LABEL } from '../constants'
 import { buildImgUri } from '../utils/buildImgUri'
+import { dockerEvents } from '../utils/dockerEvents'
 import { generateUrls } from '../utils/generateUrls'
 import { buildPullOpts } from '../utils/buildPullOpts'
 import { buildContainerEnvs } from '../utils/buildContainerEnvs'
@@ -23,7 +25,7 @@ import {
   TContainerInfo,
   TContainerRoute,
   TContainerInspect,
-} from '../conductor.types'
+} from '../types/conductor.types'
 
 export class Docker extends Controller {
 
@@ -31,11 +33,13 @@ export class Docker extends Controller {
   images: TImgsConfig
   conductor: Conductor
   config: TDockerConfig
+  events: DockerEvents
 
   constructor(conductor:Conductor, config:TDockerConfig){
     super(conductor, config)
     this.config = config
     this.docker = new Dockerode(config?.options)
+    this.events = dockerEvents(this.docker)
   }
 
   pull = async (imageRef:TImgRef, pullOpts:TPullOpts):Promise<void> => {

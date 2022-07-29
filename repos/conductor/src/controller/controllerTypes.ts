@@ -1,6 +1,6 @@
 import { Docker } from './docker'
 import { capitalize } from '@keg-hub/jsutils'
-import { TControllerConfig } from '../conductor.types'
+import { TControllerConfig } from '../types/conductor.types'
 import type { Conductor } from '../conductor/conductor'
 
 export const controllerTypes = {

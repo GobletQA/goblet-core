@@ -1,7 +1,7 @@
 import { Express } from 'express'
 import { onProxyError } from '@GCD/Utils'
 import { getApp } from '@gobletqa/shared/app'
-import { TProxyConfig } from '../conductor.types'
+import { TProxyConfig } from '../types/conductor.types'
 import { DEF_HOST_IP } from '../constants/constants'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 

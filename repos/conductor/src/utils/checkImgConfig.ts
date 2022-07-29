@@ -1,4 +1,4 @@
-import { TImgConfig, TImgRef } from '../conductor.types'
+import { TImgConfig, TImgRef } from '../types/conductor.types'
 
 export const checkImgConfig = (img:TImgConfig, imgRef?:TImgRef) => {
   const containerProps = [`ports`]
