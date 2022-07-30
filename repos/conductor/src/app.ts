@@ -1,10 +1,25 @@
 require('source-map-support').install({environment: 'node'})
 
 import { Conductor } from './index'
+import { omitKeys } from '@keg-hub/jsutils'
 import { inDocker } from '@keg-hub/cli-utils'
 import { loadEnvs } from '@gobletqa/shared/utils/loadEnvs'
 
 const isDocker = inDocker()
+const containerEnvs = omitKeys(loadEnvs({
+  name: `goblet`,
+  locations: [],
+  force: true,
+  override: false
+}), [
+  `API_PORT`,
+  `NO_VNC_PORT`,
+  `KEG_PROXY_PORT`,
+  `VNC_SERVER_PORT`,
+  `SCREENCAST_API_PORT`,
+  `VNC_PROXY_HOST`,
+  `SCREENCAST_PROXY_HOST`,
+])
 
 const conductor = new Conductor({
   proxy: {
@@ -31,13 +46,10 @@ const conductor = new Conductor({
           26369,
         ],
         envs: {
-          ...loadEnvs({
-            name: `goblet`,
-            locations: [],
-            force: true,
-            override: false
-          }),
-          KEG_DOCKER_EXEC: "conductor",
+          ...containerEnvs,
+          KEG_DOCKER_EXEC: `conductor`,
+          VNC_PROXY_HOST: isDocker ? `0.0.0.0` : `host.docker.internal`,
+          SCREENCAST_PROXY_HOST: isDocker ? `0.0.0.0` : `host.docker.internal`
         },
         runtimeEnvs: {
           API_PORT: `ports.7005`,
@@ -45,8 +57,6 @@ const conductor = new Conductor({
           KEG_PROXY_PORT: `ports.19006`,
           VNC_SERVER_PORT: `ports.26370`,
           SCREENCAST_API_PORT: `ports.7006`,
-          VNC_PROXY_HOST: isDocker ? `0.0.0.0` : `host.docker.internal`,
-          SCREENCAST_PROXY_HOST: isDocker ? `0.0.0.0` : `host.docker.internal`
           // TODO: this should be dynamically set to the auth users email
           // which is passed in at run time
           // GITHUB_AUTH_USERS: `user.email`,

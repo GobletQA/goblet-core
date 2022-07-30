@@ -124,27 +124,27 @@ export class Conductor {
 
   async proxyRouter(req:Request):Promise<TProxyRoute|string> {
     const [port, subdomain] = (req.subdomains || []).reverse()
-    const routeData = this.routes?.[subdomain]?.[port]
-    
-    return routeData?.internal
-      || routeData?.route
+    let routeData = this.routes?.[subdomain]?.[port]
+
+    // Websocket connection don't see to get the subdomains added the the request
+    // So we have to manually parse it from the host header
+    if(!routeData){
+      const [ hPort, hSubdomain ] = req?.headers?.host.split(`.`)
+      routeData = this.routes?.[hSubdomain]?.[hPort]
+    }
+
+    return routeData?.route
+      || routeData?.internal
       || undefined
-
-    // if(!route) throw new Error(`Unrecognized route for destination ${destination}`)
-
-    // return {
-    //   port: route.port,
-    //   host: route.host,
-    //   protocol: route.port === 443 ? `https:` : `http:`,
-    // } as TProxyRoute
   }
 
   /**
    * Starts conductor by creating the Server and Proxy
    */
   async start() {
-    createServer(this.config.server)
-    createProxy({ ...this.config.proxy, proxyRouter: this.proxyRouter.bind(this) })
+    const { server } = createServer(this.config.server)
+    const proxyHandler = createProxy({ ...this.config.proxy, proxyRouter: this.proxyRouter.bind(this) })
+    server.on('upgrade', proxyHandler.upgrade)
 
     return this
   }

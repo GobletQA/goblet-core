@@ -1,9 +1,9 @@
 import { TProxyConfig } from '../types'
-import { onProxyError } from '@gobletqa/conductor/utils'
-import { ProxyRouter } from '@gobletqa/conductor/server/routers'
 import { DEF_HOST_IP } from '../constants/constants'
+import { onProxyError } from '@gobletqa/conductor/utils'
 import { getOrigin } from '@gobletqa/shared/utils/getOrigin'
 import { createProxyMiddleware } from 'http-proxy-middleware'
+import { ProxyRouter } from '@gobletqa/conductor/server/routers'
 
 const addAllowOriginHeader = (proxyRes, origin) => {
   proxyRes.headers['Access-Control-Allow-Origin'] = origin
@@ -36,10 +36,10 @@ const mapResponseHeaders = (proxyRes, res) => {
  */
 export const createProxy = (config:TProxyConfig) => {
   const { host, proxyRouter, proxy } = config
-  ProxyRouter.use(`**`, createProxyMiddleware({
-    // xfwd: true,
-    // changeOrigin: true,
+  const proxyHandler = createProxyMiddleware({
     ws: true,
+    xfwd: true,
+    toProxy: true,
     logLevel: 'error',
     router: proxyRouter,
     onError: onProxyError,
@@ -53,6 +53,9 @@ export const createProxy = (config:TProxyConfig) => {
       addAllowOriginHeader(proxyRes, origin)
     },
     ...proxy,
-  }))
+  })
 
+  ProxyRouter.use(`*`, proxyHandler)
+
+  return proxyHandler
 }

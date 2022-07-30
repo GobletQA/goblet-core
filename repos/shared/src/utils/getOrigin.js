@@ -6,10 +6,10 @@
 const getOrigin = req => {
   return (
     req.headers.origin ||
-    (req.headers.referer && new URL(req.headers.referer).origin) ||
+    (req.headers.referer && new URL(req?.headers?.referer).origin) ||
     (req.headers.host &&
       req.protocol &&
-      `${req.protocol}://${req.headers.host.split(':').shift()}`)
+      `${req.protocol}://${req?.headers?.host?.split(':').shift()}`)
   )
 }
 
