@@ -204,7 +204,11 @@ export class Docker extends Controller {
    * Generates a url for each exposed port
    * @member Docker
    */
-  run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TUrlsMap> => {
+  run = async (
+    imageRef:TImgRef,
+    runOpts:TRunOpts,
+    subdomain:string
+  ):Promise<TUrlsMap> => {
     const image = this.getImg(imageRef)
     !image && this.notFoundErr({ type: `image`, ref: imageRef as string })
 

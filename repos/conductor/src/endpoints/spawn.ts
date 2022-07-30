@@ -1,34 +1,25 @@
 import { Request, Response } from 'express'
-import { hashString } from '@keg-hub/jsutils'
 import { AppRouter } from '@gobletqa/conductor/server/routers'
 
-
 const spawnGet = async (req:Request, res:Response) => {
-  const { imageRef } =  req.params
   const conductor = req.app.locals.conductor
-  if(!conductor) throw new Error(`Missing Conductor Instance`)
 
   const status = await conductor.spawn(
-    imageRef,
+    req.params.imageRef,
     req.body,
-    hashString(`${req?.query?.user}-${conductor?.config?.proxy?.hashKey}`)
+    res.locals.subdomain
   )
 
   res.status(200).json(status)
 }
 
 export const spawn = async (req:Request, res:Response) => {
-  // TODO: call the spawn method from the conductor class
-  const { imageRef } =  req.params
   const conductor = req.app.locals.conductor
-  if(!conductor) throw new Error(`Missing Conductor Instance`)
-  
+
   const status = await conductor.spawn(
-    imageRef,
+    req.params.imageRef,
     req.body,
-    // TODO: add middleware to pull the user form a header,
-    // So it can be accessed here and passed to the spawn command
-    `${req?.query?.user || ``}-${req.ip}-${req.headers.host}`
+    res.locals.subdomain
   )
 
   res.status(200).json(status)

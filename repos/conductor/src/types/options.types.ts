@@ -20,6 +20,7 @@ export type TProxyOpts = {
   host?: string
   domain?:string
   timeout?: number
+  secret?: string
   rateLimit?: number
   logLevel?: TLogLevel
   port?: string | number

@@ -3,8 +3,6 @@ import { isFunc } from '@keg-hub/jsutils'
 import asyncHandler from 'express-async-handler'
 
 const Router = express.Router()
-
-
 const boundGet = Router.get.bind(Router)
 const boundPut = Router.put.bind(Router)
 const boundPost = Router.post.bind(Router)

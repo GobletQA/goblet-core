@@ -28,6 +28,6 @@ export const Logger = {
   info: log,
   error: loggerWrap(`error`, `red`, true, `white`),
   warn: loggerWrap(`warn`, `yellow`, true, `white`),
-  success: loggerWrap(`warn`, `green`, true, `white`),
+  success: loggerWrap(`success`, `green`, true, `white`),
 }
 

@@ -3,12 +3,13 @@ require('source-map-support').install({environment: 'node'})
 import { Conductor } from './index'
 import { inDocker } from '@keg-hub/cli-utils'
 import { loadEnvs } from '@gobletqa/shared/utils/loadEnvs'
-const secretHash = `c8da1644628fdfecf45bc26d79e242036ec65d3f34a6daf3981ae818da22cda0`
 
 const isDocker = inDocker()
 
-
 const conductor = new Conductor({
+  proxy: {
+    secret: `c8da1644628fdfecf45bc26d79e242036ec65d3f34a6daf3981ae818da22cda0`
+  },
   controller: {
     type: 'Docker'
   },

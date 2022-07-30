@@ -13,6 +13,7 @@ type TPartialConf = Record<any, any>
 
 const {
   CD_TIMEOUT=5000,
+  CD_SERVER_SECRET,
   CD_PIDS_LIMIT=500,
   CD_PROXY_PORT=9901,
   CD_RATE_LIMIT=5000,
@@ -31,6 +32,7 @@ export const config:TConductorConfig = {
   proxy: {
     host: CD_PROXY_HOST,
     hashKey: CD_HASH_KEY,
+    secret: CD_SERVER_SECRET,
     logLevel: CD_LOG_LEVEL || `info`,
     domain: CD_PROXY_DOMAIN || CD_PROXY_HOST,
     timeout: (toNum(CD_TIMEOUT) || 5000) as number,

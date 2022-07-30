@@ -78,14 +78,12 @@ export class Conductor {
     this.rateLimitMap[addr] = nextTime
   }
 
+ /**
+   * Pulls an image by forwarding it to the controller.pull method
+   */
   async pull(imageRef:TImgRef){
     await this.controller.pull(imageRef)
   } 
-
-  async hydrateRoutes(subdomain:string, map:Record<string, TUrlMap>) {
-    this.routes[subdomain] = map
-  }
-
 
   /**
    * Spawns a new container based on the passed in request
@@ -101,9 +99,20 @@ export class Conductor {
     return { urls }
   }
 
-  async cleanup(containerRef:TContainerRef) {
-    return await this.controller.removeAll()
-    // return await this.controller.remove(containerRef)
+  /**
+   * Removes a container be reference name
+   */
+  async remove(containerRef:TContainerRef){
+    return await this.controller.remove(containerRef)
+  } 
+
+  /**
+   * Removes all existing conductor containers
+   * Then calls cleanup method of existing controller
+   */
+  async cleanup() {
+    await this.controller.removeAll()
+    return await this.controller.cleanup()
   }
 
   async proxyRouter(req:Request):Promise<TProxyRoute|string> {
@@ -123,6 +132,9 @@ export class Conductor {
     // } as TProxyRoute
   }
 
+  /**
+   * Starts conductor by creating the Server and Proxy
+   */
   async start() {
     createServer(this.config.server)
     createProxy({ ...this.config.proxy, proxyRouter: this.proxyRouter.bind(this) })
