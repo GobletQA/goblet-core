@@ -4,7 +4,7 @@ const { aliases } = require('@GConfigs/aliases.config')
 
 /** Path to the logs directory */
 const logDir = aliases[`@GLogs`]
-const cdRoot = aliases[`@GCDRoot`]
+const cdRoot = aliases[`@gobletqa/conductor/root`]
 
 module.exports = {
   apps : [

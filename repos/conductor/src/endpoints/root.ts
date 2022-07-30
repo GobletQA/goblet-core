@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { AppRouter } from '@GCD/Server/routers'
+import { AppRouter } from '@gobletqa/conductor/server/routers'
 
 /**
  * Root get endpoint to validate the server is running

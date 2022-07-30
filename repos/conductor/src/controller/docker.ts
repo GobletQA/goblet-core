@@ -1,17 +1,17 @@
 import { ReadStream } from 'tty'
 import Dockerode from 'dockerode'
+import { Logger } from '@gobletqa/conductor/utils/logger'
 import DockerEvents from 'docker-events'
 import { Controller } from './controller'
 import type { Conductor } from '../conductor'
 import { buildImgUri } from '../utils/buildImgUri'
-import { wait, noOp, isObj } from '@keg-hub/jsutils'
 import { dockerEvents } from '../utils/dockerEvents'
 import { generateUrls } from '../utils/generateUrls'
 import { buildPullOpts } from '../utils/buildPullOpts'
 import { CONDUCTOR_SUBDOMAIN_LABEL } from '../constants'
-import { buildContainerEnvs } from '../utils/buildContainerEnvs'
+import { wait, noOp, isObj, checkCall } from '@keg-hub/jsutils'
 import { buildContainerPorts } from '../utils/buildContainerPorts'
-import { buildContainerLabels } from '../utils/buildContainerLabels'
+import { buildContainerConfig } from '../utils/buildContainerConfig'
 import {
   TImgRef,
   TRunOpts,
@@ -47,6 +47,8 @@ export class Docker extends Controller {
   }
 
   removeFromCache = (message:Record<any,any>) => {
+    Logger.info(`Removing container ${message?.Actor?.Attributes?.name} from cache`)
+
     this.containers = Object.entries(this.containers)
       .reduce((acc, [ref, container]:[string, TContainerData]) => {
         isObj(message)
@@ -71,7 +73,9 @@ export class Docker extends Controller {
 
       return acc
     }, Promise.resolve({}))
-    
+
+    const hydrateCount = Object.keys(this.containers).length
+    hydrateCount && Logger.info(`Hydrating ${hydrateCount} container(s) into runtime cache`)
 
     return this.containers as Record<string, TContainerInspect>
   }
@@ -82,6 +86,8 @@ export class Docker extends Controller {
 
     const repoTag = buildImgUri(image)
     const options = buildPullOpts(image, pullOpts)
+
+    Logger.info(`Pulling image ${repoTag}...`)
 
     return new Promise((res, rej) => {
       this.docker.pull(repoTag, options, (err:Error, stream:ReadStream) => {
@@ -103,47 +109,51 @@ export class Docker extends Controller {
     })
   }
 
+  /**
+   * Runs a docker container from the passed in imageRef
+   * Returns a set of urls for connecting to the running container
+   * Generates a url for each exposed port
+   */
   run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TUrlsMap> => {
     const image = this.getImg(imageRef)
     !image && this.notFoundErr({ type: `image`, ref: imageRef as string })
 
+    const portData = await buildContainerPorts(image)
+    const containerConfig = await buildContainerConfig(this, image, subdomain, runOpts, portData)
 
-    const { ports, exposed, bindings } = await buildContainerPorts(image)
-    const pidLimit = image?.pidsLimit || this?.config?.pidsLimit
+    const createConfig = await checkCall(image?.container?.beforeCreate, containerConfig) || containerConfig
 
-    const createConfig = {
-      // TODO: investigate createContainer options that should be allowed form a request
-      ...runOpts,
-      ExposedPorts: exposed,
-      Image: buildImgUri(image),
-      Env: buildContainerEnvs(image),
-      Labels: buildContainerLabels(image, subdomain),
-      HostConfig: {
-        ...runOpts.hostConfig,
-        // AutoRemove: true,
-        PortBindings: bindings,
-        PidsLimit: pidLimit,
-        // TODO: investigate this
-        // IpcMode: 'none',
-        // StorageOpt: { size: `10G`},
-        RestartPolicy: { Name: `on-failure`, MaximumRetryCount: 2 },
-      }
-    }
-
+    Logger.info(`Creating container from image ${image.name}`)
     const container = await this.docker.createContainer(createConfig)
 
     !container
       && this.controllerErr({ message: `Docker could not create container from image ${image.name}` })
 
+    const beforeStartInsp = await container.inspect()
+
+    // @ts-ignore
+    await checkCall(image?.container?.beforeStart, container, beforeStartInsp)
+
+    Logger.info(`Starting container...`)
     await container.start()
     // Wait slightly longer for container to start.
-    // Hack because sometimes the connection gets randomly reset.
+    // Hack because sometimes the connection gets randomly reset
     await wait(200)
 
-    const containerInfo = await container.inspect()
-    this.containers[container.id] = containerInfo
+    const afterStartInsp = await container.inspect()
+    // @ts-ignore
+    await checkCall(image?.container?.afterStart, container, afterStartInsp)
+    Logger.success(`Container started successfully`)
 
-    return generateUrls(containerInfo, ports, subdomain, this?.conductor)
+    this.containers[container.id] = afterStartInsp
+
+    Logger.info(`Generating container urls...`)
+    return generateUrls(
+      afterStartInsp,
+      portData.ports,
+      subdomain,
+      this.conductor
+    )
   }
 
   remove = async (containerRef:TContainerRef) => {
@@ -151,6 +161,7 @@ export class Docker extends Controller {
     !containerData && this.notFoundErr({ type: `container`, ref: containerRef as string })
 
     const cont = await this.docker.getContainer(containerData.Id)
+    Logger.info(`Removing container with ID ${cont.id}`)
     await cont.stop()
     await cont.remove()
 
@@ -161,6 +172,7 @@ export class Docker extends Controller {
         return acc
       }, {})
 
+    Logger.success(`Container removed successfully`)
   }
 
   removeAll = async () => {

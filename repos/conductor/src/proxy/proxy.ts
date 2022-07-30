@@ -1,6 +1,6 @@
 import { TProxyConfig } from '../types'
-import { onProxyError } from '@GCD/Utils'
-import { ProxyRouter } from '@GCD/Server/routers'
+import { onProxyError } from '@gobletqa/conductor/utils'
+import { ProxyRouter } from '@gobletqa/conductor/server/routers'
 import { DEF_HOST_IP } from '../constants/constants'
 import { getOrigin } from '@gobletqa/shared/utils/getOrigin'
 import { createProxyMiddleware } from 'http-proxy-middleware'

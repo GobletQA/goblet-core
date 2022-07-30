@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { AppRouter } from '@GCD/Server/routers'
+import { AppRouter } from '@gobletqa/conductor/server/routers'
 
 const pullGet = async (req:Request, res:Response) => {
   const { imageRef } =  req.params

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { hashString } from '@keg-hub/jsutils'
-import { AppRouter } from '@GCD/Server/routers'
+import { AppRouter } from '@gobletqa/conductor/server/routers'
 
 
 const spawnGet = async (req:Request, res:Response) => {

@@ -3,8 +3,8 @@ import subdomain from 'express-subdomain'
 import { getApp } from '@gobletqa/shared/app'
 import type { Conductor } from '../conductor'
 import { API_VERSION } from '../constants/constants'
-import { AppRouter, ProxyRouter } from '@GCD/Server/routers'
-import '@GCD/Endpoints'
+import { AppRouter, ProxyRouter } from '@gobletqa/conductor/server/routers'
+import '@gobletqa/conductor/endpoints'
 
 
 export const setupRouters = (app?:Express) => {

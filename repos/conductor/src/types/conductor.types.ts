@@ -1,6 +1,6 @@
 import { Request } from 'express'
-import { DockerOptions } from 'dockerode'
 import { Options } from 'http-proxy-middleware'
+import { DockerOptions, ContainerCreateOptions, Container } from 'dockerode'
 
 export type TContainerLabels = Record<string, string>
 
@@ -11,6 +11,9 @@ export type TContainerConfig = {
   timeout: number
   rateLimit: number
   envs?: Record<string, string|boolean|number>
+  beforeCreate?: (config:ContainerCreateOptions) => ContainerCreateOptions
+  afterStart?: (container:Container) => void
+  beforeStart?: (container:Container) => void
 }
 
 export type TImgConfig = {

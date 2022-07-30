@@ -4,7 +4,7 @@ import { Express } from 'express'
 import { TServerConfig } from '../types'
 import { getApp } from '@gobletqa/shared/app'
 import { DEF_HOST_IP } from '../constants/constants'
-import { setupRouters } from '@GCD/Middleware/setupRouters'
+import { setupRouters } from '@gobletqa/conductor/middleware/setupRouters'
 import {
   setupJWT,
   setupCors,

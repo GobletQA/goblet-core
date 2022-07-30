@@ -1,4 +1,4 @@
-import { AppRouter } from '@GCD/Server/routers'
+import { AppRouter } from '@gobletqa/conductor/server/routers'
 import { Request, Response } from 'express'
 
 const removeGet = async (req:Request, res:Response) => {

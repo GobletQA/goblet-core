@@ -1,9 +1,8 @@
 import { resolveIp } from './resolveIp'
-import type { Conductor } from '../conductor'
 import { inDocker } from '@keg-hub/cli-utils'
-import { DEF_HOST_IP, API_VERSION } from '../constants/constants'
+import type { Conductor } from '@gobletqa/conductor/conductor'
 import { TUrlsMap, TPortsMap, TContainerInspect } from '../types'
-
+import { DEF_HOST_IP, API_VERSION } from '@gobletqa/conductor/constants'
 
 /**
  * Builds a route used by the proxy to forward requests
