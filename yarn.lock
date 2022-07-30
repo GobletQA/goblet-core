@@ -4579,7 +4579,7 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-docker-events@^0.0.2:
+docker-events@0.0.2:
   version "0.0.2"
   resolved "https://registry.npmjs.org/docker-events/-/docker-events-0.0.2.tgz#c001f998f5bccb2d92d7b6c5c0f7f9b8d4001e90"
   integrity sha512-zmIZ3VY+y4g6WmiFk5V1J5VUvepw/otTJTVYjDmwPi4mpfsPYRl9hqbULPS0XnZcVWFiScw/dODH+4jVsPZ23g==
@@ -5192,6 +5192,11 @@ express-jwt@6.1.1:
     express-unless "^1.0.0"
     jsonwebtoken "^8.1.0"
     lodash "^4.17.21"
+
+express-subdomain@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.npmjs.org/express-subdomain/-/express-subdomain-1.0.5.tgz#990ef97940b7f4c2823d9593648b79be858a638b"
+  integrity sha512-tpYy7MPgDoouxA4r+BnGI43yxYakbSSpQn7MjEYM0ssHeipTM1YiIoK3i4pCAgoXoks22Yb5C4QFkOYBYczZcw==
 
 express-unless@^1.0.0:
   version "1.0.0"

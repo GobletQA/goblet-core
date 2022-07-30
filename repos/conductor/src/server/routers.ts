@@ -3,6 +3,8 @@ import { isFunc } from '@keg-hub/jsutils'
 import asyncHandler from 'express-async-handler'
 
 const Router = express.Router()
+
+
 const boundGet = Router.get.bind(Router)
 const boundPut = Router.put.bind(Router)
 const boundPost = Router.post.bind(Router)
@@ -22,6 +24,7 @@ const wrapInAsync = (boundMethod, ...args) => {
   )
 }
 
+
 /**
  * Root Express router for the backend API attached to the Main Express App
  * Extends the express Router, and overrides the main HTTP verb methods
@@ -34,3 +37,8 @@ export const AppRouter = Object.assign(Router, {
   patch: (...args: Array<any>) => wrapInAsync(boundPatch, ...args),
   delete: (...args: Array<any>) => wrapInAsync(boundDelete, ...args),
 })
+
+/**
+ * Routes to handle proxy requests
+ */
+export const ProxyRouter = express.Router()

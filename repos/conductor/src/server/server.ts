@@ -4,7 +4,7 @@ import { Express } from 'express'
 import { TServerConfig } from '../types'
 import { getApp } from '@gobletqa/shared/app'
 import { DEF_HOST_IP } from '../constants/constants'
-import { setupEndpoints } from '@GCD/Middleware/setupEndpoints'
+import { setupRouters } from '@GCD/Middleware/setupRouters'
 import {
   setupJWT,
   setupCors,
@@ -23,7 +23,7 @@ export const createServer = (config:TServerConfig) => {
   // TODO: Investigate setting up JWT for proxies
   // setupJWT(app)
   setupServer(app, false, false)
-  setupEndpoints(app)
+  setupRouters(app)
 
   const { insecureServer, secureServer } = setupServerListen(app, serverConf)
   setupLoggerErr(app)

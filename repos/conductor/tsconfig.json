@@ -22,7 +22,8 @@
       "@gobletqa/shared/app": ["../shared/src/express/app"],
       "@gobletqa/shared/middleware": ["../shared/src/middleware"],
       "@gobletqa/shared/middleware/*": ["../shared/src/middleware/*"],
-      "@gobletqa/shared/appRouter": ["../shared/src/express/appRouter"]
+      "@gobletqa/shared/utils": ["../shared/src/utils"],
+      "@gobletqa/shared/utils/getOrigin": ["../shared/src/utils/getOrigin"]
     }
   },
   "include": ["src/**/*"],

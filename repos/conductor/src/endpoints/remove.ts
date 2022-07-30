@@ -1,4 +1,4 @@
-import { AppRouter } from '@GCD/Server/router'
+import { AppRouter } from '@GCD/Server/routers'
 import { Request, Response } from 'express'
 
 const removeGet = async (req:Request, res:Response) => {
@@ -21,6 +21,6 @@ export const remove = async (req:Request, res:Response) => {
   res.status(200).json({ status })
 }
 
-AppRouter.post('/remove/:containerRef', remove)
+AppRouter.post(`/remove/:containerRef`, remove)
 // TODO: remove this, it should only be used temporarly
-AppRouter.get('/remove/:containerRef', removeGet)
+AppRouter.get(`/remove/:containerRef`, removeGet)

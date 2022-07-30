@@ -1,1 +1,1 @@
-export * from './setupEndpoints'
+export * from './setupRouters'

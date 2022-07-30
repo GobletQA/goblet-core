@@ -3,26 +3,27 @@ import Dockerode from 'dockerode'
 import DockerEvents from 'docker-events'
 import { Controller } from './controller'
 import type { Conductor } from '../conductor'
-import { wait, noOp } from '@keg-hub/jsutils'
-import { CONDUCTOR_LABEL } from '../constants'
 import { buildImgUri } from '../utils/buildImgUri'
+import { wait, noOp, isObj } from '@keg-hub/jsutils'
 import { dockerEvents } from '../utils/dockerEvents'
 import { generateUrls } from '../utils/generateUrls'
 import { buildPullOpts } from '../utils/buildPullOpts'
+import { CONDUCTOR_SUBDOMAIN_LABEL } from '../constants'
 import { buildContainerEnvs } from '../utils/buildContainerEnvs'
 import { buildContainerPorts } from '../utils/buildContainerPorts'
 import { buildContainerLabels } from '../utils/buildContainerLabels'
 import {
   TImgRef,
   TRunOpts,
+  TUrlsMap,
   TPullOpts,
   TImgsConfig,
-  TRunResponse,
   TContainerRef,
   TDockerConfig,
   TContainerData,
   TContainerInfo,
   TContainerRoute,
+  TContainerInspect
 } from '../types'
 
 export class Docker extends Controller {
@@ -38,22 +39,41 @@ export class Docker extends Controller {
     super(conductor, config)
     this.config = config
     this.docker = new Dockerode(config?.options)
-    this.events = dockerEvents(this.docker)
-    this.hydrate()
+
+    // List for docker events, and cleanup our local cache
+    this.events = dockerEvents(this.docker, {
+      destroy: this.removeFromCache,
+    })
   }
 
-  hydrate = async () => {
-    const containers = await this.getAll()
+  removeFromCache = (message:Record<any,any>) => {
+    this.containers = Object.entries(this.containers)
+      .reduce((acc, [ref, container]:[string, TContainerData]) => {
+        isObj(message)
+          && message?.id !== container.Id
+          && (acc[ref] = container)
+        return acc
+      }, {})
+  }
 
-    this.containers = containers.reduce((acc, container) => {
-      if(container.Labels[`${CONDUCTOR_LABEL}.conductor`]){
-        container.State !== 'running'
-          ? this.docker.getContainer(container.Id).remove()
-          : acc[container.Id] = container
+  hydrate = async ():Promise<Record<string, TContainerInspect>> => {
+    const containers = await this.getAll()
+    this.containers = await containers.reduce(async (toResolve, container) => {
+      const acc = await toResolve
+      if(!container.Labels[CONDUCTOR_SUBDOMAIN_LABEL]) return acc
+
+      if(container.State !== 'running'){
+        this.docker.getContainer(container.Id).remove()
+        return acc
       }
 
+      acc[container.Id] = await this.docker.getContainer(container.Id).inspect()
+
       return acc
-    }, {})
+    }, Promise.resolve({}))
+    
+
+    return this.containers as Record<string, TContainerInspect>
   }
 
   pull = async (imageRef:TImgRef, pullOpts:TPullOpts):Promise<void> => {
@@ -83,7 +103,7 @@ export class Docker extends Controller {
     })
   }
 
-  run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TRunResponse> => {
+  run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TUrlsMap> => {
     const image = this.getImg(imageRef)
     !image && this.notFoundErr({ type: `image`, ref: imageRef as string })
 
@@ -97,7 +117,7 @@ export class Docker extends Controller {
       ExposedPorts: exposed,
       Image: buildImgUri(image),
       Env: buildContainerEnvs(image),
-      Labels: buildContainerLabels(image),
+      Labels: buildContainerLabels(image, subdomain),
       HostConfig: {
         ...runOpts.hostConfig,
         // AutoRemove: true,
@@ -121,13 +141,9 @@ export class Docker extends Controller {
     await wait(200)
 
     const containerInfo = await container.inspect()
-    const { urls, map } = generateUrls(containerInfo, ports, subdomain, this?.conductor)
-
     this.containers[container.id] = containerInfo
 
-    return {
-      urls,
-    }
+    return generateUrls(containerInfo, ports, subdomain, this?.conductor)
   }
 
   remove = async (containerRef:TContainerRef) => {
@@ -151,7 +167,7 @@ export class Docker extends Controller {
     const containers = await this.getAll()
     const removed = await Promise.all(
       containers.map(container => {
-        if(container.Labels[`${CONDUCTOR_LABEL}.conductor`]){
+        if(container.Labels[CONDUCTOR_SUBDOMAIN_LABEL]){
           (async () => {
             const cont = this.docker.getContainer(container.Id)
             await cont.stop()

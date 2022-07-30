@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { hashString } from '@keg-hub/jsutils'
-import { AppRouter } from '@GCD/Server/router'
+import { AppRouter } from '@GCD/Server/routers'
 
 
 const spawnGet = async (req:Request, res:Response) => {
@@ -34,6 +34,6 @@ export const spawn = async (req:Request, res:Response) => {
   res.status(200).json(status)
 }
 
-AppRouter.post('/spawn/:imageRef', spawn)
+AppRouter.post(`/spawn/:imageRef`, spawn)
 // TODO: remove this, it should only be used temporarly
-AppRouter.get('/spawn/:imageRef', spawnGet)
+AppRouter.get(`/spawn/:imageRef`, spawnGet)

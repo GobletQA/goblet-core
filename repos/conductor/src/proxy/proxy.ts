@@ -1,8 +1,8 @@
-import { Express } from 'express'
 import { TProxyConfig } from '../types'
 import { onProxyError } from '@GCD/Utils'
-import { getApp } from '@gobletqa/shared/app'
+import { ProxyRouter } from '@GCD/Server/routers'
 import { DEF_HOST_IP } from '../constants/constants'
+import { getOrigin } from '@gobletqa/shared/utils/getOrigin'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 
 const addAllowOriginHeader = (proxyRes, origin) => {
@@ -36,9 +36,7 @@ const mapResponseHeaders = (proxyRes, res) => {
  */
 export const createProxy = (config:TProxyConfig) => {
   const { host, proxyRouter, proxy } = config
-  const app = getApp() as Express
-  
-  app.use(`**`, createProxyMiddleware({
+  ProxyRouter.use(`**`, createProxyMiddleware({
     // xfwd: true,
     // changeOrigin: true,
     ws: true,
@@ -50,11 +48,11 @@ export const createProxy = (config:TProxyConfig) => {
       mapRequestHeaders(proxyReq, req)
     },
     onProxyRes: (proxyRes, req, res) => {
+      const origin = getOrigin(req)
       mapResponseHeaders(proxyRes, res)
       addAllowOriginHeader(proxyRes, origin)
     },
     ...proxy,
   }))
-
 
 }

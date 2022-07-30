@@ -5,13 +5,14 @@ import { checkImgConfig } from '../utils/checkImgConfig'
 import {
   TImgRef,
   TRunOpts,
+  TUrlsMap,
   TPullOpts,
   TImgConfig,
   TImgsConfig,
-  TRunResponse,
   TContainerRef,
   TContainerData,
   TContainerRoute,
+  TContainerInspect,
   TControllerConfig,
 } from '../types'
 
@@ -66,12 +67,17 @@ export class Controller {
       ))
   }
 
+  hydrate = async (hydrateCache?:any):Promise<Record<string, TContainerInspect>> => {
+    throwOverrideErr()
+    return undefined
+  }
+
   pull = async (imageRef:TImgRef, pullOpts?:TPullOpts) => {
     throwOverrideErr()
     return undefined
   }
 
-  run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TRunResponse> => {
+  run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TUrlsMap> => {
     throwOverrideErr()
     return undefined
   }

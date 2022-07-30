@@ -24,7 +24,7 @@ export type TImgConfig = {
 }
 
 export type TCreatePortsObj = {
-  ports: Record<any, any>
+  ports: TPortsMap
   exposed: Record<string, Record<any, any>>
   bindings: Record<string, Record<'HostPort', string>[]>
 }

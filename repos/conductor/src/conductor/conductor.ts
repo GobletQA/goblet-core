@@ -6,10 +6,11 @@ import { getApp } from '@gobletqa/shared/app'
 import { getDomain } from '../utils/getDomain'
 import { buildConfig } from '../utils/buildConfig'
 import { Controller } from '../controller/controller'
-import { resolveHostName } from '../utils/resolveHostName'
 import { getController } from '../controller/controllerTypes'
+import { hydrateRoutes } from '../utils/hydrateRoutes'
 import {
   TImgRef,
+  TUrlMap,
   TSpawnOpts,
   TProxyRoute,
   TContainerRef,
@@ -24,6 +25,7 @@ export class Conductor {
   config: TConductorConfig
   rateLimitMap:Record<any, any>
   containerTimeoutMap: Record<any, any>
+  routes: Record<string, Record<string, TUrlMap>> = {}
 
   constructor(config:TConductorOpts) {
     this.rateLimitMap = {}
@@ -36,7 +38,8 @@ export class Conductor {
       && this.controller.buildImgs(this.config.images)
     
     const app = getApp() as Express
-    app.locals.conductor = this
+    app.locals.conductor = this as Conductor
+    this.controller.hydrate().then((containers) => hydrateRoutes(this, containers))
   }
 
   /**
@@ -79,6 +82,10 @@ export class Conductor {
     await this.controller.pull(imageRef)
   } 
 
+  async hydrateRoutes(subdomain:string, map:Record<string, TUrlMap>) {
+    this.routes[subdomain] = map
+  }
+
 
   /**
    * Spawns a new container based on the passed in request
@@ -88,9 +95,10 @@ export class Conductor {
     if(!imageRef && !spawnOpts.name)
       throw new Error(`Image ref or name is require to spawn a new container`)
     
-    const runResp = await this.controller.run(imageRef, spawnOpts, subdomain)
-
-    return runResp
+    const { urls, map } = await this.controller.run(imageRef, spawnOpts, subdomain)
+    this.routes[subdomain] = map
+  
+    return { urls }
   }
 
   async cleanup(containerRef:TContainerRef) {
@@ -98,9 +106,16 @@ export class Conductor {
     // return await this.controller.remove(containerRef)
   }
 
-  async proxyRouter(req:Request):Promise<TProxyRoute> {
-    return undefined
-    // const destination = resolveHostName(req)
+  async proxyRouter(req:Request):Promise<TProxyRoute|string> {
+    const [port, subdomain] = (req.subdomains || []).reverse()
+    const routeData = this.routes?.[subdomain]?.[port]
+    
+    return routeData?.internal
+      || routeData?.route
+      || undefined
+
+
+
     // const route = await this.controller.route(destination)
     // if(!route) throw new Error(`Unrecognized route for destination ${destination}`)
 

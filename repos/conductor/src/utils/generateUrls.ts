@@ -1,7 +1,7 @@
 import { resolveIp } from './resolveIp'
 import type { Conductor } from '../conductor'
 import { inDocker } from '@keg-hub/cli-utils'
-import { DEF_HOST_IP } from '../constants/constants'
+import { DEF_HOST_IP, API_VERSION } from '../constants/constants'
 import { TUrlsMap, TPortsMap, TContainerInspect } from '../types'
 
 
@@ -42,13 +42,14 @@ export const generateUrls = (
 
   return Object.entries(ports).reduce((acc, [cPort, hPort]:[string, string]) => {
     const route = buildRoute(ipAddress, cPort, hPort)
-    const external = `${route.protocol}//${cPort}.${subdomain}.${domain}:${port}`
+    const external = `${route.protocol}//${cPort}.${subdomain}.${API_VERSION}.${domain}:${port}`
     acc.urls[cPort] = external
     acc.map[cPort] = {
       route,
       external,
       // Build the route, that the proxy should route to => i.e. forward incoming traffic to here
-      internal: `${route.protocol}//${route.host}:${route.port}`,
+      // internal: `${route.protocol}//${route.host}:${route.port}`,
+      internal: `${route.protocol}//localhost:${route.port}`,
     }
 
     return acc

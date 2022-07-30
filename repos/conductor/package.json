@@ -48,6 +48,7 @@
     "dockerode": "3.3.2",
     "express": "4.17.3",
     "express-async-handler": "^1.2.0",
+    "express-subdomain": "^1.0.5",
     "get-port-please": "2.5.0",
     "http-proxy-middleware": "2.0.4",
     "jsonwebtoken": "8.5.1",

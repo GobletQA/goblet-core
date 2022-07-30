@@ -1,5 +1,5 @@
 
-export type TControllerEvt = (messate?:string) => void
+export type TControllerEvt = (message?:Record<any, any>) => void
 
 export type TControllerEvts = {
   die?: TControllerEvt
