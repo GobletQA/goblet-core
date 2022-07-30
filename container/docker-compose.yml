@@ -4,7 +4,7 @@ services:
     ipc: host
     privileged: true
     environment:
-      - BE_API_PORT
+      - GB_BE_API_PORT
       - DOC_APP_PATH
       - DOC_BUILD_PATH
       - ENV
@@ -18,11 +18,11 @@ services:
       - FIRE_BASE_STORAGE_BUCKET
       - FIRE_BASE_TOKEN
       - GOBLET_APP_URL
-      - GOBLET_COOKIE_KEY
-      - GOBLET_COOKIE_NAME
-      - GOBLET_MOUNT_ROOT
-      - SOCKR_SOCKET_PORT
-      - SOCKR_SOCKET_HOST
+      - GB_BE_COOKIE_KEY
+      - GB_BE_COOKIE_NAME
+      - GB_SH_MOUNT_ROOT
+      - GB_BE_SOCKET_PORT
+      - GB_BE_SOCKET_HOST
       - KEG_EXEC_CMD
       - KEG_DOCKER_EXEC
       - KEG_PROXY_HOST
@@ -30,5 +30,5 @@ services:
       - NODE_ENV
       - GOBLET_SUB_REPO
     ports:
-      - ${BE_API_PORT}:${BE_API_PORT}
+      - ${GB_BE_API_PORT}:${GB_BE_API_PORT}
 

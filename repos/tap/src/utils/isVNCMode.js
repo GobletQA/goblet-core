@@ -1,5 +1,5 @@
 import { toBool } from '@keg-hub/jsutils'
-const activeVNC = toBool(process.env.GOBLET_USE_VNC)
+const activeVNC = toBool(process.env.GB_VNC_ACTIVE)
 
 /**
  * Helper to check if in vnc mode

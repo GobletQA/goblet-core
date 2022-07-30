@@ -7,8 +7,8 @@ const { Logger } = require('@keg-hub/cli-utils')
  * @returns {Object<boolean>} - Contains the boolean values of vnc env and socket env
  */
 const checkVncEnv = () => ({
-  vncActive: toBool(process.env.GOBLET_USE_VNC),
-  socketActive: toBool(process.env.GOBLET_PW_SOCKET),
+  vncActive: toBool(process.env.GB_VNC_ACTIVE),
+  socketActive: toBool(process.env.GB_PW_SOCKET_ACTIVE),
 })
 
 
@@ -35,8 +35,8 @@ const envUpdates = (toAdd, toRemove) => {
 const setVncENV = vncActive => {
 
   vncActive
-    ? envUpdates(`GOBLET_USE_VNC`, `GOBLET_PW_SOCKET`)
-    : envUpdates(`GOBLET_PW_SOCKET`, `GOBLET_USE_VNC`)
+    ? envUpdates(`GB_VNC_ACTIVE`, `GB_PW_SOCKET_ACTIVE`)
+    : envUpdates(`GB_PW_SOCKET_ACTIVE`, `GB_VNC_ACTIVE`)
 
   vncActive
     ? Logger.highlight(`Using`, `VNC in Docker`, `for browser automation`)

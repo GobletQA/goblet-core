@@ -62,7 +62,7 @@ const buildReporters = (opts=noOpObj, gobletRoot, config) => {
  */
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 const jestConfig = (config, opts=noOpObj) => {
-  const { GOBLET_CONFIG_BASE, GOBLET_MOUNT_ROOT, GOBLET_TEST_DEBUG } = process.env
+  const { GOBLET_CONFIG_BASE, GB_SH_MOUNT_ROOT, GOBLET_TEST_DEBUG } = process.env
   GOBLET_TEST_DEBUG &&
     Logger.stdout(`[Goblet] Loaded Config:\n${JSON.stringify(config, null, 2)}\n`)
 
@@ -91,7 +91,7 @@ const jestConfig = (config, opts=noOpObj) => {
     // Jest no loading tests outside of the rootDir
     // So set the root to be the parent of keg-config and the repos dir
     // If no rootDir override is set
-    rootDir: opts.rootDir || GOBLET_MOUNT_ROOT || '/keg',
+    rootDir: opts.rootDir || GB_SH_MOUNT_ROOT || '/keg',
     globals: {
       'ts-jest': {
         tsconfig: path.join(testUtilsDir, `tsconfig.json`),

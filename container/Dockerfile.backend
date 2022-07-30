@@ -30,7 +30,7 @@ RUN yarn turbo run build --filter=@gobletqa/backend && \
 FROM $GB_BASE_IMAGE as goblet-runner
 WORKDIR /keg/tap/repos/backend
 ARG DOC_APP_PATH=/keg/tap
-ARG BE_API_PORT=7005
+ARG GB_BE_API_PORT=7005
 
 # TODO: investigate what else needs copied over form build stage
 # COPY --from=goblet-builder /keg/tap/repos/backend/dist repos
@@ -41,5 +41,5 @@ ARG BE_API_PORT=7005
 
 RUN ln -s /keg/tap/node_modules $HOME/.node_modules && \
     ln -s /keg/tap/node_modules /keg/node_modules
-EXPOSE $BE_API_PORT
+EXPOSE $GB_BE_API_PORT
 CMD [ "yarn", "serve" ]

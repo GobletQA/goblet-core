@@ -15,7 +15,6 @@ COPY --from=gb-gitfs /keg/gitfs /keg/gitfs
 
 # Path of the tap within the docker container
 ARG DOC_APP_PATH=/keg/tap
-ARG EXPO_CLI_VERSION=5.0.3
 ARG KEG_PROXY_PORT=19006
 
 ENV HOME=/root \
@@ -24,10 +23,10 @@ ENV HOME=/root \
     LC_ALL=C.UTF-8 \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
+    EXPO_CLI_VERSION=5.3.2 \
     DOC_APP_PATH=$DOC_APP_PATH \
     DEBIAN_FRONTEND=noninteractive \
     KEG_PROXY_PORT=$KEG_PROXY_PORT \
-    EXPO_CLI_VERSION=$EXPO_CLI_VERSION \
     PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin
 
 # Set the current directory to tap repo

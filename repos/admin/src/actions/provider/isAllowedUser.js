@@ -1,7 +1,7 @@
 import { signOutAuthUser } from './signOutAuthUser'
 
 // Get all allowed emails from the env
-const allowedUser = (process.env.GITHUB_AUTH_USERS || '').split(',')
+const allowedUser = (process.env.GB_GITHUB_AUTH_USERS || '').split(',')
 
 // If in a non-dev env, then we should check for user emails
 // Only check if allowed user emails actually exist

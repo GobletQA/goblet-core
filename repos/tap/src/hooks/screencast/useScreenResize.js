@@ -2,8 +2,8 @@ import { noOpObj } from '@keg-hub/jsutils'
 import { useState, useRef, useEffect } from 'react'
 
 const defSize = {
-  height: parseInt(process.env.VNC_VIEW_HEIGHT) || 900,
-  width: parseInt(process.env.VNC_VIEW_WIDTH) || 1440,
+  height: parseInt(process.env.GB_VNC_VIEW_HEIGHT) || 900,
+  width: parseInt(process.env.GB_VNC_VIEW_WIDTH) || 1440,
 }
 
 defSize.ratio = defSize.width / defSize.height

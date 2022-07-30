@@ -2,12 +2,12 @@ version: "3.8"
 services:
   goblet:
     environment:
-      - GOBLET_PW_SOCKET=true
+      - GB_PW_SOCKET_ACTIVE=true
       - GOBLET_ARTIFACTS_DIR
       - GOBLET_FEATURES_DIR
-      - GOBLET_LOCAL_MOUNT
-      - GOBLET_USE_AUTH=false
-      - GOBLET_MOUNT_ROOT
+      - GB_SH_LOCAL_MOUNT
+      - GB_AUTH_ACTIVE=false
+      - GB_SH_MOUNT_ROOT
       - GOBLET_REPO_ROOT
       - GOBLET_REPORTS_DIR
       - GOBLET_ROOT_DIR
@@ -16,8 +16,8 @@ services:
       - GOBLET_UNIT_DIR
       - GOBLET_WORK_DIR
       - GOBLET_WAYPOINT_DIR
-      - SOCKR_SOCKET_PORT
-      - SOCKR_SOCKET_HOST
+      - GB_BE_SOCKET_PORT
+      - GB_BE_SOCKET_HOST
     volumes:
-      - ${GOBLET_REPO_ROOT}:${GOBLET_MOUNT_ROOT}/${GOBLET_LOCAL_MOUNT}
+      - ${GOBLET_REPO_ROOT}:${GB_SH_MOUNT_ROOT}/${GB_SH_LOCAL_MOUNT}
 

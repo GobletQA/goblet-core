@@ -12,14 +12,14 @@ const containerEnvs = omitKeys(loadEnvs({
   force: true,
   override: false
 }), [
-  `BE_API_PORT`,
-  `NO_VNC_PORT`,
+  `GB_BE_API_PORT`,
+  `GB_NO_VNC_PORT`,
   `KEG_PROXY_PORT`,
-  `VNC_SERVER_PORT`,
-  `SC_API_PORT`,
-  `VNC_SERVER_HOST`,
-  `BE_API_HOST`,
-  `SC_API_HOST`,
+  `GB_VNC_SERVER_PORT`,
+  `GB_SC_API_PORT`,
+  `GB_VNC_SERVER_HOST`,
+  `GB_BE_API_HOST`,
+  `GB_SC_API_HOST`,
 ])
 
 const containerNodeEnv = containerEnvs.NODE_ENV || process.env.NODE_ENV
@@ -52,22 +52,22 @@ const conductor = new Conductor({
         envs: {
           ...containerEnvs,
           KEG_DOCKER_EXEC: `conductor`,
-          // VNC_SERVER_HOST: containerHost,
-          // BE_API_HOST: containerHost,
-          // SC_API_HOST: containerHost
+          // GB_VNC_SERVER_HOST: containerHost,
+          // GB_BE_API_HOST: containerHost,
+          // GB_SC_API_HOST: containerHost
         },
         runtimeEnvs: {
-          BE_API_HOST: `urls.7005`,
-          BE_API_PORT: `ports.7005`,
-          NO_VNC_PORT: `ports.26369`,
+          GB_BE_API_HOST: `urls.7005`,
+          GB_BE_API_PORT: `ports.7005`,
+          GB_NO_VNC_PORT: `ports.26369`,
           KEG_PROXY_PORT: `ports.19006`,
-          VNC_SERVER_HOST: `urls.26370`,
-          VNC_SERVER_PORT: `ports.26370`,
-          SC_API_HOST: `urls.7006`,
-          SC_API_PORT: `ports.7006`,
+          GB_VNC_SERVER_HOST: `urls.26370`,
+          GB_VNC_SERVER_PORT: `ports.26370`,
+          GB_SC_API_HOST: `urls.7006`,
+          GB_SC_API_PORT: `ports.7006`,
           // TODO: this should be dynamically set to the auth users email
           // which is passed in at run time
-          // GITHUB_AUTH_USERS: `user.email`,
+          // GB_GITHUB_AUTH_USERS: `user.email`,
         }
       }
     }

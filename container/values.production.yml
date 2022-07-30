@@ -1,6 +1,6 @@
 env:
-  BE_API_HOST: goblet.backend.gobletqa.app
-  SC_API_HOST: 0.0.0.0
-  VNC_SERVER_HOST: 0.0.0.0
+  GB_BE_API_HOST: goblet.backend.gobletqa.app
+  GB_SC_API_HOST: 0.0.0.0
+  GB_VNC_SERVER_HOST: 0.0.0.0
   KEG_USE_PROXY: false
 

@@ -8,7 +8,7 @@ const appRoot = path.join(__dirname, '../../../')
 const testRemovePrefix = [
   'KEG_',
   'DOC_',
-  'GOBLET_JWT_',
+  'GB_BE_JWT_',
   'GITHUB_'
 ]
 

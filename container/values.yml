@@ -1,10 +1,7 @@
 env:
-  # --- KEG-CLI ENV CONTEXT --- #
 
-  CORE_PATH: "{{ cli.taps.core.path }}"
-  COMPONENTS_PATH: "{{ cli.taps.components.path }}"
-  RETHEME_PATH: "{{ cli.taps.retheme.path }}"
-  JSUTILS_PATH: "{{ cli.taps.utils.path }}"
+# --- KEG-CLI ENV CONTEXT --- #
+
   PARKIN_PATH: "{{ cli.taps.parkin.path }}"
   VALUES_PATH: "{{ cli.taps.goblet.path }}/container"
   BACKEND_PATH: "{{ cli.taps.goblet.path }}/repos/backend"
@@ -29,23 +26,35 @@ env:
   # The KEG_CONTEXT_PATH env should be the location of the external app being run
   KEG_CONTEXT_PATH: "{{ cli.taps.goblet.path }}"
 
-  # This is a true base image from playwright - Alpine Linux are not supported
-  # ref: https://playwright.dev/docs/docker/README/#using-on-ci
-  # includes node v 14.15.3
-  # When building the goblet image, this acts as the parent image
-  # Image to use when building goblet
-  # KEG_BASE_IMAGE: mcr.microsoft.com/playwright:bionic
+  # Disable using the trafik proxy, use tap-proxy instead
+  KEG_USE_PROXY: true
+
+  KEG_EXEC_CMD: dev
+
+# --- DOCKER IMAGES --- #
+
+  # Root Image to use when building goblet
   KEG_BASE_IMAGE: mcr.microsoft.com/playwright:v1.23.4-focal
 
-  # Image to use when running goblet
-  # Even if the dockerfile does not use this in the FROM directive
-  # It should still be defined as the image used to run the Tap
-  KEG_IMAGE_FROM: ghcr.io/gobletqa/goblet:develop
-  
-  # --- Goblet Core ENVs --- #
+  # Name of the image built from the KEG_BASE_IMAGE
+  # All sub goblet images are built from this image
   GB_BASE_IMAGE: ghcr.io/gobletqa/goblet-base:develop
 
-  # --- DOCKER ENV CONTEXT --- #
+  # Development image that contains all the goblet code
+  KEG_IMAGE_FROM: ghcr.io/gobletqa/goblet:develop
+
+
+# --- DOCKER BUILD ENVS --- #
+  # Tag / Version of the gitfs docker image to use when building the goblet container
+  GB_GITFS_VER: 0.0.0
+
+  # Image/Container Build information
+  # IMAGE and CONTAINER_NAME should be the same
+  IMAGE: goblet
+  CONTAINER_NAME: goblet
+
+
+# --- DOCKER SYNC ENV CONTEXT --- #
 
   # Paths within the docker container
   # Used when setting up syncs between host and container
@@ -53,12 +62,7 @@ env:
   DOC_APP_PATH: /keg/tap
   DOC_BUILD_PATH: /keg/tap-build
   DOC_CORE_PATH: /keg/tap/node_modules/keg-core
-  DOC_COMPONENTS_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
-  DOC_RETHEME_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
-  DOC_RESOLVER_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/tap-resolver
-  DOC_JSUTILS_PATH: /keg/tap/node_modules/@keg-hub/jsutils
   DOC_PARKIN_PATH: /keg/tap/node_modules/@ltipton/parkin
-  DOC_SOCKR_PATH: /keg/tap/node_modules/@ltipton/sockr
   DOC_VALUES_PATH: /keg/tap/container
   DOC_BACKEND_PATH: /keg/tap/repos/backend
   DOC_SHARED_PATH: /keg/tap/repos/shared
@@ -66,85 +70,76 @@ env:
   DOC_ROOT_PATH: /keg/tap
   DOC_CONTAINER_PATH: /keg/tap/container
 
-  EXPO_CLI_VERSION: 5.3.2
-  KEG_NODE_VERSION: 14.17-alpine
 
-  # Default port of the app to expose from the container
-  KEG_PROXY_PORT: 19006
-  BE_API_PORT: 7005
-  BE_API_SECURE_PORT: 443
-  SC_API_PORT: 7006
-  NO_VNC_PORT: 26369
-  VNC_SERVER_PORT: 26370
-  VNC_VIEW_HEIGHT: 900
-  VNC_VIEW_WIDTH: 1440
-
-  # How the FE connects to the BE
-  BE_API_HOST: 0.0.0.0
-
-  # URL where the screencast is being displayed
-  # This is the URL of the server the proxy connects to
-  # Update this to call an externally available VNC websocket host
-  SC_API_HOST: 0.0.0.0
-
-  # Host of the novnc proxy to tigerVNC
-  # This is internal, and generally should not change
-  VNC_SERVER_HOST: 0.0.0.0
-  
+# --- SHARED ENVs --- #
   # Required for VNC to work properly
   # Needs a display of some type
   DISPLAY: ":0.0"
+  GB_SH_MOUNT_ROOT: /keg/repos
+  GB_SH_LOCAL_MOUNT: goblet-local/current
+  GB_LOG_LEVEL: 'debug'
+  GB_SERVER_ORIGINS: 'localhost,dev.gobletqa.app,gobletqa-develop.local.keghub.io'
 
-  # --- GENERAL CONTEXT ENVs --- #
-  KEG_EXEC_CMD: dev
 
-  # Image/Container Build information
-  # IMAGE and CONTAINER_NAME should be the same
-  IMAGE: goblet
-  CONTAINER_NAME: goblet
+# --- BACKEND API ENVs --- #
+  GB_BE_API_PORT: 7005
+  GB_BE_API_SECURE_PORT: 443
+  # Host the FE uses to connect to the BE
+  GB_BE_API_HOST: 0.0.0.0
+  # Port to forward connections from backend API to screencast
+  GB_NO_VNC_PORT: 26369
+  # Default to the backend api and host
+  # But should be set when running as own server
+  GB_BE_SOCKET_PORT: 7005
+  GB_BE_SOCKET_HOST: 0.0.0.0
+  GB_BE_SOCKR_PATH: '/sockr-socket'
 
-  GOBLET_MOUNT_ROOT: /keg/repos
-  GOBLET_LOCAL_MOUNT: goblet-local/current
+  # --- API JWT AUTH --- #
+  GB_BE_JWT_EXP: 7200000
+  GB_BE_JWT_SECRET: k3G-H3rkiN-1234
+  GB_BE_JWT_CREDENTIALS: true
+  GB_BE_JWT_REFRESH_EXP: 7200000
+  GB_BE_JWT_REFRESH_SECRET: 4926-G0b13T-g3K
+
+  # --- API COOKIE AUTH --- #
+  # GB_BE_COOKIE_SECRET: ""
+  GB_BE_COOKIE_SECURE: true
+  GB_BE_COOKIE_NAME: goblet
+  GB_BE_COOKIE_HTTP_ONLY: true
+  GB_BE_COOKIE_OVERWRITE: true
+  GB_BE_COOKIE_SAME_SITE: None
+  GB_BE_COOKIE_KEY: goblet-cookie-7979
+
+
+# --- SCREENCAST ENVs --- #
+  GB_SC_API_PORT: 7006
+  # URL where the screencast is being displayed
+  # This is the URL of the server the proxy connects to
+  # Update this to call an externally available VNC websocket host
+  GB_SC_API_HOST: 0.0.0.0
+  # Host of the novnc proxy to tigerVNC
+  # This is internal, and generally should not change
+  GB_VNC_SERVER_HOST: 0.0.0.0
+  GB_VNC_SERVER_PORT: 26370
+  GB_VNC_VIEW_HEIGHT: 900
+  GB_VNC_VIEW_WIDTH: 1440
+
+
+# --- CONDUCTOR ENVs --- #
+
+
+# --- FRONTEND ENVs --- #
+  # DEV-ONLY - Default port of the app to expose from the container
+  KEG_PROXY_PORT: 19006
+
 
   # Define the type of API server to run => all | backend | screencast
   # TODO: @lance-tipton - Add to tasks as an option
   # GOBLET_SUB_REPO: ''
 
-  # Disable using the trafik proxy, use tap-proxy instead
-  KEG_USE_PROXY: true
-
-  # Default to the backend api and host
-  # But should be set when running as own server
-  # SOCKR_SOCKET_PORT: ${BE_API_PORT}
-  # SOCKR_SOCKET_HOST:$ {BE_API_HOST}
-
-  GOBLET_JWT_EXP: 7200000
-  GOBLET_JWT_SECRET: k3G-H3rkiN-1234
-  GOBLET_JWT_CREDENTIALS: true
-  GOBLET_JWT_REFRESH_EXP: 7200000
-  GOBLET_JWT_REFRESH_SECRET: 4321-nIKR3h-g3K
-
   # TODO: @lance-tipton - Make this more dynamic - value comes from firebase?
-  GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com,nnorman15@gmail.com,lance.tipton@workboard.com,mpcarolin.dev@gmail.com
+  GB_GITHUB_AUTH_USERS: geoffrey.schultz@gmail.com,lancetipton04@gmail.com,nnorman15@gmail.com,lance.tipton@workboard.com,mpcarolin.dev@gmail.com
 
-  # Tag / Version of the gitfs docker image to use when building the goblet container
-  GB_GITFS_VER: 0.0.0
-  
-  
-  # Enable to override the default fn port
-  # GB_FN_PORT:
-  # Must also set this env to the host and port when overriding the default port
-  # Or use fn contexts api
-  # FN_API_URL=http://127.0.0.1:8081
-  
-  # Enable to set the default context that fn will use for all task command
-  # GB_FN_CONTEXT: <context-name>
-
-  # Enable the name of the default app used for goblet
-  # GB_FN_APP_NAME
-
-  # Enable the name of the default func used for fn deploys
-  # GB_FN_APP_FUNC
 
 actions:
   tap:

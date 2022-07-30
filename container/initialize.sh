@@ -21,7 +21,7 @@ gobletRunScreencast(){
   fi
 
   # Starts the screen cast servers when not using a websocket from the hostmachine
-  if [[ "$GOBLET_USE_VNC" == "true" || "$START_VNC_SERVER" ]]; then
+  if [[ "$GB_VNC_ACTIVE" == "true" || "$START_VNC_SERVER" ]]; then
     echo "------ Runing VNC Screencast - $GOBLET_SUB_REPO --------"
     cd /keg/tap/repos/screencast
     yarn sc:pm2 >> /proc/1/fd/1 &

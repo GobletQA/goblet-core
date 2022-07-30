@@ -5,13 +5,13 @@ const config = getGobletConfig()
 const { serviceAccount, ...firebaseConfig } = config.firebase
 const {
   NODE_ENV,
-  GOBLET_USE_AUTH,
-  GOBLET_USE_VNC,
-  GOBLET_PW_SOCKET,
-  GITHUB_CLIENT_ID,
-  GITHUB_AUTH_USERS,
-  VNC_VIEW_WIDTH=1440,
-  VNC_VIEW_HEIGHT=900,
+  GB_AUTH_ACTIVE,
+  GB_VNC_ACTIVE,
+  GB_PW_SOCKET_ACTIVE,
+  GB_GITHUB_CLIENT_ID,
+  GB_GITHUB_AUTH_USERS,
+  GB_VNC_VIEW_WIDTH=1440,
+  GB_VNC_VIEW_HEIGHT=900,
 } = process.env
 
 module.exports = {
@@ -21,15 +21,15 @@ module.exports = {
   keg: {
     envs: {
       'process.env.NODE_ENV': NODE_ENV,
-      'process.env.BE_API_HOST': config.server.host,
-      'process.env.GOBLET_USE_AUTH': GOBLET_USE_AUTH,
-      'process.env.GOBLET_USE_VNC': GOBLET_USE_VNC,
-      'process.env.GOBLET_PW_SOCKET': GOBLET_PW_SOCKET,
-      'process.env.GITHUB_CLIENT_ID': GITHUB_CLIENT_ID,
-      'process.env.GITHUB_AUTH_USERS': GITHUB_AUTH_USERS,
-      'process.env.VNC_VIEW_WIDTH': `${VNC_VIEW_WIDTH}`,
-      'process.env.VNC_VIEW_HEIGHT': `${VNC_VIEW_HEIGHT}`,
-      'process.env.BE_API_PORT': `${config.server.port}`,
+      'process.env.GB_BE_API_HOST': config.server.host,
+      'process.env.GB_AUTH_ACTIVE': GB_AUTH_ACTIVE,
+      'process.env.GB_VNC_ACTIVE': GB_VNC_ACTIVE,
+      'process.env.GB_PW_SOCKET_ACTIVE': GB_PW_SOCKET_ACTIVE,
+      'process.env.GB_GITHUB_CLIENT_ID': GB_GITHUB_CLIENT_ID,
+      'process.env.GB_GITHUB_AUTH_USERS': GB_GITHUB_AUTH_USERS,
+      'process.env.GB_VNC_VIEW_WIDTH': `${GB_VNC_VIEW_WIDTH}`,
+      'process.env.GB_VNC_VIEW_HEIGHT': `${GB_VNC_VIEW_HEIGHT}`,
+      'process.env.GB_BE_API_PORT': `${config.server.port}`,
       'process.env.WS_SERVER_CONFIG': JSON.stringify(config.server.sockr),
       ...(firebaseConfig.ui && {
         'process.env.FIRE_BASE_CONFIG': JSON.stringify(firebaseConfig),

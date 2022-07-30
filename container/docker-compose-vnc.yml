@@ -3,19 +3,19 @@ services:
   goblet:
     environment:
       - DISPLAY
-      - GITHUB_CLIENT_ID
-      - GITHUB_AUTH_USERS
-      - GOBLET_USE_VNC=true
-      - GOBLET_USE_AUTH=true
-      - NO_VNC_PORT
-      - SC_API_PORT
-      - SC_API_HOST
-      - VNC_SERVER_HOST
-      - VNC_SERVER_PORT
-      - VNC_VIEW_HEIGHT
-      - VNC_VIEW_WIDTH
+      - GB_GITHUB_CLIENT_ID
+      - GB_GITHUB_AUTH_USERS
+      - GB_VNC_ACTIVE=true
+      - GB_AUTH_ACTIVE=true
+      - GB_NO_VNC_PORT
+      - GB_SC_API_PORT
+      - GB_SC_API_HOST
+      - GB_VNC_SERVER_HOST
+      - GB_VNC_SERVER_PORT
+      - GB_VNC_VIEW_HEIGHT
+      - GB_VNC_VIEW_WIDTH
     ports:
-      - ${NO_VNC_PORT}:${NO_VNC_PORT}
-      - ${SC_API_PORT}:${SC_API_PORT}
+      - ${GB_NO_VNC_PORT}:${GB_NO_VNC_PORT}
+      - ${GB_SC_API_PORT}:${GB_SC_API_PORT}
       # Only expose this port if we want to expose the VNC server outside the container
-      # - ${VNC_SERVER_PORT}:${VNC_SERVER_PORT}
+      # - ${GB_VNC_SERVER_PORT}:${GB_VNC_SERVER_PORT}
