@@ -108,10 +108,17 @@ export class Conductor {
 
   /**
    * Removes all existing conductor containers
+   */
+  async removeAll() {
+    return await this.controller.removeAll()
+  }
+
+  /**
+   * Removes all existing conductor containers
    * Then calls cleanup method of existing controller
    */
   async cleanup() {
-    await this.controller.removeAll()
+    await this.removeAll()
     return await this.controller.cleanup()
   }
 

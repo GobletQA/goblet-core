@@ -170,7 +170,7 @@ export class Docker extends Controller {
     const removed = await Promise.all(
       containers.map(container => {
         if(container.Labels[CONDUCTOR_SUBDOMAIN_LABEL]){
-          (async () => {
+          ;(async () => {
             const cont = this.docker.getContainer(container.Id)
             await cont.stop()
             await cont.remove()
