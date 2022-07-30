@@ -2,21 +2,24 @@
 import { omitKeys } from '@keg-hub/jsutils'
 import { TConductorOpts } from '@gobletqa/conductor/types'
 import { loadEnvs } from '@gobletqa/shared/utils/loadEnvs'
+const nodeEnv = process.env.NODE_ENV || `local`
 
 const containerEnvs = omitKeys(loadEnvs({
   name: `goblet`,
   locations: [],
   force: true,
-  override: false
+  override: nodeEnv === 'local'
 }), [
-  `GB_BE_API_PORT`,
   `GB_NO_VNC_PORT`,
   `KEG_PROXY_PORT`,
-  `GB_VNC_SERVER_PORT`,
-  `GB_SC_API_PORT`,
-  `GB_VNC_SERVER_HOST`,
+  `GB_BE_API_PORT`,
   `GB_BE_API_HOST`,
+  `GB_VNC_SERVER_PORT`,
+  `GB_VNC_SERVER_HOST`,
+  `GB_SC_API_PORT`,
   `GB_SC_API_HOST`,
+  `GB_BE_SOCKET_PORT`,
+  `GB_BE_SOCKET_HOST`
 ])
 
 export const appConfig:TConductorOpts = {
@@ -45,6 +48,8 @@ export const appConfig:TConductorOpts = {
         ],
         envs: {
           ...containerEnvs,
+          GB_VNC_ACTIVE: true,
+          GB_AUTH_ACTIVE: true,
           KEG_DOCKER_EXEC: `conductor`,
         },
         runtimeEnvs: {
@@ -56,6 +61,11 @@ export const appConfig:TConductorOpts = {
           GB_VNC_SERVER_PORT: `ports.26370`,
           GB_SC_API_HOST: `urls.7006`,
           GB_SC_API_PORT: `ports.7006`,
+
+          // TODO: investigate why GB_BE_SOCKET_PORT is needed but not GB_BE_SOCKET_HOST
+          GB_BE_SOCKET_PORT: `ports.7005`,
+          // GB_BE_SOCKET_HOST: `urls.7005`,
+
           // TODO: this should be dynamically set to the auth users email
           // which is passed in at run time
           // GB_GITHUB_AUTH_USERS: `user.email`,

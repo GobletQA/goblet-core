@@ -1,9 +1,13 @@
 import { resolveIp } from './resolveIp'
 import { inDocker } from '@keg-hub/cli-utils'
 import type { Conductor } from '@gobletqa/conductor/conductor'
-import { TUrlsMap, TPortsMap, TContainerInspect } from '../types'
+import { TUrls, TUrlsMap, TPortsMap, TContainerInspect } from '../types'
 import { DEF_HOST_IP, API_VERSION } from '@gobletqa/conductor/constants'
 const isDocker = inDocker()
+
+const getProtocol = (port:string) => {
+  return port === `443` ? `https:` : `http:`
+}
 
 /**
  * Builds a route used by the proxy to forward requests
@@ -14,8 +18,28 @@ const buildRoute = (ipAddress:string, cPort:string, hPort:string|number) => {
     host: isDocker ? ipAddress : DEF_HOST_IP,
     // TODO: figure out a way to check if port is secure for ports
     // 443 is default, but would be better to allow it to be any port
-    protocol: cPort === `443` ? `https:` : `http:`
+    protocol: getProtocol(cPort)
   }
+}
+
+/**
+ * Builds the external urls for accessing the container
+ */
+export const generateExternalUrls = (
+  ports:TPortsMap,
+  subdomain:string,
+  conductor:Conductor
+) => {
+  const domain = conductor?.domain
+  const sPort = conductor?.config?.server?.port
+
+  return Object.entries(ports).reduce((acc, [cPort, hPort]:[string, string]) => {
+    const protocol = getProtocol(cPort)
+    acc[cPort] = `${protocol}//${cPort}.${subdomain}.${API_VERSION}.${domain}:${sPort}`
+
+    return acc
+  }, {} as TUrls)
+
 }
 
 /**
@@ -29,7 +53,6 @@ const buildRoute = (ipAddress:string, cPort:string, hPort:string|number) => {
 export const generateUrls = (
   containerInfo:TContainerInspect,
   ports:TPortsMap,
-  subdomain: string,
   conductor:Conductor
 ):TUrlsMap => {
   const domain = conductor?.domain
@@ -41,11 +64,8 @@ export const generateUrls = (
 
   return Object.entries(ports).reduce((acc, [cPort, hPort]:[string, string]) => {
     const route = buildRoute(ipAddress, cPort, hPort)
-    const external = `${route.protocol}//${cPort}.${subdomain}.${API_VERSION}.${domain}:${port}`
-    acc.urls[cPort] = external
     acc.map[cPort] = {
       route,
-      external,
       // Build the route, that the proxy should route to => i.e. forward incoming traffic to here
       // internal: `${route.protocol}//${route.host}:${route.port}`,
       internal: isDocker
@@ -56,7 +76,6 @@ export const generateUrls = (
     return acc
   }, {
     map: {},
-    urls: {},
     meta: {
       id: containerInfo.Id,
       name: containerInfo.Name,

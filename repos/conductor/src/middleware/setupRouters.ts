@@ -1,4 +1,3 @@
-import '@gobletqa/conductor/endpoints'
 
 import { Express } from 'express'
 import subdomain from 'express-subdomain'
@@ -6,6 +5,7 @@ import { getApp } from '@gobletqa/shared/app'
 import type { Conductor } from '../conductor'
 import { API_VERSION } from '../constants/constants'
 import { AppRouter, ProxyRouter } from '@gobletqa/conductor/server/routers'
+import '@gobletqa/conductor/endpoints'
 
 
 export const setupRouters = (app?:Express) => {
@@ -19,5 +19,6 @@ export const setupRouters = (app?:Express) => {
     : `conductor`
 
   app.use(subdomain(`*.${API_VERSION}.${subdomains}`, ProxyRouter))
-  app.use(subdomain(subdomains, AppRouter))
+  // app.use(subdomain(subdomains, AppRouter))
+  app.use(AppRouter)
 }

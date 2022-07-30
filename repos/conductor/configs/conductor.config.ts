@@ -1,5 +1,6 @@
 
 import { toNum } from '@keg-hub/jsutils'
+import { loadEnvs } from '@gobletqa/shared/utils/loadEnvs'
 import { DEF_HOST_IP } from '@gobletqa/conductor/constants/constants'
 import {
   TDockerConfig,
@@ -7,6 +8,14 @@ import {
   TServerConfig,
   TConductorConfig
 } from '@gobletqa/conductor/types'
+
+const nodeEnv = process.env.NODE_ENV || `local`
+loadEnvs({
+  name: `goblet`,
+  force: true,
+  locations: [],
+  override: nodeEnv === 'local'
+})
 
 const {
   GB_CD_TIMEOUT,

@@ -5,13 +5,12 @@ import { checkImgConfig } from '../utils/checkImgConfig'
 import {
   TImgRef,
   TRunOpts,
-  TUrlsMap,
   TPullOpts,
   TImgConfig,
   TImgsConfig,
+  TRunResponse,
   TContainerRef,
   TContainerData,
-  TContainerRoute,
   TContainerInspect,
   TControllerConfig,
 } from '../types'
@@ -88,7 +87,7 @@ export class Controller {
     return undefined
   }
 
-  run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TUrlsMap> => {
+  run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TRunResponse> => {
     throwOverrideErr()
     return undefined
   }

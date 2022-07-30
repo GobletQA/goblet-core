@@ -2,7 +2,7 @@ import http from 'http'
 import https from 'https'
 import { TServerConfig } from '../types'
 import { getApp } from '@gobletqa/shared/app'
-import { RequestHandler, Express } from 'express'
+import { Express } from 'express'
 import { DEF_HOST_IP } from '../constants/constants'
 
 import { setupRouters } from '@gobletqa/conductor/middleware/setupRouters'

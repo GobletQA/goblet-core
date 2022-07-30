@@ -1,5 +1,5 @@
-import { TUrlsMap } from './routes.types'
-import { TPortsMap, TContainerConfig } from './conductor.types'
+import { TUrlMap } from './routes.types'
+import { TContainerConfig } from './conductor.types'
 import {
   Image,
   Container,
@@ -35,6 +35,7 @@ export type TRunOpts = {
 }
 
 export type TRunResponse = {
+  map: Record<string, TUrlMap>
   urls?: Record<string, string>
+  meta?: Record<string, any>
 }
-

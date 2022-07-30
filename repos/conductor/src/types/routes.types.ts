@@ -17,12 +17,10 @@ export type TProxyRoutes = {
 
 export type TUrlMap = {
   internal: string
-  external: string
   route: TProxyRoute
 }
 
 export type TUrlsMap = {
-  urls: TUrls
   meta?: Record<string, any>
   map: Record<string, TUrlMap>
 }

@@ -6,19 +6,19 @@ import type { Conductor } from '../conductor'
 import { noOp, isObj } from '@keg-hub/jsutils'
 import { buildImgUri } from '../utils/buildImgUri'
 import { dockerEvents } from '../utils/dockerEvents'
-import { generateUrls } from '../utils/generateUrls'
 import { buildPullOpts } from '../utils/buildPullOpts'
 import { CONDUCTOR_SUBDOMAIN_LABEL } from '../constants'
 import { Logger } from '@gobletqa/conductor/utils/logger'
 import { buildContainerPorts } from '../utils/buildContainerPorts'
 import { buildContainerConfig } from '../utils/buildContainerConfig'
+import { generateUrls, generateExternalUrls } from '../utils/generateUrls'
 
 import {
   TImgRef,
   TRunOpts,
-  TUrlsMap,
   TPullOpts,
   TImgsConfig,
+  TRunResponse,
   TContainerRef,
   TDockerConfig,
   TContainerData,
@@ -215,13 +215,22 @@ export class Docker extends Controller {
     imageRef:TImgRef,
     runOpts:TRunOpts,
     subdomain:string
-  ):Promise<TUrlsMap> => {
+  ):Promise<TRunResponse> => {
     const image = this.getImg(imageRef)
     !image && this.notFoundErr({ type: `image`, ref: imageRef as string })
 
     // Build the container ports and container create config 
     const portData = await buildContainerPorts(image)
-    const containerConfig = await buildContainerConfig(this, image, subdomain, runOpts, portData)
+    const urls = generateExternalUrls(portData.ports, subdomain, this.conductor)
+    
+    const containerConfig = await buildContainerConfig(
+      this,
+      image,
+      subdomain,
+      runOpts,
+      portData,
+      urls
+    )
 
     // Create the container from the image
     const container = await createContainer(this, image, containerConfig)
@@ -234,12 +243,18 @@ export class Docker extends Controller {
 
     // Generate the urls for accessing the container
     Logger.info(`Generating container urls...`)
-    return generateUrls(
+    const { meta, map } = generateUrls(
       containerInspect,
       portData.ports,
-      subdomain,
       this.conductor
     )
+
+    return {
+      map,
+      urls,
+      meta,
+    }
+
   }
 
 }

@@ -3,7 +3,7 @@ import type { Docker } from '../controller/docker'
 import { ContainerCreateOptions } from 'dockerode'
 import { buildContainerEnvs } from './buildContainerEnvs'
 import { buildContainerLabels } from './buildContainerLabels'
-import { TCreatePortsObj, TImgConfig, TRunOpts, TPortsMap } from '../types'
+import { TUrls, TCreatePortsObj, TImgConfig, TRunOpts, TPortsMap } from '../types'
 
 export type TCreateContResp = {
   ports: TPortsMap
@@ -15,7 +15,8 @@ export const buildContainerConfig = async (
   image:TImgConfig,
   subdomain:string,
   runOpts:TRunOpts,
-  portData:TCreatePortsObj
+  portData:TCreatePortsObj,
+  urls: TUrls
 ):Promise<ContainerCreateOptions> => {
 
   const { ports, exposed, bindings } = portData
@@ -31,6 +32,7 @@ export const buildContainerConfig = async (
     Image: buildImgUri(image),
     Labels: buildContainerLabels(image, subdomain),
     Env: buildContainerEnvs(image, {
+        urls,
         ports,
         subdomain,
         options:runOpts,

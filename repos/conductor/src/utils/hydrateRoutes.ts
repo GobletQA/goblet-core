@@ -25,10 +25,9 @@ export const routesFromContainer = (conductor:Conductor, container:TContainerIns
   const subdomain = container.Config.Labels[CONDUCTOR_SUBDOMAIN_LABEL]
   if(!subdomain) return
 
-  const { urls, map } = generateUrls(
+  const { map } = generateUrls(
     container,
     buildPorts(container.NetworkSettings.Ports),
-    subdomain,
     conductor
   )
 
