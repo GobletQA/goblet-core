@@ -59,18 +59,22 @@ export class Controller {
   getContainer(containerRef:TContainerRef):TContainerData {
     const isStr = typeof containerRef === 'string'
 
+    // There's an odd bug where dockerode is adding / before a named container
+    // So we have to compare the name include a / on the ref
+    // first remove it if it exists, then added back to it works with or without it
+    const strRef = isStr && `/${containerRef.replace(`/`, ``)}`
 
-    if(isStr && this.containers[containerRef])
-      return this.containers[containerRef]
+    if(strRef && this.containers[strRef])
+      return this.containers[strRef]
 
     return Object.values(this.containers)
       .find((cont) => {
         const container = cont as TContainerInspect
-        // There's an odd bug where dockerode is adding / before a named container
-        // So we have to compare the name include a / on the ref
         return isStr
-          ? container?.Id.startsWith(containerRef) || container?.Name.startsWith(`/${containerRef}`)
-          : container?.Id.startsWith(containerRef?.Id) || container?.Name.startsWith(`/${containerRef?.Name}`)
+          ? container?.Id.startsWith(containerRef)
+            || container?.Name.startsWith(strRef)
+          : container?.Id.startsWith(containerRef?.Id)
+            || container?.Name.startsWith(`/${containerRef?.Name.replace(`/`, ``)}`)
       })
   }
 

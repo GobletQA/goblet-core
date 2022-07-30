@@ -61,5 +61,5 @@ export const startContainer = async (
   await wait(200)
 
   Logger.success(`Container started successfully`)
-  return await checkCallHook(image?.container?.afterStart, container)
+  return await checkCallHook(image?.container?.afterStart, container, true)
 }

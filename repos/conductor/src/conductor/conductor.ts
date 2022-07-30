@@ -93,10 +93,10 @@ export class Conductor {
     if(!imageRef && !spawnOpts.name)
       throw new Error(`Image ref or name is require to spawn a new container`)
     
-    const { urls, map } = await this.controller.run(imageRef, spawnOpts, subdomain)
+    const { urls, map, meta } = await this.controller.run(imageRef, spawnOpts, subdomain)
     this.routes[subdomain] = map
   
-    return { urls }
+    return { urls, meta }
   }
 
   /**

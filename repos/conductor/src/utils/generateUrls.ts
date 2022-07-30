@@ -54,7 +54,14 @@ export const generateUrls = (
     }
 
     return acc
-  }, { map: {}, urls: {} } as TUrlsMap)
+  }, {
+    map: {},
+    urls: {},
+    meta: {
+      id: containerInfo.Id,
+      name: containerInfo.Name,
+    }
+  } as TUrlsMap)
 
 }
 

@@ -23,6 +23,7 @@ export type TUrlMap = {
 
 export type TUrlsMap = {
   urls: TUrls
+  meta?: Record<string, any>
   map: Record<string, TUrlMap>
 }
 
