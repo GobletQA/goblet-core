@@ -82,11 +82,6 @@ export class Controller {
     return undefined
   }
 
-  route = async (containerRef:TContainerRef):Promise<TContainerRoute> => {
-    throwOverrideErr()
-    return undefined
-  }
-
   remove = async (containerRef:TContainerRef) => {
     throwOverrideErr()
     return undefined

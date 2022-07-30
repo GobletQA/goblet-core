@@ -1,4 +1,6 @@
 const path = require('path')
+
+const { noPropArr } = require('@keg-hub/jsutils')
 const { addToProcess } = require('@keg-hub/cli-utils')
 
 const appRoot = path.join(__dirname, '../../../')
@@ -25,13 +27,22 @@ let __LOADED_ENVS__
 /**
  * Loads the goblet envs from .env and yaml values files 
  * @param {Object} options - Options for loading the env files
- * @param {boolean} [processAdd=true] - Should the envs be added to the current process
+ * @param {boolean} [override=true] - Should the envs be added to the current process
  * 
  * @returns {Object} - Loaded Envs object
  */
-const loadEnvs = (processAdd) => {
-  const nodeEnv = process.env.NODE_ENV || `local`
+const loadEnvs = ({
+  env,
+  force,
+  override,
+  name=`goblet`,
+  locations=noPropArr,
+  ...envOpts
+}) => {
+  const nodeEnv = env || process.env.NODE_ENV || `local`
 
+  // When running in test environment
+  // Ensure specific envs don't get loaded
   if(process.env.JEST_WORKER_ID !== undefined){
     Object.entries(process.env)
       .map(([key, val ]) => {
@@ -47,15 +58,17 @@ const loadEnvs = (processAdd) => {
     return {}
   }
 
-  __LOADED_ENVS__ = __LOADED_ENVS__ || require('@keg-hub/parse-config').loadConfigs({
+  __LOADED_ENVS__ = (!force && __LOADED_ENVS__)
+    || require('@keg-hub/parse-config').loadConfigs({
+    name,
     env: nodeEnv,
-    name: 'goblet',
-    locations: [appRoot],
+    locations: [ ...locations, appRoot],
+    ...envOpts,
   })
 
-  // Add the loaded envs to process.env if processAdd is set
-  // Or env if local, and processAdd is not explicitly set to false
-  addToProcess(__LOADED_ENVS__, {force: processAdd || (nodeEnv === 'local' && processAdd !== false)})
+  // Add the loaded envs to process.env if override is set
+  // Or env if local, and override is not explicitly set to false
+  addToProcess(__LOADED_ENVS__, {force: override || (nodeEnv === 'local' && override !== false)})
 
   return __LOADED_ENVS__
 }

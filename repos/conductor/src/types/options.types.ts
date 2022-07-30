@@ -1,13 +1,6 @@
 import { TPorts, TImgConfig, TContainerConfig, TLogLevel, TControllerType } from './conductor.types'
 
-export type TContainerOpts = TContainerConfig & {
-  mem?: number
-  idle?: number
-  ports?: TPorts
-  timeout?: number
-  rateLimit?: number 
-  envs?: Record<string, string|boolean|number>
-}
+export type TContainerOpts = TContainerConfig & {}
 
 export type TImgOpts = TImgConfig & {
   container?: TContainerOpts

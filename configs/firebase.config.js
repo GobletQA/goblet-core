@@ -1,7 +1,7 @@
 // TODO: figure out how to make this an alias instead of relative path
 const { loadEnvs } = require('../repos/shared/src/utils/loadEnvs')
 const nodeEnv = process.env.NODE_ENV || `local`
-loadEnvs(nodeEnv === 'local')
+loadEnvs({ override: nodeEnv === 'local'})
 
 const {
   FIRE_BASE_KEY,

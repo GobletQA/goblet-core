@@ -85,7 +85,7 @@ const dockerExec = async (cmd, preArgs, postArgs, opts) => {
   } = opts
 
   const cmdEnvs = {
-    ...(envFile || envFiles ? loadEnvs({env, locations: [...envFiles, envFile]}) : noOpObj),
+    ...(envFile || envFiles ? loadEnvs({ env, locations: [...envFiles, envFile] }) : noOpObj),
     ...envs,
   }
 

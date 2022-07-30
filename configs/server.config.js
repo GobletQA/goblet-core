@@ -6,8 +6,7 @@ const { loadEnvs } = require('../repos/shared/src/utils/loadEnvs')
 const { generateOrigins } = require('../repos/shared/src/utils/generateOrigins')
 
 const nodeEnv = process.env.NODE_ENV || `local`
-
-loadEnvs(nodeEnv === 'local')
+loadEnvs({ override: nodeEnv === 'local'})
 
 // TODO: @lance-tipton - Remove these defaults. Should come from values files
 const {

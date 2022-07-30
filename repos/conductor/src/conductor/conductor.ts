@@ -114,9 +114,6 @@ export class Conductor {
       || routeData?.route
       || undefined
 
-
-
-    // const route = await this.controller.route(destination)
     // if(!route) throw new Error(`Unrecognized route for destination ${destination}`)
 
     // return {

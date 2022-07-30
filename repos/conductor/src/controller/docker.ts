@@ -1,6 +1,5 @@
 import { ReadStream } from 'tty'
 import Dockerode from 'dockerode'
-import { Logger } from '@gobletqa/conductor/utils/logger'
 import DockerEvents from 'docker-events'
 import { Controller } from './controller'
 import type { Conductor } from '../conductor'
@@ -9,9 +8,11 @@ import { dockerEvents } from '../utils/dockerEvents'
 import { generateUrls } from '../utils/generateUrls'
 import { buildPullOpts } from '../utils/buildPullOpts'
 import { CONDUCTOR_SUBDOMAIN_LABEL } from '../constants'
+import { Logger } from '@gobletqa/conductor/utils/logger'
 import { wait, noOp, isObj, checkCall } from '@keg-hub/jsutils'
 import { buildContainerPorts } from '../utils/buildContainerPorts'
 import { buildContainerConfig } from '../utils/buildContainerConfig'
+
 import {
   TImgRef,
   TRunOpts,
@@ -22,10 +23,15 @@ import {
   TDockerConfig,
   TContainerData,
   TContainerInfo,
-  TContainerRoute,
   TContainerInspect
 } from '../types'
 
+import { createContainer, startContainer } from '../utils/runContainerHelpers'
+
+/**
+ * Docker controller class with interfacing with the Docker-Api via Dockerode
+ * Matches the Controller class interface
+ */
 export class Docker extends Controller {
 
   domain: string
@@ -46,18 +52,11 @@ export class Docker extends Controller {
     })
   }
 
-  removeFromCache = (message:Record<any,any>) => {
-    Logger.info(`Removing container ${message?.Actor?.Attributes?.name} from cache`)
-
-    this.containers = Object.entries(this.containers)
-      .reduce((acc, [ref, container]:[string, TContainerData]) => {
-        isObj(message)
-          && message?.id !== container.Id
-          && (acc[ref] = container)
-        return acc
-      }, {})
-  }
-
+  /**
+   * Gets all running containers and rebuilds the runtime cache and routes
+   * Allows starting / restarting conductor at anytime and it still works
+   * @member Docker
+   */
   hydrate = async ():Promise<Record<string, TContainerInspect>> => {
     const containers = await this.getAll()
     this.containers = await containers.reduce(async (toResolve, container) => {
@@ -80,6 +79,10 @@ export class Docker extends Controller {
     return this.containers as Record<string, TContainerInspect>
   }
 
+  /**
+   * Pulls a docker image locally so it can be run
+   * @member Docker
+   */
   pull = async (imageRef:TImgRef, pullOpts:TPullOpts):Promise<void> => {
     const image = this.getImg(imageRef)
     !image && this.notFoundErr({ type: `image`, ref: imageRef as string })
@@ -101,6 +104,10 @@ export class Docker extends Controller {
     })
   }
 
+  /**
+   * Gets all containers from the Docker-Api
+   * @member Docker
+   */
   getAll = async ():Promise<TContainerInfo[]> => {
     return new Promise((res, rej) => {
       this.docker.listContainers({ all: true }, (err, containers) => {
@@ -110,52 +117,24 @@ export class Docker extends Controller {
   }
 
   /**
-   * Runs a docker container from the passed in imageRef
-   * Returns a set of urls for connecting to the running container
-   * Generates a url for each exposed port
+   * Removes a container from the runtime cache based on Id
+   * @member Docker
    */
-  run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TUrlsMap> => {
-    const image = this.getImg(imageRef)
-    !image && this.notFoundErr({ type: `image`, ref: imageRef as string })
+  removeFromCache = (message:Record<any,any>) => {
+    Logger.info(`Removing container ${message?.Actor?.Attributes?.name} from cache`)
 
-    const portData = await buildContainerPorts(image)
-    const containerConfig = await buildContainerConfig(this, image, subdomain, runOpts, portData)
-
-    const createConfig = await checkCall(image?.container?.beforeCreate, containerConfig) || containerConfig
-
-    Logger.info(`Creating container from image ${image.name}`)
-    const container = await this.docker.createContainer(createConfig)
-
-    !container
-      && this.controllerErr({ message: `Docker could not create container from image ${image.name}` })
-
-    const beforeStartInsp = await container.inspect()
-
-    // @ts-ignore
-    await checkCall(image?.container?.beforeStart, container, beforeStartInsp)
-
-    Logger.info(`Starting container...`)
-    await container.start()
-    // Wait slightly longer for container to start.
-    // Hack because sometimes the connection gets randomly reset
-    await wait(200)
-
-    const afterStartInsp = await container.inspect()
-    // @ts-ignore
-    await checkCall(image?.container?.afterStart, container, afterStartInsp)
-    Logger.success(`Container started successfully`)
-
-    this.containers[container.id] = afterStartInsp
-
-    Logger.info(`Generating container urls...`)
-    return generateUrls(
-      afterStartInsp,
-      portData.ports,
-      subdomain,
-      this.conductor
-    )
+    this.containers = Object.entries(this.containers)
+      .reduce((acc, [ref, container]:[string, TContainerData]) => {
+        isObj(message)
+          && message?.id !== container.Id
+          && (acc[ref] = container)
+        return acc
+      }, {})
   }
 
+  /**
+   * Removes a container from docker, by calling the Docker API
+   */
   remove = async (containerRef:TContainerRef) => {
     const containerData = this.getContainer(containerRef)
     !containerData && this.notFoundErr({ type: `container`, ref: containerRef as string })
@@ -175,6 +154,10 @@ export class Docker extends Controller {
     Logger.success(`Container removed successfully`)
   }
 
+  /**
+   * Removes all containers with the conductor label
+   * @member Docker
+   */
   removeAll = async () => {
     const containers = await this.getAll()
     const removed = await Promise.all(
@@ -194,6 +177,10 @@ export class Docker extends Controller {
     return removed.filter(Boolean)
   }
 
+  /**
+   * Calls Docker Prune api on containers, images, and volumes
+   * @member Docker
+   */
   cleanup = async () => {
     return new Promise(async (res, rej) => {
       try {
@@ -209,11 +196,39 @@ export class Docker extends Controller {
     })
   }
 
-  route = async (containerRef:TContainerRef):Promise<TContainerRoute> => {
-    const container = this.getContainer(containerRef)
-    !container && this.notFoundErr({ type: `container`, ref: containerRef as string })
+  /**
+   * Similar to the docker run command from the docker cli
+   * Will first create a container from the passed in imageRef
+   * Then starts it, calling passed in hooks as needed 
+   * Returns a set of urls for connecting to the running container
+   * Generates a url for each exposed port
+   * @member Docker
+   */
+  run = async (imageRef:TImgRef, runOpts:TRunOpts, subdomain:string):Promise<TUrlsMap> => {
+    const image = this.getImg(imageRef)
+    !image && this.notFoundErr({ type: `image`, ref: imageRef as string })
 
-    return undefined
+    // Build the container ports and container create config 
+    const portData = await buildContainerPorts(image)
+    const containerConfig = await buildContainerConfig(this, image, subdomain, runOpts, portData)
+
+    // Create the container from the image
+    const container = await createContainer(this, image, containerConfig)
+
+    // Start the container that was just created
+    const containerInspect = await startContainer(image, container)
+
+    // Cache the container in runtime cache
+    this.containers[container.id] = containerInspect
+
+    // Generate the urls for accessing the container
+    Logger.info(`Generating container urls...`)
+    return generateUrls(
+      containerInspect,
+      portData.ports,
+      subdomain,
+      this.conductor
+    )
   }
 
 }

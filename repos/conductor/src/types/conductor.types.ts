@@ -10,6 +10,7 @@ export type TContainerConfig = {
   ports?: TPorts
   timeout: number
   rateLimit: number
+  runtimeEnvs?: Record<string, string>
   envs?: Record<string, string|boolean|number>
   beforeCreate?: (config:ContainerCreateOptions) => ContainerCreateOptions
   afterStart?: (container:Container) => void

@@ -3,12 +3,12 @@ import { inDocker } from '@keg-hub/cli-utils'
 import type { Conductor } from '@gobletqa/conductor/conductor'
 import { TUrlsMap, TPortsMap, TContainerInspect } from '../types'
 import { DEF_HOST_IP, API_VERSION } from '@gobletqa/conductor/constants'
+const isDocker = inDocker()
 
 /**
  * Builds a route used by the proxy to forward requests
  */
 const buildRoute = (ipAddress:string, cPort:string, hPort:string|number) => {
-  const isDocker = inDocker()
   return {
     port: isDocker ? cPort : hPort,
     host: isDocker ? ipAddress : DEF_HOST_IP,
@@ -48,7 +48,9 @@ export const generateUrls = (
       external,
       // Build the route, that the proxy should route to => i.e. forward incoming traffic to here
       // internal: `${route.protocol}//${route.host}:${route.port}`,
-      internal: `${route.protocol}//localhost:${route.port}`,
+      internal: isDocker
+        ? `${route.protocol}//${route.host}:${route.port}`
+        : `${route.protocol}//localhost:${route.port}`,
     }
 
     return acc
