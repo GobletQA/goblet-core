@@ -3,13 +3,13 @@ const { toBool } = require('@keg-hub/jsutils')
 const {
   GOBLET_USE_VNC,
   DISPLAY = ':0.0',
+  SC_API_PORT = 7006,
   NO_VNC_PORT = 26369,
-  SCREENCAST_PROXY_HOST,
+  SC_API_HOST,
   VNC_VIEW_HEIGHT = 900,
   VNC_VIEW_WIDTH = 1440,
   VNC_SERVER_PORT = 26370,
-  SCREENCAST_API_PORT = 7006,
-  VNC_PROXY_HOST = SCREENCAST_PROXY_HOST,
+  VNC_SERVER_HOST = SC_API_HOST,
 } = process.env
 
 
@@ -25,16 +25,16 @@ const screencastConfig = {
   proxy: {
     path: '/novnc',
     port: NO_VNC_PORT,
-    host: VNC_PROXY_HOST,
+    host: VNC_SERVER_HOST,
   },
   // Uses to start separate screencast API
   server: {
-    host: SCREENCAST_PROXY_HOST,
-    port: SCREENCAST_API_PORT,
+    port: SC_API_PORT,
+    host: SC_API_HOST,
   },
   vnc: {
     display: DISPLAY,
-    host: VNC_PROXY_HOST,
+    host: VNC_SERVER_HOST,
     port: VNC_SERVER_PORT,
     width: VNC_VIEW_WIDTH,
     height: VNC_VIEW_HEIGHT,

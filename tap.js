@@ -21,6 +21,7 @@ module.exports = {
   keg: {
     envs: {
       'process.env.NODE_ENV': NODE_ENV,
+      'process.env.BE_API_HOST': config.server.host,
       'process.env.GOBLET_USE_AUTH': GOBLET_USE_AUTH,
       'process.env.GOBLET_USE_VNC': GOBLET_USE_VNC,
       'process.env.GOBLET_PW_SOCKET': GOBLET_PW_SOCKET,
@@ -28,8 +29,7 @@ module.exports = {
       'process.env.GITHUB_AUTH_USERS': GITHUB_AUTH_USERS,
       'process.env.VNC_VIEW_WIDTH': `${VNC_VIEW_WIDTH}`,
       'process.env.VNC_VIEW_HEIGHT': `${VNC_VIEW_HEIGHT}`,
-      'process.env.GOBLET_SERVER_HOST': config.server.host,
-      'process.env.SERVER_PORT': `${config.server.port}`,
+      'process.env.BE_API_PORT': `${config.server.port}`,
       'process.env.WS_SERVER_CONFIG': JSON.stringify(config.server.sockr),
       ...(firebaseConfig.ui && {
         'process.env.FIRE_BASE_CONFIG': JSON.stringify(firebaseConfig),
