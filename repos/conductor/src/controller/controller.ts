@@ -57,14 +57,21 @@ export class Controller {
   }
 
   getContainer(containerRef:TContainerRef):TContainerData {
-    if(typeof containerRef === 'string')
+    const isStr = typeof containerRef === 'string'
+
+
+    if(isStr && this.containers[containerRef])
       return this.containers[containerRef]
 
     return Object.values(this.containers)
-      .find(cont => (
-        cont === containerRef
-        || cont?.Id === containerRef?.Id
-      ))
+      .find((cont) => {
+        const container = cont as TContainerInspect
+        // There's an odd bug where dockerode is adding / before a named container
+        // So we have to compare the name include a / on the ref
+        return isStr
+          ? container?.Id.startsWith(containerRef) || container?.Name.startsWith(`/${containerRef}`)
+          : container?.Id.startsWith(containerRef?.Id) || container?.Name.startsWith(`/${containerRef?.Name}`)
+      })
   }
 
   hydrate = async (hydrateCache?:any):Promise<Record<string, TContainerInspect>> => {
@@ -112,6 +119,8 @@ export class Controller {
     })
   }
 
+  // TODO: Add an error override to allow setting the correct error response codes
+  // Currently returns 500 any time and error is thrown
   controllerErr = (args:Record<string, string>) => {
     const {
       ref=``,

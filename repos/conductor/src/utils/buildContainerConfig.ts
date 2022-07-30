@@ -1,9 +1,7 @@
 import { buildImgUri } from './buildImgUri'
-import { checkCall } from '@keg-hub/jsutils'
 import type { Docker } from '../controller/docker'
 import { ContainerCreateOptions } from 'dockerode'
 import { buildContainerEnvs } from './buildContainerEnvs'
-import { buildContainerPorts } from './buildContainerPorts'
 import { buildContainerLabels } from './buildContainerLabels'
 import { TCreatePortsObj, TImgConfig, TRunOpts, TPortsMap } from '../types'
 
@@ -23,6 +21,10 @@ export const buildContainerConfig = async (
   const { ports, exposed, bindings } = portData
 
   return {
+    // TODO: figure out the best way to name the containers to avoid collisions
+    // Doing it this way will fail if the user tries to create more then one image of the same type
+    // name: subdomain,
+
     // TODO: investigate createContainer options that should be allowed form a request
     ...runOpts,
     ExposedPorts: exposed,

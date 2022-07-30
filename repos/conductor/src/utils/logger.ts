@@ -21,11 +21,11 @@ const loggerWrap = (
     CliLogger.removeTag()
   }
 }
-const log = loggerWrap(`log`, `cyan`, false, `white`)
+
 export const Logger = {
   ...CliLogger,
-  log,
-  info: log,
+  log: loggerWrap(`log`, `cyan`, false, `white`),
+  info: loggerWrap(`info`, `cyan`, false, `white`),
   error: loggerWrap(`error`, `red`, true, `white`),
   warn: loggerWrap(`warn`, `yellow`, true, `white`),
   success: loggerWrap(`success`, `green`, true, `white`),

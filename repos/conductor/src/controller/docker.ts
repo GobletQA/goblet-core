@@ -3,13 +3,13 @@ import Dockerode from 'dockerode'
 import DockerEvents from 'docker-events'
 import { Controller } from './controller'
 import type { Conductor } from '../conductor'
+import { noOp, isObj } from '@keg-hub/jsutils'
 import { buildImgUri } from '../utils/buildImgUri'
 import { dockerEvents } from '../utils/dockerEvents'
 import { generateUrls } from '../utils/generateUrls'
 import { buildPullOpts } from '../utils/buildPullOpts'
 import { CONDUCTOR_SUBDOMAIN_LABEL } from '../constants'
 import { Logger } from '@gobletqa/conductor/utils/logger'
-import { wait, noOp, isObj, checkCall } from '@keg-hub/jsutils'
 import { buildContainerPorts } from '../utils/buildContainerPorts'
 import { buildContainerConfig } from '../utils/buildContainerConfig'
 
@@ -111,7 +111,7 @@ export class Docker extends Controller {
   getAll = async ():Promise<TContainerInfo[]> => {
     return new Promise((res, rej) => {
       this.docker.listContainers({ all: true }, (err, containers) => {
-        err ? rej(err) : res(containers)
+        err ? rej(err) : res(containers.map(container => ({ ...container, Name: container.Names[0] })))
       })
     })
   }
@@ -140,9 +140,15 @@ export class Docker extends Controller {
     !containerData && this.notFoundErr({ type: `container`, ref: containerRef as string })
 
     const cont = await this.docker.getContainer(containerData.Id)
+
     Logger.info(`Removing container with ID ${cont.id}`)
-    await cont.stop()
-    await cont.remove()
+
+    // Called inside an iif to it doesn't holdup the response 
+    // Basically fire and forget
+    ;(async () => {
+      await cont.stop()
+      await cont.remove()
+    })()
 
     this.containers = Object.entries(this.containers)
       .reduce((acc, [ref, cont]:[string, TContainerData]) => {
@@ -152,6 +158,7 @@ export class Docker extends Controller {
       }, {})
 
     Logger.success(`Container removed successfully`)
+    return cont
   }
 
   /**

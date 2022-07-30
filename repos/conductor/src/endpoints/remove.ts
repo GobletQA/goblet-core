@@ -4,7 +4,9 @@ import { Request, Response } from 'express'
 
 export const remove = async (req:Request, res:Response) => {
   const conductor = req.app.locals.conductor
-  const status = await conductor.remove(req.params.containerRef)
+  const refCont = conductor.controller.getContainer((req.params.containerRef || ``).trim())
+  const container = refCont || conductor.controller.getContainer((res.locals.subdomain).trim())
+  const status = await conductor.remove(container.Id)
 
   res.status(200).json({ status })
 }

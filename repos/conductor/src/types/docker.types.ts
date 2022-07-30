@@ -8,7 +8,9 @@ import {
 } from 'dockerode'
 
 export type TContainerInspect = ContainerInspectInfo & {}
-export type TContainerInfo = ContainerInfo & {}
+export type TContainerInfo = ContainerInfo & {
+  Name: string
+}
 export type TContainerData = TContainerInfo | TContainerInspect
 
 export type TContainerObj = Container & {
