@@ -9,7 +9,6 @@ const definitions = !GOBLET_RUN_FROM_CI && {
 
 module.exports = {
   ...definitions,
-  ...initialize(require('./fn')),
   ...initialize(require('./bdd')),
   ...initialize(require('./unit')),
   ...initialize(require('./waypoint'))

@@ -126,6 +126,16 @@ env:
 
 
 # --- CONDUCTOR ENVs --- #
+  GB_CD_TIMEOUT: 5000
+  GB_CD_SERVER_SECRET: ""
+  GB_CD_LOG_LEVEL: info
+  GB_CD_PIDS_LIMIT: 500
+  GB_CD_PROXY_PORT: 9901
+  GB_CD_RATE_LIMIT: 5000
+  # Salting the user hash string. Not intended to be secure just anonymous
+  GB_CD_HASH_KEY: C0nDuc10R
+  GB_CD_PROXY_HOST: 0.0.0.0
+  GB_CD_PROXY_DOMAIN: 0.0.0.0
 
 
 # --- FRONTEND ENVs --- #

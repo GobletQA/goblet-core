@@ -9,12 +9,17 @@
       "@gobletqa/shared/middleware/*": ["../shared/src/middleware/*"],
       "@gobletqa/shared/utils": ["../shared/src/utils"],
       "@gobletqa/shared/utils/*": ["../shared/src/utils/*"],
+      "@gobletqa/shared/utils/loadEnvs": ["../shared/src/utils/loadEnvs"],
       "@gobletqa/shared/utils/getOrigin": ["../shared/src/utils/getOrigin"],
+      "@gobletqa/shared": ["../shared/src"],
+      "@gobletqa/shared/*": ["../shared/src/*"],
+      "@gobletqa/conductor/configs": ["./configs"],
+      "@gobletqa/conductor/configs/*": ["./configs/*"],
       "@gobletqa/conductor": ["src"],
       "@gobletqa/conductor/*": ["src/*"],
       "@gobletqa/conductor/root": ["./"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "configs/**/*"],
   "exclude": ["node_modules", "dist"]
 }
