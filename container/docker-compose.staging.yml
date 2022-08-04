@@ -2,7 +2,6 @@ version: "3.8"
 services:
   goblet:
     ipc: host
-    privileged: true
     environment:
       - GB_BE_API_PORT
       - GB_BE_API_SECURE_PORT

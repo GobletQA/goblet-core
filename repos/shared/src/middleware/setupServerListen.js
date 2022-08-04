@@ -56,7 +56,7 @@ const exitListener = (insecureServer, secureServer) => {
  *
  * @returns {Object} - Insecure / Secure server object and Express app object
  */
-const serverListen = (app, serverConf) => {
+const serverListen = (app, serverConf, exitListen=true) => {
   const { securePort, port, host, name } = serverConf
   const creds = {
     key: process.env.KEG_PROXY_PRIVATE_KEY,
@@ -89,7 +89,7 @@ const serverListen = (app, serverConf) => {
       Logger.empty()
     })
 
-  exitListener(insecureServer, secureServer)
+  exitListen && exitListener(insecureServer, secureServer)
 
   return { insecureServer, secureServer, app }
 }

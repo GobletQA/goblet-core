@@ -44,11 +44,19 @@ export const buildContainerConfig = async (
       ...runOpts.hostConfig,
       PortBindings: bindings,
       PidsLimit: image?.pidsLimit || docker?.config?.pidsLimit,
+      IpcMode: `host`,
+      // Privileged: true
+      Devices: [{
+        PathOnHost: `/dev/fuse`,
+        CgroupPermissions: `rwm`,
+        PathInContainer: `/dev/fuse`,
+      }],
+      CapAdd: [`SYS_ADMIN`],
+      // --cap-add SYS_ADMIN --device /dev/fuse
       // TODO: investigate this
       // IpcMode: 'none',
       // AutoRemove: true,
       // StorageOpt: { size: `10G`},
     }
   }
-
 }

@@ -2,7 +2,10 @@ version: "3.8"
 services:
   goblet:
     ipc: host
-    privileged: true
+    devices:
+      - /dev/fuse:/dev/fuse:rwm
+    cap_add:
+      - SYS_ADMIN
     environment:
       - GB_BE_API_PORT
       - DOC_APP_PATH
