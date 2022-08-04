@@ -36,11 +36,11 @@
   },
   "resolutions": {
     "@keg-hub/cli-utils": "0.7.0",
-    "@keg-hub/jsutils": "9.0.3"
+    "@keg-hub/jsutils": "9.2.0"
   },
   "dependencies": {
     "@keg-hub/cli-utils": "0.7.0",
-    "@keg-hub/jsutils": "9.0.3",
+    "@keg-hub/jsutils": "9.2.0",
     "@keg-hub/parse-config": "2.0.2",
     "@ltipton/sockr": "0.3.0",
     "express": "4.17.3",

@@ -31,11 +31,11 @@
   },
   "resolutions": {
     "@keg-hub/cli-utils": "0.7.0",
-    "@keg-hub/jsutils": "9.0.3"
+    "@keg-hub/jsutils": "9.2.0"
   },
   "dependencies": {
     "@keg-hub/cli-utils": "0.7.0",
-    "@keg-hub/jsutils": "9.0.3",
+    "@keg-hub/jsutils": "9.2.0",
     "@keg-hub/parse-config": "2.0.2",
     "axios": "0.24.0",
     "module-alias": "2.2.2"

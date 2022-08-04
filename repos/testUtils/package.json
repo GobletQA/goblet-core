@@ -29,13 +29,13 @@
   },
   "resolutions": {
     "@keg-hub/cli-utils": "0.7.0",
-    "@keg-hub/jsutils": "9.0.3",
+    "@keg-hub/jsutils": "9.2.0",
     "playwright": "1.23.4"
   },
   "peerDependencies": {},
   "dependencies": {
     "@keg-hub/cli-utils": "0.7.0",
-    "@keg-hub/jsutils": "9.0.3",
+    "@keg-hub/jsutils": "9.2.0",
     "@ltipton/parkin": "1.4.0",
     "expect": "28.1.0",
     "jest": "28.1.3",
