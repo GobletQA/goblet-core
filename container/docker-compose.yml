@@ -7,7 +7,7 @@ services:
     cap_add:
       - SYS_ADMIN
     environment:
-      - GB_BE_API_PORT
+      - GB_BE_PORT
       - DOC_APP_PATH
       - DOC_BUILD_PATH
       - ENV
@@ -33,5 +33,5 @@ services:
       - NODE_ENV
       - GOBLET_SUB_REPO
     ports:
-      - ${GB_BE_API_PORT}:${GB_BE_API_PORT}
+      - ${GB_BE_PORT}:${GB_BE_PORT}
 

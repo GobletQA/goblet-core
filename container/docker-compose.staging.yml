@@ -3,8 +3,8 @@ services:
   goblet:
     ipc: host
     environment:
-      - GB_BE_API_PORT
-      - GB_BE_API_SECURE_PORT
+      - GB_BE_PORT
+      - GB_BE_SECURE_PORT
       - DOC_APP_PATH
       - DOC_BUILD_PATH
       - ENV
@@ -33,7 +33,7 @@ services:
       - KEG_PROXY_CA
       - KEG_PROXY_SSL
     ports:
-      - 80:${GB_BE_API_PORT}
+      - 80:${GB_BE_PORT}
       - 443:443
     volumes:
       - /home/goblet/.kegConfig/certs:/keg/certs:ro

@@ -60,10 +60,10 @@ env:
 
 
 # --- BACKEND API ENVs --- #
-  GB_BE_API_PORT: 7005
-  GB_BE_API_SECURE_PORT: 443
+  GB_BE_PORT: 7005
+  GB_BE_SECURE_PORT: 443
   # Host the FE uses to connect to the BE
-  GB_BE_API_HOST: 0.0.0.0
+  GB_BE_HOST: 0.0.0.0
   # Port to forward connections from backend API to screencast
   GB_NO_VNC_PORT: 26369
   # Default to the backend api and host

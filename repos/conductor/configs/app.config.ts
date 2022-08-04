@@ -12,8 +12,8 @@ const containerEnvs = omitKeys(loadEnvs({
 }), [
   `GB_NO_VNC_PORT`,
   `KEG_PROXY_PORT`,
-  `GB_BE_API_PORT`,
-  `GB_BE_API_HOST`,
+  `GB_BE_PORT`,
+  `GB_BE_HOST`,
   `GB_VNC_SERVER_PORT`,
   `GB_VNC_SERVER_HOST`,
   `GB_SC_API_PORT`,
@@ -53,8 +53,8 @@ export const appConfig:TConductorOpts = {
           KEG_DOCKER_EXEC: `conductor`,
         },
         runtimeEnvs: {
-          GB_BE_API_HOST: `urls.7005`,
-          GB_BE_API_PORT: `ports.7005`,
+          GB_BE_HOST: `urls.7005`,
+          GB_BE_PORT: `ports.7005`,
           GB_NO_VNC_PORT: `ports.26369`,
           KEG_PROXY_PORT: `ports.19006`,
           GB_VNC_SERVER_HOST: `urls.26370`,

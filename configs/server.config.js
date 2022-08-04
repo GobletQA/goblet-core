@@ -20,9 +20,9 @@ const {
   GB_BE_SOCKET_PORT,
   GB_BE_SOCKET_HOST,
 
-  GB_BE_API_PORT,
-  GB_BE_API_HOST,
-  GB_BE_API_SECURE_PORT,
+  GB_BE_PORT,
+  GB_BE_HOST,
+  GB_BE_SECURE_PORT,
 
   GB_BE_JWT_EXP,
   GB_BE_JWT_ALGO,
@@ -43,9 +43,9 @@ const {
 } = process.env
 
 const serverConfig = {
-  port: GB_BE_API_PORT,
-  host: GB_BE_API_HOST,
-  securePort: GB_BE_API_SECURE_PORT,
+  port: GB_BE_PORT,
+  host: GB_BE_HOST,
+  securePort: GB_BE_SECURE_PORT,
   environment: nodeEnv,
   path: GB_BE_SOCKR_PATH,
   logLevel: GB_LOG_LEVEL,
@@ -65,8 +65,8 @@ const serverConfig = {
   },
   sockr: {
     path: GB_BE_SOCKR_PATH,
-    port: GB_BE_SOCKET_PORT || GB_BE_API_PORT,
-    host: GB_BE_SOCKET_HOST || GB_BE_API_HOST,
+    port: GB_BE_SOCKET_PORT || GB_BE_PORT,
+    host: GB_BE_SOCKET_HOST || GB_BE_HOST,
     process: {
       root: GobletRoot,
       debug: Boolean(GB_LOG_LEVEL == 'debug'),
