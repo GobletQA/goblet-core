@@ -3,13 +3,13 @@ const { toBool } = require('@keg-hub/jsutils')
 const {
   GB_VNC_ACTIVE,
   DISPLAY = ':0.0',
-  GB_SC_API_PORT = 7006,
+  GB_SC_PORT = 7006,
   GB_NO_VNC_PORT = 26369,
-  GB_SC_API_HOST,
+  GB_SC_HOST,
   GB_VNC_VIEW_HEIGHT = 900,
   GB_VNC_VIEW_WIDTH = 1440,
   GB_VNC_SERVER_PORT = 26370,
-  GB_VNC_SERVER_HOST = GB_SC_API_HOST,
+  GB_VNC_SERVER_HOST = GB_SC_HOST,
 } = process.env
 
 
@@ -29,8 +29,8 @@ const screencastConfig = {
   },
   // Uses to start separate screencast API
   server: {
-    port: GB_SC_API_PORT,
-    host: GB_SC_API_HOST,
+    port: GB_SC_PORT,
+    host: GB_SC_HOST,
   },
   vnc: {
     display: DISPLAY,

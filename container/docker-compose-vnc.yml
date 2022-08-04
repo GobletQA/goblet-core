@@ -8,14 +8,14 @@ services:
       - GB_VNC_ACTIVE=true
       - GB_AUTH_ACTIVE=true
       - GB_NO_VNC_PORT
-      - GB_SC_API_PORT
-      - GB_SC_API_HOST
+      - GB_SC_PORT
+      - GB_SC_HOST
       - GB_VNC_SERVER_HOST
       - GB_VNC_SERVER_PORT
       - GB_VNC_VIEW_HEIGHT
       - GB_VNC_VIEW_WIDTH
     ports:
       - ${GB_NO_VNC_PORT}:${GB_NO_VNC_PORT}
-      - ${GB_SC_API_PORT}:${GB_SC_API_PORT}
+      - ${GB_SC_PORT}:${GB_SC_PORT}
       # Only expose this port if we want to expose the VNC server outside the container
       # - ${GB_VNC_SERVER_PORT}:${GB_VNC_SERVER_PORT}

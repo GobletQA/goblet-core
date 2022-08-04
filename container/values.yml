@@ -90,11 +90,11 @@ env:
 
 
 # --- SCREENCAST ENVs --- #
-  GB_SC_API_PORT: 7006
+  GB_SC_PORT: 7006
   # URL where the screencast is being displayed
   # This is the URL of the server the proxy connects to
   # Update this to call an externally available VNC websocket host
-  GB_SC_API_HOST: 0.0.0.0
+  GB_SC_HOST: 0.0.0.0
   # Host of the novnc proxy to tigerVNC
   # This is internal, and generally should not change
   GB_VNC_SERVER_HOST: 0.0.0.0
@@ -108,12 +108,12 @@ env:
   GB_CD_SERVER_SECRET: ""
   GB_CD_LOG_LEVEL: info
   GB_CD_PIDS_LIMIT: 500
-  GB_CD_PROXY_PORT: 9901
+  GB_CD_PORT: 9901
   GB_CD_RATE_LIMIT: 5000
   # Salting the user hash string. Not intended to be secure just anonymous
   GB_CD_HASH_KEY: C0nDuc10R
-  # GB_CD_PROXY_HOST: local.keghub.io
-  # GB_CD_PROXY_DOMAIN: local.keghub.io
+  # GB_CD_HOST: local.keghub.io
+  # GB_CD_DOMAIN: local.keghub.io
 
 
 # --- FRONTEND ENVs --- #

@@ -30,7 +30,7 @@ RUN yarn turbo run build --filter=@gobletqa/conductor && \
 FROM $GB_BASE_IMAGE as goblet-runner
 WORKDIR /keg/tap/repos/screencast
 ARG DOC_APP_PATH=/keg/tap
-ARG GB_SC_API_PORT=7005
+ARG GB_SC_PORT=7005
 
 # TODO: investigate what else needs copied over form build stage
 # COPY --from=goblet-builder /keg/tap/repos/screencast/dist repos
@@ -46,6 +46,6 @@ RUN pm2 install pm2-logrotate && \
 
 RUN ln -s /keg/tap/node_modules $HOME/.node_modules && \
     ln -s /keg/tap/node_modules /keg/node_modules
-EXPOSE $GB_SC_API_PORT
+EXPOSE $GB_SC_PORT
 CMD [ "yarn", "serve" ]
 

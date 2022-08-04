@@ -16,8 +16,8 @@ const containerEnvs = omitKeys(loadEnvs({
   `GB_BE_HOST`,
   `GB_VNC_SERVER_PORT`,
   `GB_VNC_SERVER_HOST`,
-  `GB_SC_API_PORT`,
-  `GB_SC_API_HOST`,
+  `GB_SC_PORT`,
+  `GB_SC_HOST`,
   `GB_BE_SOCKET_PORT`,
   `GB_BE_SOCKET_HOST`
 ])
@@ -59,8 +59,8 @@ export const appConfig:TConductorOpts = {
           KEG_PROXY_PORT: `ports.19006`,
           GB_VNC_SERVER_HOST: `urls.26370`,
           GB_VNC_SERVER_PORT: `ports.26370`,
-          GB_SC_API_HOST: `urls.7006`,
-          GB_SC_API_PORT: `ports.7006`,
+          GB_SC_HOST: `urls.7006`,
+          GB_SC_PORT: `ports.7006`,
 
           // TODO: investigate why GB_BE_SOCKET_PORT is needed but not GB_BE_SOCKET_HOST
           GB_BE_SOCKET_PORT: `ports.7005`,
