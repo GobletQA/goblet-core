@@ -1,10 +1,9 @@
+require('../resolveRoot')
 const path = require('path')
 const hq = require('alias-hq')
 const { spawn } = require('child_process')
 const { loadConfigs } = require('@keg-hub/parse-config')
-const aliasConfig = path.join(process.cwd().split(`/repos`).shift(), `configs/aliases.config`)
-const { aliases } = require(aliasConfig)
-
+const { aliases } = require('@GConfigs/aliases.config')
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { build } = require('esbuild')
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -51,7 +50,6 @@ const devServer = async () => {
  * [See here for more info](https://esbuild.github.io/api/#build-api)
  */
 build({
-  // outdir: distDir,
   outfile: outFile,
   bundle: true,
   minify: false,
@@ -69,9 +67,7 @@ build({
     },
   },
   plugins: [
-    aliasPlugin({
-      ...hq.get('webpack'),
-    }),
+    aliasPlugin(aliases),
     /**
      * Custom plugin to filter out node_modules
      * See more info [here](https://github.com/evanw/esbuild/issues/619#issuecomment-751995294)
