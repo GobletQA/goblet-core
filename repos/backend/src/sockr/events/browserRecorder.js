@@ -6,7 +6,7 @@ const {
   setPage,
   stopBrowser,
   startRecording,
-} = require('@GSC/Playwright')
+} = require('@gobletqa/screencast/libs/playwright')
 
 /**
  * Stats a the browser recorder from a socket.io event

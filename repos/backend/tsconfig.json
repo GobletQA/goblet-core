@@ -13,7 +13,9 @@
       "@GBK": ["src"],
       "@GBKRoot": ["./"],
       "@gobletqa/shared": ["../shared/src"],
-      "@gobletqa/shared/*": ["../shared/src/*"]
+      "@gobletqa/shared/*": ["../shared/src/*"],
+      "@gobletqa/screencast": ["../screencast/src"],
+      "@gobletqa/screencast/*": ["../screencast/src/*"]
     }
   },
   "include": ["src/**/*"],

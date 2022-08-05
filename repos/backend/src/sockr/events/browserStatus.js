@@ -1,6 +1,6 @@
 const { Logger } = require('@keg-hub/cli-utils')
 const { get, noOpObj } = require('@keg-hub/jsutils')
-const { statusBrowser } = require('@GSC/Playwright/browser/statusBrowser')
+const { statusBrowser } = require('@gobletqa/screencast/libs/playwright/browser/statusBrowser')
 
 let watchInterval = false
 let prevStatus

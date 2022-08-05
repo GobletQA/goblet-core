@@ -5,7 +5,7 @@ const {
   setPage,
   stopBrowser,
   startPlaying,
-} = require('@GSC/Playwright')
+} = require('@gobletqa/screencast/libs/playwright')
 
 const handleStartPlaying = async (data, repo, socket, Manager, app) => {
   const { token, ref, action, ...browser } = data
