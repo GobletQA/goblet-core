@@ -1,4 +1,4 @@
-const { loadTemplate } = require(`@GSH/Template/loadTemplate`)
+const { loadTemplate } = require(`@gobletqa/shared/templates/loadTemplate`)
 
 const page404Data = {
   title: 'Goblet - 404 Page not found',

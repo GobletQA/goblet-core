@@ -1,5 +1,5 @@
-const { saveGobletFile } = require('@GSH/FileSys/gobletFiles')
-const { asyncWrap, apiRes } = require('@GSH/Exp')
+const { saveGobletFile } = require('@gobletqa/shared/libs/fileSys/gobletFiles')
+const { asyncWrap, apiRes } = require('@gobletqa/shared/express')
 
 /**
  * Saves a file to a location within the docker mounted test root folder

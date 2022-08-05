@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 require('../resolveRoot')
-const { getApp } = require('@GSH/App')
+const { getApp } = require('@gobletqa/shared/express/app')
 const apiEndpoints = require('@GBK/Endpoints')
 const { initSockr } = require('@GBK/Sockr/sockr')
-const { isDeployedEnv } = require('@GSH/Utils/isDeployedEnv')
+const { isDeployedEnv } = require('@gobletqa/shared/utils/isDeployedEnv')
 const {
   setReqRepo,
   setupVNCProxy,
@@ -18,7 +18,7 @@ const {
   setupLoggerReq,
   setupLoggerErr,
   setupServerListen,
-} = require('@GSH/Middleware')
+} = require('@gobletqa/shared/middleware')
 
 /**
  * Starts a express API server, and connects the sockr Websocket

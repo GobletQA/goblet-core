@@ -1,5 +1,5 @@
 const { noOpObj } = require('@keg-hub/jsutils')
-const { joinBrowserConf } = require('@GSH/Utils/joinBrowserConf')
+const { joinBrowserConf } = require('@gobletqa/shared/utils/joinBrowserConf')
 
 // TODO: @lance-tipton - Move all socket.io setup and files to screencast folder
 const {

@@ -1,7 +1,7 @@
-const { asyncWrap } = require('@GSH/Exp')
+const { asyncWrap } = require('@gobletqa/shared/express')
 const { htmlRes, htmlErr } = require('@GBK/Endpoints/handlers')
 const { getTestReportHtml } = require('@GBK/Utils/getTestReportHtml')
-const { loadTemplate } = require(`@GSH/Template/loadTemplate`)
+const { loadTemplate } = require(`@gobletqa/shared/templates/loadTemplate`)
 
 /**
  * Loads reports from the passed in params

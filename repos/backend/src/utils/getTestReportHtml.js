@@ -1,7 +1,7 @@
 const path = require('path')
-const { getFileContent } = require('@GSH/Utils/getFileContent')
-const { getMountRootDir } = require('@GSH/Utils/getMountRootDir')
-const { reportHeight } = require(`@GSH/Template/reportHeight.template`)
+const { getFileContent } = require('@gobletqa/shared/utils/getFileContent')
+const { getMountRootDir } = require('@gobletqa/shared/utils/getMountRootDir')
+const { reportHeight } = require(`@gobletqa/shared/templates/reportHeight.template`)
 
 /**
  * Loads a report by it's name and fileType

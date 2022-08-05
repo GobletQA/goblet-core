@@ -1,6 +1,6 @@
-const { Repo } = require('@GSH/Repo/repo')
-const { asyncWrap, apiRes } = require('@GSH/Exp')
-const { loadRepoContent } = require('@GSH/Repo/loadRepoContent')
+const { Repo } = require('@gobletqa/shared/repo/repo')
+const { asyncWrap, apiRes } = require('@gobletqa/shared/express')
+const { loadRepoContent } = require('@gobletqa/shared/repo/loadRepoContent')
 
 /**
  * Runs the initializeGoblet workflow to setup a new repository

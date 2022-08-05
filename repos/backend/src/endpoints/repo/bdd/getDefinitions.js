@@ -1,7 +1,7 @@
-const { asyncWrap, apiRes } = require('@GSH/Exp')
-const { loadDefinitions } = require('@GSH/Definitions/definitions')
-const { definitionsByType } = require('@GSH/Utils/definitionsByType')
-const { fileModelArrayToObj } = require('@GSH/Utils/fileModelArrayToObj')
+const { asyncWrap, apiRes } = require('@gobletqa/shared/express')
+const { loadDefinitions } = require('@gobletqa/shared/libs/definitions/definitions')
+const { definitionsByType } = require('@gobletqa/shared/utils/definitionsByType')
+const { fileModelArrayToObj } = require('@gobletqa/shared/utils/fileModelArrayToObj')
 
 const getDefinitions = asyncWrap(async (req, res) => {
   const definitions = await loadDefinitions(

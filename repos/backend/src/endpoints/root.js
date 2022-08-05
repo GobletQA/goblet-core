@@ -1,5 +1,6 @@
-const { AppRouter } = require('@GSH/Router')
-const { asyncWrap, apiRes } = require('@GSH/Exp')
+const { apiRes } = require('@gobletqa/shared/express/apiRes')
+const { AppRouter } = require('@gobletqa/shared/express/appRouter')
+const { asyncWrap } = require('@gobletqa/shared/express/asyncWrap')
 
 const apiRoot = asyncWrap(async (req, res) => {
   const config = req.app.locals.config

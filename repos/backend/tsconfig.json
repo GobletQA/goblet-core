@@ -11,7 +11,9 @@
       "@GBK/Endpoints": ["src/endpoints"],
       "@GBK/Middleware": ["src/middleware"],
       "@GBK": ["src"],
-      "@GBKRoot": ["./"]
+      "@GBKRoot": ["./"],
+      "@gobletqa/shared": ["../shared/src"],
+      "@gobletqa/shared/*": ["../shared/src/*"]
     }
   },
   "include": ["src/**/*"],

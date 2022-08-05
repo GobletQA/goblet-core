@@ -13,7 +13,7 @@ module.exports = {
       cwd: bkRoot,
       script: 'yarn',
       name: `PM2.BE`,
-      args: 'build:start',
+      args: 'serve',
       interpreter: '/bin/bash',
       watch: [
         `src`,

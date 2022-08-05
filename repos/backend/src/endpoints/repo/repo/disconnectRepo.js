@@ -1,5 +1,5 @@
-const { Repo } = require('@GSH/Repo/repo')
-const { asyncWrap, apiRes } = require('@GSH/Exp')
+const { Repo } = require('@gobletqa/shared/repo/repo')
+const { asyncWrap, apiRes } = require('@gobletqa/shared/express')
 
 /**
  * Disconnects a connected repo ( VNC mode only )

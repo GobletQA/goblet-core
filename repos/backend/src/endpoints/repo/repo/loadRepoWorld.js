@@ -1,4 +1,4 @@
-const { asyncWrap, apiRes } = require('@GSH/Exp')
+const { asyncWrap, apiRes } = require('@gobletqa/shared/express')
 
 /**
  * Loads the Parkin World object and passes it to the frontend

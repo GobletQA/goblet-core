@@ -1,6 +1,6 @@
 // TODO: @lance-tipton - Move all socket.io setup and files to screencast folder
-const { Repo } = require('@GSH/Repo/repo')
-const { joinBrowserConf } = require('@GSH/Utils/joinBrowserConf')
+const { Repo } = require('@gobletqa/shared/repo/repo')
+const { joinBrowserConf } = require('@gobletqa/shared/utils/joinBrowserConf')
 const {
   setPage,
   stopBrowser,

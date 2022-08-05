@@ -1,5 +1,5 @@
-const { asyncWrap, apiRes } = require('@GSH/Exp')
-const { getGobletFile } = require('@GSH/FileSys/gobletFiles')
+const { asyncWrap, apiRes } = require('@gobletqa/shared/express')
+const { getGobletFile } = require('@gobletqa/shared/libs/fileSys/gobletFiles')
 
 /**
  * Loads a file from within the docker mounted test root folder

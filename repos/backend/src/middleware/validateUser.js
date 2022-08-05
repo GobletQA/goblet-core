@@ -1,5 +1,5 @@
-const { AppRouter } = require('@GSH/Router')
-const { asyncWrap, resError } = require('@GSH/Exp')
+const { AppRouter } = require('@gobletqa/shared/express/appRouter')
+const { asyncWrap, resError } = require('@gobletqa/shared/express')
 
 /**
  * Checks if the user and their token exists in the session.

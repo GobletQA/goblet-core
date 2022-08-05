@@ -1,5 +1,5 @@
-const { asyncWrap, apiRes } = require('@GSH/Exp')
-const { loadFeatures } = require('@GSH/Features/features')
+const { asyncWrap, apiRes } = require('@gobletqa/shared/express')
+const { loadFeatures } = require('@gobletqa/shared/libs/features/features')
 
 const getFeatures = asyncWrap(async (req, res) => {
   const features = await loadFeatures(res.locals.repo)
