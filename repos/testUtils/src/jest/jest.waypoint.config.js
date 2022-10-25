@@ -1,3 +1,10 @@
+require('esbuild-register/dist/node').register({
+  loader: 'ts',
+  minify: false,
+  target: "es2015",
+})
+
+
 const { jestConfig } = require('./jest.default.config')
 
 const path = require('path')

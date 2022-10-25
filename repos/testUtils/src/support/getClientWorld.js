@@ -1,11 +1,21 @@
-const path = require('path')
+const fs = require('fs')
 const glob = require('glob')
-
+const path = require('path')
+const { deepMerge } = require('@keg-hub/jsutils/src/node')
 const { getGobletConfig } = require('@GSH/utils/getGobletConfig')
 const { getPathFromConfig } = require('@GSH/utils/getPathFromConfig')
-const { tryRequireSync, deepMerge } = require('@keg-hub/jsutils/src/node')
 
 process.env.GOBLET_ENV = process.env.GOBLET_ENV || `develop`
+
+const tryRequireSync = filePath => {
+  try {
+    return fs.existsSync(filePath) ? require(filePath) : null
+  }
+  catch (err) {
+    console.error(err)
+    return null
+  }
+}
 
 /**
  * Searches the client's support directory for a world export

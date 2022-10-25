@@ -1,14 +1,22 @@
 const path = require('path')
 const {transformSync} = require('esbuild')
-const { getWorld } = require('@gobletqa/shared/repo/world')
+const { getWorld } = require('@GTU/Support/world')
 const { default:createCacheKeyFunction } = require('@jest/create-cache-key-function')
 
 const loaders = ['js', 'jsx', 'ts', 'tsx']
 const nodeVersion = process.env.NODE_ENV === 'test' ? '16' : process.versions.node
 
+
+
 module.exports = {
   getCacheKey: createCacheKeyFunction([], []),
   process: (src, file, options) => {
+    const methodName = `Method${new Date().getTime()}`
+    const wrapped = [
+      `const ${methodName} = async () => {`,
+      `  ${src}`,
+      `};`,
+    ].join('\n')
 
     const name = file.split('/').pop()
     const extname = path.extname(file)
@@ -18,7 +26,7 @@ module.exports = {
     const {
       map,
       code:transformCode,
-    } = transformSync(src, {
+    } = transformSync(wrapped, {
       format: 'cjs',
       sourcefile: file,
       sourcemap: 'inline',
@@ -40,7 +48,8 @@ module.exports = {
       `     delete jest.resolver`,
       `     delete jest.restoreAllMocks;`,
       `     const $world = ${worldStr};`,
-      `    ${transformCode}`,
+      `     ${transformCode}`,
+      `     ;await ${methodName}()`,
       `  })`,
       `})`
     ].join(`\n`)

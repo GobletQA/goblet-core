@@ -28,6 +28,7 @@ const buildJestArgs = (params, jestConfig, extraArgs=noPropArr) => {
     path.join(appRoot, `node_modules/.bin/jest`),
     ...extraArgs,
     `--env=node`,
+    // `--no-cache`,
     // Convert to milliseconds
     `--testTimeout=${(parseInt(testTimeout, 10) || 30000)}`,
   ]

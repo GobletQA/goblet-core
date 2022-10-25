@@ -1,3 +1,9 @@
+require('esbuild-register/dist/node').register({
+  loader: 'ts',
+  minify: false,
+  target: "es2015",
+})
+
 const os = require("os")
 const path = require('path')
 
