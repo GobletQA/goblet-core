@@ -7,6 +7,18 @@ services:
     cap_add:
       - SYS_ADMIN
     environment:
+      - DISPLAY
+      - GB_GITHUB_CLIENT_ID
+      - GB_GITHUB_AUTH_USERS
+      - GB_VNC_ACTIVE=true
+      - GB_AUTH_ACTIVE=true
+      - GB_NO_VNC_PORT
+      - GB_SC_PORT
+      - GB_SC_HOST
+      - GB_VNC_SERVER_HOST
+      - GB_VNC_SERVER_PORT
+      - GB_VNC_VIEW_HEIGHT
+      - GB_VNC_VIEW_WIDTH
       - GB_BE_PORT
       - DOC_APP_PATH
       - DOC_BUILD_PATH
@@ -34,4 +46,6 @@ services:
       - GOBLET_SUB_REPO
     ports:
       - ${GB_BE_PORT}:${GB_BE_PORT}
+      - ${GB_NO_VNC_PORT}:${GB_NO_VNC_PORT}
+      - ${GB_SC_PORT}:${GB_SC_PORT}
 

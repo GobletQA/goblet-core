@@ -1,32 +1,37 @@
-const babelJest = require('babel-jest')
-const { createHash } = require('crypto')
-const { getWorld } = require('@GTU/Support')
+const path = require('path')
+const {transformSync} = require('esbuild')
+const { getWorld } = require('@gobletqa/shared/repo/world')
+const { default:createCacheKeyFunction } = require('@jest/create-cache-key-function')
 
-/**
- * Custom jest transformer for wrapping waypoint scripts in a test method
- *
- * @return {Object} - Jest custom transformer model object
- */
- module.exports = {
-  getCacheKey(fileData, filename, ...rest) {
-    const babelCacheKey = babelJest.getCacheKey(fileData, filename, ...rest)
+const loaders = ['js', 'jsx', 'ts', 'tsx']
+const nodeVersion = process.env.NODE_ENV === 'test' ? '16' : process.versions.node
 
-    return createHash('md5')
-      .update(babelCacheKey)
-      .update('goblet')
-      .digest('hex')
-  },
-  process(src, filename, ...rest) {
-    const name = filename.split('/').pop()
+module.exports = {
+  getCacheKey: createCacheKeyFunction([], []),
+  process: (src, file, options) => {
+
+    const name = file.split('/').pop()
+    const extname = path.extname(file)
     const world = getWorld()
     const worldStr = JSON.stringify(world)
 
+    const {
+      map,
+      code:transformCode,
+    } = transformSync(src, {
+      format: 'cjs',
+      sourcefile: file,
+      sourcemap: 'inline',
+      target: `node${nodeVersion}`,
+      loader: loaders.find(ext => `.${ext}` === extname)|| 'js',
+    })
+
     /**
-     * Wrap the waypoint script in a single test
+     * Wrap the transformed waypoint script in a single test
      * Ensure Jest doesn't throw or complain having no tests
      * It also allows us to use the same jest-html-test reporter
      */
-    const content = [
+    const code = [
       `describe('Goblet Waypoint', () => {`,
       `  test('Executing File: ${name}', async () => {`,
       `     delete jest.resetMocks`,
@@ -35,11 +40,14 @@ const { getWorld } = require('@GTU/Support')
       `     delete jest.resolver`,
       `     delete jest.restoreAllMocks;`,
       `     const $world = ${worldStr};`,
-      `    ${src}`,
+      `    ${transformCode}`,
       `  })`,
       `})`
     ].join(`\n`)
 
-    return babelJest.process(content, filename, ...rest);
-  },
+    return {
+      map,
+      code,
+    }
+  }
 }

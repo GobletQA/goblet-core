@@ -35,6 +35,8 @@ const {
   DOC_APP_PATH,
   GOBLET_REPO_ROOT,
   GOBLET_WORK_DIR = `goblet`,
+  // TODO: figure out how this are overwritten by repo config ??? 
+  GOBLET_ENVIRONMENTS_DIR = `environments`,
   GOBLET_ARTIFACTS_DIR = `artifacts`,
   GOBLET_REPORTS_DIR = `artifacts/reports`,
   GOBLET_FEATURES_DIR = `bdd/features`,
@@ -57,6 +59,7 @@ const dirsFromEnvs = deepFreeze({
   GOBLET_UNIT_DIR,
   GOBLET_WAYPOINT_DIR,
   GOBLET_WORK_DIR,
+  GOBLET_ENVIRONMENTS_DIR
 })
 
 // TODO: fix this. It's only valid when in local mode and no locally mounted folder exists

@@ -85,10 +85,7 @@ module.exports = async () => {
     /** Add feature as an extension that can be loaded */
     moduleFileExtensions: [
       'feature',
-      'js',
-      'json',
-      'ts',
-      'tsx'
+      ...defConf.moduleFileExtensions,
     ],
     /** Pass on the browser options defined from the task that started the process */
     globals: {
@@ -110,7 +107,7 @@ module.exports = async () => {
     ],
     /** Add the custom Parkin transformer for all found .feature files */
     transform: {
-      '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+      ...defConf.transform,
       // Add the custom parkin transformer for feature files
       '^.*\\.feature': `${testUtilsDir}/src/parkin/transformer.js`,
     },

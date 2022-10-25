@@ -79,6 +79,15 @@ const jestConfig = (config, opts=noOpObj) => {
     testRunner: 'jest-jasmine2',
     preset: 'ts-jest/presets/js-with-ts',
     reporters: buildReporters(opts, gobletRoot, config),
+    moduleFileExtensions: [
+      'js',
+      'jsx',
+      'cjs',
+      'mjs',
+      'json',
+      'ts',
+      'tsx'
+    ],
     // This seems to be needed based on how the github action is setup
     // But it may be a better option then sym-linking the keg-config node_modules to ~/.node_modules
     // Need to investigate it
@@ -96,7 +105,10 @@ const jestConfig = (config, opts=noOpObj) => {
       'ts-jest': {
         tsconfig: path.join(testUtilsDir, `tsconfig.json`),
       },
-    }
+    },
+    transform: {
+      '\\.(js|jsx|mjs|cjs|ts|tsx)?$': path.resolve(__dirname, 'transformer.js'),
+    },
   }
 }
 

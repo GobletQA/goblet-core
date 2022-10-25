@@ -111,7 +111,7 @@ const parseFeatures = (repo, featureFiles, featuresDir) => {
       featuresParser({
         location: file,
         relative: file.replace(`${featuresDir}/`, ''),
-      })
+      }, repo)
     )
 
     if(err){

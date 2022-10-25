@@ -116,7 +116,7 @@ module.exports = async () => {
       // TODO: add a custom transformer for unit tests
       // '^.*\\.(waypoint.js|wp.js|test.js|spec.js)$': `${testUtilsDir}/src/waypoint/transformer.js`,
       // '^(waypoint|wp|test|spec)\\..*\\.(js)$': `${testUtilsDir}/src/waypoint/transformer.js`,
-      '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+      ...defConf.transform,
     },
   }
 

@@ -1,27 +1,43 @@
 const path = require('path')
 const glob = require('glob')
-const { getGobletConfig } = require('@GSH/Config')
-const {
-  tryRequireSync,
-  deepMerge,
-} = require('@keg-hub/jsutils/src/node')
+
+const { getGobletConfig } = require('@GSH/utils/getGobletConfig')
+const { getPathFromConfig } = require('@GSH/utils/getPathFromConfig')
+const { tryRequireSync, deepMerge } = require('@keg-hub/jsutils/src/node')
+
+process.env.GOBLET_ENV = process.env.GOBLET_ENV || `develop`
 
 /**
  * Searches the client's support directory for a world export
  *
  * @return {Object?} - the client's world object, or undefined if it does not exist
  */
-const getClientWorld = (config) => {
+const searchWorld = (config) => {
   config = config || getGobletConfig()
-  const { repoRoot, supportDir, workDir } = config.paths
+  const { repoRoot, workDir } = config.paths
   const baseDir = workDir ? path.join(repoRoot, workDir) : repoRoot
-  const worldPattern = path.join(baseDir, supportDir, '**/world.js')
 
-  const clientExport = glob
+  // TODO: update this to allow world.json | world.ts | world.js | world/index.*
+  // Should use the world path from the config
+  const worldPattern = path.join(baseDir, '**/world.js')
+  
+  return glob
     .sync(worldPattern)
     .reduce((found, file) => found || tryRequireSync(file), false)
+}
 
-  return deepMerge(config.world, clientExport && clientExport.world)
+/**
+ * Loads the clients world based on defined path or via search
+ *
+ * @return {Object?} - the client's world object, or undefined if it does not exist
+ */
+const getClientWorld = (config) => {
+  config = config || getGobletConfig()
+  const worldPath = getPathFromConfig(`world`, config)
+  let clientExport = tryRequireSync(worldPath)
+  if(!clientExport) clientExport = searchWorld(config)
+
+  return deepMerge(config.world, clientExport && (clientExport.world || clientExport))
 }
 
 module.exports = { getClientWorld }

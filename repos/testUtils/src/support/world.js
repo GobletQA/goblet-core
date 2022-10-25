@@ -4,7 +4,7 @@ const { getClientWorld } = require('./getClientWorld')
 /**
  * Merge of world defaults with client world
  */
-const getWorld = config => {
+const getWorld = (config) => {
   return deepMerge(
     {
       app: {

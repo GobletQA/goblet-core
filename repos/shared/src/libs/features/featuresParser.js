@@ -11,9 +11,9 @@ const { getParkinInstance } = require('@GTU/Parkin/instance')
  *
  * @returns {Promise<Array<Object>>} - Parsed feature file ast joined with the featureMeta Object
  */
-const featuresParser = (featureMeta = noOpObj) => {
+const featuresParser = (featureMeta = noOpObj, repo) => {
   const { location } = featureMeta
-  const parkin = getParkinInstance()
+  const parkin = repo?.parkin || getParkinInstance(repo)
 
   return new Promise((res, rej) => {
     fs.readFile(location, (err, data) => {

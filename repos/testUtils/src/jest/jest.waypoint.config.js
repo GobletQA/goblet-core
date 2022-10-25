@@ -107,8 +107,10 @@ module.exports = async () => {
     transform: {
       // Add the custom waypoint transformer for waypoint files
       '^.*\\.(waypoint.js|wp.js|test.js|spec.js)$': `${testUtilsDir}/src/waypoint/transformer.js`,
+      '^.*\\.(waypoint.ts|wp.ts|test.ts|spec.ts)$': `${testUtilsDir}/src/waypoint/transformer.js`,
       '^(waypoint|wp|test|spec)\\..*\\.(js)$': `${testUtilsDir}/src/waypoint/transformer.js`,
-      '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+      '^(waypoint|wp|test|spec)\\..*\\.(ts)$': `${testUtilsDir}/src/waypoint/transformer.js`,
+      ...defConf.transform,
     },
   }
 

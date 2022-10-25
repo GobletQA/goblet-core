@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export GOBLET_RUN_FROM_UI=1
+export GOBLET_ENV=${GOBLET_ENV:-"develop"}
 
 # Prints a message to the terminal through stderr
 printMessage(){
